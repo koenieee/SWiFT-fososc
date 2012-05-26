@@ -1,7 +1,0 @@
-./project/build/LiftProject.scala ./src/main/scala/bootstrap/liftweb/Boot.scala
-./src/main/scala/org/ocbkc/swift/lib/DepencyFactory.scala ./src/main/scala/org/ocbkc/swift/model/Coord.scala
-./src/main/scala/org/ocbkc/swift/model/Core.scala ./src/main/scala/org/ocbkc/swift/model/Player.scala
-./src/main/scala/org/ocbkc/swift/snippet/HelloWorld.scala ./src/main/scala/org/ocbkc/swift/snippet/QuestionAttackRound.scala
-./src/main/scala/org/ocbkc/swift/snippet/StartSession.scala ./src/main/scala/org/ocbkc/swift/snippet/TranslationRound.scala
-./src/test/scala/LiftConsole.scala ./src/test/scala/org/ocbkc/swift/AppTest.scala
-./src/test/scala/org/ocbkc/swift/snippet/HelloWorldTest.scala ./src/test/scala/RunWebApp.scala
