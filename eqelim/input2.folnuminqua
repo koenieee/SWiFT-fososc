@@ -1,0 +1,3 @@
+equal(g,a,i,y,z)
+p(g,{a,z,k})
+p({i,y,z},{z,y,g,a})

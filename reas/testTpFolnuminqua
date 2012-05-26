@@ -1,0 +1,1 @@
+scala -classpath $JNGIT/SWiFTfososc/source/classes org.ocbkc.swift.reas.TestTpFolnuminquaCLI $1

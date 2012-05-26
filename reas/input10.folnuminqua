@@ -1,0 +1,3 @@
+p(a,{b,c,d})
+inequal(c,d)
+equal(c,d)

@@ -1,0 +1,4 @@
+#echo "... first making dependent .scala files"
+#../logilang/mc
+echo "... making tpfolnuminqua.scala"
+scalac -classpath $JNGIT/SWiFTfososc/source/classes -d $JNGIT/SWiFTfososc/source/classes $JNGIT/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/reas/tpfolnuminqua.scala

@@ -1,0 +1,2 @@
+p({a},{a,b,c})
+inequal(b,c)

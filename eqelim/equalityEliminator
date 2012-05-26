@@ -1,0 +1,6 @@
+#input="hurelanBridge(father,is_father_of,child)"
+#input="inequal(john-jules,beer-tj-e,chidetje)"
+#input="entity(c1,John-Jules)"
+#filename="input.folnuminqua"
+#input="p({aapje,beertje},{chidetje})"
+scala -classpath ../classes org.ocbkc.swift.reas.EqualityEliminatorCLI $1

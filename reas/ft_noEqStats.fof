@@ -1,0 +1,6 @@
+fof(form0, axiom, p(a,a)).
+fof(form1, axiom, p(a,b)).
+fof(form2, axiom, p(a,c)).
+fof(form3, axiom, p(a,d)).
+fof(form4, axiom, q(e,f)).
+fof(form5, question, ? [PVx] : p(a,PVx)).

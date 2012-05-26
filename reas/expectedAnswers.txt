@@ -1,0 +1,57 @@
+input2.folnuminqua:
+query: p(a,*)
+eprover {a,b,c}
+equalRemove =
+{  introconstants(a,b)
+   {a,b,c}
+}
+paradox: model size = 1
+
+input3.folnuminqua:
+query: p(a,*)
+eprover: {a,b,c}
+equalRemove = 
+{  introconstants(a,b,c)
+   inequal(a,c)
+}
+paradox model size = 2
+
+input4.folnuminqua:
+query: p(a,*)
+eprover: {a,b,c}
+equalRemove =
+{ introconstants(a,a,c)
+  inequal(a,c)
+}
+model size: 2
+
+input5.folnuminqua:
+query: p(a,*)
+eprover: {a,b,c,d}
+equalRemove =
+{ introconstants(a,b,c,a)
+  inequal(b,c)
+  inequal(c,a)
+}
+model size = 2
+
+input6.folnuminqua:
+query: p(a,*)
+eprover: {a,b,c,d}
+equalRemove =
+{ introconstants(a,b,c,a)
+  inequal(b,c)
+  inequal(c,a)
+}
+model size: 2
+
+input7.folnuminqua:
+query: p(a,*)
+eprover: {a,b,c,d}
+equalRemove =
+{ introconstants(a,b,c,a)
+  inequal(b,c)
+  inequal(c,a)
+  inequal(b,a)
+}
+model size: 3

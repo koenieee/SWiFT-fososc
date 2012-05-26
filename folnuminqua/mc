@@ -1,0 +1,5 @@
+#echo "... first making dependent .scala files"
+#../logilang/mc
+echo "... making folnuminqua.scala"
+scalac -deprecation -classpath $JNGIT/SWiFTfososc/source/classes:$CHIDEHOME/.m2/repository/net/liftweb/lift-json_2.9.1/2.4-M4/lift-json_2.9.1-2.4-M4.jar -d $JNGIT/SWiFTfososc/source/classes $JNGIT/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/logilang/query/Folnuminqua.scala
+

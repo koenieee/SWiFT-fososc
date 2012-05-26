@@ -1,0 +1,3 @@
+fof(form0, axiom, b != c).
+fof(form1, axiom, c != a).
+fof(form2, axiom, introduceconstants(a,b,c,a)).

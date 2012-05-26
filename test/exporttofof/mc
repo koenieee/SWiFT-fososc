@@ -1,0 +1,4 @@
+#echo "... first making dependent .scala files"
+#../logilang/mc
+echo "... making ExportToFof.scala"
+scalac -classpath $JNGIT/SWiFTfososc/source/classes -d $JNGIT/SWiFTfososc/source/classes $JNGIT/SWiFTfososc/source/test/exporttofof/ExportToFof.scala

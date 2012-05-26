@@ -1,0 +1,7 @@
+p({a},{a,b,c,d})
+q(e,f)
+inequal(b,c)
+inequal(c,d)
+inequal(b,d)
+equal(a,d)
+inequal(c,e)
