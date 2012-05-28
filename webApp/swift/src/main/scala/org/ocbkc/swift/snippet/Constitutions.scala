@@ -34,7 +34,8 @@ class Constitutions
             // <&y2012.03.23.19:20:18& displayNoneIfEmpty doesn't work, don't know why>
             def displayNoneIfEmpty(d:String):String = if( d.equals("") ) "None" else d
             val doc =  Elem(null, "table", Null, TopScope,  
-            <tr><td>ID</td><td>description</td></tr>::Constitution.constis.reverse.map(c => <tr><td><a href="">Constitution { c.id }</a></td>{ displayNoneIfEmpty(c.shortDescription) }<td><a href="">edit</a></td></tr>): _*  )
+            <tr><td>ID</td><td>description</td></tr>::Constitution.constis.reverse.map(c => <tr><td><a href={ "constitutions/constitution" + c.id  }>Constitution { c.id }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td></tr>): _*  )
+            // <&y2012.05.28.12:13:54& perhaps more elegant to refer to constitutions by using a html-parameter>
             println("   doc = " + doc)
             //XML.loadString(doc)
             doc
