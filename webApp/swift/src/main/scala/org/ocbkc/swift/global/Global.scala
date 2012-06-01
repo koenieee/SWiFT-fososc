@@ -14,6 +14,7 @@ object GlobalConstant
 {  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPROOT = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift" // change this when moving the project. 
+   val CONSTITUTIONDIR = "src/main/webapp/constitutions/"
 }
 
 object TestSettings
