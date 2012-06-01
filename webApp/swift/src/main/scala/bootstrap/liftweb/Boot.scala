@@ -47,7 +47,7 @@ class Boot {
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutionAlpha" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
       Menu(Loc("startSession", "startSession" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
