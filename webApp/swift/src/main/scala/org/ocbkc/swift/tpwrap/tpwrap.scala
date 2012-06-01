@@ -71,7 +71,8 @@ object Eprover
    {  def this() = this("","")
       def extractConstants:List[Constant] =
       {  var cs:List[Constant] = Nil
-         val regex = """# SZS answers Tuple \[\[([^\]])+\]|_\]""".r // WIW: translate from vim syntax to java syntax: only left: | and ^\ are they correct?
+         // working gvim regex (POSIX regex) = \[\[\([^]]\+\)\]|_\] 
+         val regex = """# SZS answers Tuple \[\[([^\]]+)\]|_\]""".r // WIW: translate from vim syntax to java syntax: only left: | and ^\ are they correct?
          println("   matched groups:")
          for(matchLoc <- regex.findAllIn(out).matchData; group <- matchLoc.subgroups)
          { println(group); if (group != null) cs +:= Constant(group) }
