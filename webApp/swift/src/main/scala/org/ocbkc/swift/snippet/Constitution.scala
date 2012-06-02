@@ -37,7 +37,7 @@ class Constitution
 
       val (constitutionHtml, creator, creationDate, title) = S.param("id") match
       {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                              {  case Some(const) => { println("   Constitution id:" + idLoc); (const.loadHtml, Text(""+const.creatorUserID), Text(""+const.creationDate), Text("Constitution " + const.id)) }
+                              {  case Some(const) => { println("   Constitution id:" + idLoc); (const.loadHtml, Text(""+const.creatorUserID), Text(""+const.creationTime), Text("Constitution " + const.id)) }
                                  case None        => (Text("No constitution with id " + idLoc + " exists"), EmptyNode, EmptyNode, Text("Constitution not found"))
                               }
 
