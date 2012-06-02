@@ -36,8 +36,8 @@ class Constitution
       val EmptyNode = Text("") // <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
 
       val (constitutionHtml, creator, creationDate, title) = S.param("id") match
-      {  case Full(idLoc)  =>  Constitution.getById(idLoc.toInt) match
-                              {  case Some(const) => { println("   Constitution id:" + idLoc); (XML.loadFile(GlobalConstant.CONSTITUTIONDIR + "constitution" + idLoc + ".html"), Text(""+const.creatorUserID), Text(""+const.id), Text("Constitution " + const.id)) }
+      {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
+                              {  case Some(const) => { println("   Constitution id:" + idLoc); (const.loadHtml, Text(""+const.creatorUserID), Text(""+const.id), Text("Constitution " + const.id)) }
                                  case None        => (Text("No constitution with id " + idLoc + " exists"), EmptyNode, EmptyNode, Text("Constitution not found"))
                               }
 

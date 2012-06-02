@@ -1,5 +1,6 @@
 package org.ocbkc.swift.OCBKC
 {  
+import _root_.scala.xml._
 import org.ocbkc.swift.model._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
@@ -41,6 +42,11 @@ class Constitution(  val id:ConstiId, // unique identifier for this constitution
    out.print(Constitution.templateNewConstitution(id))
    out.flush()
    out.close()
+
+   /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
+   def loadHtml =
+   {  XML.loadFile(GlobalConstant.CONSTITUTIONDIR + "constitution" + id + ".html")
+   }
    /* <? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
    */
 }
