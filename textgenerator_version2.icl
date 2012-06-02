@@ -389,8 +389,8 @@ FHpre2stat ("hasChild",["Akwasi", "Sirtaki"]) 2
 FHhurelanstat2nl::FHstat Int BridgeStats_ -> SentenceNL_
 FHhurelanstat2nl  (FHpre2stat (fhpre, fhconstants)) pos bridgestats
                # (IntRep_Hurelan (roleEnt1, roleEnt2)) = mapCTL2NL bridgestats (CTLs_FHpre fhpre)
-               | pos == 1  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt1 +++ " of " +++ andList(snd fhconstants) ) // <&y2011.08.06.18:17:48& also define a connection between constants and the way to represent these constants as nouns in nl. I know assume the label of the constant to coincide with the nl noun, but that is not tidy
-               | pos == 2  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt2 +++ " of " +++ andList(fst fhconstants) )
+               | pos == 1  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt1 +++ " of " +++ andList(snd fhconstants) +++ "." ) // <&y2011.08.06.18:17:48& also define a connection between constants and the way to represent these constants as nouns in nl. I know assume the label of the constant to coincide with the nl noun, but that is not tidy
+               | pos == 2  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt2 +++ " of " +++ andList(fst fhconstants) +++ "." )
                            = abort("Error: FHhurelanstat2nl offered pos = " +++ toString pos +++ ".")
 
 // <&y2011.08.06.14:24:52& Should be a bit different: type is too wide for this function, so either extend function defs to also cover rest, or define narrower type...>
