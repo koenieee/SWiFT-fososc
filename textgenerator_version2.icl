@@ -129,7 +129,7 @@ ProperNamesForPersons_nli |
                length names < 2 = abort("\nProperNamesForPersons_nli: error, please define more than one proper names in my definition\n")
                                 = names
 where
-     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "John-Jules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "Henk-Jan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
+     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "John-Jules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "Henk-Jan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi", "Sélinde", "Jesse", "Laura", "Geoff", "Szymon", "Sjaak", "Bo", "Michilio", "Michiel", "Gaston", "Jasm"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
 PNFP_length =: length ProperNamesForPersons_nli
 
 Hurelans_nli :: [(String,String)]
