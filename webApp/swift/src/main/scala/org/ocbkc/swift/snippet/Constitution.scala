@@ -27,25 +27,31 @@ class Constitution
          }
             <<< EUC */
       }
- 
-      /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
-      val constitution = S.param("id") match
-      {  case Full(idLoc) => { Constitutions.getById(idLoc) match
-                               { case Some(const) => ("", const)
-                                 case _           => (Text("No constitution with id" + idLoc + " exists", null) }
-         case _           => Text("Cannot retrieve constitution: incorrect parameters in url: id required.")
-      }
-     
-      val constitutionHtml = S.param("id") match
-      {  case Full(idLoc) => { println("   Constitution id:" + idLoc); XML.loadFile(GlobalConstant.CONSTITUTIONDIR + "constitution" + idLoc + ".html") }
-         case _           => Text("Cannot retrieve constitution: incorrect parameters in url: id required.")
+
+      def processHistoryBtn() =
+      {
       }
 
+      /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
+      val EmptyNode = Text("") // <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
+
+      val (constitutionHtml, creator, creationDate, title) = S.param("id") match
+      {  case Full(idLoc)  =>  Constitution.getById(idLoc.toInt) match
+                              {  case Some(const) => { println("   Constitution id:" + idLoc); (XML.loadFile(GlobalConstant.CONSTITUTIONDIR + "constitution" + idLoc + ".html"), Text(""+const.creatorUserID), Text(""+const.id), Text("Constitution " + const.id)) }
+                                 case None        => (Text("No constitution with id " + idLoc + " exists"), EmptyNode, EmptyNode, Text("Constitution not found"))
+                              }
+
+         case Empty        => (Text("Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here]."), EmptyNode, EmptyNode, Text("Constitution not found"))
+   //    case HalfFull => Always better then empty ;-)
+      }
+     
       val answer   = bind( "top", ns, 
                            "constitutionText"   -> constitutionHtml,
-                           "editBt"             -> SHtml.button("Edit", processEditBtn) // <&y2012.05.30.16:25:40& disable button when no user is logged in>
+                           "editBt"             -> SHtml.button("Edit", processEditBtn), // <&y2012.05.30.16:25:40& disable button when no user is logged in>
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
-                           "creationDate"       -> Text("
+                           "creator"            -> creator,
+                           "title"              -> title,
+                           "creationDate"       -> creationDate
                          )
       answer
    }

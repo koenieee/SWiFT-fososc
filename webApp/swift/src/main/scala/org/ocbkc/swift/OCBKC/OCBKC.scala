@@ -55,15 +55,19 @@ object Constitution
    }
    */
    def templateNewConstitution(constitutionId:Int):String =
-   """<h1>Constitution """ + constitutionId + """</h1>
+"""<lift:children><h2>Short description: ...</h2>
 
-<h2>Article 1</h2>
-   """
+<h2>Article 1</h2><p>...</p></lift:children>
+"""
    def create(creatorUserID:Int):Constitution = 
    {  highestId += 1
       val c = new Constitution( highestId, currentTimeMillis().toInt, creatorUserID )
       constis = c::constis
       c
+   }
+
+   def getById(id:Int):Option[Constitution] =
+   {  constis.find( _.id == id)
    }
 
    /* <&y2012.05.24.11:03:48& for next subincrement>
