@@ -12,6 +12,7 @@ import _root_.java.sql.{Connection, DriverManager}
 import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.OCBKC._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -85,6 +86,10 @@ class Boot {
     /* I get following error on this: 
     if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = autoLoginTestUser :: LiftSession.afterSessionCreate}
     */
+
+    // Initialisation/shutdown code for OCBKC stuffz
+    Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
+    LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
   }
 
   /**

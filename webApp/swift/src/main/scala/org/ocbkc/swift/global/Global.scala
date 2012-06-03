@@ -13,8 +13,10 @@ package org.ocbkc.swift.global
 object GlobalConstant
 {  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
-   val WEBAPROOT = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift" // change this when moving the project. 
-   val CONSTITUTIONDIR = "src/main/webapp/constitutions/"
+   val WEBAPROOT = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift" // change this when moving the project.  <&y2012.06.03.00:44:59& really needed, isn't leaving out first slash equal to webapp root?>
+   val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
+   val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
+   val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
 }
 
 object TestSettings
