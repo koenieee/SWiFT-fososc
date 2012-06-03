@@ -45,7 +45,7 @@ class Core(/* val player: User */var text: Text, var round: Round)
          case _         => { throw new RuntimeException("  No user id found.") }
       }
       // cc stands for CoreContent
-
+      // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
       val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
       val ccFiles = ccRootDir.listFiles()
       if( ccFiles != null && ccFiles.length != 0 )
