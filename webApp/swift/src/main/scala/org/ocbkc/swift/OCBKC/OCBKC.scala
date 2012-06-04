@@ -98,10 +98,14 @@ object Constitution
          
          constitutionFiles map readConst
       }
+      else
+      {  println("   No serialised Constitution objects found in permanent storage!")
+      }
    }
 
    def serialize = 
-   {  constis.map(_.serialize)
+   {  println("Constitution.serialize called")
+      constis.map(_.serialize)
    }
 
    def templateNewConstitution(constitutionId:Int):String =

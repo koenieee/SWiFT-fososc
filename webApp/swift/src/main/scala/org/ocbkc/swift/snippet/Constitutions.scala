@@ -18,13 +18,15 @@ class Constitutions
 
    def list(ns: NodeSeq): NodeSeq =
    {  def displayConstis:NodeSeq = 
-      {  if(sesCoord.Test.initConstitutions) // only for testing, remove after test.
+      {  /*
+         if(sesCoord.Test.initConstitutions) // only for testing, remove after test.
          {  val c1 = Constitution.create(0) // test
             c1.shortDescription = "for analytical people"
             val c2 = Constitution.create(0) // test
             c2.shortDescription = "for visual people"
             sesCoord.Test.initConstitutions = false
          }
+         */
          if( Constitution.constis.size == 0 )
             Text("There is no constitution population yet...")
          else
