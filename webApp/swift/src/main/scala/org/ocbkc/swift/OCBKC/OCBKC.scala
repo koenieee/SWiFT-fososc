@@ -17,6 +17,13 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 
 
 */
+object TestSerialization
+{  def main(args: Array[String]) =
+   {  if( args.length != 0 ) println("Usage: command filename")
+      val const1 = new Constitution(1,15,2,0,"Lets go organic!",None)
+   }
+}
+
 
 object ConstitutionTypes
 {  type ConstiId = Int
@@ -82,6 +89,8 @@ object Constitution
    */
 
    def deserialize =
+   /* <&y2012.06.04.17:03:35& problem here: exception occurs. I think it has something to do with the fact that the serialized Constitution object doesn't contain the last value (predecessorId), don't know why...> */
+
    {  println("Constitution.deserialize called")
       val constObjDir = new File(GlobalConstant.CONSTITUTIONOBJECTDIR)
       val constitutionFiles = constObjDir.listFiles()
@@ -92,6 +101,7 @@ object Constitution
          {  println("   converting to Constitution-object: " + file.getPath() )
             val in:BufferedReader   = new BufferedReader(new FileReader(file))
             var inStr:String        = in.readLine()
+            println("   serialized form: " + inStr)
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const
          }
