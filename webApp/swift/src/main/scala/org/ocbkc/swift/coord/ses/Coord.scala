@@ -25,7 +25,7 @@ package ses
 {
 
 import Round._
-class Core(/* val player: User */var text: Text, var round: Round)
+class Core(/* val player: User, var text: Text,*/ var round: Round)
 {  val gameCore: TraitGameCore = new NotUna()
    var cc: CoreContent = null
    val sesHis = new SessionHistory()
