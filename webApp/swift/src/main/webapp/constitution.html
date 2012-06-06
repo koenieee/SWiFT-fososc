@@ -1,0 +1,41 @@
+<lift:surround with="default" at="content">
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+
+<lift:ConstitutionSnippet form="POST">
+
+<h1><top:title /></h1>
+
+<table>
+   <tr><td>Creationdate:</td> <td> <top:creationDate /></td></tr>
+   <tr><td>Created by:</td>   <td><top:creator /></td>      </tr>
+</table>
+
+<hr />
+
+<!-- edit subsnippet <&y2012.06.06.20:09:36& refactor: put in separate "subsnippet" which is loaded from the render code> -->
+
+<table>
+   <tr><td><top:cancelBt /></td><td><top:revisionHistory /></td>  </tr>
+   <tr><td colspan="2"><hr /></td>                                </tr>
+   <tr><td colspan="2"><top:constitutionText /></td>              </tr>
+   <tr><td colspan="2"><hr /></td>                                </tr>
+   <tr><td><top:cancelBt /></td><td><top:revisionHistory /></td>  </tr>
+</table>
+
+<!-- view subsnippet <&y2012.06.06.20:14:09& see todo above> -->
+
+<table>
+   <tr><td><top:editBt /></td><td><top:revisionHistory /></td> </tr>
+   <tr colspan="2"><hr />                                      </tr>
+   <tr colspan="2"><top:constitutionText />                    </tr>
+   <tr colspan="2"><hr />                                      </tr>
+   <tr><td><top:editBt /></td><td><top:revisionHistory /></td> </tr>
+</table>
+
+
+</lift:ConstitutionSnippet>
+
+</lift:surround>
