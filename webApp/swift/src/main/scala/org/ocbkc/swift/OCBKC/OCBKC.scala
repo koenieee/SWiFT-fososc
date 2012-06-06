@@ -135,9 +135,9 @@ object Constitution
    {  constis.find( _.id == id )
    }
 
-   /* <&y2012.05.24.11:03:48& for next subincrement>
-   def remove(c:Constitution) = ...
-   */
+   def remove(c:Constitution) = 
+   {  constis = constis.filterNot( _ == c )
+   }
 }
 
 }
