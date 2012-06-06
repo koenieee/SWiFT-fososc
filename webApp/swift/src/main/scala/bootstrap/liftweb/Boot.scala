@@ -78,14 +78,13 @@ class Boot {
     { 
     }
 */
+/*
     def autoLoginTestUser(l:LiftSession, r: Req) =
     { Player.logUserIdIn("1")
     }
-    
-    if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(println)) :: LiftSession.afterSessionCreate}
-    /* I get following error on this: 
-    if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = autoLoginTestUser :: LiftSession.afterSessionCreate}
-    */
+  */  
+    //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(println)) :: LiftSession.afterSessionCreate}
+    if(TestSettings.AUTOLOGIN) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn("1") ) }
 
     // Initialisation/shutdown code for OCBKC stuffz
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
