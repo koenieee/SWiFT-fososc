@@ -129,7 +129,7 @@ ProperNamesForPersons_nli |
                length names < 2 = abort("\nProperNamesForPersons_nli: error, please define more than one proper names in my definition\n")
                                 = names
 where
-     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "John-Jules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "Henk-Jan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
+     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "John-Jules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "Henk-Jan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi", "Sélinde", "Jesse", "Laura", "Geoff", "Szymon", "Sjaak", "Bo", "Michilio", "Michiel", "Gaston", "Jasm"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
 PNFP_length =: length ProperNamesForPersons_nli
 
 Hurelans_nli :: [(String,String)]
@@ -389,8 +389,8 @@ FHpre2stat ("hasChild",["Akwasi", "Sirtaki"]) 2
 FHhurelanstat2nl::FHstat Int BridgeStats_ -> SentenceNL_
 FHhurelanstat2nl  (FHpre2stat (fhpre, fhconstants)) pos bridgestats
                # (IntRep_Hurelan (roleEnt1, roleEnt2)) = mapCTL2NL bridgestats (CTLs_FHpre fhpre)
-               | pos == 1  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt1 +++ " of " +++ andList(snd fhconstants) ) // <&y2011.08.06.18:17:48& also define a connection between constants and the way to represent these constants as nouns in nl. I know assume the label of the constant to coincide with the nl noun, but that is not tidy
-               | pos == 2  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt2 +++ " of " +++ andList(fst fhconstants) )
+               | pos == 1  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt1 +++ " of " +++ andList(snd fhconstants) +++ "." ) // <&y2011.08.06.18:17:48& also define a connection between constants and the way to represent these constants as nouns in nl. I know assume the label of the constant to coincide with the nl noun, but that is not tidy
+               | pos == 2  = SentenceNL ( andList(fst fhconstants) +++ " is a " +++ roleEnt2 +++ " of " +++ andList(fst fhconstants) +++ "." )
                            = abort("Error: FHhurelanstat2nl offered pos = " +++ toString pos +++ ".")
 
 // <&y2011.08.06.14:24:52& Should be a bit different: type is too wide for this function, so either extend function defs to also cover rest, or define narrower type...>
