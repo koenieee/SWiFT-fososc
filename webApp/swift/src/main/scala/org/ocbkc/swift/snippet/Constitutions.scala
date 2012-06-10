@@ -48,7 +48,7 @@ class Constitutions
          {  case Full(id)  => { Constitution.create(id.asInstanceOf[String].toInt)  }
             case _         => { throw new RuntimeException("  No user id found.") }
          }
-         S.redirectTo("constitution.html?id=" + const.id) // <&y2012.06.05.10:05:58& redirectTo, does this also terminate the execution of the method, or does the method remain indefinitely on the stack?>
+         S.redirectTo("constitution.html?id=" + const.id + "&edit=true&firstedit=true") // <&y2012.06.05.10:05:58& redirectTo, does this also terminate the execution of the method, or does the method remain indefinitely on the stack?>
       }
 
       val answer   = bind( "top", ns, 

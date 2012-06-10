@@ -8,6 +8,7 @@
 
 <h1><top:title /></h1>
 
+Info
 <table>
    <tr><td>Creationdate:</td> <td> <top:creationDate /></td></tr>
    <tr><td>Created by:</td>   <td><top:creator /></td>      </tr>
@@ -15,26 +16,34 @@
 
 <hr />
 
-<!-- edit subsnippet <&y2012.06.06.20:09:36& refactor: put in separate "subsnippet" which is loaded from the render code> -->
-
+General controls
 <table>
-   <tr><td><top:cancelBt /></td><td><top:revisionHistory /></td>  </tr>
-   <tr><td colspan="2"><hr /></td>                                </tr>
-   <tr><td colspan="2"><top:constitutionText /></td>              </tr>
-   <tr><td colspan="2"><hr /></td>                                </tr>
-   <tr><td><top:cancelBt /></td><td><top:revisionHistory /></td>  </tr>
+   <tr><td><top:revisionHistory /></td>  </tr>
 </table>
 
-<!-- view subsnippet <&y2012.06.06.20:14:09& see todo above> -->
-
+<!-- edit subsnippet -->
+<top:edit>
+Mode = edit
 <table>
-   <tr><td><top:editBt /></td><td><top:revisionHistory /></td> </tr>
-   <tr colspan="2"><hr />                                      </tr>
-   <tr colspan="2"><top:constitutionText />                    </tr>
-   <tr colspan="2"><hr />                                      </tr>
-   <tr><td><top:editBt /></td><td><top:revisionHistory /></td> </tr>
+   <tr><td><top:cancelBt /></td><td><top:saveBt /></td></td>  </tr>
+   <tr><td colspan="2"><hr /></td>                                </tr>
+   <tr><td colspan="2"><top:constitutionEditor /></td>              </tr>
+   <tr><td colspan="2"><hr /></td>                                </tr>
+   <tr><td><top:cancelBt /></td><td><top:saveBt /></td>  </tr>
 </table>
+</top:edit>
 
+<!-- view subsnippet -->
+<top:view>
+Mode = view
+<table>
+   <tr><td><top:editBt /></td><td></td> </tr>
+   <tr><td colspan="2"><hr />                             </td></tr>
+   <tr><td colspan="2"><top:constitutionText /></td>           </tr>
+   <tr><td colspan="2"><hr />    </td>                         </tr>
+   <tr><td><top:editBt /></td><td></td> </tr>
+</table>
+</top:view>
 
 </lift:ConstitutionSnippet>
 
