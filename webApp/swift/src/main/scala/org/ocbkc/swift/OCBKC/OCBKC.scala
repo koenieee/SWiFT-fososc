@@ -45,14 +45,7 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 {  val htmlFileName = "constitution" + id + ".html"
 
    // create html file which holds the constitution
-   {  val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
-
-      err.println("  creating file: " + outFile.getAbsolutePath)
-      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
-      out.print(Constitution.templateNewConstitution(id))
-      out.flush()
-      out.close()
-   }
+   saveHtml(Constitution.templateNewConstitution(id))
 
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
    def loadHtml =
@@ -60,6 +53,16 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    }
    /* <? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
    */
+
+   def saveHtml(constitutionText:String) =
+   {  val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
+
+      err.println("  opening file: " + outFile.getAbsolutePath)
+      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
+      out.print(constitutionText)
+      out.flush()
+      out.close()
+   }
 
    /* Only serializes the object - not the html text which is already stored... */
    def serialize =

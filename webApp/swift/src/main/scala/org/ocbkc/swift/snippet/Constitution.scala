@@ -15,8 +15,9 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 
 class ConstitutionSnippet
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
-   var constitutionTAcontent:String
+{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+   var constitutionTAcontent:String = ""
+
    def render(ns: NodeSeq): NodeSeq =
    {  println("ConstitutionSnippet.render")
       def processEditBtn(id:Int) =
@@ -24,21 +25,21 @@ class ConstitutionSnippet
       }
 
       def processHistoryBtn() =
-      {
+      {  
       }
 
-      def saveBtn(const:Constitution, ) =
-      {  const.
+      def processSaveBtn(const:Constitution) =
+      {  const.saveHtml(constitutionTAcontent)
       }
       
       def processCancelBtn(const:Constitution, firstEdit:Boolean) =
       {  // <&y2012.06.06.19:21:59& SHOULDDO: first are you certain box if text area contains more than a few characters>
-         if(firstEdit)
-         {  Constitution.remove(const) // if the constitution didn' exist yet (this was the first edit) then remove the complete constitution. Otherwise, simply discard the current edit and go back to the constitution just being edited.
-            S.redirectTo("constitutions.html")
-         }
-         else
-            S.redirectTo("constitution?id=" + const.id + "&edit=false")
+          if(firstEdit)
+          {  Constitution.remove(const) // if the constitution didn' exist yet (this was the first edit) then remove the complete constitution. Otherwise, simply discard the current edit and go back to the constitution just being edited.
+             S.redirectTo("constitutions.html")
+          }
+          else
+             S.redirectTo("constitution?id=" + const.id + "&edit=false")
       }
 
       def processConstitutionTA(taContent:String) =
@@ -87,17 +88,6 @@ class ConstitutionSnippet
                            "title"              -> title,
                            "creationDate"       -> creationDate
                      )
-      /*
-      val answer   = bind( "top", ns, 
-                           "constitutionText"   -> { if(editmode && !errorRetrievingConstitution) { constitutionEditor } else { const.loadHtml } },
-                           "editBt"             -> { if(!editmode && !errorRetrievingConstitution ) SHtml.button("Edit", () => processEditBtn(const.id)) else emptyNode }, // <&y2012.05.30.16:25:40& disable button when no user is logged in>
-                           "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
-                           "creator"            -> creator,
-                           "title"              -> title,
-                           "creationDate"       -> creationDate,
-                           "cancelBt"           -> { if(firstEdt) SHtml.button("Cancel", () => processCancelBtn(const)) else emptyNode }
-                         )
-                         */
       answer
    }
 }
