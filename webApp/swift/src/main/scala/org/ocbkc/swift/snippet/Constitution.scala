@@ -29,7 +29,7 @@ class ConstitutionSnippet
       }
 
       def processSaveBtn(const:Constitution) =
-      {  const.saveHtml(constitutionTAcontent)
+      {  const.save(constitutionTAcontent)
       }
       
       def processCancelBtn(const:Constitution, firstEdit:Boolean) =
@@ -49,17 +49,17 @@ class ConstitutionSnippet
       /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
       val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
 
-      val (errorRetrievingConstitution:Boolean, const:Constitution, constitutionHtml, creator, creationDate, title) = S.param("id") match
+      val (errorRetrievingConstitution:Boolean, errorMsg:String, const:Constitution, creator, creationDate, title) = S.param("id") match
       {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                              {  case Some(const) => { println("   Constitution id:" + idLoc); (false, const, const.loadHtml, Text("" + const.creatorUserID), Text(""+const.creationTime), Text("Constitution " + const.id)) }
-                                 case None        => { (true, null, Text("No constitution with id " + idLoc + " exists"), emptyNode, emptyNode, Text("Constitution not found")) }
+                              {  case Some(const) => { println("   Constitution id:" + idLoc); (false, "", const, Text("" + const.creatorUserID), Text(""+const.creationTime), Text("Constitution " + const.id)) }
+                                 case None        => { (true, "No constitution with this id exists.", null, emptyNode, emptyNode, Text("Constitution not found")) }
                               }
 
-         case Empty        => (true, null, Text("Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here]."), emptyNode, emptyNode, Text("Constitution not found"))
+         case Empty        => (true, "Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].", null, emptyNode, emptyNode, Text("Constitution not found"))
    //    case HalfFull => Always better then empty ;-)
       }
 
-      lazy val constitutionEditor = SHtml.textarea(const.loadHtml.toString, processConstitutionTA, "rows" -> "10", "cols" -> "100" )
+      lazy val constitutionEditor = SHtml.textarea(const.loadHtml.mkString("\n"), processConstitutionTA, "rows" -> "10", "cols" -> "150" )
 
       val editmode:Boolean = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
@@ -82,7 +82,8 @@ class ConstitutionSnippet
                            "view"    -> {   if( editmode ) 
                                                          emptyNode
                                                       else
-                                                         bind( "top", chooseTemplate("top","view", ns), "constitutionText" -> const.loadHtml, "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id))  )
+                                                         bind( "top", chooseTemplate("top","view", ns), "constitutionText" -> if(!errorRetrievingConstitution) const.plainContent else WIW, "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id))  )
+
                                               },
                            "creator"           -> creator,
                            "title"              -> title,

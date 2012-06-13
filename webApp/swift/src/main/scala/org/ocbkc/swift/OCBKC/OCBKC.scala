@@ -45,17 +45,28 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 {  val htmlFileName = "constitution" + id + ".html"
 
    // create html file which holds the constitution
-   saveHtml(Constitution.templateNewConstitution(id))
+   save(Constitution.templateNewConstitution(id))
 
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
-   def loadHtml =
-   {  XML.loadFile(GlobalConstant.CONSTITUTIONHTMLDIR + "constitution" + id + ".html")
+   def plainContent:String =
+   {  val inFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
+      val in:BufferedReader = new BufferedReader(new FileReader(inFile))
+      val content:String = "<p>TODO in method plainContent</p>" // <&y2012.06.12.21:25:41& read complete file in oneggo into a string>
+      content
+   }
+
+   // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
+   def contentInScalaXML:Elem =
+   {  val contentWrapped = "<lift:child>/n" + plainContent + "/n</lift:child>/n"
+      val xml = XML.loadString( contentWrapped )
+      xml
    }
    /* <? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
    */
 
-   def saveHtml(constitutionText:String) =
-   {  val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
+   def save(constitutionText:String) =
+   {  // <&y2012.06.11.19:53:08& first add lift:children tag to make it a well-formed xml file.>
+      val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
 
       err.println("  opening file: " + outFile.getAbsolutePath)
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
