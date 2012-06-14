@@ -59,7 +59,7 @@ class ConstitutionSnippet
    //    case HalfFull => Always better then empty ;-)
       }
 
-      lazy val constitutionEditor = SHtml.textarea(const.loadHtml.mkString("\n"), processConstitutionTA, "rows" -> "10", "cols" -> "150" )
+      lazy val constitutionEditor = SHtml.textarea(const.plainContent.mkString("\n"), processConstitutionTA, "rows" -> "10", "cols" -> "150" )
 
       val editmode:Boolean = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
@@ -82,9 +82,11 @@ class ConstitutionSnippet
                            "view"    -> {   if( editmode ) 
                                                          emptyNode
                                                       else
-                                                         bind( "top", chooseTemplate("top","view", ns), "constitutionText" -> if(!errorRetrievingConstitution) const.plainContent else WIW, "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id))  )
+                                                         bind( "top", chooseTemplate("top","view", ns), 
+                                                         "constitutionText" -> { if(!errorRetrievingConstitution) const.contentInScalaXML else Text(errorMsg) }, 
+                                                         "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id))  )
 
-                                              },
+                                        },
                            "creator"           -> creator,
                            "title"              -> title,
                            "creationDate"       -> creationDate
