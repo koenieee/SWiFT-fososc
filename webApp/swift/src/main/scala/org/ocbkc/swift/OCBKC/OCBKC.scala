@@ -49,9 +49,7 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
    def plainContent:String =
-   {  val inFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
-      val in:BufferedReader = new BufferedReader(new FileReader(inFile))
-      val content:String = "<p>TODO in method plainContent</p>" // <&y2012.06.12.21:25:41& read complete file in oneggo into a string>
+   {  val content:String = scala.io.Source.fromFile(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName).mkString
       content
    }
 
@@ -133,9 +131,9 @@ object Constitution
    }
 
    def templateNewConstitution(constitutionId:Int):String =
-"""<lift:children><h2>Short description: ...</h2>
+"""<h2>Short description: ...</h2>
 
-<h2>Article 1</h2><p>...</p></lift:children>
+<h2>Article 1</h2><p>...</p>
 """
    def create(creatorUserID:Int):Constitution = 
    {  highestId += 1
