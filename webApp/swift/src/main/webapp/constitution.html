@@ -23,8 +23,11 @@ Don't understand, cannot find unclosed tr.
 Info
 
 <table>
-   <tr><td>Creationdate:</td> <td> <top:creationDate /></td></tr>
-   <tr><td>Created by:</td>   <td><top:creator /></td>      </tr>
+   <tr><td>Creationdate:</td>             <td> <top:creationDate /></td>   </tr>
+   <tr><td>Created by:</td>               <td><top:creator /></td>         </tr>
+   <tr><td>Description:</td>              <td><top:description /></td>     </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                    </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                    </tr>
 </table>
 
 <hr />
@@ -37,13 +40,14 @@ General controls
 <!-- edit subsnippet -->
 <top:edit>
 Mode = edit
-
+   
 <table>
-   <tr><td><top:cancelBt /></td><td><top:saveBt /></td>  </tr>
+   <tr><!-- <td><top:cancelBt /> </td>--><td colspan="2"><top:saveBt /></td><!-- for some next increment, only within a short period after creation this is possible </td><top:removeBt /> --></tr>
    <tr><td colspan="2"><hr /></td>                                </tr>
+   <tr><td colspan="1">Description</td><td colspan="1"><top:descriptionTextfield /></td>   </tr>
    <tr><td colspan="2"><top:constitutionEditor /></td>              </tr>
    <tr><td colspan="2"><hr /></td>                                </tr>
-   <tr><td><top:cancelBt /></td><td><top:saveBt /></td>  </tr>
+   <tr><!-- <td><top:cancelBt /> </td>--><td colspan="3"><top:saveBt /></td><!-- for some next increment </td><top:removeBt /> --></tr>
 </table>
 </top:edit>
 

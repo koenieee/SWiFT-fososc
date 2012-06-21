@@ -17,6 +17,7 @@ import org.ocbkc.swift.global._
 class ConstitutionSnippet
 {  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    var constitutionTAcontent:String = ""
+   var descriptionTFcontent:String = ""
 
    def render(ns: NodeSeq): NodeSeq =
    {  println("ConstitutionSnippet.render")
@@ -30,6 +31,8 @@ class ConstitutionSnippet
 
       def processSaveBtn(const:Constitution) =
       {  const.save(constitutionTAcontent)
+         const.shortDescription = descriptionTFcontent
+         S.redirectTo("constitution?id=" + const.id + "&edit=true")
       }
       
       def processCancelBtn(const:Constitution, firstEdit:Boolean) =
@@ -40,6 +43,16 @@ class ConstitutionSnippet
           }
           else
              S.redirectTo("constitution?id=" + const.id + "&edit=false")
+      }
+
+      def processDescriptionTf(descriptionTFcontentLoc:String) =
+      {  descriptionTFcontent = descriptionTFcontentLoc
+      }
+
+      def processRemoveBtn(const:Constitution) =
+      {  // <&y2012.06.18.16:18:55& dialog here> 
+         Constitution.remove(const) // if the constitution didn' exist yet (this was the first edit) then remove the complete constitution. Otherwise, simply discard the current edit and go back to the constitution just being edited.
+          S.redirectTo("constitutions.html")
       }
 
       def processConstitutionTA(taContent:String) =
@@ -54,12 +67,11 @@ class ConstitutionSnippet
                               {  case Some(constLoc) => { println("   Constitution id:" + idLoc); const = constLoc; (false, "", const.creatorUserID, const.creationTime, "Constitution " + const.id) }
                                  case None        => { (true, "No constitution with this id exists.", 0, 0L, "Constitution not found") }
                               }
-//&y2012.06.15.10:34:13& WIW: solving match error: perhaps has something to do with return null (which has no type). Now try null.asInstanceOfWIW ...
-         case _           => (true, "Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].", 0, 0L, "Constitution not found")
+         case _           => S.redirectTo("constitutions") //(true, "Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].", 0, 0L, "Constitution not found")
    //    case HalfFull => Always better then empty ;-)
       }
 
-      lazy val constitutionEditor = SHtml.textarea(const.plainContent, processConstitutionTA, "rows" -> "10", "cols" -> "150" )
+      lazy val constitutionEditor = SHtml.textarea(const.plainContent, processConstitutionTA, "rows" -> "10", "cols" -> "300" )
 
       val editmode:Boolean = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
@@ -77,19 +89,24 @@ class ConstitutionSnippet
                            "edit"          -> {   if( !editmode ) 
                                                          emptyNode
                                                       else
-                                                         bind( "top", chooseTemplate("top","edit", ns), "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(const, firstEdit)), "saveBt" -> SHtml.button("Save", () => processSaveBtn(const)),"constitutionEditor" -> constitutionEditor )
+                                                         bind( "top", chooseTemplate("top","edit", ns),
+                                                            "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(const, firstEdit)),
+                                                            "saveBt" -> SHtml.button("Save", () => processSaveBtn(const)),
+                                                            "descriptionTextfield" -> SHtml.text(const.shortDescription, processDescriptionTf),
+                                                            "constitutionEditor" -> constitutionEditor)
                                               },
                            "view"    -> {   if( editmode ) 
                                                          emptyNode
                                                       else
                                                          bind( "top", chooseTemplate("top","view", ns), 
-                                                         "constitutionText" -> { if(!errorRetrievingConstitution) const.contentInScalaXML else Text(errorMsg) }, 
-                                                         "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id))  )
+                                                            "constitutionText" -> { if(!errorRetrievingConstitution) const.contentInScalaXML else Text(errorMsg) }, 
+                                                            "editBt" -> SHtml.button("Edit", () => processEditBtn(const.id)))
 
                                         },
-                           "creator"           -> { if( !errorRetrievingConstitution ) Text(creator.toString) else emptyNode },
+                           "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.toString) else emptyNode },
                            "title"              -> Text(title),
-                           "creationDate"       -> { if( !errorRetrievingConstitution ) Text(creationDate.toString) else emptyNode }
+                           "creationDate"       -> { if( !errorRetrievingConstitution ) Text(creationDate.toString) else emptyNode },
+                           "description"        -> { if( !errorRetrievingConstitution ) Text(const.shortDescription) else emptyNode }
                      )
       answer
    }
