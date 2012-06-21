@@ -1,7 +1,7 @@
 package org.ocbkc.swift.OCBKC
 {  
 import _root_.scala.xml._
-import org.ocbkc.swift.model._
+//import org.ocbkc.swift.model._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -19,8 +19,9 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 */
 object TestSerialization
 {  def main(args: Array[String]) =
-   {  if( args.length != 0 ) println("Usage: command filename")
+   {  if( args.length != 0 ) println("Usage: command without arguments")
       val const1 = new Constitution(1,15,2,0,"Lets go organic!",None)
+      //const1.serialize
    }
 }
 
@@ -55,7 +56,8 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
-   {  val contentWrapped = "<lift:child>/n" + plainContent + "/n</lift:child>/n"
+   {  val contentWrapped = "<lift:children>" + plainContent + "</lift:children>"
+      println("   contentWrapped:String = " + contentWrapped)
       val xml = XML.loadString( contentWrapped )
       xml
    }
