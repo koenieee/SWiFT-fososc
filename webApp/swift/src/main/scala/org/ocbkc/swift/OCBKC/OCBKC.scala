@@ -121,6 +121,11 @@ object Constitution
          }
          
          constitutionFiles map readConst
+         val highestIdFile       = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
+         val in:BufferedReader   = new BufferedReader(new FileReader(highestIdFile))
+         var inStr:String        = in.readLine()
+         highestId               = inStr.toInt
+         println("   read from file: highestId = " + highestId)
       }
       else
       {  println("   No serialised Constitution objects found in permanent storage!")
@@ -130,6 +135,14 @@ object Constitution
    def serialize = 
    {  println("Constitution.serialize called")
       constis.map(_.serialize)
+
+      var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
+      err.println("   creating file: " + outFile.getAbsolutePath)
+      // outFile.getParentFile().mkdirs() these should already exist
+      // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
+      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
+      out.println(highestId.toString)
+      out.close()
    }
 
    def templateNewConstitution(constitutionId:Int):String =
