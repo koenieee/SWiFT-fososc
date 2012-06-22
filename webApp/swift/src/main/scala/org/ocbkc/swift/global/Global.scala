@@ -19,7 +19,7 @@ object GlobalConstant
    private val PREFIX = if( ABSOLUTEPATHS ) WEBAPROOT + "/" else ""
    val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
    val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
-   val CONSTITUTIONOBJECTDIR = PREFIX + PERSISTDIR + "/constobjs"
+   val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
 }
 
 object TestSettings
