@@ -38,6 +38,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    /* var translationTouched:Boolean, var bridgeTouched:Boolean) */
 
    private def initialise = {  // load sessionhistory data from disk for this user (persistency info).
+         println("Core.initialise called")
       // Read output of the Clean command
       var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistant>
       Player.currentUserId match
@@ -47,6 +48,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
       // cc stands for CoreContent
       // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
       val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
+      println("   directory to read in serialized corecontents: " +  ccRootDir.getAbsolutePath)
       val ccFiles = ccRootDir.listFiles()
       if( ccFiles != null && ccFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
