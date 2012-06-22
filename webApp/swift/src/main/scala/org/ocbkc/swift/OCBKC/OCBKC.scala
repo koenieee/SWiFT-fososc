@@ -20,8 +20,8 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = new Constitution(1,15,2,0,"Lets go organic!",None)
-      //const1.serialize
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None)
+      const1.serialize
    }
 }
 
