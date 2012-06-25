@@ -41,7 +41,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          println("Core.initialise called")
       // Read output of the Clean command
       var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistant>
-      Player.currentUserId match
+      Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }

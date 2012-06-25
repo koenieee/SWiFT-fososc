@@ -8,6 +8,7 @@ import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
 import net.liftweb.json._
 import java.io._
+import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
@@ -20,7 +21,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = Constitution(1,15,2,0,"Lets go organic!",None)
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None, List())
       const1.serialize
    }
 }
@@ -41,7 +42,8 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
                         val creatorUserID:Int,
                         var averageScore:Int, // redundant, for efficiency
                         var shortDescription:String,
-                        val predecessorId:Option[ConstiId]
+                        val predecessorId:Option[ConstiId],
+                        var followers:List[Int] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
                        )
 {  val htmlFileName = "constitution" + id + ".html"
 
@@ -53,7 +55,11 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    {  val content:String = scala.io.Source.fromFile(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName).mkString
       content
    }
-
+/* &y2012.06.23.14:39:56& just use followers.contains(...) directly.
+   def followedByUser(userId:Int):boolean = 
+   {  followers.contains(userId) 
+   }
+*/
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
    {  val contentWrapped = "<lift:children>" + plainContent + "</lift:children>"
@@ -107,7 +113,8 @@ object Constitution
 
    {  println("Constitution.deserialize called")
       val constObjDir = new File(GlobalConstant.CONSTITUTIONOBJECTDIR)
-      val constitutionFiles = constObjDir.listFiles()
+      val fileFilter:FileFilter = new WildcardFileFilter("Constitution*")
+      val constitutionFiles = constObjDir.listFiles(fileFilter)
       if( constitutionFiles != null && constitutionFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
 
@@ -153,7 +160,7 @@ object Constitution
    def create(creatorUserID:Int):Constitution = 
    {  highestId += 1
       val now = currentTimeMillis().toLong
-      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None )
+      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
       c
    }
