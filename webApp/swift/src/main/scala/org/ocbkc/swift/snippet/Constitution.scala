@@ -13,6 +13,7 @@ import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.coord.ses._
 
 class ConstitutionSnippet
 {  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
@@ -35,11 +36,34 @@ class ConstitutionSnippet
       {  
       }
 
+      def updateConstitutionContent(const:Constitution) =
+      {  var changes:Boolean = false
+         if( const.plainContent.equals( constitutionTAcontent ) ) // <&y2012.06.27.12:59:21& refactor using javascript? So that you can see at the client whether someone has started typing, and thus has made a change. The current solution is computationally far more expensive.> 
+         {  println("   No changes in constitution body.")
+         }
+         else
+         {  const.save(constitutionTAcontent)
+            changes = true
+         }
+         
+         if( const.shortDescription.equals(descriptionTFcontent) )
+         {  println("   No changes in description.")
+         }
+         else
+         {  const.shortDescription = descriptionTFcontent
+            changes = true
+         }
+         
+         if( changes )
+            sesCoordLR.mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
+
+      }
+
       def processSaveBtn() =
-      {  if( const.isDefined )
+      {  println("processSaveBtn called")
+         if( const.isDefined )
          {  val constLoc = const.get
-            constLoc.save(constitutionTAcontent)
-            constLoc.shortDescription = descriptionTFcontent
+            updateConstitutionContent(constLoc)
             S.redirectTo("constitution?id=" + constLoc.id + "&edit=true")
          } else // <&y2012.06.23.17:46:32& perhaps refactor, this cannot happen, because there is no save button when there is no constitution.>
          {  S.redirectTo("constitutions")
@@ -48,11 +72,11 @@ class ConstitutionSnippet
       }
  
       def processGeneralSaveBtn() =
-      {  if( const.isDefined )
+      {  println("processGeneralSaveBtn called")
+         if( const.isDefined )
          {  val constLoc = const.get
             if( editmode )
-            {  constLoc.save(constitutionTAcontent)
-               constLoc.shortDescription = descriptionTFcontent
+            {  updateConstitutionContent(constLoc)
             }
             S.redirectTo("constitution?id=" + constLoc.id + { if( editmode ) "&edit=true" else "" })
          } else // <&y2012.06.23.17:46:32& perhaps refactor, this cannot happen, because there is no save button when there is no constitution.>
@@ -90,10 +114,15 @@ class ConstitutionSnippet
          {  val constLoc = const.get
             if( checked )
             {  if( !constLoc.followers.contains(currentUserId))
-                  constLoc.followers ::= currentUserId
+               {  constLoc.followers ::= currentUserId
+                  sesCoordLR.mailFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
+               }
             }                  
             else
-               constLoc.followers = constLoc.followers.filterNot( _ == currentUserId )
+            {  constLoc.followers = constLoc.followers.filterNot( _ == currentUserId )
+               sesCoordLR.mailFollowersUpdate(constLoc, MailMessage.lostfollower(constLoc))
+               // <&y2012.06.27.14:00:21& send mail to unfollowerto confirm.>
+            }  
          }
       }
       /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
@@ -123,13 +152,11 @@ class ConstitutionSnippet
          case _          => false
       } // < &y2012.06.10.17:37:17& I think it is better to do this differently: do not create the constitution as yet, but do this after the first save. Danger of current approach is that if someones session crashes, the constitution continues to exist.>
      
-
-   
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
                            "followCheckbox"     -> SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
                            "saveGeneralControlBt"             -> SHtml.button("Save", () => processGeneralSaveBtn),
-
+                           "numberOfFollowers"  -> Text(constLoc.followers.size.toString),
                            "edit"          -> {   if( !editmode ) 
                                                          emptyNode
                                                       else
@@ -156,5 +183,31 @@ class ConstitutionSnippet
    }
 }
 
+object MailMessage
+{  def update2text(const:Constitution):String =
+"""Constitution """ + const.id + """ has been updated. If you want to review the changes please visit this link:
+
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+
+""" + how2unfollow
+
+   def newfollower(const:Constitution) =
+"""Constitution """ + const.id + """ has a new follower. Visit this link to see all followers:
+
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+
+""" + how2unfollow
+
+   def lostfollower(const:Constitution) =
+"""Constitution """ + const.id + """ lost a follower. Visit this link to see all followers:
+
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+
+""" + how2unfollow
+
+   val how2unfollow = 
+"""You are receiving this email because you are a follower of the mentioned constitution of the SWiFT game. If you want to unfollow the constitution, visit the above link.
+"""
+}
 }
 }

@@ -7,11 +7,15 @@ package org.ocbkc.swift.coord
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.general._
+import org.ocbkc.swift.OCBKC._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import net.liftweb.json._
 import java.io._
+import net.liftweb.util.Mailer
+import net.liftweb.util.Mailer._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
@@ -140,6 +144,23 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          None
       else
          Some(HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer))
+   }
+
+   // call this when const has been updated, and you want to notify all followers.
+   def mailFollowersUpdate(const: Constitution, body:String ) =
+   {  def sendupdatemail(followerId:Int) =
+      {  println("sendupdatemail called")
+         val follower = Player.find(followerId.toString) match
+         {  case Full(player)  => player
+            case _             => throw new RuntimeException("Player with id " + followerId + " not found.")
+         }
+         println("   follower id = " + followerId)
+         println("   follower email = " + follower.email.get)
+         Mailer.sendMail(From("cg@xs4all.nl"), Subject("Constitution " + const.id + " has been updated..."), To(follower.email.get), new PlainMailBodyType(body))
+         println("   mail sent!")
+      }
+
+      const.followers.map( sendupdatemail )
    }
 
    object Test

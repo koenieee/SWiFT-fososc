@@ -20,10 +20,11 @@ object GlobalConstant
    val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
    val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
+   val SWIFTURL = "http://127.0.0.1:8080"
 }
 
 object TestSettings
-{  val AUTOLOGIN = true // <&y2012.01.13.10:20:07& not used yet, make it so>
+{  val AUTOLOGIN = true
    val AUTOTRANSLATION = false
 }
 
