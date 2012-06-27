@@ -1,0 +1,92 @@
+<html>
+<head>
+<title>Html Blank out</title>
+<style type="text/css">
+p#text
+{
+   visibility:hidden;
+   width: 600px;
+}
+h3
+{
+   visibility:hidden;
+}
+</style>
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript">
+google.load("jquery", "1.6.3");
+
+google.setOnLoadCallback(
+
+function()
+{
+   
+
+   //lorem epsum url:
+   var lorem = "http://desktoppub.about.com/library/weekly/lorem.txt";
+   
+   
+   var keyisdown = false;
+   var scroll_last_position;
+   $('body').bind('keydown',function(e)
+   {
+       var keycode = 18; //alt key
+       var keycode2 = 79; //o key
+       //alert(e.which);
+       if (e.altKey && e.which === keycode2)
+       {
+       
+           $(window).scrollTop(scroll_last_position);
+           keyisdown = true;
+           $('#text').css('visibility', 'visible');
+           $('#blank').css('visibility', 'hidden');
+           $('h3').css('visibility', 'visible');
+           
+       }
+   }
+
+   ).bind('keyup',function()
+   {
+       scroll_last_position = $(window).scrollTop();
+       keyisdown = false;
+       $('#blank').css('visibility', 'visible');
+       $('#text').css('visibility', 'hidden');
+       $('h3').css('visibility', 'hidden');
+       scroll(0,0);
+       
+   });
+
+});
+
+</script>
+</head>
+<body id="area">
+<h1><center>Html Blank out - testing</center></h1>
+<p id="blank">
+If you want to read on, please hold the left Alt and O key.
+</p>
+<h3>Titel Hierzo</h3>
+<p id="text">
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales nulla vitae augue molestie bibendum mattis metus venenatis. Nulla ultricies rhoncus tellus a tincidunt. Maecenas vel luctus nisl. Proin aliquet pulvinar blandit. Phasellus et egestas magna. Praesent et ultrices diam. Maecenas vitae libero a libero tempus condimentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus ut augue sapien, quis euismod ipsum. Quisque consectetur aliquet est, non laoreet nulla eleifend ac. Nulla quis magna sed erat ultricies tempor. Curabitur sit amet tortor quis nisi vehicula ornare. Nam porta risus vel tortor convallis vel vehicula ante sodales. Maecenas nulla dolor, ultricies in commodo ut, molestie fermentum dui.
+
+Quisque in justo eros, at placerat ante. Donec at lectus quam. Donec ut metus nec dui ullamcorper faucibus. Morbi vel aliquam nunc. Phasellus fringilla tempor leo, id vestibulum est rhoncus at. Sed lorem ligula, posuere feugiat bibendum quis, iaculis at magna. Integer non ante magna, in faucibus risus. Etiam nec pulvinar orci. Donec vitae aliquet dui. Aliquam erat volutpat. Aenean consequat hendrerit odio eleifend iaculis. Etiam ultricies mi volutpat libero convallis lacinia. Nulla sagittis pellentesque odio faucibus porttitor. Donec vitae lacus sed massa ultrices pharetra. Vestibulum feugiat pellentesque neque, non interdum felis varius ac. Proin sem dolor, mollis ac lacinia id, molestie et urna.
+
+Nam hendrerit mauris euismod risus suscipit viverra. Maecenas non ante sapien. Ut in leo urna. Phasellus blandit, arcu commodo semper faucibus, elit sapien egestas neque, pharetra consequat massa odio ac nulla. Vivamus pharetra turpis et turpis fringilla volutpat. Vivamus ullamcorper eleifend hendrerit. Suspendisse posuere massa volutpat mauris aliquet auctor vitae a ante. Integer et urna est. Nam ullamcorper accumsan justo, quis sollicitudin tellus dignissim eleifend. Etiam eget dictum libero. Praesent mollis augue ac massa pretium quis faucibus tortor fringilla. Morbi tincidunt consectetur pretium.
+
+Vivamus id lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi ac dui congue eros eleifend malesuada nec vitae erat. Sed congue ante et nulla viverra at sodales ante posuere. Suspendisse pulvinar aliquam tempus. Maecenas nibh libero, fermentum vel rhoncus eu, tempus nec ipsum. In turpis nisi, auctor a fermentum non, accumsan eu risus. Quisque id augue nisl, mollis mattis justo.
+
+Nullam eu urna eros. Sed at mollis orci. Suspendisse potenti. Proin blandit, tellus sed pulvinar fermentum, sem enim lacinia sapien, non ultricies libero lorem a lacus. Nulla volutpat tempor semper. Praesent auctor dolor nec libero vulputate rhoncus. Mauris libero ipsum, porttitor vel scelerisque a, accumsan non ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse potenti. Donec auctor molestie sodales. In at nulla at risus venenatis ullamcorper vel quis sem. Aenean feugiat massa quis massa varius pretium. Suspendisse rhoncus, dui ac bibendum sodales, elit leo pellentesque dolor, suscipit semper arcu urna bibendum risus.
+
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed sodales nulla vitae augue molestie bibendum mattis metus venenatis. Nulla ultricies rhoncus tellus a tincidunt. Maecenas vel luctus nisl. Proin aliquet pulvinar blandit. Phasellus et egestas magna. Praesent et ultrices diam. Maecenas vitae libero a libero tempus condimentum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Phasellus ut augue sapien, quis euismod ipsum. Quisque consectetur aliquet est, non laoreet nulla eleifend ac. Nulla quis magna sed erat ultricies tempor. Curabitur sit amet tortor quis nisi vehicula ornare. Nam porta risus vel tortor convallis vel vehicula ante sodales. Maecenas nulla dolor, ultricies in commodo ut, molestie fermentum dui.
+
+Quisque in justo eros, at placerat ante. Donec at lectus quam. Donec ut metus nec dui ullamcorper faucibus. Morbi vel aliquam nunc. Phasellus fringilla tempor leo, id vestibulum est rhoncus at. Sed lorem ligula, posuere feugiat bibendum quis, iaculis at magna. Integer non ante magna, in faucibus risus. Etiam nec pulvinar orci. Donec vitae aliquet dui. Aliquam erat volutpat. Aenean consequat hendrerit odio eleifend iaculis. Etiam ultricies mi volutpat libero convallis lacinia. Nulla sagittis pellentesque odio faucibus porttitor. Donec vitae lacus sed massa ultrices pharetra. Vestibulum feugiat pellentesque neque, non interdum felis varius ac. Proin sem dolor, mollis ac lacinia id, molestie et urna.
+
+Nam hendrerit mauris euismod risus suscipit viverra. Maecenas non ante sapien. Ut in leo urna. Phasellus blandit, arcu commodo semper faucibus, elit sapien egestas neque, pharetra consequat massa odio ac nulla. Vivamus pharetra turpis et turpis fringilla volutpat. Vivamus ullamcorper eleifend hendrerit. Suspendisse posuere massa volutpat mauris aliquet auctor vitae a ante. Integer et urna est. Nam ullamcorper accumsan justo, quis sollicitudin tellus dignissim eleifend. Etiam eget dictum libero. Praesent mollis augue ac massa pretium quis faucibus tortor fringilla. Morbi tincidunt consectetur pretium.
+
+Vivamus id lacinia augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Morbi ac dui congue eros eleifend malesuada nec vitae erat. Sed congue ante et nulla viverra at sodales ante posuere. Suspendisse pulvinar aliquam tempus. Maecenas nibh libero, fermentum vel rhoncus eu, tempus nec ipsum. In turpis nisi, auctor a fermentum non, accumsan eu risus. Quisque id augue nisl, mollis mattis justo.
+
+Nullam eu urna eros. Sed at mollis orci. Suspendisse potenti. Proin blandit, tellus sed pulvinar fermentum, sem enim lacinia sapien, non ultricies libero lorem a lacus. Nulla volutpat tempor semper. Praesent auctor dolor nec libero vulputate rhoncus. Mauris libero ipsum, porttitor vel scelerisque a, accumsan non ligula. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Suspendisse potenti. Donec auctor molestie sodales. In at nulla at risus venenatis ullamcorper vel quis sem. Aenean feugiat massa quis massa varius pretium. Suspendisse rhoncus, dui ac bibendum sodales, elit leo pellentesque dolor, suscipit semper arcu urna bibendum risus.
+
+</p>
+</body>
+</html>

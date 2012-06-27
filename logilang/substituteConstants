@@ -1,0 +1,2 @@
+scala -classpath .:../classes org.ocbkc.swift.parser.ConstantSubtitutionCLI $1 $2 $3
+

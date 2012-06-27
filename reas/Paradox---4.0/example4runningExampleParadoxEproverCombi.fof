@@ -1,0 +1,3 @@
+%fof(constants,axiom,p(b,c,e)).
+fof(a1,axiom, b != c).
+fof(a2,axiom, e != c).

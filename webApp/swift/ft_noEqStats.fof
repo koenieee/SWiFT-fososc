@@ -1,0 +1,6 @@
+fof(form0, axiom, sibling_of(henkjan,sybren)).
+fof(form1, axiom, sibling_of(henkjan,christopher)).
+fof(form2, axiom, sibling_of(henkjan,alex)).
+fof(form3, axiom, sibling_of(henkjan,quintus)).
+fof(form4, axiom, sibling_of(henkjan,rapunzel)).
+fof(form5, question, ? [PVx] : sibling_of(henkjan,PVx)).

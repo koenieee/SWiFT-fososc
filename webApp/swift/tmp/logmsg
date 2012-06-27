@@ -1,0 +1,807 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Building swift Project
+[INFO]    task-segment: [jetty:run]
+[INFO] ------------------------------------------------------------------------
+[INFO] Preparing jetty:run
+[debug] execute contextualize
+[INFO] [resources:resources {execution: default-resources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 2 resources
+[debug] execute contextualize
+[INFO] [resources:copy-resources {execution: default-copy-resources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] [yuicompressor:compress {execution: default}]
+[INFO] nb warnings: 0, nb errors: 0
+[INFO] [compiler:compile {execution: default-compile}]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [scala:compile {execution: default}]
+[INFO] Checking for multiple versions of scala
+[INFO] includes = [**/*.scala,**/*.java,]
+[INFO] excludes = []
+[INFO] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala:-1: info: compiling
+[INFO] Compiling 24 source files to /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/target/classes at 1339748956341
+[WARNING] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/logilang/FOL.scala:58: warning: match is not exhaustive!
+[INFO] missing combination   FOLstatement
+[INFO] 
+[INFO]       val add:Boolean = stat match
+[INFO]                         ^
+[WARNING] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/logilang/FOL.scala:171: warning: match is not exhaustive!
+[INFO] missing combination   FOLstatement
+[INFO] 
+[INFO]          { case PredApp(a, cs)    =>
+[INFO]          ^
+[WARNING] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/logilang/FOL.scala:194: warning: match is not exhaustive!
+[INFO] missing combination   FOLstatement
+[INFO] 
+[INFO]    {  def stat2fof(stat:FOLstatement):String = stat match 
+[INFO]                                                ^
+[WARNING] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/reas/equalityEliminator.scala:64: warning: match is not exhaustive!
+[INFO] missing combination   FOLstatement
+[INFO] missing combination        PredApp
+[INFO] missing combination        Unequal
+[INFO] 
+[INFO]       ft.stats.find( { case s:Equal => true; case _ => false } ) match
+[INFO]                    ^
+[WARNING] /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/snippet/Constitution.scala:52: warning: match is not exhaustive!
+[INFO] missing combination        Failure
+[INFO] missing combination   ParamFailure
+[INFO] 
+[ERROR]       val (errorRetrievingConstitution:Boolean, errorMsg:String, const:Constitution, creator:Int, creationDate:Long, title:String) = S.param("id") match
+[INFO]                                                                                                                                             ^
+[WARNING] warning: there were 3 deprecation warnings; re-run with -deprecation for details
+[WARNING] 6 warnings found
+[INFO] prepare-compile in 0 s
+[INFO] compile in 28 s
+[debug] execute contextualize
+[INFO] [resources:testResources {execution: default-testResources}]
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 1 resource
+[INFO] [compiler:testCompile {execution: default-testCompile}]
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [scala:testCompile {execution: default}]
+[INFO] Checking for multiple versions of scala
+[INFO] includes = [**/*.scala,**/*.java,]
+[INFO] excludes = []
+[INFO] Nothing to compile - all classes are up to date
+[INFO] [jetty:run {execution: default-cli}]
+[INFO] Configuring Jetty for project: swift Project
+[INFO] Webapp source directory = /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/webapp
+[INFO] Reload Mechanic: automatic
+[INFO] Classes = /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/target/classes
+2012-06-15 10:29:45.468:INFO::Logging to STDERR via org.mortbay.log.StdErrLog
+[INFO] Context path = /
+[INFO] Tmp directory =  determined at runtime
+[INFO] Web defaults = org/mortbay/jetty/webapp/webdefault.xml
+[INFO] Web overrides =  none
+[INFO] web.xml file = /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/webapp/WEB-INF/web.xml
+[INFO] Webapp directory = /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/webapp
+[INFO] Starting jetty 6.1.25 ...
+2012-06-15 10:29:45.523:INFO::jetty-6.1.25
+2012-06-15 10:29:45.615:INFO::No Transaction manager found - if your webapp requires one, please configure one.
+10:29:46.618 [main] DEBUG net.liftweb.mapper.MetaMapper - Initializing MetaMapper for Player
+10:29:46.622 [main] DEBUG net.liftweb.mapper.MetaMapper - Created FieldFinder for interface net.liftweb.mapper.MappedField
+10:29:47.034 [main] DEBUG net.liftweb.db.ProtoDBVendor - Created new pool entry. name=ConnectionIdentifier(lift), poolSize=1
+10:29:47.047 [main] DEBUG net.liftweb.mapper.Schemifier - Starting schemify. write=true, structureOnly=false, dbId=ConnectionIdentifier(lift), schema=PUBLIC, tables=List(users)
+10:29:47.048 [main] DEBUG net.liftweb.mapper.Schemifier - Running beforeSchemifier on table users
+10:29:47.153 [main] DEBUG net.liftweb.mapper.Schemifier - Executing DDL statements
+10:29:47.155 [main] DEBUG net.liftweb.mapper.Schemifier - Running afterSchemifier on table users
+10:29:47.157 [main] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+Constitution.deserialize called
+   converting to Constitution-object: persist/constobjs/Constitution3
+   serialized form: {"id":3,"creationTime":1338822996704,"creatorUserID":1,"averageScore":0,"shortDescription":"No description provided."}
+10:29:47.281 [main] ERROR n.liftweb.http.provider.HTTPProvider - Failed to Boot! Your application may not run properly
+java.lang.NoClassDefFoundError: scala/tools/nsc/util/ClassPath$JavaContext
+	at scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser$.scalaSigFromAttribute(ScalaSig.scala:35) ~[scalap-2.9.1.jar:na]
+	at scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser$.parse(ScalaSig.scala:38) ~[scalap-2.9.1.jar:na]
+	at scala.tools.scalap.scalax.rules.scalasig.ScalaSigParser$.parse(ScalaSig.scala:52) ~[scalap-2.9.1.jar:na]
+	at net.liftweb.json.ScalaSigReader$.findClass(ScalaSig.scala:40) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.ScalaSigReader$.readConstructor(ScalaSig.scala:24) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$Reflection$.term$1(Meta.scala:268) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$Reflection$.typeParameters(Meta.scala:285) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$.mkContainer$1(Meta.scala:107) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$.fieldMapping$1(Meta.scala:134) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$.toArg$1(Meta.scala:154) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$$anonfun$constructors$1$1$$anonfun$apply$1.apply(Meta.scala:98) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$$anonfun$constructors$1$1$$anonfun$apply$1.apply(Meta.scala:97) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:59) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library-2.9.1.jar:na]
+	at net.liftweb.json.Meta$$anonfun$constructors$1$1.apply(Meta.scala:97) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$$anonfun$constructors$1$1.apply(Meta.scala:96) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.LinearSeqOptimized$class.foreach(LinearSeqOptimized.scala:59) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.immutable.List.foreach(List.scala:45) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.immutable.List.map(List.scala:45) ~[scala-library-2.9.1.jar:na]
+	at net.liftweb.json.Meta$.constructors$1(Meta.scala:96) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$$anonfun$mappingOf$1.apply(Meta.scala:168) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$$anonfun$mappingOf$1.apply(Meta.scala:160) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$Memo.memoize(Meta.scala:197) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Meta$.mappingOf(Meta.scala:160) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Extraction$.mkMapping$1(Extraction.scala:193) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Extraction$.net$liftweb$json$Extraction$$extract0(Extraction.scala:195) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Extraction$.extract(Extraction.scala:42) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.JsonAST$JValue.extract(JsonAST.scala:300) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.json.Serialization$.read(Serialization.scala:48) ~[lift-json_2.9.1-2.4-M4.jar:2.4-M4]
+	at org.ocbkc.swift.OCBKC.Constitution$.readConst$1(OCBKC.scala:119) ~[classes/:na]
+	at org.ocbkc.swift.OCBKC.Constitution$$anonfun$deserialize$1.apply(OCBKC.scala:123) ~[classes/:na]
+	at org.ocbkc.swift.OCBKC.Constitution$$anonfun$deserialize$1.apply(OCBKC.scala:123) ~[classes/:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$$anonfun$map$1.apply(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.IndexedSeqOptimized$class.foreach(IndexedSeqOptimized.scala:34) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.mutable.ArrayOps.foreach(ArrayOps.scala:38) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.TraversableLike$class.map(TraversableLike.scala:194) ~[scala-library-2.9.1.jar:na]
+	at scala.collection.mutable.ArrayOps.map(ArrayOps.scala:38) ~[scala-library-2.9.1.jar:na]
+	at org.ocbkc.swift.OCBKC.Constitution$.deserialize(OCBKC.scala:123) ~[classes/:na]
+	at bootstrap.liftweb.Boot.boot(Boot.scala:90) ~[classes/:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.6.0_24]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.6.0_24]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.6.0_24]
+	at java.lang.reflect.Method.invoke(Method.java:616) ~[na:1.6.0_24]
+	at net.liftweb.util.ClassHelpers$$anonfun$createInvoker$1.apply(ClassHelpers.scala:361) ~[lift-util_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.util.ClassHelpers$$anonfun$createInvoker$1.apply(ClassHelpers.scala:359) ~[lift-util_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.DefaultBootstrap$$anonfun$boot$1.apply(LiftRules.scala:1838) ~[lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.DefaultBootstrap$$anonfun$boot$1.apply(LiftRules.scala:1838) ~[lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.common.Full.map(Box.scala:491) ~[lift-common_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.DefaultBootstrap$.boot(LiftRules.scala:1838) ~[lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.provider.HTTPProvider$class.bootLift(HTTPProvider.scala:86) ~[lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.LiftFilter.bootLift(LiftServlet.scala:757) [lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.provider.servlet.ServletFilterProvider$class.init(ServletFilterProvider.scala:40) [lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at net.liftweb.http.LiftFilter.init(LiftServlet.scala:757) [lift-webkit_2.9.1-2.4-M4.jar:2.4-M4]
+	at org.mortbay.jetty.servlet.FilterHolder.doStart(FilterHolder.java:97) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50) [jetty-util-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.servlet.ServletHandler.initialize(ServletHandler.java:662) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.servlet.Context.startContext(Context.java:140) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.webapp.WebAppContext.startContext(WebAppContext.java:1272) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.handler.ContextHandler.doStart(ContextHandler.java:517) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.webapp.WebAppContext.doStart(WebAppContext.java:489) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.Jetty6PluginWebAppContext.doStart(Jetty6PluginWebAppContext.java:115) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50) [jetty-util-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.handler.HandlerCollection.doStart(HandlerCollection.java:152) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.handler.ContextHandlerCollection.doStart(ContextHandlerCollection.java:156) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50) [jetty-util-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.handler.HandlerCollection.doStart(HandlerCollection.java:152) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50) [jetty-util-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.handler.HandlerWrapper.doStart(HandlerWrapper.java:130) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.Server.doStart(Server.java:224) [jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.component.AbstractLifeCycle.start(AbstractLifeCycle.java:50) [jetty-util-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.Jetty6PluginServer.start(Jetty6PluginServer.java:132) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.AbstractJettyMojo.startJetty(AbstractJettyMojo.java:441) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.AbstractJettyMojo.execute(AbstractJettyMojo.java:383) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.AbstractJettyRunMojo.execute(AbstractJettyRunMojo.java:210) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.plugin.Jetty6RunMojo.execute(Jetty6RunMojo.java:184) [maven-jetty-plugin-6.1.25.jar:6.1.25]
+	at org.apache.maven.plugin.DefaultPluginManager.executeMojo(DefaultPluginManager.java:490) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoals(DefaultLifecycleExecutor.java:694) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeStandaloneGoal(DefaultLifecycleExecutor.java:569) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoal(DefaultLifecycleExecutor.java:539) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeGoalAndHandleFailures(DefaultLifecycleExecutor.java:387) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.executeTaskSegments(DefaultLifecycleExecutor.java:348) [maven-debian-uber.jar:na]
+	at org.apache.maven.lifecycle.DefaultLifecycleExecutor.execute(DefaultLifecycleExecutor.java:180) [maven-debian-uber.jar:na]
+	at org.apache.maven.DefaultMaven.doExecute(DefaultMaven.java:328) [maven-debian-uber.jar:na]
+	at org.apache.maven.DefaultMaven.execute(DefaultMaven.java:138) [maven-debian-uber.jar:na]
+	at org.apache.maven.cli.MavenCli.main(MavenCli.java:362) [maven-debian-uber.jar:na]
+	at org.apache.maven.cli.compat.CompatibleMain.main(CompatibleMain.java:60) [maven-debian-uber.jar:na]
+	at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method) ~[na:1.6.0_24]
+	at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57) ~[na:1.6.0_24]
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43) ~[na:1.6.0_24]
+	at java.lang.reflect.Method.invoke(Method.java:616) ~[na:1.6.0_24]
+	at org.codehaus.classworlds.Launcher.launchEnhanced(Launcher.java:315) [classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.Launcher.launch(Launcher.java:255) [classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.Launcher.mainWithExitCode(Launcher.java:430) [classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.Launcher.main(Launcher.java:375) [classworlds-1.1.jar:na]
+Caused by: java.lang.ClassNotFoundException: scala.tools.nsc.util.ClassPath$JavaContext
+	at java.net.URLClassLoader$1.run(URLClassLoader.java:217) ~[na:1.6.0_24]
+	at java.security.AccessController.doPrivileged(Native Method) ~[na:1.6.0_24]
+	at java.net.URLClassLoader.findClass(URLClassLoader.java:205) ~[na:1.6.0_24]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:321) ~[na:1.6.0_24]
+	at org.codehaus.classworlds.RealmClassLoader.loadClassDirect(RealmClassLoader.java:195) ~[classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.DefaultClassRealm.loadClass(DefaultClassRealm.java:255) ~[classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.DefaultClassRealm.loadClass(DefaultClassRealm.java:274) ~[classworlds-1.1.jar:na]
+	at org.codehaus.classworlds.RealmClassLoader.loadClass(RealmClassLoader.java:214) ~[classworlds-1.1.jar:na]
+	at java.lang.ClassLoader.loadClass(ClassLoader.java:266) ~[na:1.6.0_24]
+	at org.mortbay.jetty.webapp.WebAppClassLoader.loadClass(WebAppClassLoader.java:401) ~[jetty-6.1.25.jar:6.1.25]
+	at org.mortbay.jetty.webapp.WebAppClassLoader.loadClass(WebAppClassLoader.java:363) ~[jetty-6.1.25.jar:6.1.25]
+	... 102 common frames omitted
+2012-06-15 10:29:47.348:INFO::Started SelectChannelConnector@0.0.0.0:8080
+[INFO] Started Jetty Server
+[INFO] Starting scanner at interval of 5 seconds.
+10:30:40.154 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:40.218 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+ConstitutionSnippet.render
+10:30:40.549 [332327930@qtp-826629364-0] ERROR net.liftweb.http.LiftRules - Exception being returned to browser when processing /constitution.html: Message: scala.MatchError: (true,Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].,null,0,0,Constitution not found) (of class scala.Tuple6)
+	org.ocbkc.swift.snippet.ConstitutionSnippet.render(Constitution.scala:52)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:616)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2$$anonfun$apply$8.apply(ClassHelpers.scala:318)
+	net.liftweb.util.ControlHelpers$class.tryo(ControlHelpers.scala:46)
+	net.liftweb.util.Helpers$.tryo(Helpers.scala:34)
+	net.liftweb.util.ControlHelpers$class.tryo(ControlHelpers.scala:84)
+	net.liftweb.util.Helpers$.tryo(Helpers.scala:34)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2.apply(ClassHelpers.scala:318)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2.apply(ClassHelpers.scala:318)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:335)
+	scala.collection.Iterator$class.find(Iterator.scala:708)
+	scala.collection.Iterator$$anon$19.find(Iterator.scala:333)
+	net.liftweb.util.ClassHelpers$class.net$liftweb$util$ClassHelpers$$_invokeMethod(ClassHelpers.scala:319)
+	net.liftweb.util.ClassHelpers$class.invokeMethod(ClassHelpers.scala:238)
+	net.liftweb.util.Helpers$.invokeMethod(Helpers.scala:34)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85$$anonfun$apply$88.apply(LiftSession.scala:1648)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85$$anonfun$apply$88.apply(LiftSession.scala:1645)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1645)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1553)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1552)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processSnippet(LiftSession.scala:1552)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1778)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1766)
+	net.liftweb.util.NamedPF.apply(NamedPartialFunction.scala:36)
+	net.liftweb.util.NamedPF$.apply(NamedPartialFunction.scala:82)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1869)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1868)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withAttrs(S.scala:2013)
+	net.liftweb.http.S$.withAttrs(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processOrDefer(LiftSession.scala:1853)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1865)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1860)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.Iterator$class.foreach(Iterator.scala:660)
+	scala.collection.LinearSeqLike$$anon$1.foreach(LinearSeqLike.scala:50)
+	scala.collection.IterableLike$class.foreach(IterableLike.scala:73)
+	scala.xml.NodeSeq.foreach(NodeSeq.scala:43)
+	scala.collection.TraversableLike$class.flatMap(TraversableLike.scala:200)
+	scala.xml.NodeSeq.flatMap(NodeSeq.scala:43)
+	net.liftweb.http.LiftSession.processSurroundAndInclude(LiftSession.scala:1860)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2$$anonfun$apply$3.apply(Surround.scala:40)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2$$anonfun$apply$3.apply(Surround.scala:39)
+	net.liftweb.util.AnyVarTrait$class.doWith(AnyVar.scala:233)
+	net.liftweb.util.AnyVar.doWith(AnyVar.scala:89)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2.apply(Surround.scala:39)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2.apply(Surround.scala:37)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1.apply(Surround.scala:37)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1.apply(Surround.scala:36)
+	net.liftweb.common.Full.flatMap(Box.scala:493)
+	net.liftweb.builtin.snippet.Surround$.render(Surround.scala:36)
+	net.liftweb.builtin.snippet.Surround$$anonfun$dispatch$1$$anonfun$apply$1.apply(Surround.scala:31)
+	net.liftweb.builtin.snippet.Surround$$anonfun$dispatch$1$$anonfun$apply$1.apply(Surround.scala:31)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1584)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1553)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1552)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processSnippet(LiftSession.scala:1552)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1778)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1766)
+	net.liftweb.util.NamedPF.apply(NamedPartialFunction.scala:36)
+	net.liftweb.util.NamedPF$.apply(NamedPartialFunction.scala:82)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1869)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1868)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withAttrs(S.scala:2013)
+	net.liftweb.http.S$.withAttrs(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processOrDefer(LiftSession.scala:1853)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1865)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1860)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.Iterator$class.foreach(Iterator.scala:660)
+	scala.collection.IndexedSeqLike$Elements.foreach(IndexedSeqLike.scala:54)
+	scala.collection.IterableLike$class.foreach(IterableLike.scala:73)
+	scala.xml.NodeSeq.foreach(NodeSeq.scala:43)
+	scala.collection.TraversableLike$class.flatMap(TraversableLike.scala:200)
+	scala.xml.NodeSeq.flatMap(NodeSeq.scala:43)
+	net.liftweb.http.LiftSession.processSurroundAndInclude(LiftSession.scala:1860)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44$$anonfun$apply$45.apply(LiftSession.scala:986)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44$$anonfun$apply$45.apply(LiftSession.scala:983)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44.apply(LiftSession.scala:983)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44.apply(LiftSession.scala:982)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1.apply(LiftSession.scala:981)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1.apply(LiftSession.scala:981)
+	net.liftweb.util.AnyVarTrait$class.doWith(AnyVar.scala:233)
+	net.liftweb.util.AnyVar.doWith(AnyVar.scala:89)
+	net.liftweb.http.LiftSession.processTemplate(LiftSession.scala:980)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$50.apply(LiftSession.scala:1087)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$50.apply(LiftSession.scala:1087)
+	net.liftweb.common.EmptyBox.or(Box.scala:576)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47.apply(LiftSession.scala:1086)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47.apply(LiftSession.scala:1086)
+	net.liftweb.util.StackableMaker$class.doWith(Maker.scala:141)
+	net.liftweb.http.Factory$FactoryMaker.doWith(Factory.scala:37)
+	net.liftweb.util.StackableMaker$class.doWith(Maker.scala:135)
+	net.liftweb.http.Factory$FactoryMaker.doWith(Factory.scala:37)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46.apply(LiftSession.scala:1085)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46.apply(LiftSession.scala:1081)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$checkStatelessInSiteMap(LiftSession.scala:1025)
+	net.liftweb.http.LiftSession$$anonfun$19.apply(LiftSession.scala:1081)
+	net.liftweb.http.LiftSession$$anonfun$19.apply(LiftSession.scala:1079)
+	net.liftweb.common.EmptyBox.or(Box.scala:576)
+	net.liftweb.http.LiftSession.processRequest(LiftSession.scala:1079)
+	net.liftweb.http.LiftServlet.net$liftweb$http$LiftServlet$$dispatchStatefulRequest(LiftServlet.scala:414)
+	net.liftweb.http.LiftServlet$$anonfun$doSession$1$1.apply(LiftServlet.scala:279)
+	net.liftweb.http.LiftServlet$$anonfun$doSession$1$1.apply(LiftServlet.scala:279)
+	net.liftweb.http.S$class.net$liftweb$http$S$$wrapQuery(S.scala:1371)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_nest2InnerInit$1$$anonfun$apply$34.apply(S.scala:1519)
+	net.liftweb.http.S$class.net$liftweb$http$S$$doAround(S.scala:1300)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$doAround$1.apply(S.scala:1301)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.recurseMe$1(DB.scala:211)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12$$anonfun$recurseMe$1$1.apply(DB.scala:227)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12$$anonfun$recurseMe$1$1.apply(DB.scala:227)
+	net.liftweb.db.DB$$anonfun$use$1.apply(DB.scala:639)
+	net.liftweb.util.DynoVar$class.run(ThreadGlobal.scala:95)
+	net.liftweb.db.DB$class.use(DB.scala:636)
+	net.liftweb.db.DB$$anon$1.use(DB.scala:38)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.recurseMe$1(DB.scala:227)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.apply(DB.scala:229)
+	net.liftweb.util.DynoVar$class.run(ThreadGlobal.scala:95)
+	net.liftweb.db.DB$$anon$2.apply(DB.scala:203)
+	net.liftweb.http.S$class.net$liftweb$http$S$$doAround(S.scala:1301)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_nest2InnerInit$1.apply(S.scala:1517)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_nest2InnerInit(S.scala:1516)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39$$anonfun$apply$40$$anonfun$apply$41.apply(S.scala:1556)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$withReq$1.apply(S.scala:1566)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withReq(S.scala:1565)
+	net.liftweb.http.S$.withReq(S.scala:48)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39$$anonfun$apply$40.apply(S.scala:1555)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39.apply(S.scala:1554)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38.apply(S.scala:1553)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1.apply(S.scala:1552)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_innerInit(S.scala:1551)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$48.apply(S.scala:1589)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46$$anonfun$apply$47.apply(S.scala:1587)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:613)
+	net.liftweb.http.RequestVarHandler$.apply(Vars.scala:515)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46.apply(S.scala:1586)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:613)
+	net.liftweb.http.TransientRequestVarHandler$.apply(Vars.scala:528)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45.apply(S.scala:1585)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44.apply(S.scala:1584)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1.apply(S.scala:1583)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_init(S.scala:1582)
+	net.liftweb.http.S$class.init(S.scala:1185)
+	net.liftweb.http.LiftServlet.doSession$1(LiftServlet.scala:278)
+	net.liftweb.http.LiftServlet.doService(LiftServlet.scala:288)
+	net.liftweb.http.LiftServlet$$anonfun$doIt$1$1.apply(LiftServlet.scala:132)
+	net.liftweb.http.LiftServlet$$anonfun$doIt$1$1.apply(LiftServlet.scala:131)
+	net.liftweb.util.TimeHelpers$class.calcTime(TimeHelpers.scala:344)
+	net.liftweb.util.Helpers$.calcTime(Helpers.scala:34)
+	net.liftweb.util.TimeHelpers$class.logTime(TimeHelpers.scala:363)
+	net.liftweb.util.Helpers$.logTime(Helpers.scala:34)
+	net.liftweb.http.LiftServlet.doIt$1(LiftServlet.scala:131)
+	net.liftweb.http.LiftServlet.service(LiftServlet.scala:142)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply$mcV$sp(HTTPProvider.scala:71)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply(HTTPProvider.scala:70)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply(HTTPProvider.scala:70)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.URLRewriter$.doWith(Req.scala:1244)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply$mcV$sp(HTTPProvider.scala:69)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply(HTTPProvider.scala:69)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply(HTTPProvider.scala:69)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.provider.HTTPProvider$class.service(HTTPProvider.scala:65)
+	net.liftweb.http.LiftFilter.service(LiftServlet.scala:757)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply$mcV$sp(ServletFilterProvider.scala:67)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply(ServletFilterProvider.scala:62)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply(ServletFilterProvider.scala:62)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18$$anonfun$apply$19.apply(Vars.scala:619)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18.apply(Vars.scala:618)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17.apply(Vars.scala:617)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16.apply(Vars.scala:616)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:615)
+	net.liftweb.http.RequestVarHandler$.apply(Vars.scala:515)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1.apply(ServletFilterProvider.scala:61)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1.apply(ServletFilterProvider.scala:61)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18$$anonfun$apply$19.apply(Vars.scala:619)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18.apply(Vars.scala:618)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17.apply(Vars.scala:617)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16.apply(Vars.scala:616)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:615)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$class.doFilter(ServletFilterProvider.scala:60)
+	net.liftweb.http.LiftFilter.doFilter(LiftServlet.scala:757)
+	org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1157)
+	org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:388)
+	org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:182)
+	org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:765)
+	org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:440)
+	org.mortbay.jetty.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:230)
+	org.mortbay.jetty.handler.HandlerCollection.handle(HandlerCollection.java:114)
+	org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	org.mortbay.jetty.Server.handle(Server.java:326)
+	org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:542)
+	org.mortbay.jetty.HttpConnection$RequestHandler.headerComplete(HttpConnection.java:926)
+	org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:549)
+	org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:212)
+	org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+	org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:410)
+	org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+
+10:30:40.559 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:40.604 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /constitution.html returned 500, took 529 Milliseconds
+10:30:40.660 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:40.680 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:40.682 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /favicon.ico returned 404, took 26 Milliseconds
+10:30:45.243 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+Menu Loc "startSession": user logged in = true
+10:30:45.406 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:45.412 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) / returned 200, took 171 Milliseconds
+10:30:45.575 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:45.594 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:45.595 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /ajax_request/liftAjax.js returned 200, took 23 Milliseconds
+10:30:46.220 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:46.230 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:46.232 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /favicon.ico returned 404, took 14 Milliseconds
+10:30:48.195 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+Menu Loc "startSession": user logged in = true
+10:30:48.873 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:48.876 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /constitutions returned 200, took 683 Milliseconds
+10:30:48.926 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:48.929 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:48.931 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /ajax_request/liftAjax.js returned 200, took 6 Milliseconds
+10:30:49.021 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:49.032 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:49.034 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /favicon.ico returned 404, took 15 Milliseconds
+10:30:50.219 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+  opening file: /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/webapp/constitutions/constitution1.html
+10:30:50.241 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.243 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (POST) /constitutions returned 302, took 28 Milliseconds
+10:30:50.248 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+ConstitutionSnippet.render
+   Constitution id:1
+edit url param = true
+firstedit url param = true
+Menu Loc "startSession": user logged in = true
+10:30:50.309 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.313 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /constitution.html returned 200, took 67 Milliseconds
+10:30:50.349 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.354 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.356 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /ajax_request/liftAjax.js returned 200, took 11 Milliseconds
+10:30:50.380 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.392 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:30:50.395 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /favicon.ico returned 404, took 17 Milliseconds
+10:31:06.675 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+  opening file: /home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/webapp/constitutions/constitution1.html
+ConstitutionSnippet.render
+10:31:06.692 [332327930@qtp-826629364-0] ERROR net.liftweb.http.LiftRules - Exception being returned to browser when processing /constitution.html: Message: scala.MatchError: (true,Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].,null,0,0,Constitution not found) (of class scala.Tuple6)
+	org.ocbkc.swift.snippet.ConstitutionSnippet.render(Constitution.scala:52)
+	sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)
+	sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:57)
+	sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	java.lang.reflect.Method.invoke(Method.java:616)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2$$anonfun$apply$8.apply(ClassHelpers.scala:318)
+	net.liftweb.util.ControlHelpers$class.tryo(ControlHelpers.scala:46)
+	net.liftweb.util.Helpers$.tryo(Helpers.scala:34)
+	net.liftweb.util.ControlHelpers$class.tryo(ControlHelpers.scala:84)
+	net.liftweb.util.Helpers$.tryo(Helpers.scala:34)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2.apply(ClassHelpers.scala:318)
+	net.liftweb.util.ClassHelpers$$anonfun$net$liftweb$util$ClassHelpers$$_invokeMethod$2.apply(ClassHelpers.scala:318)
+	scala.collection.Iterator$$anon$19.next(Iterator.scala:335)
+	scala.collection.Iterator$class.find(Iterator.scala:708)
+	scala.collection.Iterator$$anon$19.find(Iterator.scala:333)
+	net.liftweb.util.ClassHelpers$class.net$liftweb$util$ClassHelpers$$_invokeMethod(ClassHelpers.scala:319)
+	net.liftweb.util.ClassHelpers$class.invokeMethod(ClassHelpers.scala:238)
+	net.liftweb.util.Helpers$.invokeMethod(Helpers.scala:34)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85$$anonfun$apply$88.apply(LiftSession.scala:1648)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85$$anonfun$apply$88.apply(LiftSession.scala:1645)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1645)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1553)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1552)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processSnippet(LiftSession.scala:1552)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1778)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1766)
+	net.liftweb.util.NamedPF.apply(NamedPartialFunction.scala:36)
+	net.liftweb.util.NamedPF$.apply(NamedPartialFunction.scala:82)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1869)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1868)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withAttrs(S.scala:2013)
+	net.liftweb.http.S$.withAttrs(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processOrDefer(LiftSession.scala:1853)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1865)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1860)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.Iterator$class.foreach(Iterator.scala:660)
+	scala.collection.LinearSeqLike$$anon$1.foreach(LinearSeqLike.scala:50)
+	scala.collection.IterableLike$class.foreach(IterableLike.scala:73)
+	scala.xml.NodeSeq.foreach(NodeSeq.scala:43)
+	scala.collection.TraversableLike$class.flatMap(TraversableLike.scala:200)
+	scala.xml.NodeSeq.flatMap(NodeSeq.scala:43)
+	net.liftweb.http.LiftSession.processSurroundAndInclude(LiftSession.scala:1860)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2$$anonfun$apply$3.apply(Surround.scala:40)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2$$anonfun$apply$3.apply(Surround.scala:39)
+	net.liftweb.util.AnyVarTrait$class.doWith(AnyVar.scala:233)
+	net.liftweb.util.AnyVar.doWith(AnyVar.scala:89)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2.apply(Surround.scala:39)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1$$anonfun$apply$2.apply(Surround.scala:37)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1.apply(Surround.scala:37)
+	net.liftweb.builtin.snippet.Surround$$anonfun$render$1.apply(Surround.scala:36)
+	net.liftweb.common.Full.flatMap(Box.scala:493)
+	net.liftweb.builtin.snippet.Surround$.render(Surround.scala:36)
+	net.liftweb.builtin.snippet.Surround$$anonfun$dispatch$1$$anonfun$apply$1.apply(Surround.scala:31)
+	net.liftweb.builtin.snippet.Surround$$anonfun$dispatch$1$$anonfun$apply$1.apply(Surround.scala:31)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1584)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83$$anonfun$apply$85.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80$$anonfun$apply$83.apply(LiftSession.scala:1556)
+	net.liftweb.common.EmptyBox.openOr(Box.scala:574)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.LiftSession$$anonfun$27$$anonfun$apply$80.apply(LiftSession.scala:1555)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1553)
+	net.liftweb.http.LiftSession$$anonfun$27.apply(LiftSession.scala:1552)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processSnippet(LiftSession.scala:1552)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1778)
+	net.liftweb.http.LiftSession$$anonfun$_defaultLiftTagProcessing$1.apply(LiftSession.scala:1766)
+	net.liftweb.util.NamedPF.apply(NamedPartialFunction.scala:36)
+	net.liftweb.util.NamedPF$.apply(NamedPartialFunction.scala:82)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1869)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93$$anonfun$apply$94.apply(LiftSession.scala:1868)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withAttrs(S.scala:2013)
+	net.liftweb.http.S$.withAttrs(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92$$anonfun$apply$93.apply(LiftSession.scala:1867)
+	net.liftweb.http.S$class.doSnippet(S.scala:2223)
+	net.liftweb.http.S$.doSnippet(S.scala:48)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1$$anonfun$apply$92.apply(LiftSession.scala:1866)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$processOrDefer(LiftSession.scala:1853)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1865)
+	net.liftweb.http.LiftSession$$anonfun$processSurroundAndInclude$1.apply(LiftSession.scala:1860)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.TraversableLike$$anonfun$flatMap$1.apply(TraversableLike.scala:200)
+	scala.collection.Iterator$class.foreach(Iterator.scala:660)
+	scala.collection.IndexedSeqLike$Elements.foreach(IndexedSeqLike.scala:54)
+	scala.collection.IterableLike$class.foreach(IterableLike.scala:73)
+	scala.xml.NodeSeq.foreach(NodeSeq.scala:43)
+	scala.collection.TraversableLike$class.flatMap(TraversableLike.scala:200)
+	scala.xml.NodeSeq.flatMap(NodeSeq.scala:43)
+	net.liftweb.http.LiftSession.processSurroundAndInclude(LiftSession.scala:1860)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44$$anonfun$apply$45.apply(LiftSession.scala:986)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44$$anonfun$apply$45.apply(LiftSession.scala:983)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44.apply(LiftSession.scala:983)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1$$anonfun$apply$44.apply(LiftSession.scala:982)
+	net.liftweb.common.Full.map(Box.scala:491)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1.apply(LiftSession.scala:981)
+	net.liftweb.http.LiftSession$$anonfun$processTemplate$1.apply(LiftSession.scala:981)
+	net.liftweb.util.AnyVarTrait$class.doWith(AnyVar.scala:233)
+	net.liftweb.util.AnyVar.doWith(AnyVar.scala:89)
+	net.liftweb.http.LiftSession.processTemplate(LiftSession.scala:980)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$50.apply(LiftSession.scala:1087)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$50.apply(LiftSession.scala:1087)
+	net.liftweb.common.EmptyBox.or(Box.scala:576)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47.apply(LiftSession.scala:1086)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46$$anonfun$apply$47.apply(LiftSession.scala:1086)
+	net.liftweb.util.StackableMaker$class.doWith(Maker.scala:141)
+	net.liftweb.http.Factory$FactoryMaker.doWith(Factory.scala:37)
+	net.liftweb.util.StackableMaker$class.doWith(Maker.scala:135)
+	net.liftweb.http.Factory$FactoryMaker.doWith(Factory.scala:37)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46.apply(LiftSession.scala:1085)
+	net.liftweb.http.LiftSession$$anonfun$19$$anonfun$apply$46.apply(LiftSession.scala:1081)
+	net.liftweb.http.LiftSession.net$liftweb$http$LiftSession$$checkStatelessInSiteMap(LiftSession.scala:1025)
+	net.liftweb.http.LiftSession$$anonfun$19.apply(LiftSession.scala:1081)
+	net.liftweb.http.LiftSession$$anonfun$19.apply(LiftSession.scala:1079)
+	net.liftweb.common.EmptyBox.or(Box.scala:576)
+	net.liftweb.http.LiftSession.processRequest(LiftSession.scala:1079)
+	net.liftweb.http.LiftServlet.net$liftweb$http$LiftServlet$$dispatchStatefulRequest(LiftServlet.scala:414)
+	net.liftweb.http.LiftServlet$$anonfun$doSession$1$1.apply(LiftServlet.scala:279)
+	net.liftweb.http.LiftServlet$$anonfun$doSession$1$1.apply(LiftServlet.scala:279)
+	net.liftweb.http.S$class.net$liftweb$http$S$$wrapQuery(S.scala:1371)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_nest2InnerInit$1$$anonfun$apply$34.apply(S.scala:1519)
+	net.liftweb.http.S$class.net$liftweb$http$S$$doAround(S.scala:1300)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$doAround$1.apply(S.scala:1301)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.recurseMe$1(DB.scala:211)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12$$anonfun$recurseMe$1$1.apply(DB.scala:227)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12$$anonfun$recurseMe$1$1.apply(DB.scala:227)
+	net.liftweb.db.DB$$anonfun$use$1.apply(DB.scala:639)
+	net.liftweb.util.DynoVar$class.run(ThreadGlobal.scala:95)
+	net.liftweb.db.DB$class.use(DB.scala:636)
+	net.liftweb.db.DB$$anon$1.use(DB.scala:38)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.recurseMe$1(DB.scala:227)
+	net.liftweb.db.DB$$anon$2$$anonfun$apply$12.apply(DB.scala:229)
+	net.liftweb.util.DynoVar$class.run(ThreadGlobal.scala:95)
+	net.liftweb.db.DB$$anon$2.apply(DB.scala:203)
+	net.liftweb.http.S$class.net$liftweb$http$S$$doAround(S.scala:1301)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_nest2InnerInit$1.apply(S.scala:1517)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_nest2InnerInit(S.scala:1516)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39$$anonfun$apply$40$$anonfun$apply$41.apply(S.scala:1556)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$withReq$1.apply(S.scala:1566)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.withReq(S.scala:1565)
+	net.liftweb.http.S$.withReq(S.scala:48)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39$$anonfun$apply$40.apply(S.scala:1555)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38$$anonfun$apply$39.apply(S.scala:1554)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1$$anonfun$apply$38.apply(S.scala:1553)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_innerInit$1.apply(S.scala:1552)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_innerInit(S.scala:1551)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46$$anonfun$apply$47$$anonfun$apply$48.apply(S.scala:1589)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46$$anonfun$apply$47.apply(S.scala:1587)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:613)
+	net.liftweb.http.RequestVarHandler$.apply(Vars.scala:515)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45$$anonfun$apply$46.apply(S.scala:1586)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:613)
+	net.liftweb.http.TransientRequestVarHandler$.apply(Vars.scala:528)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44$$anonfun$apply$45.apply(S.scala:1585)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1$$anonfun$apply$44.apply(S.scala:1584)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$$anonfun$net$liftweb$http$S$$_init$1.apply(S.scala:1583)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.S$class.net$liftweb$http$S$$_init(S.scala:1582)
+	net.liftweb.http.S$class.init(S.scala:1185)
+	net.liftweb.http.LiftServlet.doSession$1(LiftServlet.scala:278)
+	net.liftweb.http.LiftServlet.doService(LiftServlet.scala:288)
+	net.liftweb.http.LiftServlet$$anonfun$doIt$1$1.apply(LiftServlet.scala:132)
+	net.liftweb.http.LiftServlet$$anonfun$doIt$1$1.apply(LiftServlet.scala:131)
+	net.liftweb.util.TimeHelpers$class.calcTime(TimeHelpers.scala:344)
+	net.liftweb.util.Helpers$.calcTime(Helpers.scala:34)
+	net.liftweb.util.TimeHelpers$class.logTime(TimeHelpers.scala:363)
+	net.liftweb.util.Helpers$.logTime(Helpers.scala:34)
+	net.liftweb.http.LiftServlet.doIt$1(LiftServlet.scala:131)
+	net.liftweb.http.LiftServlet.service(LiftServlet.scala:142)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply$mcV$sp(HTTPProvider.scala:71)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply(HTTPProvider.scala:70)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2$$anonfun$apply$mcV$sp$1.apply(HTTPProvider.scala:70)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.URLRewriter$.doWith(Req.scala:1244)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply$mcV$sp(HTTPProvider.scala:69)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply(HTTPProvider.scala:69)
+	net.liftweb.http.provider.HTTPProvider$$anonfun$service$2.apply(HTTPProvider.scala:69)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.provider.HTTPProvider$class.service(HTTPProvider.scala:65)
+	net.liftweb.http.LiftFilter.service(LiftServlet.scala:757)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply$mcV$sp(ServletFilterProvider.scala:67)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply(ServletFilterProvider.scala:62)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1$$anonfun$apply$mcV$sp$1.apply(ServletFilterProvider.scala:62)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18$$anonfun$apply$19.apply(Vars.scala:619)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18.apply(Vars.scala:618)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17.apply(Vars.scala:617)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16.apply(Vars.scala:616)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:615)
+	net.liftweb.http.RequestVarHandler$.apply(Vars.scala:515)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1.apply(ServletFilterProvider.scala:61)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$$anonfun$doFilter$1.apply(ServletFilterProvider.scala:61)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18$$anonfun$apply$19.apply(Vars.scala:619)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17$$anonfun$apply$18.apply(Vars.scala:618)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16$$anonfun$apply$17.apply(Vars.scala:617)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$$anonfun$apply$16.apply(Vars.scala:616)
+	net.liftweb.util.ThreadGlobal.doWith(ThreadGlobal.scala:71)
+	net.liftweb.http.CoreRequestVarHandler$class.apply(Vars.scala:615)
+	net.liftweb.http.provider.servlet.ServletFilterProvider$class.doFilter(ServletFilterProvider.scala:60)
+	net.liftweb.http.LiftFilter.doFilter(LiftServlet.scala:757)
+	org.mortbay.jetty.servlet.ServletHandler$CachedChain.doFilter(ServletHandler.java:1157)
+	org.mortbay.jetty.servlet.ServletHandler.handle(ServletHandler.java:388)
+	org.mortbay.jetty.security.SecurityHandler.handle(SecurityHandler.java:216)
+	org.mortbay.jetty.servlet.SessionHandler.handle(SessionHandler.java:182)
+	org.mortbay.jetty.handler.ContextHandler.handle(ContextHandler.java:765)
+	org.mortbay.jetty.webapp.WebAppContext.handle(WebAppContext.java:440)
+	org.mortbay.jetty.handler.ContextHandlerCollection.handle(ContextHandlerCollection.java:230)
+	org.mortbay.jetty.handler.HandlerCollection.handle(HandlerCollection.java:114)
+	org.mortbay.jetty.handler.HandlerWrapper.handle(HandlerWrapper.java:152)
+	org.mortbay.jetty.Server.handle(Server.java:326)
+	org.mortbay.jetty.HttpConnection.handleRequest(HttpConnection.java:542)
+	org.mortbay.jetty.HttpConnection$RequestHandler.content(HttpConnection.java:943)
+	org.mortbay.jetty.HttpParser.parseNext(HttpParser.java:756)
+	org.mortbay.jetty.HttpParser.parseAvailable(HttpParser.java:218)
+	org.mortbay.jetty.HttpConnection.handle(HttpConnection.java:404)
+	org.mortbay.io.nio.SelectChannelEndPoint.run(SelectChannelEndPoint.java:410)
+	org.mortbay.thread.QueuedThreadPool$PoolThread.run(QueuedThreadPool.java:582)
+
+10:31:06.693 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:31:06.695 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (POST) /constitution.html returned 500, took 24 Milliseconds
+10:31:06.739 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:31:06.745 [332327930@qtp-826629364-0] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+10:31:06.747 [332327930@qtp-826629364-0] INFO  net.liftweb.util.TimeHelpers - Service request (GET) /favicon.ico returned 404, took 10 Milliseconds
+11:03:12.712 [pool-2-thread-16] INFO  net.liftweb.http.SessionMaster -  Session 1pxveq9jbe7hs134vfnmbksdjg expired
+11:03:12.725 [pool-2-thread-1] DEBUG net.liftweb.db.ProtoDBVendor - Released connection. poolSize=1
+2012-06-15 11:16:58.596:INFO::Shutdown hook executing
+2012-06-15 11:16:58.597:INFO::Stopped SelectChannelConnector@0.0.0.0:8080
+11:16:59.111 [Shutdown] INFO  net.liftweb.db.ProtoDBVendor - Closing all connections
+11:16:59.112 [Shutdown] INFO  net.liftweb.db.ProtoDBVendor - Closing all connections
+11:16:59.112 [Shutdown] DEBUG net.liftweb.http.LiftServlet - Destroyed Lift handler.
+[INFO] 
+Jetty server exiting.
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESSFUL
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 47 minutes 46 seconds
+[INFO] Finished at: Fri Jun 15 11:16:59 CEST 2012
+[INFO] Final Memory: 35M/511M
+[INFO] ------------------------------------------------------------------------

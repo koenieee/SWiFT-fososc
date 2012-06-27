@@ -1,0 +1,2 @@
+[(FHpre2stat (_Tuple2 [1]p (_Tuple2 [[1]a] [[1]b])))]
+Some(Sharpest(NumResPat(Geq,PatVar(n),Var(name = x, id = -410599528),PredApp(Predicate(name = p, arity = 2),List(Constant(name = a, id = 1687578024), Var(name = x, id = -410599528))))))

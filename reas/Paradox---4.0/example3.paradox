@@ -1,0 +1,5 @@
+fof(constants,axiom,p(a,b,c,d)).
+fof(ab,axiom, a != c).
+fof(bc,axiom, b != d).
+%fof(bc,axiom, c != d).
+% a=1, b=2, c=2, d=1

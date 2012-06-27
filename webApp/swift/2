@@ -1,0 +1,12 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[ERROR] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Invalid task 'tmp/logmsg': you must specify a valid lifecycle phase, or a goal in the format plugin:goal or pluginGroupId:pluginArtifactId:pluginVersion:goal
+[INFO] ------------------------------------------------------------------------
+[INFO] For more information, run Maven with the -e switch
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: < 1 second
+[INFO] Finished at: Wed Feb 22 15:24:24 CET 2012
+[INFO] Final Memory: 5M/86M
+[INFO] ------------------------------------------------------------------------

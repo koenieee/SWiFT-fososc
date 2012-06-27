@@ -1,0 +1,38 @@
+@base <http://thisdocument/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+<The_concept_of_vitamin> rdfs:subClassOf <The_class_of_organic_compounds>.
+<The_concept_of_vitamin> <requiredBy> <The_class_of_organisms>.
+
+<The_concept_of_vitamin_D> <functionAs> _:a1.
+_:a1_<type> <The_class_of_Hormones>.
+
+<The_concept_of_vitamin_E> <functionAs>_:a2.
+_:a2 <type> <The_class_of_Antioxidants>.
+
+<The_concept_of_vitamin_A> <discoveredin> "1909"^^xsd:gYear.
+<The_concept_of_vitamin_A> <hasSource> <The_cod_liver_oil>.
+
+<The_concept_of_vitamin_D> <discoveredin> "1918"^^xsd:gYear.
+<The_concept_of_vitamin_D> <hasSource> <The_cod_liver_oil>.
+
+<The_concept_of_vitamin_C> <discoveredin> "1912"^^xsd:gYear.
+<The_concept_of_vitamin_C> <hasSource> <The_concept_ascorbic_acid>.
+
+<The_concept_of_vitamin_B1> <discoveredin> "1912"^^xsd:gYear.
+<The_concept_of_vitamin_B1> <hasSource> <The_concept_of_rice_bran>.
+
+<The_concept_of_vitamin_E> <discoveredin> "1922"^^xsd:gYear.
+<The_concept_of_vitamin_E> <hasSource> <The_concept_tocopherol>.
+
+<The_concept_of_vitamin_B12> <discoveredin> "1926"^^xsd:gYear.
+<The_concept_of_vitamin_B12> <hasSource> <The_concept_of_liver>.
+
+<The_concept_of_vitamin_B12> rdfs:subClassOf <The_concept_of_vitamin>.
+<The_concept_of_vitamin_A> rdfs:subClassOf <The_concept_of_vitamin>.
+<The_concept_of_vitamin_D> rdfs:subClassOf <The_concept_of_vitamin>.
+<The_concept_of_vitamin_C> rdfs:subClassOf <The_concept_of_vitamin>.
+<The_concept_of_vitamin_B1> rdfs:subClassOf <The_concept_of_vitamin>.
+<The_concept_of_vitamin_E> rdfs:subClassOf <The_concept_of_vitamin>.

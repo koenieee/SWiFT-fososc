@@ -1,0 +1,10 @@
+Ivana is a friend of Quadario and Christopher
+
+[(FHpre2stat (_Tuple2 [12]is_friend_of (_Tuple2 [[5]Ivana] [[8]Quadario,[11]Christopher]))),(FHeqstat (_Tuple2 Neq [[8]Quadario,[11]Christopher]))]
+
+[(_Hurelan_cfnl [12]is_friend_of [6]friend [6]friend)]
+
+
+
+
+[(FHpre2stat (_Tuple2 [13]is_sibling_of (_Tuple2 [[1]Q] [[1]A,[1]P,[1]S]))), (FHeqstat (_Tuple2 Neq [[1]A,[1]P,[1]S]))]

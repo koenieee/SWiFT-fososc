@@ -1,0 +1,5 @@
+equal(a,b,c)
+inequal(c,d,e,f,g)
+p(a,{a,b,c})
+p({h,i},{i,j,k})
+

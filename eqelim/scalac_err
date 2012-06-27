@@ -1,0 +1,7 @@
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:140: error: ':' expected but ')' found.
+   def folminquaSentence(ft)           = ( eqstat(ft) | pre2stat(ft) ) ^^ ( x => {println("debug folminquaSentence result: " + x); x} )
+                           ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:170: error: identifier expected but '}' found.
+}
+^
+two errors found

@@ -1,0 +1,7 @@
+
+% Status : Unsatisfiable
+
+cnf( axiom, axiom, h(a,X) ).
+
+cnf( axiom, axiom, ~h(X,f(X)) ).
+

@@ -1,0 +1,1 @@
+{"numrespat":{"comOp":0,"patvar":{"id":"n"},"boundvar":{"jsonClass":"Var","name":"x"},"predapp":{"p":{"name":"sibling_of","arity":2},"terms":[{"jsonClass":"Constant","name":"henkjan"},{"jsonClass":"Var","name":"x"}]}}}

@@ -1,0 +1,3 @@
+[(HurelanStat (_HurelanStat_ [13]is_sibling_of [7]sibling [7]sibling)),(EntityStat (_EntityStat_ [8]Henk-Jan [8]Henk-Jan))]
+(PatLang (SharpestPat (_Tuple2 [1]n (NumRestrPat (_Tuple4 Geq [1]n [1]x (Literal (_Tuple2 [13]is_sibling_of [(FHconstant [8]Henk-Jan),(FHvar [1]x)])))))))
+[(EntityStat (_EntityStat_ [7]henkjan [8]Henk-Jan)),(HurelanStat (_HurelanStat_ [10]sibling_of [7]sibling [7]sibling))]

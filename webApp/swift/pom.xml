@@ -95,7 +95,7 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
-      <scope>test</scope>
+      <scope>compile</scope> <!-- changed to test something, switch back to "test" if needed -->
     </dependency>
   </dependencies>
 

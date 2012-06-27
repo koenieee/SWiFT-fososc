@@ -1,7 +1,7 @@
 package org.ocbkc.swift.OCBKC
 {  
 import _root_.scala.xml._
-import org.ocbkc.swift.model._
+//import org.ocbkc.swift.model._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -19,8 +19,9 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 */
 object TestSerialization
 {  def main(args: Array[String]) =
-   {  if( args.length != 0 ) println("Usage: command filename")
-      val const1 = new Constitution(1,15,2,0,"Lets go organic!",None)
+   {  if( args.length != 0 ) println("Usage: command without arguments")
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None)
+      const1.serialize
    }
 }
 
@@ -49,15 +50,14 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
    def plainContent:String =
-   {  val inFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
-      val in:BufferedReader = new BufferedReader(new FileReader(inFile))
-      val content:String = "<p>TODO in method plainContent</p>" // <&y2012.06.12.21:25:41& read complete file in oneggo into a string>
+   {  val content:String = scala.io.Source.fromFile(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName).mkString
       content
    }
 
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
-   {  val contentWrapped = "<lift:child>/n" + plainContent + "/n</lift:child>/n"
+   {  val contentWrapped = "<lift:children>" + plainContent + "</lift:children>"
+      println("   contentWrapped:String = " + contentWrapped)
       val xml = XML.loadString( contentWrapped )
       xml
    }
@@ -121,6 +121,11 @@ object Constitution
          }
          
          constitutionFiles map readConst
+         val highestIdFile       = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
+         val in:BufferedReader   = new BufferedReader(new FileReader(highestIdFile))
+         var inStr:String        = in.readLine()
+         highestId               = inStr.toInt
+         println("   read from file: highestId = " + highestId)
       }
       else
       {  println("   No serialised Constitution objects found in permanent storage!")
@@ -130,12 +135,20 @@ object Constitution
    def serialize = 
    {  println("Constitution.serialize called")
       constis.map(_.serialize)
+
+      var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
+      err.println("   creating file: " + outFile.getAbsolutePath)
+      // outFile.getParentFile().mkdirs() these should already exist
+      // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
+      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
+      out.println(highestId.toString)
+      out.close()
    }
 
    def templateNewConstitution(constitutionId:Int):String =
-"""<lift:children><h2>Short description: ...</h2>
+"""<h2>Short description: ...</h2>
 
-<h2>Article 1</h2><p>...</p></lift:children>
+<h2>Article 1</h2><p>...</p>
 """
    def create(creatorUserID:Int):Constitution = 
    {  highestId += 1

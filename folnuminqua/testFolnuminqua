@@ -1,0 +1,1 @@
+scala -classpath $JNGIT/SWiFTfososc/source/classes:$CHIDEHOME/.m2/repository/net/liftweb/lift-json_2.9.1/2.4-M4/lift-json_2.9.1-2.4-M4.jar org.ocbkc.swift.logilang.query.TestFolnuminquaCLI $1

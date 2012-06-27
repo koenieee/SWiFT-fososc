@@ -1,0 +1,163 @@
+/*
+Part of SWiFT game (c) Chide Groenouwe
+
+
+
+### CONVENTIONS
+None so far
+
+*/
+
+package org.ocbkc.swift.parser
+{
+import scala.collection.JavaConversions._
+import scala.util.parsing.combinator._
+import System._
+import java.io._
+
+object FolminquaParserCLI
+{  def main(args: Array[String]) 
+   {  println("inputfilename: " + args(0))
+      
+      //var inFile = new File(arg(0))
+      //val in:BufferedReader = new BufferedReader(new FileReader(inFile))
+      //var input:String
+      val source = scala.io.Source.fromFile(args(0))
+      val lines = source.mkString // <&y2012.02.19.00:00:27& careful: this always adds a newline after each string in the source, even if it is a last line without a newline. Really so? Make SLI from this>
+      source.close()
+      println("inputfile: \n" + lines)
+      //println(FolminquaParser.parseAll(FolminquaParser.folminquaSentence, args(0)))
+      //println(HurelanBridge.parseAll(HurelanBridge.entityStat, args(0)))
+      println(FolminquaParser.parseAll(FolminquaParser.folminquaTheory, lines))
+      /*FolminquaParser.parseAll(FolminquaParser.folminquaTheory, lines)) match
+      {  case s@Success(_) => println(s)
+         case f@Failure(_,_) => prinln(f)
+      }*/
+   }
+}
+
+object HurelanBridgeParserCLI
+{  def main(args: Array[String]) 
+   {  println("inputfilename: " + args(0))
+      
+      //var inFile = new File(arg(0))
+      //val in:BufferedReader = new BufferedReader(new FileReader(inFile))
+      //var input:String
+      val source = scala.io.Source.fromFile(args(0))
+      val lines = source.mkString
+      source.close()
+      println("inputfile: " + lines)
+      //println(FolminquaParser.parseAll(FolminquaParser.folminquaSentence, args(0)))
+      //println(HurelanBridge.parseAll(HurelanBridge.entityStat, args(0)))
+      println(HurelanBridge.parseAll(HurelanBridge.bridge, lines))
+   }
+}
+
+/*
+### INPUT: Folminqua in user syntax. Example:
+P({Akwasi}, {John, Alexia})
+inequal(Akwasi, John)
+
+
+### OUTPUT: Folminqua in Clean data structure (after gToString). Example:
+[(FHpre2stat (_Tuple2 [13]is_trainee_of (_Tuple2 [[11]Christopher] [[9]Anastasia,[6]Alexia,[7]Sirtaki,[4]Alex,[5]Frank]))),(FHeqstat (_Tuple2 Neq [[9]Anastasia,[6]Alexia,[7]Sirtaki,[4]Alex,[5]Frank]))]
+[(FHpre2stat (_Tuple2 [3]pee (_Tuple2 [[2]aa] [[2]bb])))]
+*/
+
+class SWiFTparser extends JavaTokenParsers
+{  def NL = "\r\n" | "\n"
+   override val skipWhitespace = false
+}
+
+// @BS: only functions which can be reused in other than folminqua parsers, such as the bridge parser. Parsers added to this class may not postprocess!
+class FolminquaRelatedParser extends SWiFTparser
+{   def id: Parser[String]              = """[a-zA-Z][a-zA-Z0-9_\-]*""".r
+}
+
+
+//< &y2012.02.18.22:22:27& perhaps more elegant to define separate type for list of constants and also one for predicates. To give the type checking system of scala extra info to discover bugs.
+
+case class FolminquaParseResult(var bridgeInClean:String, var constants:List[String], var predicates:List[String])
+
+case class ConstantList(list:List[String])
+
+class Folminqua extends FolminquaRelatedParser
+{  import HelperFunctions._
+   /* Nasty error, which I do not understand (run-time):
+         inputfilename: input.folnuminqua
+         inputfile: 
+         p({a},{a,b,c})
+         inequal(a,b,c)
+         p({a},{a,b,c})
+
+         debug folminquaSentence result: ((FHpre2stat (_Tuple2 [1]p (_Tuple2 [[1]a] [[1]a,[1]b,[1]c]))),List([1]a, [1]a, [1]b, [1]c),List([1]p))
+         debug folminquaSentence result: ((FHeqstat (_Tuple2 Neq [[1]a,[1]b,[1]c])),List([1]a, [1]b, [1]c),List())
+         debug folminquaSentence result: ((FHpre2stat (_Tuple2 [1]p (_Tuple2 [[1]a] [[1]a,[1]b,[1]c]))),List([1]a, [1]a, [1]b, [1]c),List([1]p))
+         [4.1] failure: string matching regex `[a-zA-Z][a-zA-Z0-9_\-]*' expected but end of source found
+
+   <&y2012.02.18.23:53:39& tried:  <~ """\z""".r, but error remains>
+   */
+   // For now: simplification of language because of incompleteness reasoner.
+   // <&y2012.02.25.13:52:46& restore original definition after having made reasoner complete.>
+
+   def folminquaTheory = 
+      eqstat ~ NL ~ pre2stat ~ rep(NL) ^^ { case Tuple3(cleanformat1,consts1,preds1) ~ _ ~ Tuple3(cleanformat2, consts2, preds2) ~ _ => FolminquaParseResult(printList(List(cleanformat1,cleanformat2),"[",",","]"), (consts1 ++ consts2).distinct, (preds1 ++ preds2 ).distinct) } | 
+      pre2stat ~ NL ~ eqstat ~ rep(NL) ^^ { case Tuple3(cleanformat1,consts1,preds1) ~ _ ~ Tuple3(cleanformat2, consts2, preds2) ~ _ => FolminquaParseResult(printList(List(cleanformat1,cleanformat2),"[",",","]"), (consts1 ++ consts2).distinct, (preds1 ++ preds2 ).distinct) } |
+      pre2stat ~ rep(NL) ^^ { case Tuple3(cleanformat, constst, preds) ~ _ => FolminquaParseResult("[" + cleanformat + "]", constst, preds) } |
+      eqstat ~ rep(NL)  ^^ { case Tuple3(cleanformat, constst, preds) ~ _ => FolminquaParseResult("[" + cleanformat + "]", constst, preds) }
+   /*
+   def folminquaTheory                 = repsep(folminquaSentence, NL) <~ rep(NL) ^^ (sentences => FolminquaParseResult(printList(sentences.map({ case (sentence,_,_)=>sentence}),"[",",","]"), sentences.map({case (_,constants,_)=>constants}).flatten.distinct, sentences.map({case (_,_,preds)=>preds}).flatten.distinct))
+   */
+   // def firstOf3[A,B,C](tuple3:(A,B,C)) = match first case { (first,_,_) }
+   def folminquaSentence               = ( eqstat | pre2stat ) ^^ (x=>{println("debug folminquaSentence result: " + x); x})
+   // <&y2012.02.26.01:54:47& solve error here:                           below should be at least one constant, not zero!>
+   def eqstat                          = eqpre ~ "(" ~ constantId ~ "," ~ rep1sep(constantId, ",") ~ ")" ^^ { case eqpre ~ "(" ~ constant ~ "," ~ list ~ ")" => ("(FHeqstat (_Tuple2 " + (if (eqpre.equals("equal")) "Eq" else "Neq") + " " + printList((constant::list).map(addLength),"[",",","]") + "))", constant::list, Nil)}
+   def eqpre                           = "equal" | "inequal"
+   def pre2stat                        = preId ~ "(" ~ "{" ~ repsep(constantId,",") ~ "}" ~ "," ~ "{" ~ repsep(constantId,",") ~ "}" ~ ")" ^^ { case preId ~ "(" ~ "{" ~ set1 ~ "}" ~ "," ~"{" ~ set2 ~ "}" ~ ")" => ("(FHpre2stat (_Tuple2 " + addLength(preId) + " (_Tuple2 " + printList(set1.map(addLength), "[", ",", "]") + " " + printList(set2.map(addLength),"[",",","]") + ")))", (set1 ++ set2).distinct, List(preId))}
+   def constantId                      = id//  ^^ (x => "[" + (x.length) + "]" + x)
+   def preId                           = id//  ^^ (x => "[" + (x.length) + "]" + x)
+   
+   // <&y2012.01.22.21:12:32& exclude equal and inequal from preId>
+   def addLength(id:String) = "[" + (id.length) + "]" + id
+}
+
+/*
+
+hurelan(friend,is_friend_of,friend)
+entity(c1,Akwasi)
+
+[(HurelanStat (_HurelanStat_ [13]is_patient_of [7]patient [7]dentist)),(EntityStat (_EntityStat_ [8]Quadario [8]Quadario))
+]
+
+*/
+
+class HurelanBridge extends FolminquaRelatedParser
+{  // <&y2012.02.17.10:00:54& eat superfluous enters, etc.>
+   def bridge        = repsep(bridgeStat,NL) <~ rep(NL) ^^ (x => HelperFunctions.printList(x, "[", ",", "]")) // Example output before transformer is applied: List( ("hurelanstat(...)", List("a","b","c"), List("p","q")) )
+   def bridgeStat    = hurelanStat | entityStat
+   def entityStat    = ((((("entity" ~ "(") ~> entityIdCTL) <~ ",") ~ entityNL) <~ ")") ^^ { case entityIdCTL ~ entityNL => "(EntityStat (_EntityStat_ " + entityIdCTL + " " + entityNL + "))" }
+   def hurelanStat   = ((((((("hurelan" ~ "(") ~> firstPosInNL) <~ ",") ~ predicate) <~ ",") ~ secondPosInNL) <~ ")") ^^ { case first ~ pred ~ second => "(HurelanStat (_HurelanStat_ " + pred + " " + first + " " + second + "))"}
+   def firstPosInNL  = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+   def predicate     = id ^^ (x => "[" + (x.length) + "]" + x)
+   def secondPosInNL = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+   def entityNL      = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+   def entityIdCTL   = id ^^ (x => "[" + (x.length) + "]" + x)
+   def wordNL        = wordNLregexStr.r
+   def wordNLregexStr = """[a-zA-Z\-]+""" 
+}
+
+object HurelanBridge extends HurelanBridge
+
+object FolminquaParser extends Folminqua
+
+object HelperParsers extends JavaTokenParsers
+
+object HelperFunctions
+{  def printList(list:List[String], open:String, sep:String, close:String):String = list match 
+      {  //case x::Nil => open + x + close
+         case x::xs => open + x + xs.foldLeft("")((a,b) => a + sep + b) + close
+         case Nil => ""
+      }
+}
+
+}

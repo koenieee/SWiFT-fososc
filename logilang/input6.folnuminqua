@@ -1,0 +1,6 @@
+inequal(a,b,c)
+equal(a,b,c,d)
+p1({a,b},{c,d,e})
+p2(f,g)
+p3(h,{i,j,k})
+p4({a,b},c)

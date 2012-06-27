@@ -1,0 +1,2 @@
+../eprover example4.fof
+# ../eprover -s -xAuto -tAuto --cpu-limit=30 --memory-limit=Auto --tstp-format --answers example4.fof

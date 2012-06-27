@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# mc = make code
+ROOTNATIVELIBS=~/bin/clean/lib
+ARGENVLIB=$CHIDEHOME/bin/clean/lib/ArgEnv
+LIBS=$ROOTNATIVELIBS/Gast/:$ROOTNATIVELIBS/Generics:$ROOTNATIVELIBS/StdLib:$JN/CleanLibs/GenericByCG:$JN/CleanLibs:$ROOTNATIVELIBS/MersenneTwister:$JN/CleanLibs/gastTCP/:$ROOTNATIVELIBS/../libsFromClean2.3Windows/Gast/:$ARGENVLIB
+clm -l $ARGENVLIB/ArgEnvC.o -I $LIBS answerInCTL2NL_CI
+mv a.out answerInCTL2NL_CI

@@ -1,0 +1,11 @@
+inputfilename: input.folnuminqua
+inputfile: 
+p({a},{a,b,c})
+inequal(a,b,c)
+p({a},{a,b,c})
+
+[3.1] failure: string matching regex `\z' expected but `p' found
+
+p({a},{a,b,c})
+
+^

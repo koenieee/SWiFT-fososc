@@ -1,0 +1,4 @@
+fof(a1,axiom,p(a,b)).
+fof(a2,axiom,p(a,c)).
+fof(a3,axiom,p(a,e)).
+fof(a,question,? [X] : p(a,X)).

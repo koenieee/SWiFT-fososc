@@ -1,0 +1,7 @@
+fof(p1,axiom,p(a,b)).
+fof(p2,axiom,p(a,c)).
+%fof(ab,axiom, a!= b).
+fof(bc,axiom, b != c).
+%fof(cd,axiom, c != d).
+%fof(cd,axiom, c != d).
+

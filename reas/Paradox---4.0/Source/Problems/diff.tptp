@@ -1,0 +1,16 @@
+%----Kalman's axioms for set difference:
+cnf(set_difference_1,axiom,
+    ( difference(X,difference(Y,X)) = X )).
+
+cnf(set_difference_2,axiom,
+    ( difference(X,difference(X,Y)) = difference(Y,difference(Y,X)) )).
+
+cnf(set_difference_3,axiom,
+    ( difference(difference(X,Y),Z) = difference(difference(X,Z),difference(Y,Z)) )).
+
+%----Denial of simplified third axiom:
+cnf(prove_set_difference_3_simplified,negated_conjecture,
+    (  difference(difference(a,c),b) != difference(difference(a,b),c) )).
+
+
+

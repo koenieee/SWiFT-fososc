@@ -1,0 +1,6 @@
+# deploy = copy all clean programs to the right spot in the webapplication
+
+for program in adGen reasoner textgenerator answerInCTL2NL_CI
+do
+   cp -v $program $JNGIT/SWiFTfososc/source/webApp/swift
+done

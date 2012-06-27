@@ -1,0 +1,463 @@
+@base <http://thisdocument/>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+
+#
+# TranslationByNicoleKoenderinkMadeOn20090406_IdentifiersReplacedWithLabelsSyntaxErrorsRemovedNaryTranslatedAndTranslatedToTurtle.txt
+#
+# Chide &y20090420&: I left the "reification mistake" in the translation, because I didn't count that as a trivial syntax error. For making querying possible, these reification mistakes have to be translated further (or commented out when you don't need them for a specific query).
+# Chide@20090420: replaced ^^xsd:string with nothing, because these are declared semantically identical according to [[http://www.w3.org/TR/swbp-xsch-datatypes/]]. (But this was no syntax error.).
+# A vitamin is an organic compound required as a nutrient in tiny amounts by an organism. [1]
+
+<the_concept_vitamins> rdfs:subClassOf (<the_concept_of_organic_compounds>  <the_relation_is_required_as_a_nutrient_in_tiny_amounts_by> <the_concept_of_organisms>).
+
+(<the_concept_vitamins>  <the_relation_is_defined_as>  (<the_concept_of_organic_compounds>  <the_relation_is_required_as_a_nutrient_in_tiny_amounts_by> <the_concept_of_organisms>)) <the_relation_is_reported_in>  <the_scientific_publication_[1]>.
+
+<the_concept_of_organic_compounds>  <the_relation_is_required_as_a_nutrient_in_tiny_amounts_by> <the_concept_of_organisms>.
+
+<the_concept_vitamins>  <the_relation_is_defined_as>  (<the_concept_of_organic_compounds>  <the_relation_is_required_as_a_nutrient_in_tiny_amounts_by> <the_concept_of_organisms>).
+
+<the_concept_of_organic_compounds>  <the_relation_is_required_as_a_nutrient_in_tiny_amounts_by> <the_concept_of_organisms>.
+
+# A compound is called a vitamin when it cannot be synthesized in sufficient quantities by an organism, and must be obtained from the diet.
+
+<the_concept_vitamins> <the_relation_is_defined_as>  (<the_concept_of_organic_compounds>  <the_relation_must_be_obtained_from>  <the_concept_diet> ).
+<the_concept_vitamins> <the_relation_is_defined_as>  (<the_relation_cannot_be_synthesized_in_sufficient_quantities_by>  <the_concept_of_organisms><the_concept_of_organic_compounds> ).
+<the_concept_of_organic_compounds>  <the_relation_must_be_obtained_from>  <the_concept_diet>.
+<the_relation_cannot_be_synthesized_in_sufficient_quantities_by>  <the_concept_of_organisms> <the_concept_of_organic_compounds>.
+
+# For example, ascorbic acid functions as vitamin C for some animals but not others, and vitamins D and K are required in the human diet only in certain circumstances.[2]
+
+_:r1 <Arg1_of_the_relation_-_compound_x_functions_as_vitamin_y_for_a_class_of_organisms_z_-> <the_concept_ascorbic_acid>.
+_:r1 <Arg2_of_the_relation_-_compound_x_functions_as_vitamin_y_for_a_class_of_organisms_z_-> <the_concept_vitamin_c>.
+_:r1 <Arg3_of_the_relation_-_compound_x_functions_as_vitamin_y_for_a_class_of_organisms_z_-> <the_concept_animal>.
+
+_:r1  <the_relation_is_reported_in>  <the_scientific_publication_[1]>.
+
+# (<the_relation_-_compound_x_functions_as_vitamin_y_for_a_class_of_organisms_z_->  (<the_concept_ascorbic_acid>  <the_concept_vitamin_c>  <the_concept_animal>)) <the_relation_is_reported_in>  <the_scientific_publication_[1]>.
+
+
+(<the_concept_vitamin_k> <the_relation_is_required_in_the_diet_under_some_circumstances> <the_concept_circumstance>) <the_relation_is_reported_in>  <the_scientific_publication_[1]>.
+
+(<the_concept_vitamin_d>  <the_relation_is_required_in_the_diet_under_some_circumstances> <the_concept_circumstance>) <the_relation_is_reported_in>  <the_scientific_publication_[1]>.
+
+# chide@&y20090525&: defined two times the following statement?
+# <the_relation_-_compound_x_functions_as_vitamin_y_for_a_class_of_organisms_z_->  (<the_concept_ascorbic_acid>  <the_concept_vitamin_c>  <the_concept_animal>).
+
+<the_concept_ascorbic_acid>  <the_relation_functions_as_vitamin> <the_concept_animal>.
+
+<the_concept_vitamin_k> <the_relation_is_required_in_the_diet_under_some_circumstances> <the_concept_circumstance>.
+
+<the_concept_vitamin_d>  <the_relation_is_required_in_the_diet_under_some_circumstances> <the_concept_circumstance>.
+
+<the_concept_vitamin_c>  rdfs:subClassOf <the_concept_vitamins>.
+
+<the_concept_vitamin_d>  rdfs:subClassOf <the_concept_vitamins>.
+
+<the_concept_vitamin_k> rdfs:subClassOf <the_concept_vitamins>.
+
+# Vitamins are classified by their biological and chemical activity, not their structure.
+
+<the_concept_chemical_activity_as_defined_in_SWiFText>  rdfs:subClassOf <the_activity_of_molecular_compounds>.
+
+<the_concept_biological_activity>  rdfs:subClassOf <the_activity_of_molecular_compounds>.
+
+<the_activity_of_molecular_compounds>  rdfs:subClassOf <the_concept_vitamin_property>.
+
+<the_concept_molecular_structure>  rdfs:subClassOf <the_concept_vitamin_property>.
+
+<the_concept_vitamins> <the_relation_is_classified_by>  <the_activity_of_molecular_compounds>.
+
+<the_concept_vitamins> <the_relation_is_not_classified_by> <the_concept_molecular_structure>.
+
+# For example, "vitamin A" includes the compounds retinal, retinol, and many carotenoids.[3]
+
+<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinal>.
+
+<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinol>.
+
+(<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinal> ) <the_relation_is_reported_in>  <the_scientific_publication_[3]>.
+
+<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinal>.
+
+(<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinol> ) <the_relation_is_reported_in>  <the_scientific_publication_[3]>.
+
+<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_compound_retinol>.
+
+(<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_concept_carotenoid>)  <the_relation_is_reported_in>  <the_scientific_publication_[3]>.
+
+<the_concept_vitamin_a> <the_relation_includes_the_compound> <the_concept_carotenoid>.
+
+<the_concept_vitamin_a> rdfs:subClassOf <the_concept_vitamins>.
+
+# Vitamins have diverse biochemical functions, including function as hormones (e.g. vitamin D), antioxidants (e.g. vitamin E), and mediators of cell signaling and  regulators of cell and tissue growth and differentiation (e.g. vitamin A). [5]
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_hormone> ) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_antioxidant>) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_mediator_of_cell_signaling>) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_cell_growth> ) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_tissue_growth>) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+(<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_cell_differentiation>) <the_relation_is_reported_in>  <the_scientific_publication_[5]>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_hormone>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_antioxidant>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_mediator_of_cell_signaling>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_cell_growth>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_tissue_growth>.
+
+<the_concept_vitamins> <has_biochemical_function>  <the_concept_regulator_of_cell_differentiation>.
+
+
+<the_concept_vitamin_a> rdfs:subClassOf <the_concept_regulator_of_tissue_growth>.
+
+<the_concept_vitamin_a> rdfs:subClassOf <the_concept_regulator_of_cell_growth>.
+
+<the_concept_vitamin_a> rdfs:subClassOf <the_concept_regulator_of_cell_differentiation>.
+
+<the_concept_vitamin_d>  rdfs:subClassOf <the_concept_hormone>.
+
+<the_concept_vitamin_e> rdfs:subClassOf <the_concept_antioxidant>.
+
+<the_concept_vitamin_e> rdfs:subClassOf <the_concept_vitamins>.
+
+<the_concept_hormone>  rdfs:subClassOf <the_concept_biological_function>.
+
+<the_concept_antioxidant> rdfs:subClassOf <the_concept_biological_function>.
+
+<the_concept_mediator_of_cell_signaling> rdfs:subClassOf <the_concept_biological_function>.
+
+<the_concept_regulator_of_cell_growth>  rdfs:subClassOf <the_concept_biological_function>.
+
+<the_concept_regulator_of_tissue_growth> rdfs:subClassOf <the_concept_biological_function>.
+
+# The largest number of vitamins (e.g. B complex vitamins) function as precursors for enzyme cofactor bio-molecules (coenzymes), that help act as catalysts and substrates in metabolism.
+
+<the_concept_b_complex_vitamin> rdfs:subClassOf <the_concept_vitamins>.
+
+# <the_relation_-species_vitamin_precursor-> (_:x <the_concept_vitamins> <the_concept_enzyme_cofactor_bio-molecule>).
+
+_:n1 <the_relation_-species_vitamin_precursor-_Arg1> _:x.
+_:n1 <the_relation_-species_vitamin_precursor-_Arg2> <the_concept_vitamins>.
+_:n1 <the_relation_-species_vitamin_precursor-_Arg3> <the_concept_enzyme_cofactor_bio-molecule>.
+
+# <the_relation_helps_act_as> ( <the_concept_enzyme_cofactor_bio-molecule> <the_concept_catalyst>  <the_concept_metabolism>).
+
+_:n2 <the_relation_helps_act_as_Arg1> <the_concept_enzyme_cofactor_bio-molecule>.
+_:n2 <the_relation_helps_act_as_Arg2> <the_concept_catalyst>.
+_:n2 <the_relation_helps_act_as_Arg2> <the_concept_metabolism>.
+
+
+# <the_relation_helps_act_as> ( <the_concept_enzyme_cofactor_bio-molecule> <the_concept_substrate>  <the_concept_metabolism>).
+
+_:n3 <the_relation_helps_act_as> <the_concept_enzyme_cofactor_bio-molecule>.
+_:n3 <the_relation_helps_act_as> <the_concept_substrate>.
+_:n3 <the_relation_helps_act_as> <the_concept_metabolism>.
+
+
+<the_concept_metabolism> rdfs:subClassOf <the_concept_process>.
+
+<the_concept_catalyst>  rdfs:subClassOf <the_concept_role>.
+
+<the_concept_substrate>  rdfs:subClassOf <the_concept_role>.
+
+
+<the_concept_enzyme_cofactor_bio-molecule> rdfs:label "coenzyme".
+
+<the_concept_vitamins> <largest_number_functions_as_precursor_for> <the_concept_enzyme_cofactor_bio-molecule>.
+
+<the_concept_enzyme_cofactor_bio-molecule> rdfs:subClassOf <the_concept_precursor>.
+
+# Table The discovery of vitamins and their sources
+
+# Year
+# of
+# discov. Vitamin Source
+# 1909 Vitamin A (Retinol) Cod liver oil
+# 1912 Vitamin B1 (Thiamin) Rice bran
+# 1912 Vitamin C (Ascorbic acid) Lemons
+# 1918 Vitamin D (Calciferol) Cod liver oil
+# 1922 Vitamin E (Tocopherol) Wheat germ oil, Cosmetic and Liver
+# 1926 Vitamin B12 (Cyanocobalamin) Liver
+
+
+<the_concept_vitamin_a> <the_relation_discovered_in_year> "1909"^^xsd:gYear.
+
+<the_concept_vitamin_b1>  <the_relation_discovered_in_year> "1912"^^xsd:gYear.
+
+<the_concept_vitamin_c>  <the_relation_discovered_in_year> "1912"^^xsd:gYear.
+
+<the_concept_vitamin_d>  <the_relation_discovered_in_year> "1918"^^xsd:gYear.
+
+<the_concept_vitamin_e> <the_relation_discovered_in_year> "1922"^^xsd:gYear.
+
+<the_concept_vitamin_b12> <the_relation_discovered_in_year> "1926"^^xsd:gYear.
+
+<the_concept_vitamin_a> <the_relation_discovered_in_source>  <the_concept_cod_liver_oil>.
+
+<the_concept_vitamin_b1>  <the_relation_discovered_in_source>  <the_concept_rice_bran>.
+
+<the_concept_vitamin_c>  <the_relation_discovered_in_source>  <the_concept_lemon>.
+
+<the_concept_vitamin_d>  <the_relation_discovered_in_source>  <the_concept_cod_liver_oil>.
+
+<the_concept_vitamin_e> <the_relation_discovered_in_source>  <the_concept_cosmetic>.
+
+<the_concept_vitamin_e> <the_relation_discovered_in_source>  <the_concept_of_liver>.
+
+<the_concept_vitamin_b12> <the_relation_discovered_in_source> <the_concept_of_liver>.
+
+<the_concept_vitamin_a> rdfs:label "Retinol".
+
+<the_concept_vitamin_b1>  rdfs:label "Thiamin".
+
+<the_concept_vitamin_c>  rdfs:label "Ascorbic acid".
+
+
+<the_concept_vitamin_d>  rdfs:label "Calciferol".
+
+<the_concept_vitamin_e> rdfs:label "Tocopherol".
+
+<the_concept_vitamin_b12> rdfs:label "Cyanocobalamin".
+
+<the_process_of_growth> rdfs:subClassOf  <the_concept_process>.
+
+
+# TranslationByLarsHulzebosMadeOn200904131400_SyntaxErrorsRemovedNaryTranslatedAndTranslatedToTurtle.txt
+
+# History
+
+# In 1910, Japanese scientist Umetaro Suzuki succeeded in extracting a
+# nutrient from rice bran and named it aberic acid. [10]
+
+_:human1 rdf:type <the_set_of_humans>.
+_:human1 <the_relation_hasName> "Umetaro Suzuki".
+_:human1 <the_relation_hasNationality> "Japanese".
+
+# <the_relation_organic_compound_named_by_human>(_:nutrient1 "aberic acid"_:human1 "1910"^^xsd:gYear). 
+_:r9 <Arg1_of_the_relation_organic_compound_named_by_human> _:nutrient1.
+_:r9 <Arg2_of_the_relation_organic_compound_named_by_human> "aberic acid".
+_:r9 <Arg3_of_the_relation_organic_compound_named_by_human> _:human1.
+_:r9 <Arg4_of_the_relation_organic_compound_named_by_human> "1910"^^xsd:gYear.
+
+_:nutrient1 rdf:type <nutrient>.
+<nutrient> rdfs:subClassOf <Organic_Compound>.
+_:nutrient1 <the_relation_was_extracted_from> <rice_bran>.
+
+# Polish biochemist Kazimierz Funk isolated the same complex of
+# micronutrients and proposed the complex be named "Vitamine" in 1912.[11]
+# In 1920, Jack Cecil Drummond proposed that the final "e" be dropped to
+# deemphasize the "amine" reference after the discovery that vitamin C had
+# no amine component.
+
+_:human2 rdf:type <the_set_of_humans>.
+_:human2 <the_relation_hasName> "Kazimierz Funk".
+_:human2 rdf:type <the_concept_scientist>.
+_:human2 <the_relation_hasNationality> "polish".
+
+
+_:r1 <Arg1_of_the_relation_named_by_human> _:nutrient1.
+_:r1 <Arg2_of_the_relation_named_by_human> "vitamine".
+_:r1 <Arg3_of_the_relation_named_by_human> _:human2.
+_:r1 <Arg4_of_the_relation_named_by_human> "1912"^^xsd:gYear.
+
+# <the_relation_named_by_human>(_:nutrient1 "vitamine" :human2 "1912"^^xsd:gYear). 
+
+_:human3 rdf:type <the_set_of_humans>.
+_:human3 <the_relation_hasName> "Jack Cecil Drummond".
+
+
+_:r2 <Arg1_of_the_relation_named_by_human> _:nutrient1.
+_:r2 <Arg2_of_the_relation_named_by_human> "vitamin".
+_:r2 <Arg3_of_the_relation_named_by_human> _:human3.
+_:r2 <Arg4_of_the_relation_named_by_human> "1920"^^xsd:gYear.
+
+# <the_relation_named_by_human>(_:nutrient1 "vitamin" :human3 "1920"^^xsd:gYear). 
+# The use of deprivation studies allowed scientists to isolate and
+# identify a number of vitamins. 
+
+# Initially, lipid from fish oil was used
+# to cure rickets in rats, and the fat-soluble nutrient was called
+# "antirachitic A".  
+# Thus, the first "vitamin" bioactivity ever isolated,
+# which cured rickets, was initially called "vitamin A", although
+# confusingly the bioactivity of this compound is now called vitamin
+# D.
+
+
+# 12] In 1931, Albert Szent-Györgyi and a fellow researcher Joseph
+# Svirbely discovered the chemical structure of vitamine C:  "hexuronic
+# acid". 
+
+_:human4 rdf:type <the_set_of_humans>.
+_:human4 <the_relation_hasName> "Albert Szent-Györgyi".
+_:human4 rdf:type <the_concept_scientist>.
+
+_:human5 rdf:type <the_set_of_humans>.
+_:human5 <the_relation_hasName> "Joseph Svirbely".
+_:human5 rdf:type <the_concept_scientist>.
+
+_:nutrient2 rdf:type <nutrient>.
+
+_:r3 <Arg1_of_the_relation_named_by_human> _:nutrient2.
+_:r3 <Arg2_of_the_relation_named_by_human> "hexuronic acid".
+_:r3 <Arg3_of_the_relation_named_by_human> _:human4.
+_:r3 <Arg4_of_the_relation_named_by_human> "1931"^^xsd:gYear.
+
+_:r3 <Arg1_of_the_relation_named_by_human> _:nutrient2.
+_:r3 <Arg2_of_the_relation_named_by_human> "hexuronic acid".
+_:r3 <Arg3_of_the_relation_named_by_human> _:human5.
+_:r3 <Arg4_of_the_relation_named_by_human> "1931"^^xsd:gYear.
+
+# <the_relation_named_by_human>(_:nutrient2 "hexuronic acid" _:human4 "1931"^^xsd:gYear). 
+# <the_relation_named_by_human>(_:nutrient2 "hexuronic acid" _:human5 "1931"^^xsd:gYear). 
+
+# In 1937, Szent-Györgyi was awarded the Nobel Prize for his
+# discovery. 
+
+_:r4 <Arg1_of_the_relation_awarded_for_discovery> _:nutrient2.
+_:r4 <Arg2_of_the_relation_awarded_for_discovery> _:human4.
+_:r4 <Arg3_of_the_relation_awarded_for_discovery> "1937"^^xsd:gYear.
+_:r4 <Arg4_of_the_relation_awarded_for_discovery> "Nobel Prize".
+
+# chide@&y20090525&: improved syntax error: wrong placement of arguments, definition was: 'XXX represents the 4-place relation for which holds: XXX ( w x y z ) is defined as the reward w was given in year x to human y for the work on organic compound z'
+# original sentence: <the_relation_awarded_for_discovery>( _:nutrient2 _:human4 "1937"^^xsd:gYear "Nobel Prize").
+
+_:r4 <Arg1_of_the_relation_awarded_for_discovery> "Nobel Prize".
+_:r4 <Arg2_of_the_relation_awarded_for_discovery> _:human4.
+_:r4 <Arg3_of_the_relation_awarded_for_discovery> "1937"^^xsd:gYear.
+_:r4 <Arg4_of_the_relation_awarded_for_discovery> _:nutrient2.
+
+# <the_relation_awarded_for_discovery>( "Nobel Prize" "1937"^^xsd:gYear _:human3 _:nutrient2).
+
+# In 1943 Edward Adelbert Doisy and Henrik Dam were awarded the
+# Nobel Prize for their discovery of vitamin K and its chemical structure
+_:nutrient3 rdf:type <nutrient>.
+
+_:human6 rdf:type <the_set_of_humans>.
+_:human6 <the_relation_hasName> "Edward Adelbert Doisy".
+_:human6 rdf:type <the_concept_scientist>.
+
+_:human7 rdf:type <the_set_of_humans>.
+_:human7 <the_relation_hasName> "Hendrik Dam".
+_:human7 rdf:type <the_concept_scientist>.
+
+# chide@&y20090525&: syntax errors in following statement removed: (1) wrong order of arguments, should be as in: 'XXX represents the 4-place relation for which holds: XXX ( w x y z ) is defined as the organic compound w was given the name x by human y in year z ).' (2) _:unknownYear^^xsd:gYear, should be _:unknownYear.
+#  original statements:
+#  <the_relation_named_by_human>(_:nutrient3 _:human6 _:unknownYear^^xsd:gYear "vitamin K").
+#  <the_relation_named_by_human>(_:nutrient3 _:human7 _:unknownYear^^xsd:gYear "vitamin K").
+
+_:r5 <Arg1_of_the_relation_named_by_human> _:nutrient3.
+_:r5 <Arg2_of_the_relation_named_by_human> "vitamine K".
+_:r5 <Arg3_of_the_relation_named_by_human> _:human6.
+_:r5 <Arg4_of_the_relation_named_by_human> _:unknownYear.
+
+_:r6 <Arg1_of_the_relation_named_by_human> _:nutrient3.
+_:r6 <Arg2_of_the_relation_named_by_human> "vitamine K".
+_:r6 <Arg3_of_the_relation_named_by_human> _:human7.
+_:r6 <Arg4_of_the_relation_named_by_human> _:unknownYear.
+
+# <the_relation_awarded_for_discovery>("Nobel Prize" "1943"^^xsd:gYear _:human6 _:nutrient3).
+# <the_relation_awarded_for_discovery>("Nobel Prize" "1943"^^xsd:gYear _:human7 _:nutrient3)
+
+_:r7 <Arg1_of_the_relation_awarded_for_discovery> "Nobel Prize".
+_:r7 <Arg2_of_the_relation_awarded_for_discovery> "1943"^^xsd:gYear.
+_:r7 <Arg3_of_the_relation_awarded_for_discovery> _:human6.
+_:r7 <Arg4_of_the_relation_awarded_for_discovery> _:nutrient3.
+
+_:r8 <Arg1_of_the_relation_awarded_for_discovery> "Nobel Prize".
+_:r8 <Arg2_of_the_relation_awarded_for_discovery> "1943"^^xsd:gYear.
+_:r8 <Arg3_of_the_relation_awarded_for_discovery> _:human7.
+_:r8 <Arg4_of_the_relation_awarded_for_discovery> _:nutrient3.
+
+# TranslationByMarkVanAssemMadeOn20090406_SyntaxErrorsRemovedNaryTranslatedAndTranslatedToTurtle.txt
+# 
+
+# All <includesRelation> relations for n-ary relations have not been provided yet (which is not such a problem, you don't use them for querying, as far as can see).
+
+<the_relation_nutrient_supports_process> <includesRelation> <Arg1_of_the_relation_nutrient_supports_process>.
+<the_relation_nutrient_supports_process> <includesRelation> <Arg2_of_the_relation_nutrient_supports_process>.
+<the_relation_nutrient_supports_process> <includesRelation> <Arg3_of_the_relation_nutrient_supports_process>.
+
+_:r1 <Arg1_of_the_relation_nutrient_supports_process> <the_concept_of_multicellular_organisms>.
+_:r1 <Arg2_of_the_relation_nutrient_supports_process> <the_concept_vitamins>.
+_:r1 <Arg3_of_the_relation_nutrient_supports_process> <the_process_of_growth>.
+
+# (<the_concept_of_multicellular_organisms> <the_concept_vitamins> <the_process_of_growth>).
+
+_:r2 <Arg1_of_the_relation_deficiency_causes_organism> <the_concept_vitamins>.
+_:r2 <Arg2_of_the_relation_deficiency_causes_organism> <the_concept_diseases>.
+_:r2 <Arg3_of_the_relation_deficiency_causes_organism> <the_concept_of_human_children>.
+
+
+# <the_relation_deficiency_causes_organism> (<the_concept_vitamins> <the_concept_diseases> <the_concept_of_human_children>).
+
+<the_concept_vitamins> <the_relation_-can_be_obtained_from-> <the_concept_food>.
+
+<the_microorganisms_in_the_human_intestine> <the_relation_-produces-> <the_concept_vitamin_k>.
+
+# chide@&y20090525&: syntax error: I think <the_concept_vitamin_k> should not be in here
+# original statement: <the_microorganisms_in_the_human_intestine> <the_relation_-produces-> <the_concept_vitamin_k> <the_vitamin_biotin>.
+
+<the_microorganisms_in_the_human_intestine> <the_relation_-produces-> <the_vitamin_biotin>.
+
+_:r3 <Arg1_of_the_relation_synthesized_organ_ray> <the_concept_vitamin_d>.
+_:r3 <Arg2_of_the_relation_synthesized_organ_ray> <the_concept_of_sunlight>.
+_:r3 <Arg3_of_the_relation_synthesized_organ_ray> <the_human_skin>.
+
+# <the_relation_synthesized_organ_ray>  (<the_concept_vitamin_d> <the_concept_of_sunlight> <the_human_skin> ).
+
+ _:r4 <Arg1_of_the_relation_-species_vitamin_precursor-> <the_concept_species_human>.
+ _:r4 <Arg2_of_the_relation_-species_vitamin_precursor-> <the_concept_niacin>.
+ _:r4 <Arg3_of_the_relation_-species_vitamin_precursor-> <the_concept_tryptophan>.
+
+# <the_relation_-species_vitamin_precursor-> (<the_concept_species_human> <the_concept_niacin> <the_concept_tryptophan> ).
+
+_:r5 <Arg1_of_the_relation_-species_vitamin_precursor-> <the_concept_species_human>.
+_:r5 <Arg2_of_the_relation_-species_vitamin_precursor-> <the_concept_beta_carotene>.
+_:r5 <Arg3_of_the_relation_-species_vitamin_precursor-> <the_concept_vitamin_A>.
+
+# <the_relation_-species_vitamin_precursor-> (<the_concept_species_human> <the_concept_beta_carotene> <the_concept_vitamin_A>).
+
+<the_concept_of_vitamin_k> <The_relation_discovered_in_year> "1929"^^xsd:gYear.
+<the_vitamin_b5> <The_relation_discovered_in_year> "1931"^^xsd:gYear.
+<the_vitamin_b7> <The_relation_discovered_in_year> "1931"^^xsd:gYear.
+<the_vitamin_b6> <The_relation_discovered_in_year> "1934"^^xsd:gYear.
+<the_vitamin_b3> <The_relation_discovered_in_year> "1936"^^xsd:gYear.
+<the_vitamin_b9> <The_relation_discovered_in_year> "1941"^^xsd:gYear.
+
+<the_concept_of_vitamin_k> <the_relation_discovered_in_source> <the_concept_of_alfalfa>.
+<the_vitamin_b5> <the_relation_discovered_in_source> <the_concept_of_liver>.
+<the_vitamin_b7> <the_relation_discovered_in_source> <the_concept_of_liver>.
+<the_vitamin_b6> <the_relation_discovered_in_source> <the_concept_rice_bran>.
+<the_vitamin_b3> <the_relation_discovered_in_source> <the_concept_of_liver>.
+<the_vitamin_b9> <the_relation_discovered_in_source> <the_concept_of_liver>.
+
+<the_concept_niacin> rdf:type <the_concept_vitamins>.
+<the_concept_vitamin_A> rdf:type <the_concept_vitamins>.
+<the_concept_of_vitamin_k> rdf:type <the_concept_vitamins>.
+<the_vitamin_b5> rdf:type <the_concept_vitamins>.
+<the_vitamin_b7> rdf:type <the_concept_vitamins>.
+<the_vitamin_b6> rdf:type <the_concept_vitamins>.
+<the_vitamin_b3> rdf:type <the_concept_vitamins>.
+<the_vitamin_b9> rdf:type <the_concept_vitamins>.
+
+<the_concept_of_vitamin_k> rdfs:label "Phylloquinone".
+<the_vitamin_b5> rdfs:label "Pantothenic acid".
+<the_vitamin_b7> rdfs:label "Biotin".
+<the_vitamin_b6> rdfs:label "Pyridoxine ".
+<the_vitamin_b3> rdfs:label "Niacin".
+<the_vitamin_b9> rdfs:label "Folic acid".
+
+<the_process_of_growth> rdfs:subClassOf <the_concept_process>.
+<the_process_of_normal_human_growth> rdfs:subClassOf <the_process_of_growth>.
+

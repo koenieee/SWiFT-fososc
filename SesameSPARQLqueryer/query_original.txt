@@ -1,0 +1,8 @@
+base <http://baseuri/>
+prefix wn20schema: <http://www.w3.org/2006/03/wn/wn20/schema/> 
+
+select ?partword ?wholeword where 
+{ ?part wn20schema:memberMeronymOf ?whole. 
+  ?part wn20schema:senseLabel ?partword. 
+  ?whole wn20schema:senseLabel ?wholeword. 
+}

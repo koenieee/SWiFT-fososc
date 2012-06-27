@@ -1,0 +1,8854 @@
+.comp 920 01011101001
+.start __textgenerator_version2_Start
+.depend "StdListExtensions"
+.depend "ArgEnv"
+.depend "StdDebug"
+.depend "GenericByCG"
+.depend "genToFromString"
+.depend "confSM"
+.depend "stdProperty"
+.depend "testable"
+.depend "genLibTest"
+.depend "GenEq"
+.depend "gen"
+.depend "MersenneTwister"
+.depend "gast"
+.depend "StdMaybe"
+.depend "StdGeneric"
+.depend "_SystemEnum"
+.depend "StdEnum"
+.depend "StdMisc"
+.depend "StdFunc"
+.depend "StdCharList"
+.depend "StdTuple"
+.depend "StdOrdList"
+.depend "StdList"
+.depend "StdClass"
+.depend "StdFile"
+.depend "StdString"
+.depend "_SystemArray"
+.depend "StdArray"
+.depend "StdChar"
+.depend "StdReal"
+.depend "StdInt"
+.depend "StdOverloaded"
+.depend "StdBool"
+.depend "StdEnv"
+.depend "textgenerator_version2"
+.endinfo
+.module m_textgenerator_version2 "textgenerator_version2"
+.implab _cycle_in_spine
+.implab _type_error
+.implab _hnf
+.impdesc _ind
+.implab _indirection _eaind
+.impdesc e_system_dif
+.implab e_system_nif e_system_eaif
+.implab e_system_sif
+.impdesc e_system_dAP
+.implab e_system_nAP e_system_eaAP
+.implab e_system_sAP
+.impdesc _Nil
+.impdesc _Cons
+.impdesc _Conss
+.implab n_Conss ea_Conss
+.impdesc _Consts
+.implab n_Consts ea_Consts
+.impdesc _Conssts
+.implab n_Conssts ea_Conssts
+.impdesc _Tuple
+.impdesc d_S.1
+.implab n_S.1 ea_S.1
+.impdesc d_S.2
+.implab n_S.2 ea_S.2
+.impdesc d_S.3
+.implab n_S.3 ea_S.3
+.impdesc d_S.4
+.implab n_S.4 ea_S.4
+.impdesc d_S.5
+.implab n_S.5 ea_S.5
+.impdesc d_S.6
+.implab n_S.6 ea_S.6
+.implab _driver
+.implab e_StdListExtensions_sfind
+.implab e_ArgEnv_sgetCommandLine
+.implab e_StdDebug_strace;4
+.implab e_GenericByCG_scharArrayToInt
+.impdesc e_GenericByCG_drandomPick
+.implab e_GenericByCG_nrandomPick e_GenericByCG_earandomPick
+.implab e_GenericByCG_ssameElementsUEq
+.implab e_genToFromString_sgToString_UNIT;1
+.implab e_genToFromString_sgToString_PAIR;2
+.implab e_genToFromString_sgToString_EITHER;3
+.implab e_genToFromString_sgToString_OBJECT;4
+.implab e_genToFromString_sgToString_CONS;5
+.implab e_genToFromString_sgToString_FIELD;6
+.implab e_genToFromString_sgToString__String;10
+.implab e_genToFromString_sgToString__List;11
+.implab e_genToFromString_sgToString__Tuple2;12
+.implab e_genLibTest_s+;8
+.implab e_MersenneTwister_sgenRandInt
+.implab e_StdMaybe_sisNothing
+.impdesc e_StdMaybe_dfromJust
+.implab e_StdMaybe_sfromJust
+.implab e_StdMaybe_nfromJust _
+.impdesc e_StdGeneric_rGenericConsDescriptor
+.impdesc e_StdGeneric_rGenericFieldDescriptor
+.impdesc e_StdGeneric_rGenericTypeDefDescriptor
+.impdesc e_StdGeneric_kGenTypeVar
+.implab e_StdMisc_sabort
+.impdesc e_StdList_d!!
+.implab e_StdList_s!!
+.implab e_StdList_n!! _
+.impdesc e_StdList_d++
+.implab e_StdList_n++ e_StdList_ea++
+.implab e_StdList_sfilter
+.impdesc e_StdList_dmap
+.implab e_StdList_smap
+.implab e_StdList_nmap e_StdList_eamap
+.implab e_StdList_sremoveMember
+.impdesc e_StdList_dlength;47
+.implab e_StdList_slength;47
+.implab e_StdList_nlength;47
+.impdesc e_StdClass_rEq;
+.impdesc e_StdString_d==;2
+.implab e_StdString_s==;2
+.implab e_StdString_stoString;5
+.implab e_StdString_stoString;9
+.implab e_StdString_s+++;11
+.impdesc e__SystemArray_dselect;75
+.implab e__SystemArray_nselect;75 _
+.implab e_StdInt_s+;6
+.implab e_StdInt_s-;7
+.implab e_StdInt_sabs;13
+.implab e_StdInt_s==;16
+.implab e_StdInt_s<;17
+.implab e_StdInt_srem;28
+.impdesc e_StdOverloaded_r==;
+.implab e_StdBool_snot
+.export e_textgenerator_version2_dFHeqstat
+.desc e_textgenerator_version2_dFHeqstat _hnf _add_arg 1 0 "FHeqstat"
+.export e_textgenerator_version2_dFHpre2stat
+.desc e_textgenerator_version2_dFHpre2stat _hnf _add_arg 1 0 "FHpre2stat"
+.export e_textgenerator_version2_dFHhurelanprestat
+.desc e_textgenerator_version2_dFHhurelanprestat _hnf _add_arg 1 0 "FHhurelanprestat"
+.export e_textgenerator_version2_dHurelan
+.desc e_textgenerator_version2_dHurelan _hnf _add_arg 1 0 "Hurelan"
+.export e_textgenerator_version2_dEq
+.desc0 e_textgenerator_version2_dEq 0 "Eq"
+.export e_textgenerator_version2_dNeq
+.desc0 e_textgenerator_version2_dNeq 1 "Neq"
+.export e_textgenerator_version2_dCTLs_FHpre
+.desc e_textgenerator_version2_dCTLs_FHpre _hnf _add_arg 1 0 "CTLs_FHpre"
+.export e_textgenerator_version2_dCTLs_FHconstant
+.desc e_textgenerator_version2_dCTLs_FHconstant _hnf _add_arg 1 0 "CTLs_FHconstant"
+.export e_textgenerator_version2_dPatLang
+.desc e_textgenerator_version2_dPatLang _hnf _add_arg 1 0 "PatLang"
+.export e_textgenerator_version2_dSharpestPat
+.desc e_textgenerator_version2_dSharpestPat _hnf _add_arg 1 0 "SharpestPat"
+.export e_textgenerator_version2_dNumRestrPat
+.desc e_textgenerator_version2_dNumRestrPat _hnf _add_arg 1 0 "NumRestrPat"
+.export e_textgenerator_version2_dEqt
+.desc0 e_textgenerator_version2_dEqt 0 "Eqt"
+.export e_textgenerator_version2_dGt
+.desc0 e_textgenerator_version2_dGt 1 "Gt"
+.export e_textgenerator_version2_dLt
+.desc0 e_textgenerator_version2_dLt 2 "Lt"
+.export e_textgenerator_version2_dLeq
+.desc0 e_textgenerator_version2_dLeq 3 "Leq"
+.export e_textgenerator_version2_dGeq
+.desc0 e_textgenerator_version2_dGeq 4 "Geq"
+.export e_textgenerator_version2_dLiteral
+.desc e_textgenerator_version2_dLiteral _hnf _add_arg 1 0 "Literal"
+.export e_textgenerator_version2_dFHvar
+.desc e_textgenerator_version2_dFHvar _hnf _add_arg 1 0 "FHvar"
+.export e_textgenerator_version2_dFHconstant
+.desc e_textgenerator_version2_dFHconstant _hnf _add_arg 1 0 "FHconstant"
+.export e_textgenerator_version2_dEntityStat
+.desc e_textgenerator_version2_dEntityStat _hnf _add_arg 1 0 "EntityStat"
+.export e_textgenerator_version2_dHurelanStat
+.desc e_textgenerator_version2_dHurelanStat _hnf _add_arg 1 0 "HurelanStat"
+.export e_textgenerator_version2_rEntityStat_
+.record e_textgenerator_version2_rEntityStat_ aa 2 0 "EntityStat_"
+.export e_textgenerator_version2_dEntityStat_.ent_ctl
+.export e_textgenerator_version2_nEntityStat_.ent_ctl
+.descs e_textgenerator_version2_dEntityStat_.ent_ctl e_textgenerator_version2_nEntityStat_.ent_ctl _ 1 0 "EntityStat_.ent_ctl"
+.n -4 e_textgenerator_version2_dEntityStat_.ent_ctl
+.o 1 0
+e_textgenerator_version2_nEntityStat_.ent_ctl
+	push_node _cycle_in_spine 1
+	jsr_eval 0
+	repl_r_args_a 2 0 1 1
+	jsr_eval 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_dEntityStat_.ent_nl
+.export e_textgenerator_version2_nEntityStat_.ent_nl
+.descs e_textgenerator_version2_dEntityStat_.ent_nl e_textgenerator_version2_nEntityStat_.ent_nl _ 2 0 "EntityStat_.ent_nl"
+.n -4 e_textgenerator_version2_dEntityStat_.ent_nl
+.o 1 0
+e_textgenerator_version2_nEntityStat_.ent_nl
+	push_node _cycle_in_spine 1
+	jsr_eval 0
+	repl_r_args_a 2 0 2 1
+	jsr_eval 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_rHurelanStat_
+.record e_textgenerator_version2_rHurelanStat_ aaa 3 0 "HurelanStat_"
+.export e_textgenerator_version2_dHurelanStat_.hra_ctl
+.export e_textgenerator_version2_nHurelanStat_.hra_ctl
+.descs e_textgenerator_version2_dHurelanStat_.hra_ctl e_textgenerator_version2_nHurelanStat_.hra_ctl _ 1 0 "HurelanStat_.hra_ctl"
+.n -4 e_textgenerator_version2_dHurelanStat_.hra_ctl
+.o 1 0
+e_textgenerator_version2_nHurelanStat_.hra_ctl
+	push_node _cycle_in_spine 1
+	jsr_eval 0
+	repl_r_args_a 3 0 1 1
+	jsr_eval 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_dHurelanStat_.ent1_nl
+.export e_textgenerator_version2_nHurelanStat_.ent1_nl
+.descs e_textgenerator_version2_dHurelanStat_.ent1_nl e_textgenerator_version2_nHurelanStat_.ent1_nl _ 3 0 "HurelanStat_.ent1_nl"
+.n -4 e_textgenerator_version2_dHurelanStat_.ent1_nl
+.o 1 0
+e_textgenerator_version2_nHurelanStat_.ent1_nl
+	push_node _cycle_in_spine 1
+	jsr_eval 0
+	repl_r_args_a 3 0 2 1
+	jsr_eval 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_dHurelanStat_.ent2_nl
+.export e_textgenerator_version2_nHurelanStat_.ent2_nl
+.descs e_textgenerator_version2_dHurelanStat_.ent2_nl e_textgenerator_version2_nHurelanStat_.ent2_nl _ 4 0 "HurelanStat_.ent2_nl"
+.n -4 e_textgenerator_version2_dHurelanStat_.ent2_nl
+.o 1 0
+e_textgenerator_version2_nHurelanStat_.ent2_nl
+	push_node _cycle_in_spine 1
+	jsr_eval 0
+	repl_r_args_a 3 0 3 1
+	jsr_eval 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_dFolnuminqua
+.desc e_textgenerator_version2_dFolnuminqua _hnf _add_arg 1 0 "Folnuminqua"
+.export e_textgenerator_version2_dSharpest
+.desc e_textgenerator_version2_dSharpest _hnf _add_arg 2 0 "Sharpest"
+.export e_textgenerator_version2_dSentenceNL
+.desc e_textgenerator_version2_dSentenceNL _hnf _add_arg 1 0 "SentenceNL"
+.desc d825 _hnf _add_arg 1 0 "TextCTL"
+.desc d826 _hnf _add_arg 1 0 "TextNL"
+.desc d827 _hnf _add_arg 1 0 "QuestionAttackCTL"
+.desc d828 _hnf _add_arg 1 0 "QuestionAttackNL"
+.desc d829 _hnf _add_arg 1 0 "AnswerCTL"
+.desc d830 _hnf _add_arg 1 0 "AnswerNL"
+.desc d831 _hnf _add_arg 1 0 "BridgeComputer"
+.desc d832 _hnf _add_arg 1 0 "IADTstring"
+.desc d833 _hnf _add_arg 1 0 "NRW"
+.record r694 aaa 3 0 "ReitoRiMPcOrO"
+.desc d834 _hnf _add_arg 1 0 "IntRep_Word"
+.desc d835 _hnf _add_arg 1 0 "IntRep_Hurelan"
+.record r699 a 1 0 "gToString_s;"
+.record r701 a 1 0 "gToString_ss;"
+.record r703 a 1 0 "gToString_sss;"
+.record r705 a 1 0 "gToString_sssss;"
+.record r707 a 1 0 "gToString_ssss;"
+.record r709 a 1 0 "gFromString_s;"
+.record r711 a 1 0 "gFromString_ss;"
+.record r713 a 1 0 "gFromString_sss;"
+.record r715 a 1 0 "gFromString_sssss;"
+.record r717 a 1 0 "gFromString_ssss;"
+.record r719 a 1 0 "bimap_s;"
+.record r721 a 1 0 "bimap_ss;"
+.record r723 a 1 0 "bimap_sss;"
+.record r725 a 1 0 "bimap_sssss;"
+.record r727 a 1 0 "bimap_ssss;"
+.record r729 a 1 0 "ggen_s;"
+.record r731 a 1 0 "ggen_ss;"
+.record r733 a 1 0 "ggen_sss;"
+.record r735 a 1 0 "ggen_ssss;"
+.record r737 a 1 0 "ggen_sssss;"
+.record r739 a 1 0 "gEq_s;"
+.record r741 a 1 0 "gEq_ss;"
+.record r743 a 1 0 "gEq_sss;"
+.record r745 a 1 0 "gEq_ssss;"
+.record r747 a 1 0 "gEq_sssss;"
+.record r749 a 1 0 "gEq_ssssss;"
+.record r751 a 1 0 "gEq_sssssss;"
+.record r753 a 1 0 "gEq_ssssssss;"
+.record r755 a 1 0 "gEq_sssssssss;"
+.record r757 a 1 0 "genShow_s;"
+.record r759 a 1 0 "genShow_ss;"
+.record r761 a 1 0 "genShow_sss;"
+.record r763 a 1 0 "genShow_ssss;"
+.record r765 a 1 0 "genShow_sssss;"
+.record r767 a 1 0 "genShow_ssssss;"
+.record r769 a 1 0 "genShow_sssssss;"
+.record r771 a 1 0 "genShow_ssssssss;"
+.record r773 a 1 0 "genShow_sssssssss;"
+.record r775 a 1 0 "genShow_ssssssssss;"
+.record r777 a 1 0 "genShow_sssssssssss;"
+.record r779 a 1 0 "gLess_s;"
+.record r781 a 1 0 "gLess_ss;"
+.record r783 a 1 0 "gLess_sss;"
+.record r785 a 1 0 "gLess_ssss;"
+.record r787 a 1 0 "gLess_sssss;"
+.record r789 a 1 0 "gLess_ssssss;"
+.record r791 a 1 0 "gLess_sssssss;"
+.record r793 a 1 0 "gLess_ssssssss;"
+.record r795 a 1 0 "gLess_sssssssss;"
+.record r797 a 1 0 "gLess_ssssssssss;"
+.record r799 a 1 0 "gLess_sssssssssss;"
+.export __textgenerator_version2_Start
+.o 0 0
+__textgenerator_version2_Start
+	build _ 0 n5
+.d 1 0
+	jmp _driver
+.n 0 _ ea5
+.o 1 0
+n5
+	push_node _cycle_in_spine 0
+.o 1 0
+ea5
+.o 1 0
+s5
+	build _ 0 n37
+	push_a 0
+	build d_S.1 -1 n_S.1
+	push_a 1
+	build d_S.2 -1 n_S.2
+	push_a 0
+	push_a 2
+	build _ 2 n40
+	push_a 0
+	build _ 1 n47
+	buildh _Nil 0
+	push_a 3
+	build _ 1 n850
+	buildh d832 1
+	buildh _Cons 2
+	push_a 1
+	push_a 5
+	build _ 2 n49
+	push_a 4
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 2 n849
+	build _ 1 n848
+	buildh d832 1
+	buildh _Cons 2
+	push_a 1
+	push_a 5
+	build _ 2 n49
+	buildh d829 1
+	buildh _Cons 2
+	push_a 2
+	build _ 1 n847
+	buildh d828 1
+	buildh _Cons 2
+	push_a 2
+	build _ 1 n46
+	build _ 1 n846
+	buildh d832 1
+	buildh _Cons 2
+	push_a 1
+	build _ 1 n845
+	buildh d832 1
+	buildh _Cons 2
+	buildh d48 0
+	push_a 4
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_dmap 2 e_StdList_nmap
+	push_a 4
+	push_a 6
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	build _ 3 n28
+	buildh d826 1
+	buildh _Cons 2
+	push_a 4
+	build _ 1 n844
+	buildh d832 1
+	fillh _Cons 2 7
+	pop_a 5
+.d 1 0
+	rtn
+.n 1 _ ea850
+.o 1 0
+n850
+	push_node _cycle_in_spine 1
+.o 2 0
+ea850
+.o 2 0
+s850
+	push_a 0
+	jsr_eval 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s667
+.o 1 0
+	buildAC "BridgeComputer "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _ ea849
+.o 1 0
+n849
+	push_node _cycle_in_spine 2
+.o 3 0
+ea849
+.o 3 0
+s849
+	push_a 0
+	jsr_eval 0
+	push_a 2
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp s4
+.n 1 _ ea848
+.o 1 0
+n848
+	push_node _cycle_in_spine 1
+.o 2 0
+ea848
+.o 2 0
+s848
+	push_a 0
+	jsr_eval 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s668
+.o 1 0
+	buildAC "AnswerNL "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 1 _ ea847
+.o 1 0
+n847
+	push_node _cycle_in_spine 1
+.o 2 0
+ea847
+.o 2 0
+s847
+	push_a 0
+	jsr_eval 0
+	repl_args 3 3
+	update_a 2 3
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jsr s45
+.o 2 0
+	jsr_eval 0
+.d 3 0
+	jmp s42
+.n 1 _ ea846
+.o 1 0
+n846
+	push_node _cycle_in_spine 1
+.o 2 0
+ea846
+.o 2 0
+s846
+	push_a 0
+	jsr_eval 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s667
+.o 1 0
+	buildAC "QuestionRelatedBridgeStats "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 1 _ ea845
+.o 1 0
+n845
+	push_node _cycle_in_spine 1
+.o 2 0
+ea845
+.o 2 0
+s845
+	push_a 0
+	jsr_eval 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s254
+.o 1 0
+	buildAC "QuestionAttackCTL "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 1 _ ea844
+.o 1 0
+n844
+	push_node _cycle_in_spine 1
+.o 2 0
+ea844
+.o 2 0
+s844
+	push_a 0
+	jsr_eval 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s666
+.o 1 0
+	buildAC "TextCTL "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+s666
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d260 1
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp s630
+.o 2 0
+s668
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d262 1
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp s630
+.o 2 0
+s667
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d253 1
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp s630
+.desc d262 _hnf l262 2 0 "gToString_s;268"
+.a 0 a262
+.o 2 0
+l262
+	repl_args 1 1
+.o 2 0
+a262
+.d 2 0
+	jsr ea262
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea262
+	jsr_eval 1
+.o 2 0
+s262
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s101
+.o 2 0
+s101
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n217
+	buildh d622 2
+	build _ 0 n216
+	buildh d620 2
+	buildh d219 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d219 _hnf l219 1 0 "toGenericSentenceNL_;225"
+.o 2 0
+l219
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea219
+	jsr_eval 0
+.o 2 0
+s219
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea216
+.o 1 0
+n216
+	push_node _cycle_in_spine 0
+.o 1 0
+ea216
+.o 1 0
+s216
+	build _ 0 n214
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea217
+.o 1 0
+n217
+	push_node _cycle_in_spine 0
+.o 1 0
+ea217
+.o 1 0
+s217
+	build _ 0 n215
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n214
+	push_node _cycle_in_spine 0
+.o 0 0
+ea214
+	buildh _Nil 0
+	build _ 0 n215
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "SentenceNL_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n215
+	push_node _cycle_in_spine 0
+.o 0 0
+ea215
+	buildh _Nil 0
+	buildAC "SentenceNL_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n214
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "SentenceNL"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d260 _hnf l260 2 0 "gToString_s;266"
+.a 0 a260
+.o 2 0
+l260
+	repl_args 1 1
+.o 2 0
+a260
+.d 2 0
+	jsr ea260
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea260
+	jsr_eval 1
+.o 2 0
+s260
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s99
+.o 2 0
+s99
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n201
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	build _ 0 n200
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	build _ 0 n199
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d261 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	build _ 0 n198
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	build _ 0 n197
+	buildh d620 2
+	buildh d203 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d261 _hnf l261 2 0 "gToString_s;267"
+.a 0 a261
+.o 2 0
+l261
+	repl_args 1 1
+.o 2 0
+a261
+.d 2 0
+	jsr ea261
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea261
+	jsr_eval 1
+.o 2 0
+s261
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s100
+.o 2 0
+s100
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n210
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n209
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	build _ 0 n208
+	buildh d620 2
+	buildh d212 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d212 _hnf l212 1 0 "toGenericFHeqpre;218"
+.o 2 0
+l212
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea212
+	jsr_eval 0
+.o 2 0
+s212
+	eq_desc e_textgenerator_version2_dEq 0 0
+	jmp_true case.1
+	jmp case.2
+case.1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.2
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea208
+.o 1 0
+n208
+	push_node _cycle_in_spine 0
+.o 1 0
+ea208
+.o 1 0
+s208
+	build _ 0 n205
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea209
+.o 1 0
+n209
+	push_node _cycle_in_spine 0
+.o 1 0
+ea209
+.o 1 0
+s209
+	build _ 0 n206
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea210
+.o 1 0
+n210
+	push_node _cycle_in_spine 0
+.o 1 0
+ea210
+.o 1 0
+s210
+	build _ 0 n207
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n206
+	push_node _cycle_in_spine 0
+.o 0 0
+ea206
+	buildh _Nil 0
+	buildAC "FHeqpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n205
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 0
+	buildAC "Eq"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n205
+	push_node _cycle_in_spine 0
+.o 0 0
+ea205
+	buildh _Nil 0
+	build _ 0 n207
+	buildh _Cons 2
+	build _ 0 n206
+	buildh _Cons 2
+	buildI 2
+	buildI 0
+	buildAC "FHeqpre"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n207
+	push_node _cycle_in_spine 0
+.o 0 0
+ea207
+	buildh _Nil 0
+	buildAC "FHeqpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n205
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 1
+	buildI 0
+	buildAC "Neq"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d203 _hnf l203 1 0 "toGenericFHstat;209"
+.o 2 0
+l203
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea203
+	jsr_eval 0
+.o 2 0
+s203
+	pushD_a 0
+	eqD_b e_textgenerator_version2_dFHeqstat 1
+	jmp_true case.3
+	eqD_b e_textgenerator_version2_dFHpre2stat 1
+	jmp_true case.4
+	eqD_b e_textgenerator_version2_dFHhurelanprestat 1
+	jmp_true case.5
+	jmp case.6
+case.3
+	pop_b 1
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.4
+	pop_b 1
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.5
+	pop_b 1
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.6
+	pop_b 1
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea197
+.o 1 0
+n197
+	push_node _cycle_in_spine 0
+.o 1 0
+ea197
+.o 1 0
+s197
+	build _ 0 n192
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea198
+.o 1 0
+n198
+	push_node _cycle_in_spine 0
+.o 1 0
+ea198
+.o 1 0
+s198
+	build _ 0 n193
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea199
+.o 1 0
+n199
+	push_node _cycle_in_spine 0
+.o 1 0
+ea199
+.o 1 0
+s199
+	build _ 0 n194
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea200
+.o 1 0
+n200
+	push_node _cycle_in_spine 0
+.o 1 0
+ea200
+.o 1 0
+s200
+	build _ 0 n195
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea201
+.o 1 0
+n201
+	push_node _cycle_in_spine 0
+.o 1 0
+ea201
+.o 1 0
+s201
+	build _ 0 n196
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n193
+	push_node _cycle_in_spine 0
+.o 0 0
+ea193
+	buildh _Nil 0
+	buildAC "FHstat"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "FHconstant"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "FHeqpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n192
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "FHeqstat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n194
+	push_node _cycle_in_spine 0
+.o 0 0
+ea194
+	buildh _Nil 0
+	buildAC "FHstat"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "FHconstant"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "FHconstant"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "FHpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n192
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 1
+	buildI 1
+	buildAC "FHpre2stat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n195
+	push_node _cycle_in_spine 0
+.o 0 0
+ea195
+	buildh _Nil 0
+	buildAC "FHstat"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "FHconstant"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "FHpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n192
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 2
+	buildI 1
+	buildAC "FHhurelanprestat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n192
+	push_node _cycle_in_spine 0
+.o 0 0
+ea192
+	buildh _Nil 0
+	build _ 0 n196
+	buildh _Cons 2
+	build _ 0 n195
+	buildh _Cons 2
+	build _ 0 n194
+	buildh _Cons 2
+	build _ 0 n193
+	buildh _Cons 2
+	buildI 4
+	buildI 0
+	buildAC "FHstat"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n196
+	push_node _cycle_in_spine 0
+.o 0 0
+ea196
+	buildh _Nil 0
+	buildAC "FHstat"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "FHpre"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n192
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 3
+	buildI 1
+	buildAC "Hurelan"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.o 2 0
+s254
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s93
+.o 2 0
+s93
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d255 1
+	build _ 0 n143
+	buildh d622 2
+	build _ 0 n142
+	buildh d620 2
+	buildh d145 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d255 _hnf l255 2 0 "gToString_s;261"
+.a 0 a255
+.o 2 0
+l255
+	repl_args 1 1
+.o 2 0
+a255
+.d 2 0
+	jsr ea255
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea255
+	jsr_eval 1
+.o 2 0
+s255
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s94
+.o 2 0
+s94
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d256 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	build _ 0 n150
+	buildh d622 2
+	build _ 0 n149
+	buildh d620 2
+	buildh d152 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d256 _hnf l256 2 0 "gToString_s;262"
+.a 0 a256
+.o 2 0
+l256
+	repl_args 1 1
+.o 2 0
+a256
+.d 2 0
+	jsr ea256
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea256
+	jsr_eval 1
+.o 2 0
+s256
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s95
+.o 2 0
+s95
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d257 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d258 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d263 5
+	build _ 0 n157
+	buildh d622 2
+	build _ 0 n156
+	buildh d620 2
+	buildh d159 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d263 _hnf l263 6 0 "gToString_sssss;269"
+.a 0 a263
+.o 2 0
+l263
+	repl_args 5 5
+.o 6 0
+a263
+.d 6 0
+	jsr ea263
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 6 0
+ea263
+	push_a 5
+	jsr_eval 0
+	repl_args 4 4
+	update_a 3 9
+	update_a 6 3
+	update_a 0 6
+	push_a 8
+	update_a 3 9
+	update_a 6 3
+	update_a 0 6
+	update_a 8 0
+	update_a 2 8
+	update_a 5 2
+	update_a 0 5
+	pop_a 2
+.o 9 0
+s263
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	update_a 8 17
+	update_a 7 16
+	update_a 6 15
+	update_a 5 14
+	update_a 4 13
+	update_a 3 12
+	update_a 2 11
+	update_a 1 10
+	updatepop_a 0 9
+.d 9 0
+	jmp s102
+.o 9 0
+s102
+	push_a 8
+	push_a 8
+	push_a 8
+	push_a 8
+	buildh _Tuple 4
+	buildh e_StdGeneric_dNoGenericInfo 0
+	push_a 6
+	push_a 6
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh d614 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	push_a 5
+	push_a 5
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh d614 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d614 3
+	build _ 0 n224
+	buildh d622 2
+	build _ 0 n223
+	buildh d620 2
+	buildh d226 0
+	update_a 2 11
+	update_a 1 10
+	updatepop_a 0 9
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d226 _hnf l226 1 0 "toGeneric_Tuple4;232"
+.o 2 0
+l226
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea226
+	jsr_eval 0
+	repl_args 4 4
+.o 5 0
+s226
+	push_a 3
+	push_a 3
+	buildh e_StdGeneric_dPAIR 2
+	push_a 2
+	push_a 2
+	buildh e_StdGeneric_dPAIR 2
+	buildh e_StdGeneric_dPAIR 2
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 5
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _ ea223
+.o 1 0
+n223
+	push_node _cycle_in_spine 0
+.o 1 0
+ea223
+.o 1 0
+s223
+	build _ 0 n221
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea224
+.o 1 0
+n224
+	push_node _cycle_in_spine 0
+.o 1 0
+ea224
+.o 1 0
+s224
+	build _ 0 n222
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n221
+	push_node _cycle_in_spine 0
+.o 0 0
+ea221
+	buildh _Nil 0
+	build _ 0 n222
+	buildh _Cons 2
+	buildI 1
+	buildI 4
+	buildAC "_Tuple4"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n222
+	push_node _cycle_in_spine 0
+.o 0 0
+ea222
+	buildh _Nil 0
+	pushI 3
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	pushI 2
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	pushI 1
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	pushI 0
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	buildAC "_Tuple4"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	pushI 3
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	pushI 2
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	pushI 1
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	pushI 0
+	build_r e_StdGeneric_kGenTypeVar 0 1 0 0
+	pop_b 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n221
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 4
+	buildAC "_Tuple4"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d258 _hnf l258 2 0 "gToString_s;264"
+.a 0 a258
+.o 2 0
+l258
+	repl_args 1 1
+.o 2 0
+a258
+.d 2 0
+	jsr ea258
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea258
+	jsr_eval 1
+.o 2 0
+s258
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s97
+.o 2 0
+s97
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n179
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n178
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n177
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n176
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d613 1
+	build _ 0 n175
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	build _ 0 n174
+	buildh d620 2
+	buildh d181 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d613 _hnf l613 2 0 "gToString_s;619"
+.a 0 a613
+.o 2 0
+l613
+	repl_args 1 1
+.o 2 0
+a613
+.d 2 0
+	jsr ea613
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea613
+	jsr_eval 1
+.o 2 0
+s613
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp e_genToFromString_sgToString_UNIT;1
+.desc d181 _hnf l181 1 0 "toGenericComparison_;187"
+.o 2 0
+l181
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea181
+	jsr_eval 0
+.o 2 0
+s181
+	pushD_a 0
+	eqD_b e_textgenerator_version2_dEqt 0
+	jmp_true case.7
+	eqD_b e_textgenerator_version2_dGt 0
+	jmp_true case.8
+	eqD_b e_textgenerator_version2_dLt 0
+	jmp_true case.9
+	eqD_b e_textgenerator_version2_dLeq 0
+	jmp_true case.10
+	jmp case.11
+case.7
+	pop_b 1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.8
+	pop_b 1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.9
+	pop_b 1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.10
+	pop_b 1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.11
+	pop_b 1
+	buildh e_StdGeneric_dUNIT 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dRIGHT 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea174
+.o 1 0
+n174
+	push_node _cycle_in_spine 0
+.o 1 0
+ea174
+.o 1 0
+s174
+	build _ 0 n168
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea175
+.o 1 0
+n175
+	push_node _cycle_in_spine 0
+.o 1 0
+ea175
+.o 1 0
+s175
+	build _ 0 n169
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea176
+.o 1 0
+n176
+	push_node _cycle_in_spine 0
+.o 1 0
+ea176
+.o 1 0
+s176
+	build _ 0 n170
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea177
+.o 1 0
+n177
+	push_node _cycle_in_spine 0
+.o 1 0
+ea177
+.o 1 0
+s177
+	build _ 0 n171
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea178
+.o 1 0
+n178
+	push_node _cycle_in_spine 0
+.o 1 0
+ea178
+.o 1 0
+s178
+	build _ 0 n172
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea179
+.o 1 0
+n179
+	push_node _cycle_in_spine 0
+.o 1 0
+ea179
+.o 1 0
+s179
+	build _ 0 n173
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n169
+	push_node _cycle_in_spine 0
+.o 0 0
+ea169
+	buildh _Nil 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n168
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 0
+	buildAC "Eqt"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n170
+	push_node _cycle_in_spine 0
+.o 0 0
+ea170
+	buildh _Nil 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n168
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 1
+	buildI 0
+	buildAC "Gt"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n171
+	push_node _cycle_in_spine 0
+.o 0 0
+ea171
+	buildh _Nil 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n168
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 2
+	buildI 0
+	buildAC "Lt"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n172
+	push_node _cycle_in_spine 0
+.o 0 0
+ea172
+	buildh _Nil 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n168
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 3
+	buildI 0
+	buildAC "Leq"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n168
+	push_node _cycle_in_spine 0
+.o 0 0
+ea168
+	buildh _Nil 0
+	build _ 0 n173
+	buildh _Cons 2
+	build _ 0 n172
+	buildh _Cons 2
+	build _ 0 n171
+	buildh _Cons 2
+	build _ 0 n170
+	buildh _Cons 2
+	build _ 0 n169
+	buildh _Cons 2
+	buildI 5
+	buildI 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n173
+	push_node _cycle_in_spine 0
+.o 0 0
+ea173
+	buildh _Nil 0
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	build _ 0 n168
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 4
+	buildI 0
+	buildAC "Geq"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d257 _hnf l257 2 0 "gToString_s;263"
+.a 0 a257
+.o 2 0
+l257
+	repl_args 1 1
+.o 2 0
+a257
+.d 2 0
+	jsr ea257
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea257
+	jsr_eval 1
+.o 2 0
+s257
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s96
+.o 2 0
+s96
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d259 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d630 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d632 3
+	build _ 0 n164
+	buildh d622 2
+	build _ 0 n163
+	buildh d620 2
+	buildh d166 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d632 _hnf l632 4 0 "gToString_sss;638"
+.a 0 a632
+.o 2 0
+l632
+	repl_args 3 3
+.o 4 0
+a632
+.d 4 0
+	jsr ea632
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 4 0
+ea632
+	push_a 3
+	jsr_eval 0
+	repl_args 2 2
+	update_a 1 5
+	update_a 2 1
+	update_a 3 2
+	update_a 4 3
+	update_a 0 4
+	pop_a 1
+.o 5 0
+s632
+	push_a 4
+	push_a 4
+	push_a 4
+	push_a 4
+	push_a 4
+	update_a 4 9
+	update_a 3 8
+	update_a 2 7
+	update_a 1 6
+	updatepop_a 0 5
+.d 5 0
+	jmp e_genToFromString_sgToString__Tuple2;12
+.desc d630 _hnf l630 3 0 "gToString_ss;636"
+.a 0 a630
+.o 2 0
+l630
+	repl_args 2 2
+.o 3 0
+a630
+.d 3 0
+	jsr ea630
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 3 0
+ea630
+	jsr_eval 2
+.o 3 0
+s630
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp e_genToFromString_sgToString__List;11
+.desc d259 _hnf l259 2 0 "gToString_s;265"
+.a 0 a259
+.o 2 0
+l259
+	repl_args 1 1
+.o 2 0
+a259
+.d 2 0
+	jsr ea259
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea259
+	jsr_eval 1
+.o 2 0
+s259
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s98
+.o 2 0
+s98
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n188
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n187
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	build _ 0 n186
+	buildh d620 2
+	buildh d190 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d190 _hnf l190 1 0 "toGenericFHterm_;196"
+.o 2 0
+l190
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea190
+	jsr_eval 0
+.o 2 0
+s190
+	eq_desc e_textgenerator_version2_dFHvar 1 0
+	jmp_true case.12
+	jmp case.13
+case.12
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.13
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea186
+.o 1 0
+n186
+	push_node _cycle_in_spine 0
+.o 1 0
+ea186
+.o 1 0
+s186
+	build _ 0 n183
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea187
+.o 1 0
+n187
+	push_node _cycle_in_spine 0
+.o 1 0
+ea187
+.o 1 0
+s187
+	build _ 0 n184
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea188
+.o 1 0
+n188
+	push_node _cycle_in_spine 0
+.o 1 0
+ea188
+.o 1 0
+s188
+	build _ 0 n185
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n184
+	push_node _cycle_in_spine 0
+.o 0 0
+ea184
+	buildh _Nil 0
+	buildAC "FHterm_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "Var_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n183
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "FHvar"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n183
+	push_node _cycle_in_spine 0
+.o 0 0
+ea183
+	buildh _Nil 0
+	build _ 0 n185
+	buildh _Cons 2
+	build _ 0 n184
+	buildh _Cons 2
+	buildI 2
+	buildI 0
+	buildAC "FHterm_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n185
+	push_node _cycle_in_spine 0
+.o 0 0
+ea185
+	buildh _Nil 0
+	buildAC "FHterm_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "Constant_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n183
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 1
+	buildI 1
+	buildAC "FHconstant"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d166 _hnf l166 1 0 "toGenericLiteral_;172"
+.o 2 0
+l166
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea166
+	jsr_eval 0
+.o 2 0
+s166
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea163
+.o 1 0
+n163
+	push_node _cycle_in_spine 0
+.o 1 0
+ea163
+.o 1 0
+s163
+	build _ 0 n161
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea164
+.o 1 0
+n164
+	push_node _cycle_in_spine 0
+.o 1 0
+ea164
+.o 1 0
+s164
+	build _ 0 n162
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n161
+	push_node _cycle_in_spine 0
+.o 0 0
+ea161
+	buildh _Nil 0
+	build _ 0 n162
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "Literal_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n162
+	push_node _cycle_in_spine 0
+.o 0 0
+ea162
+	buildh _Nil 0
+	buildAC "Literal_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "FHterm_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_List"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildAC "FHpre_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n161
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "Literal"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d159 _hnf l159 1 0 "toGenericNumRestrPat_;165"
+.o 2 0
+l159
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea159
+	jsr_eval 0
+.o 2 0
+s159
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea156
+.o 1 0
+n156
+	push_node _cycle_in_spine 0
+.o 1 0
+ea156
+.o 1 0
+s156
+	build _ 0 n154
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea157
+.o 1 0
+n157
+	push_node _cycle_in_spine 0
+.o 1 0
+ea157
+.o 1 0
+s157
+	build _ 0 n155
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n154
+	push_node _cycle_in_spine 0
+.o 0 0
+ea154
+	buildh _Nil 0
+	build _ 0 n155
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "NumRestrPat_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n155
+	push_node _cycle_in_spine 0
+.o 0 0
+ea155
+	buildh _Nil 0
+	buildAC "NumRestrPat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "Literal_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "BoundVar_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "PatVar_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "Comparison_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple4"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n154
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "NumRestrPat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d152 _hnf l152 1 0 "toGenericSharpestPatStat_;158"
+.o 2 0
+l152
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea152
+	jsr_eval 0
+.o 2 0
+s152
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea149
+.o 1 0
+n149
+	push_node _cycle_in_spine 0
+.o 1 0
+ea149
+.o 1 0
+s149
+	build _ 0 n147
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea150
+.o 1 0
+n150
+	push_node _cycle_in_spine 0
+.o 1 0
+ea150
+.o 1 0
+s150
+	build _ 0 n148
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n147
+	push_node _cycle_in_spine 0
+.o 0 0
+ea147
+	buildh _Nil 0
+	build _ 0 n148
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "SharpestPatStat_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n148
+	push_node _cycle_in_spine 0
+.o 0 0
+ea148
+	buildh _Nil 0
+	buildAC "SharpestPatStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "NumRestrPat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "PatVar_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_Tuple2"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeApp 2
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n147
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "SharpestPat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d145 _hnf l145 1 0 "toGenericPatternLangFolmuminquaNumQuant_;151"
+.o 2 0
+l145
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea145
+	jsr_eval 0
+.o 2 0
+s145
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea142
+.o 1 0
+n142
+	push_node _cycle_in_spine 0
+.o 1 0
+ea142
+.o 1 0
+s142
+	build _ 0 n140
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea143
+.o 1 0
+n143
+	push_node _cycle_in_spine 0
+.o 1 0
+ea143
+.o 1 0
+s143
+	build _ 0 n141
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n140
+	push_node _cycle_in_spine 0
+.o 0 0
+ea140
+	buildh _Nil 0
+	build _ 0 n141
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "PatternLangFolmuminquaNumQuant_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n141
+	push_node _cycle_in_spine 0
+.o 0 0
+ea141
+	buildh _Nil 0
+	buildAC "PatternLangFolmuminquaNumQuant_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "SharpestPatStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n140
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "PatLang"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.desc d253 _hnf l253 2 0 "gToString_s;259"
+.a 0 a253
+.o 2 0
+l253
+	repl_args 1 1
+.o 2 0
+a253
+.d 2 0
+	jsr ea253
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea253
+	jsr_eval 1
+.o 2 0
+s253
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp s92
+.o 2 0
+s92
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d268 1
+	build _ 0 n136
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d269 1
+	build _ 0 n135
+	buildh d622 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d617 3
+	build _ 0 n134
+	buildh d620 2
+	buildh d138 0
+	push_a 3
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d617 _hnf l617 4 0 "gToString_sss;623"
+.a 0 a617
+.o 2 0
+l617
+	repl_args 3 3
+.o 4 0
+a617
+.d 4 0
+	jsr ea617
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 4 0
+ea617
+	jsr_eval 3
+.o 4 0
+s617
+	push_a 3
+	push_a 3
+	push_a 3
+	push_a 3
+	update_a 3 7
+	update_a 2 6
+	update_a 1 5
+	updatepop_a 0 4
+.d 4 0
+	jmp e_genToFromString_sgToString_EITHER;3
+.desc d269 _hnf l269 2 0 "gToString_s;275"
+.a 0 a269
+.o 2 0
+l269
+	repl_args 1 1
+.o 2 0
+a269
+.d 2 0
+	jsr ea269
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea269
+	jsr_eval 1
+	push_r_args 1 2 0
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+.o 3 0
+s269
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp s104
+.o 3 0
+s104
+	build_r e_textgenerator_version2_rEntityStat_ 2 0 1 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n248
+	buildh d624 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n247
+	buildh d624 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d614 3
+	build _ 0 n246
+	buildh d622 2
+	build _ 0 n245
+	buildh d620 2
+	buildh d250 0
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d250 _hnf l250 1 0 "toGenericEntityStat_;256"
+.o 2 0
+l250
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea250
+	jsr_eval 0
+	repl_r_args 2 0
+.o 3 0
+s250
+	push_a 1
+	buildh e_StdGeneric_dFIELD 1
+	push_a 1
+	buildh e_StdGeneric_dFIELD 1
+	buildh e_StdGeneric_dPAIR 2
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 3
+	pop_a 2
+.d 1 0
+	rtn
+.n 0 _ ea245
+.o 1 0
+n245
+	push_node _cycle_in_spine 0
+.o 1 0
+ea245
+.o 1 0
+s245
+	build _ 0 n241
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea246
+.o 1 0
+n246
+	push_node _cycle_in_spine 0
+.o 1 0
+ea246
+.o 1 0
+s246
+	build _ 0 n242
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea247
+.o 1 0
+n247
+	push_node _cycle_in_spine 0
+.o 1 0
+ea247
+.o 1 0
+s247
+	build _ 0 n243
+	fillh e_StdGeneric_dGenericFieldInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea248
+.o 1 0
+n248
+	push_node _cycle_in_spine 0
+.o 1 0
+ea248
+.o 1 0
+s248
+	build _ 0 n244
+	fillh e_StdGeneric_dGenericFieldInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n241
+	push_node _cycle_in_spine 0
+.o 0 0
+ea241
+	buildh _Nil 0
+	build _ 0 n242
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "EntityStat_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n243
+	push_node _cycle_in_spine 0
+.o 0 0
+ea243
+	build _ 0 n242
+	buildI 0
+	buildAC "ent_ctl"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericFieldDescriptor 3 0 3 0 0
+	pop_a 3
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n242
+	push_node _cycle_in_spine 0
+.o 0 0
+ea242
+	buildh _Nil 0
+	build _ 0 n244
+	buildh _Cons 2
+	build _ 0 n243
+	buildh _Cons 2
+	buildAC "EntityStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n241
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 2
+	buildAC "_EntityStat_"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n244
+	push_node _cycle_in_spine 0
+.o 0 0
+ea244
+	build _ 0 n242
+	buildI 1
+	buildAC "ent_nl"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericFieldDescriptor 3 0 3 0 0
+	pop_a 3
+.d 1 0
+	rtn
+.desc d268 _hnf l268 2 0 "gToString_s;274"
+.a 0 a268
+.o 2 0
+l268
+	repl_args 1 1
+.o 2 0
+a268
+.d 2 0
+	jsr ea268
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea268
+	jsr_eval 1
+	push_r_args 1 3 0
+	update_a 2 4
+	update_a 0 2
+	push_a 3
+	update_a 2 4
+	update_a 0 2
+	pop_a 2
+.o 4 0
+s268
+	push_a 3
+	push_a 3
+	push_a 3
+	push_a 3
+	update_a 3 7
+	update_a 2 6
+	update_a 1 5
+	updatepop_a 0 4
+.d 4 0
+	jmp s103
+.o 4 0
+s103
+	build_r e_textgenerator_version2_rHurelanStat_ 3 0 1 0
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n237
+	buildh d624 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n236
+	buildh d624 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d614 3
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d629 1
+	build _ 0 n235
+	buildh d624 2
+	buildh e_StdGeneric_dNoGenericInfo 0
+	buildh d614 3
+	build _ 0 n234
+	buildh d622 2
+	build _ 0 n233
+	buildh d620 2
+	buildh d239 0
+	update_a 2 6
+	update_a 1 5
+	updatepop_a 0 4
+.d 3 0
+	jsr s252
+.o 1 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.desc d629 _hnf l629 2 0 "gToString_s;635"
+.a 0 a629
+.o 2 0
+l629
+	repl_args 1 1
+.o 2 0
+a629
+.d 2 0
+	jsr ea629
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 2 0
+ea629
+	jsr_eval 1
+	push_array 1
+	update_a 0 2
+	pop_a 1
+.o 2 0
+s629
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jmp e_genToFromString_sgToString__String;10
+.desc d624 _hnf l624 3 0 "gToString_ss;630"
+.a 0 a624
+.o 2 0
+l624
+	repl_args 2 2
+.o 3 0
+a624
+.d 3 0
+	jsr ea624
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 3 0
+ea624
+	jsr_eval 2
+.o 3 0
+s624
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp e_genToFromString_sgToString_FIELD;6
+.desc d622 _hnf l622 3 0 "gToString_ss;628"
+.a 0 a622
+.o 2 0
+l622
+	repl_args 2 2
+.o 3 0
+a622
+.d 3 0
+	jsr ea622
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 3 0
+ea622
+	jsr_eval 2
+.o 3 0
+s622
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp e_genToFromString_sgToString_CONS;5
+.desc d620 _hnf l620 3 0 "gToString_ss;626"
+.a 0 a620
+.o 2 0
+l620
+	repl_args 2 2
+.o 3 0
+a620
+.d 3 0
+	jsr ea620
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 3 0
+ea620
+	jsr_eval 2
+.o 3 0
+s620
+	push_a 2
+	push_a 2
+	push_a 2
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp e_genToFromString_sgToString_OBJECT;4
+.desc d614 _hnf l614 4 0 "gToString_sss;620"
+.a 0 a614
+.o 2 0
+l614
+	repl_args 3 3
+.o 4 0
+a614
+.d 4 0
+	jsr ea614
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.o 4 0
+ea614
+	jsr_eval 3
+.o 4 0
+s614
+	push_a 3
+	push_a 3
+	push_a 3
+	push_a 3
+	update_a 3 7
+	update_a 2 6
+	update_a 1 5
+	updatepop_a 0 4
+.d 4 0
+	jmp e_genToFromString_sgToString_PAIR;2
+.desc d239 _hnf l239 1 0 "toGenericHurelanStat_;245"
+.o 2 0
+l239
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea239
+	jsr_eval 0
+	repl_r_args 3 0
+.o 4 0
+s239
+	push_a 2
+	buildh e_StdGeneric_dFIELD 1
+	push_a 2
+	buildh e_StdGeneric_dFIELD 1
+	buildh e_StdGeneric_dPAIR 2
+	push_a 1
+	buildh e_StdGeneric_dFIELD 1
+	buildh e_StdGeneric_dPAIR 2
+	buildh e_StdGeneric_dCONS 1
+	fillh e_StdGeneric_dOBJECT 1 4
+	pop_a 3
+.d 1 0
+	rtn
+.n 0 _ ea233
+.o 1 0
+n233
+	push_node _cycle_in_spine 0
+.o 1 0
+ea233
+.o 1 0
+s233
+	build _ 0 n228
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea234
+.o 1 0
+n234
+	push_node _cycle_in_spine 0
+.o 1 0
+ea234
+.o 1 0
+s234
+	build _ 0 n229
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea235
+.o 1 0
+n235
+	push_node _cycle_in_spine 0
+.o 1 0
+ea235
+.o 1 0
+s235
+	build _ 0 n230
+	fillh e_StdGeneric_dGenericFieldInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea236
+.o 1 0
+n236
+	push_node _cycle_in_spine 0
+.o 1 0
+ea236
+.o 1 0
+s236
+	build _ 0 n231
+	fillh e_StdGeneric_dGenericFieldInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea237
+.o 1 0
+n237
+	push_node _cycle_in_spine 0
+.o 1 0
+ea237
+.o 1 0
+s237
+	build _ 0 n232
+	fillh e_StdGeneric_dGenericFieldInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n228
+	push_node _cycle_in_spine 0
+.o 0 0
+ea228
+	buildh _Nil 0
+	build _ 0 n229
+	buildh _Cons 2
+	buildI 1
+	buildI 0
+	buildAC "HurelanStat_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n230
+	push_node _cycle_in_spine 0
+.o 0 0
+ea230
+	build _ 0 n229
+	buildI 0
+	buildAC "hra_ctl"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericFieldDescriptor 3 0 3 0 0
+	pop_a 3
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n231
+	push_node _cycle_in_spine 0
+.o 0 0
+ea231
+	build _ 0 n229
+	buildI 1
+	buildAC "ent1_nl"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericFieldDescriptor 3 0 3 0 0
+	pop_a 3
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n229
+	push_node _cycle_in_spine 0
+.o 0 0
+ea229
+	buildh _Nil 0
+	build _ 0 n232
+	buildh _Cons 2
+	build _ 0 n231
+	buildh _Cons 2
+	build _ 0 n230
+	buildh _Cons 2
+	buildAC "HurelanStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	buildAC "_String"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n228
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 3
+	buildAC "_HurelanStat_"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n232
+	push_node _cycle_in_spine 0
+.o 0 0
+ea232
+	build _ 0 n229
+	buildI 2
+	buildAC "ent2_nl"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericFieldDescriptor 3 0 3 0 0
+	pop_a 3
+.d 1 0
+	rtn
+.o 3 0
+s252
+	push_a 2
+	push_a 1
+	build e_system_dAP 2 e_system_nAP
+	push_a 2
+	update_a 1 4
+	updatepop_a 0 3
+	jmp_ap 1
+.desc d138 _hnf l138 1 0 "toGenericBridgeStat_;144"
+.o 2 0
+l138
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea138
+	jsr_eval 0
+.o 2 0
+s138
+	eq_desc e_textgenerator_version2_dEntityStat 1 0
+	jmp_true case.14
+	jmp case.15
+case.14
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dLEFT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+case.15
+	repl_args 1 1
+	push_a 0
+	buildh e_StdGeneric_dCONS 1
+	buildh e_StdGeneric_dRIGHT 1
+	fillh e_StdGeneric_dOBJECT 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea134
+.o 1 0
+n134
+	push_node _cycle_in_spine 0
+.o 1 0
+ea134
+.o 1 0
+s134
+	build _ 0 n131
+	fillh e_StdGeneric_dGenericTypeDefInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea135
+.o 1 0
+n135
+	push_node _cycle_in_spine 0
+.o 1 0
+ea135
+.o 1 0
+s135
+	build _ 0 n132
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _ ea136
+.o 1 0
+n136
+	push_node _cycle_in_spine 0
+.o 1 0
+ea136
+.o 1 0
+s136
+	build _ 0 n133
+	fillh e_StdGeneric_dGenericConsInfo 1 1
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n132
+	push_node _cycle_in_spine 0
+.o 0 0
+ea132
+	buildh _Nil 0
+	buildAC "BridgeStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "EntityStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n131
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 0
+	buildI 1
+	buildAC "EntityStat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n131
+	push_node _cycle_in_spine 0
+.o 0 0
+ea131
+	buildh _Nil 0
+	build _ 0 n133
+	buildh _Cons 2
+	build _ 0 n132
+	buildh _Cons 2
+	buildI 2
+	buildI 0
+	buildAC "BridgeStat_"
+	buildh ARRAY 1
+	fill_r e_StdGeneric_rGenericTypeDefDescriptor 4 0 4 0 0
+	pop_a 4
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n133
+	push_node _cycle_in_spine 0
+.o 0 0
+ea133
+	buildh _Nil 0
+	buildAC "BridgeStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildAC "HurelanStat_"
+	buildh ARRAY 1
+	buildh e_StdGeneric_dGenTypeCons 1
+	buildh e_StdGeneric_dGenTypeArrow 2
+	build _ 0 n131
+	buildh e_StdGeneric_dGenConsNoPrio 0
+	buildI 1
+	buildI 1
+	buildAC "HurelanStat"
+	buildh ARRAY 1
+	push_a 6
+	update_a 3 7
+	update_a 4 3
+	update_a 5 4
+	update_a 6 5
+	update_a 0 6
+	pop_a 1
+	fill_r e_StdGeneric_rGenericConsDescriptor 7 0 7 0 0
+	pop_a 7
+.d 1 0
+	rtn
+.n 0 _
+.o 1 0
+n37
+	push_node _cycle_in_spine 0
+.o 0 0
+ea37
+	build _ 0 n34
+	buildh d66 0
+	build e_StdList_dmap 2 e_StdList_nmap
+	buildI 0
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	build _ 0 n35
+	buildI 0
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	build _ 0 n32
+	buildI 4
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	build _ 0 n9
+	buildI 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_GenericByCG_drandomPick 3 e_GenericByCG_nrandomPick
+	buildI 0
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	build _ 0 n858
+	build _ 0 n36
+	buildI 0
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	build _ 0 n32
+	buildI 3
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	push_a 1
+	push_a 3
+	build _ 2 n860
+	build _ 0 n9
+	buildh e_StdString_d==;2 0
+	push_a 6
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 3 n859
+	build e_GenericByCG_drandomPick 3 e_GenericByCG_nrandomPick
+	buildh _Nil 0
+	push_a 4
+	push_a 5
+	build_r e_textgenerator_version2_rEntityStat_ 2 0 0 0
+	update_a 0 2
+	pop_a 2
+	buildh e_textgenerator_version2_dEntityStat 1
+	buildh _Cons 2
+	push_a 5
+	push_a 7
+	build _ 2 n69
+	push_a 6
+	push_a 8
+	build _ 2 n68
+	push_a 7
+	push_a 9
+	build _ 2 n67
+	build_r e_textgenerator_version2_rHurelanStat_ 3 0 0 0
+	update_a 0 3
+	pop_a 3
+	buildh e_textgenerator_version2_dHurelanStat 1
+	buildh _Cons 2
+	buildh _Nil 0
+	buildh e_textgenerator_version2_dNeq 0
+	push_a 3
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dFHeqstat 1
+	buildh _Cons 2
+	buildh _Nil 0
+	push_a 6
+	buildh _Cons 2
+	push_a 3
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh _Tuple 2
+	push_a 7
+	push_a 9
+	build _ 2 n67
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dFHpre2stat 1
+	buildh _Cons 2
+	update_a 1 7
+	updatepop_a 0 6
+	push_a 1
+	push_a 1
+	fillh _Tuple 2 4
+	pop_a 2
+.d 1 0
+	rtn
+.n 2 _ ea860
+.o 1 0
+n860
+	push_node _cycle_in_spine 2
+.o 3 0
+ea860
+.o 3 0
+s860
+	push_a 1
+	jsr_eval 0
+	pushI_a 2
+	pop_a 1
+	push_a 0
+	jsr_eval 0
+	pushI_a 1
+	pop_a 1
+	ltI
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 1 b
+	jsr s669
+.o 0 1 i
+	fillI_b 0 0
+	pop_b 1
+.d 1 0
+	rtn
+.n 3 _ ea859
+.o 1 0
+n859
+	push_node _cycle_in_spine 3
+.o 4 0
+ea859
+.o 4 0
+s859
+	push_a 2
+	jsr_eval 0
+	push_a 1
+	jsr_eval 0
+	push_a 3
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 4 0
+	jmp e_StdList_sremoveMember
+.n 0 _ ea858
+.o 1 0
+n858
+	push_node _cycle_in_spine 0
+.o 1 0
+ea858
+.o 1 0
+s858
+.d 0 0
+	jsr s10
+.o 0 1 i
+	pushI 1
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	subI
+	fillI_b 0 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 1 b
+s669
+	eqB_b TRUE 0
+	jmp_true case.16
+	jmp case.17
+case.16
+	pop_b 1
+	jsr_eval 0
+	pushI_a 0
+	pop_a 2
+.d 0 1 i
+	rtn
+case.17
+	pop_b 1
+	pop_a 1
+	jsr_eval 0
+	pushI_a 0
+	pop_a 1
+.d 0 1 i
+	rtn
+.o 0 0
+s10
+	testcaf c10
+	jmp_false m.18
+	pushcaf c10 0 1
+.d 0 1 i
+	rtn
+.caf c10 0 1
+m.18
+.d 0 0
+	jsr s10.1
+.o 0 1 i
+	fillcaf c10 0 1
+.d 0 1 i
+	rtn
+.o 0 0
+s10.1
+	create
+.d 1 0
+	jsr s9
+.o 1 0
+.d 1 0
+	jmp e_StdList_slength;47
+.n 0 _ ea36
+.o 1 0
+n36
+	push_node _cycle_in_spine 0
+.o 1 0
+ea36
+.o 1 0
+s36
+	build _ 0 n32
+	buildI 2
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	create
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_MersenneTwister_sgenRandInt
+.o 1 0
+	buildh d65 0
+.d 3 0
+	jmp e_StdList_smap
+.desc d65 _hnf l65 1 0 "<lambda>[line:457];36;65"
+.o 2 0
+l65
+	pop_a 1
+.d 1 0
+	jsr ea65
+.o 0 1 i
+	buildI_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 1 0
+ea65
+	jsr_eval 0
+	pushI_a 0
+	pop_a 1
+.o 0 1 i
+s65
+	push_b 0
+	updatepop_b 0 1
+.d 0 1 i
+	jsr e_StdInt_sabs;13
+.o 0 1 i
+	pushI 5
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	remI
+	pushI 1
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	addI
+.d 0 1 i
+	rtn
+.n 0 _ ea9
+.o 1 0
+n9
+	push_node _cycle_in_spine 0
+.o 1 0
+ea9
+.o 1 0
+s9
+	buildh _Nil 0
+	buildAC "Jasm"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Gaston"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Michiel"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Michilio"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Bo"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Sjaak"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Szymon"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Geoff"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Laura"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Jesse"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Sélinde"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Pjoipjoibyroi"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Rapunzel"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Quadario"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Quintus"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Alex"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Jan"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Eva"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Sybren"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Crista"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Frank"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Ronald"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Alexia"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Anastasia"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Henk-Jan"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Pondiwu"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Kevin"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Daniel"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Ivana"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Bonjordoki"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Sirtaki"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Gerard"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "John-Jules"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Chide"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Gabriel"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Christopher"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Marijke"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Ebere"
+	buildh ARRAY 1
+	buildh _Cons 2
+	buildAC "Akwasi"
+	buildh ARRAY 1
+	buildh _Cons 2
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 2
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	ltI
+	jmp_false else.19
+	buildAC "\nProperNamesForPersons_nli: error, please define more than one proper names in my definition\n"
+	updatepop_a 0 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.19
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.desc d66 _hnf l66 1 0 "<lambda>[line:493];32;66"
+.o 2 0
+l66
+	pop_a 1
+.d 1 0
+	jsr ea66
+.o 2 0
+	push_a 1
+	push_a 1
+	buildh _Tuple 2
+	updatepop_a 0 2
+.d 1 0
+	rtn
+.o 1 0
+ea66
+	jsr_eval 0
+	pushI_a 0
+	pop_a 1
+.o 0 1 i
+s66
+	create
+.d 1 0
+	jsr s11
+.o 1 0
+	push_b 0
+	updatepop_b 0 1
+.d 1 1 i
+	jsr e_StdList_s!!
+.o 1 0
+	repl_args 2 2
+.d 2 0
+	rtn
+.n 0 _ ea34
+.o 1 0
+n34
+	push_node _cycle_in_spine 0
+.o 1 0
+ea34
+.o 1 0
+s34
+	build _ 0 n32
+	buildI 0
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	create
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_MersenneTwister_sgenRandInt
+.o 1 0
+	buildh d63 0
+.d 3 0
+	jmp e_StdList_smap
+.desc d63 _hnf l63 1 0 "<lambda>[line:448];29;63"
+.o 2 0
+l63
+	pop_a 1
+.d 1 0
+	jsr ea63
+.o 0 1 i
+	buildI_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 1 0
+ea63
+	jsr_eval 0
+	pushI_a 0
+	pop_a 1
+.o 0 1 i
+s63
+	create
+.d 1 0
+	jsr s11
+.o 1 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	push_b 1
+.d 0 1 i
+	jsr e_StdInt_sabs;13
+.o 0 1 i
+	update_b 1 2
+	updatepop_b 0 1
+	remI
+.d 0 1 i
+	rtn
+.o 1 0
+s11
+	buildh _Nil 0
+	buildAC "employee"
+	buildh ARRAY 1
+	buildAC "employer"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "enemy"
+	buildh ARRAY 1
+	buildAC "enemy"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "friend"
+	buildh ARRAY 1
+	buildAC "friend"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "trainee"
+	buildh ARRAY 1
+	buildAC "trainer"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "wife"
+	buildh ARRAY 1
+	buildAC "husband"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "grandchild"
+	buildh ARRAY 1
+	buildAC "grandparent"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "patient"
+	buildh ARRAY 1
+	buildAC "dentist"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "sibling"
+	buildh ARRAY 1
+	buildAC "sibling"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "follower"
+	buildh ARRAY 1
+	buildAC "leader"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "patient"
+	buildh ARRAY 1
+	buildAC "doctor"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "parent"
+	buildh ARRAY 1
+	buildAC "child"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "student"
+	buildh ARRAY 1
+	buildAC "teacher"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	fillh _Cons 2 2
+.d 1 0
+	rtn
+.n 0 _ ea35
+.o 1 0
+n35
+	push_node _cycle_in_spine 0
+.o 1 0
+ea35
+.o 1 0
+s35
+	build _ 0 n32
+	buildI 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	create
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_MersenneTwister_sgenRandInt
+.o 1 0
+	buildh d64 0
+.d 3 0
+	jmp e_StdList_smap
+.desc d64 _hnf l64 1 0 "<lambda>[line:452];29;64"
+.o 2 0
+l64
+	pop_a 1
+.d 1 0
+	jsr ea64
+.o 0 1 i
+	buildI_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 1 0
+ea64
+	jsr_eval 0
+	pushI_a 0
+	pop_a 1
+.o 0 1 i
+s64
+	push_b 0
+	updatepop_b 0 1
+.d 0 1 i
+	jsr e_StdInt_sabs;13
+.o 0 1 i
+	pushI 2
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	remI
+	pushI 1
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	addI
+.d 0 1 i
+	rtn
+.n 2 _ _
+.o 1 0
+n69
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea69
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea69
+	jsr_eval 1
+	jsr_eval 0
+	repl_args 2 2
+	pushI_a 2
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.o 2 1 i
+s69
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.20
+	pop_a 1
+	pop_b 1
+	jmp_eval
+else.20
+	updatepop_a 0 1
+	pop_b 1
+	jmp_eval
+.n 2 _ _
+.o 1 0
+n68
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea68
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea68
+	jsr_eval 1
+	jsr_eval 0
+	repl_args 2 2
+	pushI_a 2
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.o 2 1 i
+s68
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.21
+	updatepop_a 0 1
+	pop_b 1
+	jmp_eval
+else.21
+	pop_a 1
+	pop_b 1
+	jmp_eval
+.n 2 _
+.o 1 0
+n67
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea67
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea67
+	jsr_eval 1
+	jsr_eval 0
+	repl_args 2 2
+	pushI_a 2
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.o 2 1 i
+s67
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.22
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "_of"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	pop_b 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "is_"
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+else.22
+	pushI 2
+	push_b 1
+	eqI
+	jmp_false else.23
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "_of"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	pop_b 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "is_"
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+else.23
+	buildAC "Error at createHurelanPredicate/randomPos, pos must be 1 or 2."
+	updatepop_a 0 2
+	pop_b 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.n 0 _ ea32
+.o 1 0
+n32
+	push_node _cycle_in_spine 0
+.o 1 0
+ea32
+.o 1 0
+s32
+	build _ 0 n31
+.d 2 0
+	jmp e_MersenneTwister_sgenRandInt
+.n 0 _
+.o 1 0
+n31
+	push_node _cycle_in_spine 0
+.d 0 0
+	jsr ea31
+.o 0 1 i
+	fillI_b 0 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 0 0
+ea31
+.o 0 0
+s31
+	testcaf c31
+	jmp_false m.24
+	pushcaf c31 0 1
+.d 0 1 i
+	rtn
+.caf c31 0 1
+m.24
+.d 0 0
+	jsr s31.1
+.o 0 1 i
+	fillcaf c31 0 1
+.d 0 1 i
+	rtn
+.o 0 0
+s31.1
+.d 0 0
+	jmp s33
+.o 0 0
+s33
+	buildAC "Usage: textgen SEED, where SEED is an integer between -2147483647 and 2147483647"
+	buildh ARRAY 1
+.d 0 0
+	jsr e_ArgEnv_sgetCommandLine
+.o 1 0
+	push_a 0
+	push_a 2
+	build _ 2 n665
+	push_a 1
+	push_a 3
+	buildh _Nil 0
+	update_a 0 5
+	update_a 0 4
+	pop_a 1
+.d 2 0
+	jsr s665
+.o 0 1 i
+.d 0 1 i
+	jsr ItoAC
+.o 1 0
+	buildAC "\n"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "seed = "
+.d 2 0
+	jsr catAC
+.o 1 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_StdDebug_strace;4
+.o 1 0
+	pushI_a 0
+	pop_a 1
+.d 0 1 i
+	rtn
+.n 2 _
+.o 1 0
+n665
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea665
+.o 0 1 i
+	fillI_b 0 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea665
+.o 2 0
+s665
+	push_a 1
+	push_arraysize _ 1 0
+	pushI 2
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	eqI
+	jmp_false else.25
+	buildI 1
+	push_a 2
+	buildh ARRAY 1
+	build e__SystemArray_dselect;75 2 e__SystemArray_nselect;75
+	updatepop_a 0 2
+.d 1 0
+	jmp e_GenericByCG_scharArrayToInt
+else.25
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	updatepop_a 0 2
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	pushI_a 0
+	pop_a 1
+.d 0 1 i
+	rtn
+.desc d48 _hnf l48 1 0 "<lambda>[line:38];26;47"
+.o 2 0
+l48
+	pop_a 1
+.o 1 0
+ea48
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dHurelanStat 1 0
+	jmp_true case.26
+	jmp s48.1
+case.26
+	repl_args 1 1
+	push_a 0
+	build e_textgenerator_version2_dHurelanStat_.hra_ctl -4 e_textgenerator_version2_nHurelanStat_.hra_ctl
+	buildI 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+	push_a 1
+	push_a 1
+	buildh _Tuple 2
+	updatepop_a 0 2
+.d 1 0
+	rtn
+s48.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD d48
+.d 0 2 ii
+	jmp _match_error
+.n 3 _ ea28
+.o 1 0
+n28
+	push_node _cycle_in_spine 3
+.o 4 0
+ea28
+	jsr_eval 0
+.o 4 0
+s28
+	buildh d8 0
+	create
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 3
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jsr e_StdList_sfilter
+.o 1 0
+	push_a 2
+	push_a 2
+	buildh d59 2
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp e_StdList_smap
+.desc d59 _hnf l59 3 0 "FHhurelanstat2nl_loc;59"
+.a 3 ea59
+.o 2 0
+l59
+	push_args 0 2 2
+	update_a 3 2
+	create
+	update_a 0 4
+	pop_a 1
+.o 4 0
+ea59
+	jsr_eval 2
+	jsr_eval 0
+.o 4 0
+s59
+	push_a 2
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s60
+.o 1 0
+	pushI_a 0
+	pop_a 1
+	push_a 0
+	push_a 2
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 1 i
+	jmp s29
+.o 3 1 i
+s29
+	eq_desc e_textgenerator_version2_dFHpre2stat 1 0
+	jmp_true case.27
+	jmp s29.1
+case.27
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.28
+	push_a 1
+	build d_S.2 -1 n_S.2
+	push_a 1
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	push_a 4
+	build _ 2 n13
+	build _ 1 n861
+	build d_S.1 -1 n_S.1
+	push_a 3
+	build d_S.1 -1 n_S.1
+	build _ 3 n856
+	fillh e_textgenerator_version2_dSentenceNL 1 4
+	pop_a 3
+	pop_b 1
+.d 1 0
+	rtn
+else.28
+	pushI 2
+	push_b 1
+	eqI
+	jmp_false else.29
+	push_a 1
+	build d_S.1 -1 n_S.1
+	push_a 1
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	push_a 4
+	build _ 2 n13
+	build _ 1 n862
+	build d_S.2 -1 n_S.2
+	push_a 3
+	build d_S.1 -1 n_S.1
+	build _ 3 n857
+	fillh e_textgenerator_version2_dSentenceNL 1 4
+	pop_a 3
+	pop_b 1
+.d 1 0
+	rtn
+else.29
+	push_b 0
+	updatepop_b 0 1
+	pop_a 3
+.d 0 1 i
+	jsr ItoAC
+.o 1 0
+	buildAC "."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "Error: FHhurelanstat2nl offered pos = "
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+s29.1
+	pop_a 3
+	pop_b 1
+	pushD m_textgenerator_version2
+	pushD x_29
+.d 0 2 ii
+	jmp _match_error
+.string x_29 "FHhurelanstat2nl"
+.n 1 _ _
+.o 1 0
+n861
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea861
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea861
+	jsr_eval 0
+.o 1 0
+s861
+	eq_desc d835 1 0
+	jmp_true case.30
+	jmp s861.1
+case.30
+	repl_args 1 1
+	jmp_eval
+s861.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_861
+.d 0 2 ii
+	jmp _match_error
+.string x_861 "_match0"
+.n 1 _ _
+.o 1 0
+n862
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea862
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea862
+	jsr_eval 0
+.o 1 0
+s862
+	eq_desc d835 1 0
+	jmp_true case.31
+	jmp s862.1
+case.31
+	repl_args 1 1
+	jmp_eval
+s862.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_862
+.d 0 2 ii
+	jmp _match_error
+.string x_862 "_match1"
+.n 3 _ ea857
+.o 1 0
+n857
+	push_node _cycle_in_spine 3
+.o 4 0
+ea857
+.o 4 0
+s857
+	push_a 2
+	jsr_eval 0
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+.d 1 0
+	jsr s38
+.o 1 0
+	buildAC "."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " of "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " is a "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+.d 1 0
+	jsr s38
+.o 1 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 3 _ ea856
+.o 1 0
+n856
+	push_node _cycle_in_spine 3
+.o 4 0
+ea856
+.o 4 0
+s856
+	push_a 2
+	jsr_eval 0
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+.d 1 0
+	jsr s38
+.o 1 0
+	buildAC "."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " of "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " is a "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+.d 1 0
+	jsr s38
+.o 1 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+s38
+	eq_desc _Cons 2 0
+	jmp_true case.32
+	jmp s38.1
+case.32
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.33
+	jmp case.34
+case.33
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	updatepop_a 0 2
+	no_op
+.d 1 0
+	rtn
+case.34
+	push_a 1
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 1
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	eqI
+	jmp_false else.35
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 1 0
+	jsr s38
+.o 1 0
+	buildAC " and "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	no_op
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+else.35
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 1 0
+	jsr s38
+.o 1 0
+	buildAC ", "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	no_op
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+s38.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_38
+.d 0 2 ii
+	jmp _match_error
+.string x_38 "andList"
+.o 2 0
+s60
+	eq_desc e_textgenerator_version2_dFHpre2stat 1 1
+	jmp_true case.36
+	jmp s60.1
+case.36
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	update_a 0 1
+	pop_a 1
+	create
+	push_a 1
+	push_a 3
+	update_a 3 5
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s664
+.o 1 0
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 0
+	push_b 1
+	update_b 1 2
+	update_b 0 1
+	pop_b 1
+	eqI
+	jmp_false else.37
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "No position defined for predicate "
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+else.37
+	pushI 0
+	push_a 0
+	updatepop_a 0 2
+.d 1 1 i
+	jmp e_StdList_s!!
+s60.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_60
+.d 0 2 ii
+	jmp _match_error
+.string x_60 "selectPos;60"
+.o 3 0
+s664
+	eq_desc _Cons 2 0
+	jmp_true case.38
+	jmp case.39
+case.38
+	repl_args 2 2
+	jsr_eval 0
+	repl_args 2 2
+	push_a 3
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	jmp_false else.40
+	buildh _Nil 0
+	push_a 1
+	fillh _Cons 2 5
+	pop_a 3
+.d 1 0
+	rtn
+else.40
+	push_a 1
+	jsr_eval 0
+	push_a 3
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jmp s664
+case.39
+	fillh _Nil 0 2
+	pop_a 2
+.d 1 0
+	rtn
+.n 2 _
+.o 1 0
+n40
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea40
+.o 3 0
+	push_a 2
+	push_a 2
+	push_a 2
+	fillh _Tuple 3 6
+	pop_a 3
+.d 1 0
+	rtn
+.o 2 0
+ea40
+	jsr_eval 0
+.o 2 0
+s40
+	buildh d8 0
+	create
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 3
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jsr e_StdList_sfilter
+.o 1 0
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jmp s41
+.o 2 0
+s41
+	eq_desc _Cons 2 0
+	jmp_true case.41
+	jmp s41.1
+case.41
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHpre2stat 1 0
+	jmp_true case.42
+	pop_a 1
+	jmp s41.1
+case.42
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	update_a 0 1
+	pop_a 1
+	jsr_eval 0
+	eq_desc _Cons 2 0
+	jmp_true case.43
+	pop_a 3
+	jmp s41.1
+case.43
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.44
+	pop_a 4
+	jmp s41.1
+case.44
+	jsr_eval 4
+	eq_desc _Nil 0 4
+	jmp_true case.45
+	pop_a 4
+	jmp s41.1
+case.45
+	push_a 2
+	push_a 6
+	build _ 2 n21
+	buildh d73 0
+	build e_StdList_dmap 2 e_StdList_nmap
+	push_a 1
+	push_a 7
+	build _ 2 n15
+	buildh d72 0
+	build e_StdList_dmap 2 e_StdList_nmap
+	build e_StdList_d++ 2 e_StdList_n++
+	buildh _Nil 0
+	buildAC "x"
+	buildh ARRAY 1
+	buildh e_textgenerator_version2_dFHvar 1
+	buildh _Cons 2
+	push_a 2
+	buildh e_textgenerator_version2_dFHconstant 1
+	buildh _Cons 2
+	push_a 4
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dLiteral 1
+	buildh e_textgenerator_version2_dGeq 0
+	buildAC "x"
+	buildh ARRAY 1
+	buildAC "n"
+	buildh ARRAY 1
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh _Tuple 4
+	buildh e_textgenerator_version2_dNumRestrPat 1
+	buildAC "n"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dSharpestPat 1
+	buildh e_textgenerator_version2_dPatLang 1
+	push_a 7
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 8
+	update_a 1 7
+	updatepop_a 0 6
+.d 3 0
+	rtn
+s41.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_41
+.d 0 2 ii
+	jmp _match_error
+.string x_41 "GenerateQuestionAttackCore"
+.desc d73 _hnf l73 1 0 "<lambda>[line:564];27;73"
+.o 2 0
+l73
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea73
+.o 2 0
+s73
+	push_a 0
+	fillh e_textgenerator_version2_dHurelanStat 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.desc d72 _hnf l72 1 0 "<lambda>[line:563];27;72"
+.o 2 0
+l72
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.o 2 0
+ea72
+.o 2 0
+s72
+	push_a 0
+	fillh e_textgenerator_version2_dEntityStat 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 1 _ _
+.o 1 0
+n47
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea47
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea47
+	jsr_eval 0
+	repl_args 3 3
+	jsr_eval 0
+.o 3 0
+s47
+	updatepop_a 0 2
+.d 1 0
+	rtn
+.n 1 _ _
+.o 1 0
+n46
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea46
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea46
+	jsr_eval 0
+	repl_args 3 3
+	jsr_eval 2
+.o 3 0
+s46
+	pop_a 2
+.d 1 0
+	rtn
+.o 3 0
+s42
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 4 4
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dGeq 0 0
+	jmp_true case.46
+	pop_a 5
+	jmp s42.1
+case.46
+	jsr_eval 3
+	push_args 3 1 1
+	buildh _Nil 0
+	update_a 0 5
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.47
+	pop_a 7
+	jmp s42.1
+case.47
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHconstant 1 0
+	jmp_true case.48
+	pop_a 9
+	jmp s42.1
+case.48
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.49
+	pop_a 9
+	jmp s42.1
+case.49
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHvar 1 0
+	jmp_true case.50
+	pop_a 11
+	jmp s42.1
+case.50
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.51
+	pop_a 11
+	jmp s42.1
+case.51
+	push_a 7
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 11
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 6 9
+	update_a 4 8
+	update_a 2 7
+	update_a 1 6
+	updatepop_a 0 5
+	buildh _Nil 0
+	update_a 0 8
+	pop_a 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.52
+	buildAC "TranslateQuestionCTL2NL: error, number restriction pattern variables inequal"
+	updatepop_a 0 8
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.52
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 4
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 4 8
+	update_a 3 7
+	update_a 1 6
+	updatepop_a 0 5
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.53
+	buildAC "TranslateQuestionCTL2NL: error, bound variables unequal"
+	updatepop_a 0 3
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.53
+	buildh _Nil 0
+	push_a 2
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	push_a 4
+	build _ 2 n13
+	build _ 1 n863
+	build d_S.2 -1 n_S.2
+	push_a 2
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 2 n851
+	buildh e_textgenerator_version2_dSentenceNL 1
+	fillh _Cons 2 5
+	pop_a 3
+.d 1 0
+	rtn
+s42.1
+	pop_a 3
+	pushD m_textgenerator_version2
+	pushD x_42
+.d 0 2 ii
+	jmp _match_error
+.string x_42 "TranslateQuestionCTL2NL"
+.n 1 _ _
+.o 1 0
+n863
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea863
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea863
+	jsr_eval 0
+.o 1 0
+s863
+	eq_desc d835 1 0
+	jmp_true case.54
+	jmp s863.1
+case.54
+	repl_args 1 1
+	jmp_eval
+s863.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_863
+.d 0 2 ii
+	jmp _match_error
+.string x_863 "_match2"
+.n 2 _ ea851
+.o 1 0
+n851
+	push_node _cycle_in_spine 2
+.o 3 0
+ea851
+.o 3 0
+s851
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	no_op
+	buildAC " minimally have? Give the highest number for which this can be established with certainty."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 3
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " does "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+.d 1 0
+	jsr s39
+.o 1 0
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "How many "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 3 0
+s45
+	push_a 1
+	push_a 1
+	update_a 1 4
+	updatepop_a 0 3
+.d 2 0
+	rtn
+.n 2 _ ea49
+.o 1 0
+n49
+	push_node _cycle_in_spine 2
+.o 3 0
+ea49
+	jsr_eval 0
+.o 3 0
+s49
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr s836
+.o 2 0
+	update_a 0 1
+	pop_a 1
+	push_a 0
+.d 1 0
+	jsr e_StdMaybe_sisNothing
+.o 0 1 b
+	jmp_false else.55
+	buildAC "ERROR: Something wrong, could not derive answer from computer generated text?"
+	updatepop_a 0 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.55
+	push_a 0
+	updatepop_a 0 1
+.d 1 0
+	jsr e_StdMaybe_sfromJust
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_sAnswerInCTL2NL
+.export e_textgenerator_version2_eaAnswerInCTL2NL
+.descexp e_textgenerator_version2_dAnswerInCTL2NL e_textgenerator_version2_nAnswerInCTL2NL e_textgenerator_version2_lAnswerInCTL2NL 1 0 "AnswerInCTL2NL"
+.o 2 0
+e_textgenerator_version2_lAnswerInCTL2NL
+	update_a 1 0
+	create
+	update_a 0 2
+	pop_a 1
+.d 2 0
+	jmp e_textgenerator_version2_eaAnswerInCTL2NL
+.n 1 e_textgenerator_version2_dAnswerInCTL2NL e_textgenerator_version2_eaAnswerInCTL2NL
+.o 1 0
+e_textgenerator_version2_nAnswerInCTL2NL
+	push_node _cycle_in_spine 1
+.o 2 0
+e_textgenerator_version2_sAnswerInCTL2NL
+.o 2 0
+e_textgenerator_version2_eaAnswerInCTL2NL
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 0
+.o 3 0
+s4
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 0
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 4 4
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dGeq 0 0
+	jmp_true case.56
+	pop_a 6
+	jmp s4.1
+case.56
+	jsr_eval 3
+	push_args 3 1 1
+	buildh _Nil 0
+	update_a 0 5
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.57
+	pop_a 8
+	jmp s4.1
+case.57
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHconstant 1 0
+	jmp_true case.58
+	pop_a 10
+	jmp s4.1
+case.58
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.59
+	pop_a 10
+	jmp s4.1
+case.59
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHvar 1 0
+	jmp_true case.60
+	pop_a 12
+	jmp s4.1
+case.60
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.61
+	pop_a 12
+	jmp s4.1
+case.61
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 9
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 6 8
+	update_a 4 7
+	update_a 1 6
+	updatepop_a 0 5
+	buildh _Nil 0
+	update_a 0 6
+	pop_a 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.62
+	buildAC "AnswerInCTL2NL: error, boundvars in question not equal."
+	updatepop_a 0 9
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.62
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 6
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 3 8
+	update_a 2 7
+	update_a 1 6
+	updatepop_a 0 5
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.63
+	buildAC "AnswerInCTL2NL: error, sharpvar and numres in question not equal."
+	updatepop_a 0 4
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.63
+	buildh _Nil 0
+	push_a 2
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	push_a 5
+	build _ 2 n13
+	build _ 1 n864
+	build d_S.2 -1 n_S.2
+	push_a 2
+	buildh e_textgenerator_version2_dCTLs_FHconstant 1
+	push_a 6
+	build _ 2 n13
+	build _ 1 n865
+	push_a 5
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 3 n838
+	buildh e_textgenerator_version2_dSentenceNL 1
+	fillh _Cons 2 6
+	pop_a 4
+.d 1 0
+	rtn
+s4.1
+	pop_a 3
+	pushD m_textgenerator_version2
+	pushD e_textgenerator_version2_dAnswerInCTL2NL
+.d 0 2 ii
+	jmp _match_error
+.n 1 _ _
+.o 1 0
+n864
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea864
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea864
+	jsr_eval 0
+.o 1 0
+s864
+	eq_desc d835 1 0
+	jmp_true case.64
+	jmp s864.1
+case.64
+	repl_args 1 1
+	jmp_eval
+s864.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_864
+.d 0 2 ii
+	jmp _match_error
+.string x_864 "_match3"
+.n 1 _ _
+.o 1 0
+n865
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea865
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea865
+	jsr_eval 0
+.o 1 0
+s865
+	eq_desc d834 1 0
+	jmp_true case.65
+	jmp s865.1
+case.65
+	repl_args 1 1
+	jmp_eval
+s865.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_865
+.d 0 2 ii
+	jmp _match_error
+.string x_865 "_match4"
+.n 3 _ ea838
+.o 1 0
+n838
+	push_node _cycle_in_spine 3
+.o 4 0
+ea838
+.o 4 0
+s838
+	push_a 1
+	jsr_eval 0
+	pushI_a 2
+	pop_a 1
+	push_a 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+.d 1 1 i
+	jsr s83
+.o 1 0
+	buildAC ", and this is the highest number for which this can be established with certainty."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " "
+.d 2 0
+	jsr catAC
+.o 1 0
+	pushI_a 2
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+.d 0 1 i
+	jsr ItoAC
+.o 1 0
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC " has minimally "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _ ea13
+.o 1 0
+n13
+	push_node _cycle_in_spine 2
+.o 3 0
+ea13
+	jsr_eval 1
+.o 3 0
+s13
+	eq_desc e_textgenerator_version2_dCTLs_FHconstant 1 1
+	jmp_true case.66
+	jmp case.67
+case.66
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	push_a 0
+	push_a 2
+	build _ 2 n15
+	push_a 1
+	build _ 2 n50
+	build e_textgenerator_version2_dEntityStat_.ent_nl -4 e_textgenerator_version2_nEntityStat_.ent_nl
+	fillh d834 1 4
+	pop_a 3
+.d 1 0
+	rtn
+case.67
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	push_a 0
+	push_a 2
+	build _ 2 n21
+	push_a 1
+	build _ 2 n51
+	push_a 0
+	build e_textgenerator_version2_dHurelanStat_.ent2_nl -4 e_textgenerator_version2_nHurelanStat_.ent2_nl
+	push_a 1
+	build e_textgenerator_version2_dHurelanStat_.ent1_nl -4 e_textgenerator_version2_nHurelanStat_.ent1_nl
+	buildh _Tuple 2
+	fillh d835 1 5
+	pop_a 4
+.d 1 0
+	rtn
+.n 2 _ _
+.o 1 0
+n51
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea51
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea51
+	jsr_eval 1
+.o 2 0
+s51
+	eq_desc _Nil 0 1
+	jmp_true case.68
+	jmp case.69
+case.68
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "mapCTL2NL: error: 2 place predicate "
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC " not found in bridge."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+case.69
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.70
+	pop_a 2
+	jmp s51.1
+case.70
+	updatepop_a 0 3
+	jmp_eval
+s51.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_51
+.d 0 2 ii
+	jmp _match_error
+.string x_51 "f;50"
+.n 2 _ _
+.o 1 0
+n50
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea50
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea50
+	jsr_eval 1
+.o 2 0
+s50
+	eq_desc _Nil 0 1
+	jmp_true case.71
+	jmp case.72
+case.71
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "mapCTL2NL: error: entity "
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC " not found in bridge."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+case.72
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.73
+	pop_a 2
+	jmp s50.1
+case.73
+	updatepop_a 0 3
+	jmp_eval
+s50.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_50
+.d 0 2 ii
+	jmp _match_error
+.string x_50 "f;49"
+.o 1 1 i
+s83
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.74
+	pop_b 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+else.74
+	push_a 0
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jmp s39
+.o 1 0
+s39
+	create
+.d 1 0
+	jsr s12
+.o 1 0
+	push_a 1
+	buildh d663 1
+	create
+	push_a 2
+	update_a 1 3
+	update_a 2 1
+	update_a 0 2
+	pop_a 1
+.d 3 0
+	jsr e_StdListExtensions_sfind
+.o 1 0
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jmp s71
+.desc d663 _hnf l663 2 0 "<lambda>[line:517];31;669"
+.a 0 a663
+.o 2 0
+l663
+	repl_args 1 1
+.o 2 0
+a663
+.d 2 0
+	jsr ea663
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea663
+	push_a 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 0
+	jsr_eval 2
+	push_array 0
+	push_array 3
+	update_a 3 5
+	update_a 0 3
+	update_a 1 4
+	pop_a 3
+.o 3 0
+s663
+	push_a 0
+	push_a 2
+	update_a 1 4
+	updatepop_a 0 3
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+.d 0 1 b
+	rtn
+.o 1 0
+s12
+	buildh _Nil 0
+	buildAC "enemies"
+	buildh ARRAY 1
+	buildAC "enemy"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "grandchildren"
+	buildh ARRAY 1
+	buildAC "grandchild"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	buildh _Cons 2
+	buildAC "children"
+	buildh ARRAY 1
+	buildAC "child"
+	buildh ARRAY 1
+	buildh _Tuple 2
+	fillh _Cons 2 2
+.d 1 0
+	rtn
+.o 2 0
+s71
+	eq_desc e_StdMaybe_dNothing 0 1
+	jmp_true case.75
+	jmp case.76
+case.75
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "s"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+case.76
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	push_arg 0 2 2
+	jsr_eval 0
+	updatepop_a 0 3
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.export e_textgenerator_version2_sReasoner
+.descexp e_textgenerator_version2_dReasoner e_textgenerator_version2_nReasoner e_textgenerator_version2_lReasoner 2 0 "Reasoner"
+.a 0 a3
+.o 2 0
+e_textgenerator_version2_lReasoner
+	repl_args 1 1
+.o 2 0
+a3
+.d 2 0
+	jsr ea3
+.o 2 0
+	push_a 1
+	push_a 1
+	buildh _Tuple 2
+	updatepop_a 0 2
+.d 1 0
+	rtn
+.n 2 e_textgenerator_version2_dReasoner
+.o 1 0
+e_textgenerator_version2_nReasoner
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea3
+.o 2 0
+	push_a 1
+	push_a 1
+	fillh _Tuple 2 4
+	pop_a 2
+.d 1 0
+	rtn
+.o 2 0
+e_textgenerator_version2_sReasoner
+.o 2 0
+ea3
+	jsr_eval 0
+.o 2 0
+s3
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 2
+	push_b 1
+	eqI
+	jmp_false else.77
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	jmp s76
+else.77
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.78
+	buildI 0
+	push_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	push_a 2
+	build _ 2 n79
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+else.78
+	pushI 0
+	push_b 1
+	eqI
+	jmp_false else.79
+	buildI 0
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+else.79
+	build _ 0 n839
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+.n 0 _ ea839
+.o 1 0
+n839
+	push_node _cycle_in_spine 0
+.o 1 0
+ea839
+.o 1 0
+s839
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": more than 2 statements: not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _
+.o 1 0
+n79
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea79
+.o 0 1 i
+	fillI_b 0 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea79
+	jsr_eval 1
+.o 2 0
+s79
+	pushD_a 1
+	eqD_b e_textgenerator_version2_dFHpre2stat 1
+	jmp_true case.80
+	eqD_b e_textgenerator_version2_dFHeqstat 1
+	jmp_true case.81
+	pop_b 1
+	jmp s79.1
+case.80
+	pop_b 1
+	push_args 1 1 1
+	pop_a 1
+	push_a 0
+	jsr_eval 0
+	create
+	push_a 3
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s82
+.o 1 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 0
+	push_b 1
+	eqI
+	jmp_false else.82
+	pop_b 1
+	pushI 0
+.d 0 1 i
+	rtn
+else.82
+	push_b 0
+	pushI 0
+	ltI
+	jmp_false else.83
+	pop_b 1
+	pushI 1
+.d 0 1 i
+	rtn
+else.83
+	buildh _Nil 0
+	push_a 0
+	pop_b 1
+	jmp s79.1
+case.81
+	pop_b 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	pop_a 1
+	pop_a 2
+	pushI 0
+.d 0 1 i
+	rtn
+s79.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_79
+.d 0 2 ii
+	jmp _match_error
+.string x_79 "case1Statement;79"
+.o 2 0
+s76
+	create
+	push_a 1
+.d 2 0
+	jsr s80
+.o 1 0
+.d 1 0
+	jsr e_StdMaybe_sisNothing
+.o 0 1 b
+	jmp_false else.84
+	build _ 0 n841
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.84
+	create
+	push_a 1
+.d 2 0
+	jsr s81
+.o 1 0
+.d 1 0
+	jsr e_StdMaybe_sisNothing
+.o 0 1 b
+	jmp_false else.85
+	build _ 0 n842
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.85
+	push_a 0
+	build _ 1 n81
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	push_a 2
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 2 n82
+	push_a 1
+	build _ 1 n80
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	build _ 1 n78
+	buildh e_StdString_d==;2 0
+.d 3 0
+	jsr e_GenericByCG_ssameElementsUEq
+.o 0 1 b
+	jmp_false else.86
+	push_a 0
+	build _ 1 n80
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	build _ 1 n78
+	build e_StdList_dlength;47 1 e_StdList_nlength;47
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.86
+	build _ 0 n843
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+.n 0 _ ea843
+.o 1 0
+n843
+	push_node _cycle_in_spine 0
+.o 1 0
+ea843
+.o 1 0
+s843
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": Equality statement does not contain the same individuals as the predicate statement, not implemented yet."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea842
+.o 1 0
+n842
+	push_node _cycle_in_spine 0
+.o 1 0
+ea842
+.o 1 0
+s842
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": 2 statements, but no predicate statement, not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea841
+.o 1 0
+n841
+	push_node _cycle_in_spine 0
+.o 1 0
+ea841
+.o 1 0
+s841
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": 2 statements, but no inequality statement, not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _ ea82
+.o 1 0
+n82
+	push_node _cycle_in_spine 2
+.o 3 0
+ea82
+	jsr_eval 1
+	jsr_eval 0
+.o 3 0
+s82
+	eq_desc e_textgenerator_version2_dFHpre2stat 1 0
+	jmp_true case.87
+	jmp s82.1
+case.87
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc _Cons 2 0
+	jmp_true case.88
+	pop_a 3
+	jmp s82.1
+case.88
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.89
+	pop_a 4
+	jmp s82.1
+case.89
+	push_args 5 1 1
+	buildh _Nil 0
+	update_a 0 7
+	pop_a 1
+	jsr_eval 0
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 4 4
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dGeq 0 0
+	jmp_true case.90
+	pop_a 10
+	jmp s82.1
+case.90
+	jsr_eval 3
+	push_args 3 1 1
+	buildh _Nil 0
+	update_a 0 5
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.91
+	pop_a 12
+	jmp s82.1
+case.91
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHconstant 1 0
+	jmp_true case.92
+	pop_a 14
+	jmp s82.1
+case.92
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.93
+	pop_a 14
+	jmp s82.1
+case.93
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHvar 1 0
+	jmp_true case.94
+	pop_a 16
+	jmp s82.1
+case.94
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.95
+	pop_a 16
+	jmp s82.1
+case.95
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 9
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 6 8
+	update_a 4 7
+	update_a 1 6
+	updatepop_a 0 5
+	buildh _Nil 0
+	update_a 0 6
+	pop_a 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.96
+	buildAC "onePreStatDerivation: error, boundvars in question not equal."
+	updatepop_a 0 13
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.96
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 6
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 3 8
+	update_a 2 7
+	update_a 1 6
+	updatepop_a 0 5
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.97
+	buildAC "onePreStatDerivation: error, sharpvar and numres in question not equal."
+	updatepop_a 0 8
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.97
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 6
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 6 9
+	update_a 4 8
+	update_a 2 7
+	update_a 1 6
+	updatepop_a 0 5
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	jmp_false else.98
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	buildh _Nil 0
+	push_a 0
+	jmp_false else.98
+	push_a 2
+	jsr_eval 0
+	updatepop_a 0 3
+.d 2 0
+	jmp s662
+else.98
+	buildh _Nil 0
+	updatepop_a 0 3
+.d 2 0
+	jmp s662
+s82.1
+	pop_a 3
+	pushD m_textgenerator_version2
+	pushD x_82
+.d 0 2 ii
+	jmp _match_error
+.string x_82 "onePreStatDerivation;82"
+.o 2 0
+s662
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+.d 0 1 i
+	jsr ItoAC
+.o 1 0
+	buildAC "\n"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "onePreStatDerivation: result has length = "
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr e_StdDebug_strace;4
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _ ea77
+.o 1 0
+n77
+	push_node _cycle_in_spine 2
+.o 3 0
+ea77
+	jsr_eval 0
+.o 3 0
+s77
+	repl_args 1 1
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jmp s43
+.o 3 0
+s43
+	push_a 1
+	push_a 1
+	buildh e_textgenerator_version2_dSharpest 2
+	fillh e_textgenerator_version2_dFolnuminqua 1 3
+	pop_a 2
+.d 1 0
+	rtn
+.n 1 _ ea78
+.o 1 0
+n78
+	push_node _cycle_in_spine 1
+.o 2 0
+ea78
+	jsr_eval 0
+.o 2 0
+s78
+	eq_desc e_textgenerator_version2_dFHeqstat 1 0
+	jmp_true case.100
+	jmp s78.1
+case.100
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dNeq 0 0
+	jmp_true case.101
+	pop_a 1
+	jmp s78.1
+case.101
+	push_a 1
+	jsr_eval 0
+	updatepop_a 0 2
+.d 1 0
+	jsr s74
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+s78.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_78
+.d 0 2 ii
+	jmp _match_error
+.string x_78 "entitiesFromNeqStat;78"
+.o 1 0
+s74
+.d 1 0
+	rtn
+.n 1 _ ea81
+.o 1 0
+n81
+	push_node _cycle_in_spine 1
+.o 2 0
+ea81
+	jsr_eval 0
+.o 2 0
+s81
+	buildh d8 0
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jmp e_StdListExtensions_sfind
+.desc d8 _hnf l8 1 0 "isPre2Stat"
+.o 2 0
+l8
+	pop_a 1
+.d 1 0
+	jsr ea8
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 1 0
+ea8
+	jsr_eval 0
+.o 1 0
+s8
+	eq_desc e_textgenerator_version2_dFHpre2stat 1 0
+	jmp_true case.102
+	jmp case.103
+case.102
+	repl_args 1 1
+	pop_a 1
+	pushB TRUE
+.d 0 1 b
+	rtn
+case.103
+	pop_a 1
+	pushB FALSE
+.d 0 1 b
+	rtn
+.o 0 0
+s44
+	buildAC "NOT DERIVABLE DUE TO INCOMPLETENESS REASONER"
+.d 1 0
+	rtn
+.n 1 _ ea80
+.o 1 0
+n80
+	push_node _cycle_in_spine 1
+.o 2 0
+ea80
+	jsr_eval 0
+.o 2 0
+s80
+	buildh d6 0
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jmp e_StdListExtensions_sfind
+.desc d6 _hnf l6 1 0 "isEqStat"
+.o 2 0
+l6
+	pop_a 1
+.d 1 0
+	jsr ea6
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 1 0
+ea6
+	jsr_eval 0
+.o 1 0
+s6
+	eq_desc e_textgenerator_version2_dFHeqstat 1 0
+	jmp_true case.104
+	jmp case.105
+case.104
+	repl_args 1 1
+	pop_a 1
+	pushB TRUE
+.d 0 1 b
+	rtn
+case.105
+	pop_a 1
+	pushB FALSE
+.d 0 1 b
+	rtn
+.export e_textgenerator_version2_sexport2QuestionLangScalaFormat
+.descexp e_textgenerator_version2_dexport2QuestionLangScalaFormat e_textgenerator_version2_nexport2QuestionLangScalaFormat e_textgenerator_version2_lexport2QuestionLangScalaFormat 1 0 "export2QuestionLangScalaFormat"
+.o 2 0
+e_textgenerator_version2_lexport2QuestionLangScalaFormat
+	pop_a 1
+.d 1 0
+	jsr ea2
+.o 1 0
+	push_a 0
+	buildh ARRAY 1
+	updatepop_a 0 1
+.d 1 0
+	rtn
+.n 1 e_textgenerator_version2_dexport2QuestionLangScalaFormat
+.o 1 0
+e_textgenerator_version2_nexport2QuestionLangScalaFormat
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea2
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+e_textgenerator_version2_sexport2QuestionLangScalaFormat
+.o 1 0
+ea2
+	jsr_eval 0
+.o 1 0
+s2
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 4 4
+	update_a 0 1
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dGeq 0 0
+	jmp_true case.106
+	pop_a 4
+	jmp s2.1
+case.106
+	jsr_eval 2
+	push_args 2 1 1
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	push_a 1
+	jsr_eval 0
+	create
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr s90
+.o 1 0
+.d 1 0
+	jsr s88
+.o 1 0
+	buildAC "},\"terms\":"
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC "}}}"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+.d 0 1 i
+	jsr ItoAC
+.o 1 0
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 3
+	buildh e_textgenerator_version2_dFHvar 1
+	buildh _Nil 0
+	update_a 0 5
+	update_a 0 4
+	pop_a 1
+.d 1 0
+	jsr s91
+.o 1 0
+	push_a 6
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "{\"numrespat\":{\"comOp\":0,\"patvar\":{\"id\":\""
+	buildh _Nil 0
+	update_a 0 9
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC "\"},\"boundvar\":"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC ",\"predapp\":{\"p\":{\"name\":\""
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC "\",\"arity\":"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	update_a 1 6
+	updatepop_a 0 5
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+s2.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD e_textgenerator_version2_dexport2QuestionLangScalaFormat
+.d 0 2 ii
+	jmp _match_error
+.o 1 0
+s88
+	push_a 0
+	updatepop_a 0 1
+.d 1 0
+	jsr s89
+.o 1 0
+	buildAC "]"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "["
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+.o 1 0
+s89
+	eq_desc _Cons 2 0
+	jmp_true case.107
+	jmp s89.1
+case.107
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.108
+	jmp case.109
+case.108
+	jsr_eval 0
+	updatepop_a 0 1
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+case.109
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 1 0
+	jsr s89
+.o 1 0
+	buildAC ","
+.d 2 0
+	jsr catAC
+.o 1 0
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+s89.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_89
+.d 0 2 ii
+	jmp _match_error
+.string x_89 "cleanList2jsonListCore;89"
+.n 1 _ ea90
+.o 1 0
+n90
+	push_node _cycle_in_spine 1
+.o 2 0
+ea90
+	jsr_eval 0
+.o 2 0
+s90
+	eq_desc _Cons 2 0
+	jmp_true case.110
+	jmp case.111
+case.110
+	repl_args 2 2
+	push_a 1
+	build _ 1 n90
+	push_a 1
+	build _ 1 n91
+	fillh _Cons 2 4
+	pop_a 2
+.d 1 0
+	rtn
+case.111
+	fillh _Nil 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.n 1 _
+.o 1 0
+n91
+	push_node _cycle_in_spine 1
+.d 1 0
+	jsr ea91
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 1 0
+ea91
+	jsr_eval 0
+.o 1 0
+s91
+	eq_desc e_textgenerator_version2_dFHconstant 1 0
+	jmp_true case.112
+	jmp case.113
+case.112
+	repl_args 1 1
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "\"}"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "{\"jsonClass\":\"Constant\",\"name\":\""
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+case.113
+	repl_args 1 1
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "\"}"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr catAC
+.o 1 0
+	buildAC "{\"jsonClass\":\"Var\",\"name\":\""
+.d 2 0
+	jsr catAC
+.o 1 0
+.d 1 0
+	rtn
+.export e_textgenerator_version2_sAlgorithmicDefenceGenerator
+.export e_textgenerator_version2_eaAlgorithmicDefenceGenerator
+.descexp e_textgenerator_version2_dAlgorithmicDefenceGenerator e_textgenerator_version2_nAlgorithmicDefenceGenerator e_textgenerator_version2_lAlgorithmicDefenceGenerator 3 0 "AlgorithmicDefenceGenerator"
+.a 3 e_textgenerator_version2_eaAlgorithmicDefenceGenerator
+.o 2 0
+e_textgenerator_version2_lAlgorithmicDefenceGenerator
+	push_args 0 2 2
+	update_a 3 2
+	create
+	update_a 0 4
+	pop_a 1
+.d 4 0
+	jmp e_textgenerator_version2_eaAlgorithmicDefenceGenerator
+.n 3 e_textgenerator_version2_dAlgorithmicDefenceGenerator e_textgenerator_version2_eaAlgorithmicDefenceGenerator
+.o 1 0
+e_textgenerator_version2_nAlgorithmicDefenceGenerator
+	push_node _cycle_in_spine 3
+.o 4 0
+e_textgenerator_version2_sAlgorithmicDefenceGenerator
+.o 4 0
+e_textgenerator_version2_eaAlgorithmicDefenceGenerator
+	jsr_eval 1
+.o 4 0
+s1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 1 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	jsr_eval 0
+	repl_args 4 4
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dGeq 0 0
+	jmp_true case.114
+	pop_a 6
+	jmp s1.1
+case.114
+	jsr_eval 3
+	push_args 3 1 1
+	buildh _Nil 0
+	update_a 0 5
+	pop_a 1
+	jsr_eval 0
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.115
+	pop_a 8
+	jmp s1.1
+case.115
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHconstant 1 0
+	jmp_true case.116
+	pop_a 10
+	jmp s1.1
+case.116
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Cons 2 1
+	jmp_true case.117
+	pop_a 10
+	jmp s1.1
+case.117
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dFHvar 1 0
+	jmp_true case.118
+	pop_a 12
+	jmp s1.1
+case.118
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.119
+	pop_a 12
+	jmp s1.1
+case.119
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 9
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 2 3
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.120
+	buildAC "AlgorithmicDefenceGenerator: error, boundvars in question not equal."
+	updatepop_a 0 14
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.120
+	push_a 6
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 10
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	notB
+	jmp_false else.121
+	buildAC "AlgorithmicDefenceGenerator: error, sharpvar and numres in question not equal."
+	updatepop_a 0 14
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+else.121
+	buildh _Nil 0
+	push_a 1
+	buildh e_textgenerator_version2_dFHvar 1
+	buildh _Cons 2
+	push_a 2
+	push_a 15
+	push_a 14
+	build _ 3 n87
+	buildh e_textgenerator_version2_dFHconstant 1
+	buildh _Cons 2
+	push_a 4
+	push_a 15
+	push_a 14
+	build _ 3 n86
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dLiteral 1
+	buildh e_textgenerator_version2_dGeq 0
+	push_a 9
+	push_a 9
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	buildh _Tuple 4
+	buildh e_textgenerator_version2_dNumRestrPat 1
+	push_a 10
+	buildh _Tuple 2
+	buildh e_textgenerator_version2_dSharpestPat 1
+	fillh e_textgenerator_version2_dPatLang 1 15
+	pop_a 14
+.d 1 0
+	rtn
+s1.1
+	pop_a 4
+	pushD m_textgenerator_version2
+	pushD e_textgenerator_version2_dAlgorithmicDefenceGenerator
+.d 0 2 ii
+	jmp _match_error
+.n 3 _
+.o 1 0
+n87
+	push_node _cycle_in_spine 3
+.d 3 0
+	jsr ea87
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 3 0
+ea87
+	jsr_eval 2
+	jsr_eval 1
+	jsr_eval 0
+	push_array 2
+	update_a 0 3
+	pop_a 1
+.o 3 0
+s87
+	push_a 2
+	buildh ARRAY 1
+	buildh e_textgenerator_version2_dCTLs_FHconstant 1
+	create
+	push_a 3
+	push_a 3
+	push_a 3
+	update_a 3 4
+	update_a 0 3
+	pop_a 1
+	update_a 3 6
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 4 0
+	jsr s14
+.o 1 0
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 0
+	push_b 1
+	eqI
+	jmp_false else.122
+	buildAC "AlgorithmicDefenceGenerator: subjectPlayer not found"
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+else.122
+	push_b 0
+	pushI 1
+	ltI
+	jmp_false else.123
+	buildAC "AlgorithmicDefenceGenerator: subjectPlayer - too many found"
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+else.123
+	push_a 0
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jmp s85
+.o 1 0
+s85
+	eq_desc _Cons 2 0
+	jmp_true case.124
+	jmp s85.1
+case.124
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dCTLs_FHconstant 1 0
+	jmp_true case.125
+	pop_a 1
+	jmp s85.1
+case.125
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.126
+	pop_a 1
+	jmp s85.1
+case.126
+	jsr_eval 0
+	updatepop_a 0 1
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+s85.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_85
+.d 0 2 ii
+	jmp _match_error
+.string x_85 "<lambda>[line:742];37;85"
+.n 3 _
+.o 1 0
+n86
+	push_node _cycle_in_spine 3
+.d 3 0
+	jsr ea86
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 3 0
+ea86
+	jsr_eval 1
+.o 3 0
+s86
+	push_a 2
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	create
+	push_a 3
+	push_a 3
+	push_a 3
+	update_a 3 4
+	update_a 0 3
+	pop_a 1
+	update_a 3 6
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 4 0
+	jsr s14
+.o 1 0
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 0
+	push_b 1
+	eqI
+	jmp_false else.127
+	buildAC "AlgorithmicDefenceGenerator: fhprePlayer not found"
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+else.127
+	push_b 0
+	pushI 1
+	ltI
+	jmp_false else.128
+	buildAC "AlgorithmicDefenceGenerator: fhprePlayer - too many found"
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+else.128
+	push_a 0
+	updatepop_a 0 1
+	pop_b 1
+.d 1 0
+	jmp s84
+.o 4 0
+s14
+	eq_desc e_textgenerator_version2_dCTLs_FHconstant 1 2
+	jmp_true case.129
+	jmp case.130
+case.129
+	push_args 2 1 1
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	push_a 0
+	push_a 2
+	build _ 2 n15
+	push_a 1
+	build _ 2 n52
+	build e_textgenerator_version2_dEntityStat_.ent_nl -4 e_textgenerator_version2_nEntityStat_.ent_nl
+	create
+	push_a 4
+	push_a 2
+	update_a 2 3
+	update_a 0 2
+	pop_a 1
+	update_a 2 6
+	update_a 1 5
+	updatepop_a 0 4
+.d 3 0
+	jsr s16
+.o 1 0
+.d 2 0
+	jmp s53
+case.130
+	push_args 2 1 1
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	push_a 0
+	push_a 2
+	build _ 2 n21
+	push_a 1
+	build _ 2 n55
+	push_a 0
+	build e_textgenerator_version2_dHurelanStat_.ent2_nl -4 e_textgenerator_version2_nHurelanStat_.ent2_nl
+	push_a 1
+	build e_textgenerator_version2_dHurelanStat_.ent1_nl -4 e_textgenerator_version2_nHurelanStat_.ent1_nl
+	push_a 5
+	build _ 3 n840
+	push_a 1
+	build _ 2 n54
+	updatepop_a 0 5
+.d 2 0
+	jmp s56
+.n 3 _ ea840
+.o 1 0
+n840
+	push_node _cycle_in_spine 3
+.o 4 0
+ea840
+.o 4 0
+s840
+	push_a 2
+	push_a 2
+	push_a 2
+	jsr_eval 0
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 4 0
+	jmp s20
+.n 2 _ _
+.o 1 0
+n55
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea55
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea55
+	jsr_eval 1
+.o 2 0
+s55
+	eq_desc _Nil 0 1
+	jmp_true case.131
+	jmp case.132
+case.131
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "mapCTL2CTL: error: 2 place predicate "
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC " not found in bridge."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+case.132
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.133
+	pop_a 2
+	jmp s55.1
+case.133
+	updatepop_a 0 3
+	jmp_eval
+s55.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_55
+.d 0 2 ii
+	jmp _match_error
+.string x_55 "f;55"
+.n 2 _ ea21
+.o 1 0
+n21
+	push_node _cycle_in_spine 2
+.o 3 0
+ea21
+	jsr_eval 0
+.o 3 0
+s21
+	push_a 1
+	buildh d23 1
+	create
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 3 0
+	jsr s18
+.o 1 0
+.d 2 0
+	jmp s22
+.desc d23 _hnf l23 2 0 "isHurelanStatWithHraByCTL"
+.a 0 a23
+.o 2 0
+l23
+	repl_args 1 1
+.o 2 0
+a23
+.d 2 0
+	jsr ea23
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea23
+	jsr_eval 1
+.o 2 0
+s23
+	eq_desc e_textgenerator_version2_dHurelanStat 1 1
+	jmp_true case.134
+	jmp case.135
+case.134
+	push_args 1 1 1
+	buildh _Nil 0
+	update_a 0 3
+	pop_a 1
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	jsr_eval 1
+	push_r_args_a 1 3 0 1 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 4
+	updatepop_a 0 3
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+.d 0 1 b
+	rtn
+case.135
+	pop_a 2
+	pushB FALSE
+.d 0 1 b
+	rtn
+.n 2 _ _
+.o 1 0
+n54
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea54
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea54
+	jsr_eval 1
+.o 2 0
+s54
+	eq_desc _Nil 0 1
+	jmp_true case.136
+	jmp case.137
+case.136
+	jsr_eval 0
+	push_r_args_a 0 3 0 3 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_r_args_a 1 3 0 2 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC " ("
+	buildAC "mapCTL2CTL: error: hurelan with roles: "
+	buildh _Nil 0
+	update_a 0 5
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC ", "
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC ") "
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC " not found in bridge."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+case.137
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.138
+	pop_a 2
+	jmp s54.1
+case.138
+	updatepop_a 0 3
+	jmp_eval
+s54.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_54
+.d 0 2 ii
+	jmp _match_error
+.string x_54 "f;54"
+.o 4 0
+s20
+	push_a 2
+	push_a 2
+	buildh _Tuple 2
+	buildh d24 1
+	create
+	push_a 2
+	push_a 2
+	update_a 2 3
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 2 5
+	update_a 1 4
+	updatepop_a 0 3
+.d 3 0
+	jsr s18
+.o 1 0
+.d 2 0
+	jmp s22
+.desc d24 _hnf l24 2 0 "isHurelanStatWithHraByNL"
+.a 0 a24
+.o 2 0
+l24
+	repl_args 1 1
+.o 2 0
+a24
+.d 2 0
+	jsr ea24
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea24
+	jsr_eval 1
+	repl_args 2 2
+.o 3 0
+s24
+case.139
+	eq_desc e_textgenerator_version2_dHurelanStat 1 2
+	jmp_true case.141
+	jmp case.140
+case.141
+	push_args 2 1 1
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	jsr_eval 1
+	push_r_args_a 1 3 0 2 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 4 5
+	update_a 2 4
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+	jmp_false else.142
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_r_args_a 1 3 0 3 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+.d 0 1 b
+	rtn
+else.142
+	pop_a 2
+	pushB FALSE
+.d 0 1 b
+	rtn
+case.140
+	pop_a 3
+	pushB FALSE
+.d 0 1 b
+	rtn
+.n 1 _ ea22
+.o 1 0
+n22
+	push_node _cycle_in_spine 1
+.o 2 0
+ea22
+	jsr_eval 0
+.o 2 0
+s22
+	eq_desc _Cons 2 0
+	jmp_true case.143
+	jmp case.144
+case.143
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dHurelanStat 1 0
+	jmp_true case.145
+	jmp case.146
+case.145
+	repl_args 1 1
+	push_a 1
+	build _ 1 n22
+	push_a 1
+	fillh _Cons 2 4
+	pop_a 2
+.d 1 0
+	rtn
+case.146
+	repl_args 1 1
+	pop_a 1
+	push_a 0
+	jsr_eval 0
+	updatepop_a 0 1
+.d 2 0
+	jmp s22
+case.144
+	fillh _Nil 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+s56
+	buildh _Nil 0
+	push_a 1
+	build e_textgenerator_version2_dHurelanStat_.hra_ctl -4 e_textgenerator_version2_nHurelanStat_.hra_ctl
+	buildh e_textgenerator_version2_dCTLs_FHpre 1
+	fillh _Cons 2 3
+	pop_a 1
+.d 1 0
+	rtn
+.n 2 _ _
+.o 1 0
+n52
+	push_node _cycle_in_spine 2
+.d 2 0
+	jsr ea52
+.o 1 0
+	fill_a 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+ea52
+	jsr_eval 1
+.o 2 0
+s52
+	eq_desc _Nil 0 1
+	jmp_true case.147
+	jmp case.148
+case.147
+	push_a 0
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	buildAC "mapCTL2CTL: error: CTL identifier "
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	buildAC " not found in bridge."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+.d 1 0
+	jsr print_string_
+.o 0 0
+	halt
+.d 1 0
+	rtn
+case.148
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.149
+	pop_a 2
+	jmp s52.1
+case.149
+	updatepop_a 0 3
+	jmp_eval
+s52.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_52
+.d 0 2 ii
+	jmp _match_error
+.string x_52 "f;52"
+.n 2 _ ea15
+.o 1 0
+n15
+	push_node _cycle_in_spine 2
+.o 3 0
+ea15
+	jsr_eval 0
+.o 3 0
+s15
+	create
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s27
+.o 1 0
+	push_a 1
+	buildh d57 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jmp s18
+.desc d57 _hnf l57 2 0 "<lambda>[line:264];64;57"
+.a 0 a57
+.o 2 0
+l57
+	repl_args 1 1
+.o 2 0
+a57
+.d 2 0
+	jsr ea57
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea57
+	jsr_eval 1
+	jsr_eval 0
+	push_r_args 1 2 0
+	push_array 2
+	update_a 2 4
+	update_a 0 2
+	update_a 1 3
+	pop_a 2
+.o 3 0
+s57
+	push_a 1
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 4
+	updatepop_a 0 3
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+.d 0 1 b
+	rtn
+.o 3 0
+s16
+	create
+	push_a 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 2 0
+	jsr s27
+.o 1 0
+	push_a 1
+	buildh d58 1
+	update_a 1 2
+	updatepop_a 0 1
+.d 3 0
+	jmp s18
+.o 3 0
+s18
+	eq_desc _Cons 2 1
+	jmp_true case.150
+	jmp case.151
+case.150
+	push_args 1 2 2
+	buildh _Nil 0
+	update_a 0 4
+	pop_a 1
+	push_a 2
+	jsr_eval 0
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	jsr_ap 1
+	pushB_a 0
+	pop_a 1
+	jmp_false else.152
+	buildh _Nil 0
+	push_a 1
+	fillh _Cons 2 6
+	pop_a 4
+.d 1 0
+	rtn
+else.152
+	push_a 1
+	jsr_eval 0
+	push_a 3
+	update_a 1 5
+	updatepop_a 0 4
+.d 3 0
+	jmp s18
+case.151
+	fillh _Nil 0 2
+	pop_a 2
+.d 1 0
+	rtn
+.desc d58 _hnf l58 2 0 "<lambda>[line:267];62;58"
+.a 0 a58
+.o 2 0
+l58
+	repl_args 1 1
+.o 2 0
+a58
+.d 2 0
+	jsr ea58
+.o 0 1 b
+	buildB_b 0
+	pop_b 1
+.d 1 0
+	rtn
+.o 2 0
+ea58
+	jsr_eval 1
+	jsr_eval 0
+	push_r_args 1 2 0
+	push_array 2
+	update_a 2 4
+	update_a 0 2
+	update_a 1 3
+	pop_a 2
+.o 3 0
+s58
+	push_a 2
+	jsr_eval 0
+	push_array 0
+	updatepop_a 0 1
+	push_a 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 4
+	updatepop_a 0 3
+.d 2 0
+	jsr eqAC
+.o 0 1 b	
+.d 0 1 b
+	rtn
+.n 1 _ ea27
+.o 1 0
+n27
+	push_node _cycle_in_spine 1
+.o 2 0
+ea27
+	jsr_eval 0
+.o 2 0
+s27
+	eq_desc _Cons 2 0
+	jmp_true case.153
+	jmp case.154
+case.153
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dHurelanStat 1 0
+	jmp_true case.155
+	jmp case.156
+case.155
+	repl_args 1 1
+	pop_a 1
+	push_a 0
+	jsr_eval 0
+	updatepop_a 0 1
+.d 2 0
+	jmp s27
+case.156
+	repl_args 1 1
+	push_a 1
+	build _ 1 n27
+	push_a 1
+	fillh _Cons 2 4
+	pop_a 2
+.d 1 0
+	rtn
+case.154
+	fillh _Nil 0 1
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+s53
+	eq_desc _Nil 0 0
+	jmp_true case.157
+	jmp case.158
+case.157
+	fillh _Nil 0 1
+	pop_a 1
+.d 1 0
+	rtn
+case.158
+	repl_args 2 2
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.159
+	pop_a 1
+	jmp s53.1
+case.159
+	buildh _Nil 0
+	push_a 1
+	build e_textgenerator_version2_dEntityStat_.ent_ctl -4 e_textgenerator_version2_nEntityStat_.ent_ctl
+	buildh e_textgenerator_version2_dCTLs_FHconstant 1
+	fillh _Cons 2 4
+	pop_a 2
+.d 1 0
+	rtn
+s53.1
+	pop_a 2
+	pushD m_textgenerator_version2
+	pushD x_53
+.d 0 2 ii
+	jmp _match_error
+.string x_53 "convert;53"
+.o 1 0
+s84
+	eq_desc _Cons 2 0
+	jmp_true case.160
+	jmp s84.1
+case.160
+	repl_args 2 2
+	jsr_eval 0
+	eq_desc e_textgenerator_version2_dCTLs_FHpre 1 0
+	jmp_true case.161
+	pop_a 1
+	jmp s84.1
+case.161
+	repl_args 1 1
+	jsr_eval 1
+	eq_desc _Nil 0 1
+	jmp_true case.162
+	pop_a 1
+	jmp s84.1
+case.162
+	jsr_eval 0
+	updatepop_a 0 1
+	push_array 0
+	updatepop_a 0 1
+.d 1 0
+	rtn
+s84.1
+	pop_a 1
+	pushD m_textgenerator_version2
+	pushD x_84
+.d 0 2 ii
+	jmp _match_error
+.string x_84 "<lambda>[line:734];37;84"
+.o 2 0
+s836
+	push_a 0
+.d 1 0
+	jsr e_StdList_slength;47
+.o 0 1 i
+	pushI 2
+	push_b 1
+	eqI
+	jmp_false else.163
+	push_a 1
+	push_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	jmp s837
+else.163
+	pushI 1
+	push_b 1
+	eqI
+	jmp_false else.164
+	buildI 0
+	push_a 1
+	build e_StdList_d!! 2 e_StdList_n!!
+	push_a 2
+	build _ 2 n79
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+else.164
+	pushI 0
+	push_b 1
+	eqI
+	jmp_false else.165
+	buildI 0
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+else.165
+	build _ 0 n852
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+	pop_b 1
+.d 2 0
+	rtn
+.n 0 _ ea852
+.o 1 0
+n852
+	push_node _cycle_in_spine 0
+.o 1 0
+ea852
+.o 1 0
+s852
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": more than 2 statements: not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.o 2 0
+s837
+	create
+	push_a 1
+.d 2 0
+	jsr s80
+.o 1 0
+.d 1 0
+	jsr e_StdMaybe_sisNothing
+.o 0 1 b
+	jmp_false else.166
+	build _ 0 n853
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.166
+	create
+	push_a 1
+.d 2 0
+	jsr s81
+.o 1 0
+.d 1 0
+	jsr e_StdMaybe_sisNothing
+.o 0 1 b
+	jmp_false else.167
+	build _ 0 n854
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.167
+	push_a 0
+	build _ 1 n81
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	push_a 2
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	build _ 2 n82
+	push_a 1
+	build _ 1 n80
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	build _ 1 n78
+	buildh e_StdString_d==;2 0
+.d 3 0
+	jsr e_GenericByCG_ssameElementsUEq
+.o 0 1 b
+	jmp_false else.168
+	push_a 0
+	build _ 1 n80
+	build e_StdMaybe_dfromJust 1 e_StdMaybe_nfromJust
+	build _ 1 n78
+	build e_StdList_dlength;47 1 e_StdList_nlength;47
+	push_a 2
+	build _ 2 n77
+	buildh e_StdMaybe_dJust 1
+	buildAC ""
+	buildh ARRAY 1
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+else.168
+	build _ 0 n855
+	buildh e_StdMaybe_dNothing 0
+	update_a 1 3
+	updatepop_a 0 2
+.d 2 0
+	rtn
+.n 0 _ ea855
+.o 1 0
+n855
+	push_node _cycle_in_spine 0
+.o 1 0
+ea855
+.o 1 0
+s855
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": Equality statement does not contain the same individuals as the predicate statement, not implemented yet."
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea854
+.o 1 0
+n854
+	push_node _cycle_in_spine 0
+.o 1 0
+ea854
+.o 1 0
+s854
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": 2 statements, but no predicate statement, not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn
+.n 0 _ ea853
+.o 1 0
+n853
+	push_node _cycle_in_spine 0
+.o 1 0
+ea853
+.o 1 0
+s853
+.d 0 0
+	jsr s44
+.o 1 0
+	buildAC ": 2 statements, but no inequality statement, not implemented yet"
+	push_a 1
+	update_a 1 2
+	update_a 0 1
+	pop_a 1
+.d 2 0
+	jsr e_genLibTest_s+;8
+.o 1 0
+	push_a 0
+	fillh ARRAY 1 2
+	pop_a 1
+.d 1 0
+	rtn

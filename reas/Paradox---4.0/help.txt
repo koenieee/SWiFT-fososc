@@ -1,0 +1,50 @@
+Paradox, version 4.0, 2010-06-29.
+Usage: paradox <option>* <file>*
+
+<file> should be in TPTP format.
+
+<option> can be any of the following:
+
+  --time <num>
+    Maximum running time in seconds. Is a (very) soft limit.
+    Example: --time 300
+    Default: (off)
+
+  --root <file>
+    A directory in which included problems will be sought.
+    Example: --root TPTP-v3.0.0
+    Default: --root .
+
+  --split 
+    Split the conjecture into several sub-conjectures.
+    Default: (off)
+
+  --model 
+    Print the found model on the screen.
+    Default: (off)
+
+  --verbose <num>
+    Verbosity level.
+    Example: --verbose 2
+    Default: --verbose 0
+
+  --no-progress 
+    Do not show progress during solving.
+    Default: (off)
+
+  --verbose <num>
+    Verbosity level.
+    Example: --verbose 2
+    Default: --verbose 0
+
+  --filelist <name>
+    Specify a file containing a list of problems
+    Example: --filelist file
+    Default: --filelist (off)
+
+  --tstp 
+    Generate output in TSTP and SZS ontology format.
+    Default: (off)
+
+  --help 
+    Displays this help message.

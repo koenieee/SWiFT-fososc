@@ -1,0 +1,23 @@
+This distribution of E 1.4 (Namring) has been compiled according to
+the "README" file included in the official version from
+http://www4.informatik.tu-muenchen.de/~schulz/E/E.html.
+
+    $ tar zxvf E.tgz
+    $ cd E
+    $ ./configure
+    $ make
+
+The Mac OS X executables were built on Mac OS X 10.5 (Leopard).
+64-bit executables were built by adding "-m64" to "ARCHFLAGS" and
+"LDFLAGS" in "Makefile.vars". Similarly, 32-bit Linux executables were
+built by specifying "-m32". The executables were "strip"ped.
+
+A selection of the executables in "PROVER/" are moved to the
+platform-specific target directory (e.g., "x86-linux"). The file
+"eproof" is slightly modified to avoid a premature timeout.
+
+Enjoy!
+
+
+        Jasmin Blanchette
+        22 September 2011

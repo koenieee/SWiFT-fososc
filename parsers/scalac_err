@@ -1,0 +1,59 @@
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/targetlang/FOL.scala:110: warning: match is not exhaustive!
+missing combination   FOLstatement
+
+         { case PredApp(a, cs)    =>
+         ^
+one warning found
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:17: error: object targetlang is not a member of package org.ocbkc.swift
+import org.ocbkc.swift.targetlang._
+                       ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:37: error: value parseAll is not a member of object org.ocbkc.swift.parser.Folminqua2FOLtheoryParser
+   {  applyFunctionToFile(Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, _).toString, args(0))
+                                                    ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:50: error: value parseAll is not a member of object org.ocbkc.swift.parser.Folminqua2FOLtheoryParser
+         val ft = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminqua)
+                                            ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:69: error: value parseAll is not a member of object org.ocbkc.swift.parser.FolminquaParser
+   {  applyFunctionToFile(FolminquaParser.parseAll(FolminquaParser.folminquaTheory, _).toString, args(0))
+                                          ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:91: error: value | is not a member of java.lang.String
+{  def NL = "\r\n" | "\n"
+                   ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:138: error: value | is not a member of java.lang.String
+   def eqpre                           = "equal" | "inequal"
+                                                 ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:177: error: value | is not a member of java.lang.String
+   def eqpre                           = "equal" | "inequal"
+                                                 ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:215: error: value ~ is not a member of java.lang.String
+   def hurelanStat   = ((((((("hurelan" ~ "(") ~> firstPosInNL) <~ ",") ~ predicate) <~ ",") ~ secondPosInNL) <~ ")") ^^ { case first ~ pred ~ second => "(HurelanStat (_HurelanStat_ " + pred + " " + first + " " + second + "))"}
+                                        ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:214: error: value ~ is not a member of java.lang.String
+   def entityStat    = ((((("entity" ~ "(") ~> entityIdCTL) <~ ",") ~ entityNL) <~ ")") ^^ { case entityIdCTL ~ entityNL => "(EntityStat (_EntityStat_ " + entityIdCTL + " " + entityNL + "))" }
+                                     ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:216: error: value ^^ is not a member of scala.util.matching.Regex
+   def firstPosInNL  = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+                              ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:218: error: value ^^ is not a member of scala.util.matching.Regex
+   def secondPosInNL = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+                              ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:219: error: value ^^ is not a member of scala.util.matching.Regex
+   def entityNL      = wordNL ^^ (x => "[" + (x.length) + "]" + x)
+                              ^
+12 errors found
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:44: error: value getConstant is not a member of org.ocbkc.swift.parser.Folminqua2FOLtheoryParser.ParseResult[org.ocbkc.swift.targetlang.FOLtheory]
+      {  def getConstant(cn:String) = ft.getConstant(args(0)) match
+                                         ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:53: error: value c1 is not a member of object org.ocbkc.swift.targetlang.Constant
+         Constant c1 = getConstant(args(0))
+                  ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:54: error: value c2 is not a member of object org.ocbkc.swift.targetlang.Constant
+         Constant c2 = getConstant(args(1))
+                  ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:56: error: not found: value c1
+         if(c1!=null && c2 != null) 
+            ^
+/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift/src/main/scala/org/ocbkc/swift/parser/Folminqua.scala:57: error: value substitutConstant is not a member of org.ocbkc.swift.parser.Folminqua2FOLtheoryParser.ParseResult[org.ocbkc.swift.targetlang.FOLtheory]
+         {  ft.substitutConstant(c1, c2)
+               ^
+5 errors found
