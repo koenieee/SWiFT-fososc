@@ -128,6 +128,7 @@ object Constitution
          }
          
          constitutionFiles map readConst
+         constis = constis.sortWith((c1,c2) => c1.id < c2.id )
          val highestIdFile       = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
          val in:BufferedReader   = new BufferedReader(new FileReader(highestIdFile))
          var inStr:String        = in.readLine()
