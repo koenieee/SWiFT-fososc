@@ -13,6 +13,8 @@ import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
+import org.eclipse.jgit.api._
+import java.io._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -89,6 +91,19 @@ class Boot {
     // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
     LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
+
+    // Initialise git repository for constitutions if there isn't one created yet.
+    // Check whether there is already git tracking
+    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
+    if( gitfile.exists)
+    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everyfthing is under (version) control, my dear organic friend...")
+    }
+    else
+    { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
+      val jgitInitCommand:InitCommand = Git.init()
+      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+      jgitInitCommand.call()
+    }
   }
 
   /**
