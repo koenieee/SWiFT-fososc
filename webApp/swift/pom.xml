@@ -33,7 +33,10 @@
       <name>java.net Maven2 Repository</name>
       <url>http://download.java.net/maven/2/</url>
     </repository>
-
+    <repository>
+      <id>jgit-repository</id>
+      <url>http://download.eclipse.org/jgit/maven</url>
+    </repository>
   </repositories>
 
   <pluginRepositories>
@@ -102,6 +105,11 @@
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
             <version>2.1</version> <!-- &y2012.06.23.12:45:19& I tried newest version 2.4, but I won't download... -->
+    </dependency>
+    <dependency>
+      <groupId>org.eclipse.jgit</groupId>
+      <artifactId>org.eclipse.jgit</artifactId>
+      <version>2.0.0.201206130900-r</version>
     </dependency>
   </dependencies>
 

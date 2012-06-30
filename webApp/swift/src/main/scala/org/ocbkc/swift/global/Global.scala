@@ -9,6 +9,10 @@ package org.ocbkc.swift.global
 - CTL = Computationally Transparent Language
 - NL  = Natural Language
 */
+import org.eclipse.jgit.api._
+import org.eclipse.jgit.lib._
+import org.eclipse.jgit.storage.file._
+import java.io._
 
 object GlobalConstant
 {  val TEST = true
@@ -21,6 +25,13 @@ object GlobalConstant
    val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
+   val jgitBuilder:FileRepositoryBuilder = new FileRepositoryBuilder();
+   val jgitRepo:Repository = jgitBuilder.setGitDir(new File(CONSTITUTIONHTMLDIR))
+      .readEnvironment() // scan environment GIT_* variables
+      .findGitDir() // scan up the file system tree
+      .build()
+
+   val jgit = new Git(jgitRepo)
 }
 
 object TestSettings
