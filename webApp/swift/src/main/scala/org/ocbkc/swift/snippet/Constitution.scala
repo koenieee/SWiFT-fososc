@@ -99,10 +99,18 @@ class ConstitutionSnippet
       {  descriptionTFcontent = descriptionTFcontentLoc
       }
 
+      def processPublishDescriptionTf(description:String) =
+      { // TODO
+      }
+
       def processRemoveBtn(const:Constitution) =
       {  // <&y2012.06.18.16:18:55& dialog here> 
          Constitution.remove(const) // if the constitution didn' exist yet (this was the first edit) then remove the complete constitution. Otherwise, simply discard the current edit and go back to the constitution just being edited.
           S.redirectTo("constitutions.html")
+      }
+
+      def processPublishBtn() = 
+      {
       }
 
       def processConstitutionTA(taContent:String) =
@@ -164,6 +172,8 @@ class ConstitutionSnippet
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             "saveBt" -> SHtml.button("Save", () => processSaveBtn),
                                                             "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
+                                                            "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
+                                                            "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
                                                             "constitutionEditor" -> constitutionEditor)
                                               },
                            "view"    -> {   if( editmode ) 
