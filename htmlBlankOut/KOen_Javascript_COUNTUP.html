@@ -1,0 +1,53 @@
+<html>
+<head>
+<title>Countdown Clock Swift Fosocs</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
+<script>
+
+   $(document).ready(function(){
+       
+       var mini = 0;
+       var mini_stop = 9;
+       var ding = 0;
+       var blaat;
+      
+
+   
+       var x = function()
+       {
+				
+			var blaat = mini.toString();	
+dingetje1 = blaat.charAt( blaat.length-1 )
+dingetje2 = blaat.slice(0, -1)
+
+
+               $('#sec').text(dingetje2 +'.' + dingetje1);
+               
+       
+               
+               
+               ++mini;
+           
+       }
+       setInterval(x, 100);
+       
+
+		
+
+
+
+       
+   });
+
+
+</script>
+</head>
+<body>
+<Br><br>
+<font size="16"><b><center>Countdown clock in Javascript
+<p id="sec"></p>
+Volgens mij klopt het nu.
+Ik heb het anders gedaan, zie code
+
+</body>
+</html>
