@@ -12,6 +12,10 @@ import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
+import GlobalConstant.jgit
+import org.eclipse.jgit.api._
+import org.eclipse.jgit.lib._
+import org.eclipse.jgit.revwalk.RevCommit
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -74,11 +78,35 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    {  // <&y2012.06.11.19:53:08& first add lift:children tag to make it a well-formed xml file.>
       val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
 
-      err.println("  opening file: " + outFile.getAbsolutePath)
+      err.println("  saving file: " + outFile.getAbsolutePath)
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.print(constitutionText)
       out.flush()
       out.close()
+   }
+   
+   // Adds and commits constitutionText using jgit
+   def publish(constitutionText:String, commitMsg:String, userId:String) =
+   {
+      println("Constitution.publish called")
+      save(constitutionText)
+
+      val fullPath2Const = htmlFileName
+
+      // now add and commit to git repo
+      val username = new PersonIdent(userId, "swiftgame") // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
+      println("   jgit author id = " + username.toString)
+      println("   now adding and committing: " + fullPath2Const )
+      //jgit.status
+      val addCommand = jgit.add()
+      println("   isUpdate() (should be false) " + addCommand.isUpdate())
+      addCommand.addFilepattern( fullPath2Const ).call()
+      val status = jgit.status().call()
+      println("   added files " + status.getAdded() )
+      println("   modified files " + status.getModified() )
+      println("   changed files " + status.getChanged() )
+      println("   untracked files " + status.getUntracked() )
+      jgit.commit().setAuthor(username).setCommitter(username).setMessage(commitMsg).call()
    }
 
    /* Only serializes the object - not the html text which is already stored... */
@@ -95,6 +123,11 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.println(constSer)
       out.close()
+   }
+
+   def getHistory:List[RevCommit] =
+   {  import scala.collection.JavaConverters._ 
+      jgit.log().addPath( htmlFileName ).call().asScala.toList
    }
 }
 
@@ -154,9 +187,9 @@ object Constitution
    }
 
    def templateNewConstitution(constitutionId:Int):String =
-"""<h2>Short description: ...</h2>
+"""<h2>Article 1</h2>
 
-<h2>Article 1</h2><p>...</p>
+<p>...</p>
 """
    def create(creatorUserID:Int):Constitution = 
    {  highestId += 1

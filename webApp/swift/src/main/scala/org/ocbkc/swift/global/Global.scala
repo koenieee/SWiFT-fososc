@@ -25,13 +25,24 @@ object GlobalConstant
    val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
-   val jgitBuilder:FileRepositoryBuilder = new FileRepositoryBuilder();
-   val jgitRepo:Repository = jgitBuilder.setGitDir(new File(CONSTITUTIONHTMLDIR))
-      .readEnvironment() // scan environment GIT_* variables
-      .findGitDir() // scan up the file system tree
-      .build()
+   /*
+   val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 
-   val jgit = new Git(jgitRepo)
+   jgitRepo.create()
+   jgitRepo.getConfig().setBoolean("core", null, "bare", false)
+   */
+   
+   val jgitBuilder:FileRepositoryBuilder = new FileRepositoryBuilder()
+   val jgitRepo:Repository = jgitBuilder.setGitDir(new File(CONSTITUTIONHTMLDIR + "/.git"))
+      //.readEnvironment() // scan environment GIT_* variables
+      //.findGitDir() // scan up the file system tree <&y2012.06.30.19:51:12& perhaps leave this one out, it SHOULD be in this dir, not in a superdir>
+      .build()
+   println("   jgitRepo directory: " + jgitRepo.getDirectory() )
+   println("   jgitRepo is bare (false is correct): " + jgitRepo.isBare())
+   
+
+   val jgit = new Git(jgitRepo) // <? &y2012.06.30.18:53:23& or isn't this thread safe? I now share one jgit object accross user-sessions (I think... because I instantiate this thing in Boot.scala). Perhaps I should instantiate one per user-session...>
+   println(jgit.status().call().getUntracked)
 }
 
 object TestSettings

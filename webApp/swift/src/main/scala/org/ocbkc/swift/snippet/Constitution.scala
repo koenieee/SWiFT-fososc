@@ -15,11 +15,24 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 
+object Error extends Enumeration {
+  type Error = Value
+  val noPublishDescriptionError = Value
+}
+
 class ConstitutionSnippet
-{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+{  println("ConstitutionSnippet constructor called")
+   val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    var constitutionTAcontent:String = ""
    var descriptionTFcontent:String = ""
-   var const:Option[Constitution] = None
+   var publishDescriptionTAcontent:String = ""
+   var const:Option[Constitution] = None // <&y2012.07.04.18:52:11& refactor: constitution must always be present for this page to be rendered (with its buttons), otherwise redirect to error page>
+
+   import Error._
+   object ErrorRequestVar extends RequestVar[List[Error]](Nil)
+   val errorsLR = ErrorRequestVar.is // extract errors list from request var
+   println("   errorsLR = "  + errorsLR)
+   println("   find noPublishDescriptionError command gives: " + errorsLR.find( _ == noPublishDescriptionError ))
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toInt }
          case _         => { throw new RuntimeException("  No user id found.") }
@@ -34,6 +47,7 @@ class ConstitutionSnippet
 
       def processHistoryBtn() =
       {  
+         S.redirectTo("history?id=" + const.get.id)
       }
 
       def updateConstitutionContent(const:Constitution) =
@@ -100,7 +114,7 @@ class ConstitutionSnippet
       }
 
       def processPublishDescriptionTf(description:String) =
-      { // TODO
+      {  publishDescriptionTAcontent = description
       }
 
       def processRemoveBtn(const:Constitution) =
@@ -110,7 +124,22 @@ class ConstitutionSnippet
       }
 
       def processPublishBtn() = 
-      {
+      {  println("ConstitutionSnippet.processPublishBtn called")
+         var errors:List[Error] = Nil
+         if( const.isDefined ) // <&y2012.06.30.19:41:13& SHOULDDO: and only if something changed (you can probably check this with jgit)>
+         {  val constLoc = const.get
+            if( publishDescriptionTAcontent.equals("") ) // <&y2012.07.01.19:01:51& MUSTDO: or only containing white space characters>
+            {  println("   no publish description found, give feedback to player (s)he should provide one!")
+               errors = noPublishDescriptionError :: errors
+            }
+            else
+            {  constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
+            }
+            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ))
+         }
+         else
+         {  S.redirectTo("constitutions")
+         }
       }
 
       def processConstitutionTA(taContent:String) =
@@ -172,6 +201,7 @@ class ConstitutionSnippet
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             "saveBt" -> SHtml.button("Save", () => processSaveBtn),
                                                             "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
+                                                            "noPublishDescriptionError" -> { if( errorsLR.find( _ == noPublishDescriptionError ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
                                                             "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
                                                             "constitutionEditor" -> constitutionEditor)
