@@ -1,0 +1,70 @@
+<lift:surround with="default" at="content">
+
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+<lift:ConstitutionSnippet form="POST">
+
+<h1><top:title /></h1>
+<!-- <&y2012.06.11.19:10:53& strange bug:
+
+<div class="snippeterror" style="display: block; padding: 4px; margin: 8px; border: 2px solid red">
+<div>
+Error locating template:
+<b>/constitution.html</b>
+<br/>
+Message:
+<b>expected closing tag of tr</b>
+
+Don't understand, cannot find unclosed tr.
+<br/>
+-->
+Info
+
+<table>
+   <tr><td>Creationdate:</td>             <td> <top:creationDate /></td>      </tr>
+   <tr><td>Created by:</td>               <td><top:creator /></td>            </tr>
+   <tr><td>Description:</td>              <td><top:description /></td>        </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Number of followers:</td>      <td><top:numberOfFollowers /></td>  </tr>
+</table>
+
+<hr />
+
+General controls
+<table>
+   <tr><td colspan="2"><top:revisionHistory /></td></tr>
+   <tr><td>Follow this constitution:</td><td><top:followCheckbox /></td></tr>
+   <tr><td>Don't forget to save the above changes</td><td><top:saveGeneralControlBt /></td></tr> <!-- <&y2012.06.23.17:41:31& COULDDO: update automatically when someone clicked checkboxes etc. But don't know how to do that elegantly now with scala lift> -->
+</table>
+
+<!-- edit subsnippet -->
+<top:edit>
+Mode = edit
+   
+<table>
+   <tr><td><top:publishBt /></td><td><a href="TODOexplanation">Publish</a> <!-- <&y2012.06.27.18:28:26& add explanation> -->your addition. Describe what you added: <top:noPublishDescriptionError /></td><td><top:publishDescriptionTextfield /></td></tr>
+   <tr><td colspan="3"><hr /></td>                                </tr>
+   <tr><td colspan="1">Description</td><td colspan="2"><top:descriptionTextfield /></td>   </tr>
+   <tr><td colspan="3"><top:constitutionEditor /></td>              </tr>
+   <tr><td colspan="3"><hr /></td>                                </tr>
+   <tr><!-- <td><top:cancelBt /> </td>--><td colspan="3"><top:saveBt /></td><!-- for some next increment </td><top:removeBt /> --></tr>
+</table>
+</top:edit>
+
+<!-- view subsnippet -->
+<top:view>
+Mode = view
+<table>
+   <tr><td><top:editBt /></td><td></td> </tr>
+   <tr><td colspan="2"><hr />                             </td></tr>
+   <tr><td colspan="2"><top:constitutionText /></td>           </tr>
+   <tr><td colspan="2"><hr />    </td>                         </tr>
+   <tr><td><top:editBt /></td><td></td> </tr>
+</table>
+</top:view>
+</lift:ConstitutionSnippet>
+
+</lift:surround>
