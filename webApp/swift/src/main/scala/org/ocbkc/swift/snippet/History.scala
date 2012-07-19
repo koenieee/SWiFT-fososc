@@ -31,7 +31,7 @@ class History
    {  println("historyTableRows")
       if( const == null ) println("   bug: const == null")
       const.getHistory.flatMap( revcom => bind( "top", chooseTemplate("top", "row", ns),            
-         "restore"            -> SHtml.link("restore?id=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")), // <&y2012.07.12.20:59:23& seems to be some additional garbage returned by ObjectId.toString, look up in jgit comunity how to get rid of it.>
+         "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")), // <&y2012.07.12.20:59:23& seems to be some additional garbage returned by ObjectId.toString, look up in jgit comunity how to get rid of it.>
          "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),//Text("TODO"), // <&y2012.07.12.21:12:42& only found SHtml.checkbox, which forces you to define all checkboxes at once, while I want to create1 checkbox per tag-substitution. For Koen?>
          
          "publishDescription" -> Text(revcom.getFullMessage()),
