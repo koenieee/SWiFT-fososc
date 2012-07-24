@@ -16,6 +16,7 @@ import org.ocbkc.swift.global.GlobalConstant._
 
 class PlayerStats
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+	
 
    def optionToUI(opt:Option[Any]):String =
    {  opt match
