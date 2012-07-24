@@ -64,6 +64,9 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    {  followers.contains(userId) 
    }
 */
+   def gitUserId(liftUserId:String) = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
+   {  new PersonIdent(liftUserId, "swiftgame")   }
+   
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
    {  val contentWrapped = "<lift:children>" + plainContent + "</lift:children>"
@@ -87,14 +90,13 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    
    // Adds and commits constitutionText using jgit
    def publish(constitutionText:String, commitMsg:String, userId:String) =
-   {
-      println("Constitution.publish called")
+   {  println("Constitution.publish called")
       save(constitutionText)
 
       val fullPath2Const = htmlFileName
 
       // now add and commit to git repo
-      val username = new PersonIdent(userId, "swiftgame") // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
+      val username = gitUserId(userId) // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
       println("   jgit author id = " + username.toString)
       println("   now adding and committing: " + fullPath2Const )
       //jgit.status
@@ -107,6 +109,15 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       println("   changed files " + status.getChanged() )
       println("   untracked files " + status.getUntracked() )
       jgit.commit().setAuthor(username).setCommitter(username).setMessage(commitMsg).call()
+   }
+
+   def restore(commitId:RevCommit, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
+   {  val gitUi = gitUserId(liftUserId)
+      val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+ 
+      val commitMsg = "Restored version of " + dateFormat.format(commitId.getCommitTime().toLong*1000)
+      jgit.checkout().addPath(htmlFileName).setStartPoint(commitId).call()
+      jgit.commit().setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call()
    }
 
    /* Only serializes the object - not the html text which is already stored... */
