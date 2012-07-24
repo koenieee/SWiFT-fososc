@@ -46,8 +46,7 @@ class ConstitutionSnippet
       }
 
       def processHistoryBtn() =
-      {  
-         S.redirectTo("history?id=" + const.get.id)
+      {  S.redirectTo("history?id=" + const.get.id)
       }
 
       def updateConstitutionContent(const:Constitution) =
@@ -176,7 +175,7 @@ class ConstitutionSnippet
 
       if( constLoc != null) const = Some(constLoc)
 
-      lazy val constitutionEditor = SHtml.textarea(constLoc.plainContent, processConstitutionTA, "rows" -> "10", "cols" -> "300" )
+      lazy val constitutionEditor = SHtml.textarea(constLoc.plainContent, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" )
 
       editmode = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
@@ -187,8 +186,10 @@ class ConstitutionSnippet
       val firstEdit = S.param("firstedit") match
       {  case Full(pval) => { println("firstedit url param = " + pval); pval.equals("true") }
          case _          => false
-      } // < &y2012.06.10.17:37:17& I think it is better to do this differently: do not create the constitution as yet, but do this after the first save. Danger of current approach is that if someones session crashes, the constitution continues to exist.>
+      } // < &y2012.06.10.17:37:17& I think it is better to do this differently: do not create the constitution as yet, but do this after the first save. Danger of current approach is that if someone's session crashes, the constitution continues to exist.>
      
+      val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
                            "followCheckbox"     -> SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
@@ -206,17 +207,17 @@ class ConstitutionSnippet
                                                             "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
                                                             "constitutionEditor" -> constitutionEditor)
                                               },
-                           "view"    -> {   if( editmode ) 
-                                                         emptyNode
-                                                      else
-                                                         bind( "top", chooseTemplate("top","view", ns), 
-                                                            "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
-                                                            "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.id)))
+                           "view"    -> {    if( editmode ) 
+                                                emptyNode
+                                             else
+                                                bind( "top", chooseTemplate("top","view", ns), 
+                                                   "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
+                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.id)))
 
                                         },
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.toString) else emptyNode },
                            "title"              -> Text(title),
-                           "creationDate"       -> { if( !errorRetrievingConstitution ) Text(creationDate.toString) else emptyNode },
+                           "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
                      )
       answer
