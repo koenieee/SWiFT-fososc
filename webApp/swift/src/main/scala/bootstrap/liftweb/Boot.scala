@@ -12,6 +12,9 @@ import _root_.java.sql.{Connection, DriverManager}
 import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.OCBKC._
+import org.eclipse.jgit.api._
+import java.io._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -47,7 +50,7 @@ class Boot {
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutionAlpha" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
       Menu(Loc("startSession", "startSession" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
@@ -77,14 +80,30 @@ class Boot {
     { 
     }
 */
+/*
     def autoLoginTestUser(l:LiftSession, r: Req) =
     { Player.logUserIdIn("1")
     }
-    
-    if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(println)) :: LiftSession.afterSessionCreate}
-    /* I get following error on this: 
-    if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = autoLoginTestUser :: LiftSession.afterSessionCreate}
-    */
+  */  
+    //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(println)) :: LiftSession.afterSessionCreate}
+    if(TestSettings.AUTOLOGIN) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn("1") ) }
+
+    // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
+    Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
+    LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
+
+    // Initialise git repository for constitutions if there isn't one created yet.
+    // Check whether there is already git tracking
+    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
+    if( gitfile.exists)
+    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everyfthing is under (version) control, my dear organic friend...")
+    }
+    else
+    { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
+      val jgitInitCommand:InitCommand = Git.init()
+      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+      jgitInitCommand.call()
+    }
   }
 
   /**

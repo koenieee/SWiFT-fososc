@@ -1,0 +1,140 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
+	<title></title>
+	<META NAME="GENERATOR" CONTENT="LibreOffice 3.4  (Unix)">
+	<META NAME="CREATED" CONTENT="20120301;215600">
+	<META NAME="CHANGED" CONTENT="20120302;9482600">
+	<STYLE TYPE="text/css">
+	<!--
+		H2.cjk { font-family: "AR PL UMing HK" }
+		H2.ctl { font-family: "Lohit Hindi" }
+		H3.cjk { font-family: "AR PL UMing HK" }
+		H3.ctl { font-family: "Lohit Hindi" }
+		H4.cjk { font-family: "AR PL UMing HK" }
+		H4.ctl { font-family: "Lohit Hindi" }
+	-->
+	</STYLE>
+</HEAD>
+<body lang="en-us" dir="ltr">
+<h1 align=center>Constitution alpha</h1>
+<h2 class="western">0. Game rules</h2>
+<p>Acquaint yourself with the rules of the game.</p>
+<h2 class="western">1. Definition of the target language: folnuminqua</h2>
+<p>There is not one computationally transparent language. Just as in
+the world of the, their can be many. The SWiFT game makes use of a
+very simple computationally transparent language. The special thing
+about computationally transparent langauges is that you are free to
+introduce new words. Compared with a normal language (English) it
+could be seen as a language with a grammar, but with a minimum of
+predefined words. In a sense you extend the language (with new words)
+while you are using it.</p>
+<p>The target language is defined as follows. A document in
+folnuminqua consists of a set of sentences, and sentences of a
+sequence of words and auxiliary symbols. Lets first explain the
+words, then the sentences and after that the documents.</p>
+<h3 class="western">1.1 Words</h3>
+<p>The words in Folminqua come in two flavours: constants and
+predicates.</p>
+<h4 class="western">1.1.1 Constants</h4>
+<p>A constant is a word that stands for a certain entity (which could
+be a person, a table, an armadillo, you name it). Examples of
+constants in Folnuminqua are:</p>
+<ul>
+	<li><p><b>c1</b></p>
+	<li><p><b>obama</b></p>
+	<li><p><b>oeiruij</b></p>
+	<li><p><b>pres_hujintao</b></p>
+</ul>
+<p>You are free to choose any constant for a thing you want to refer
+to. You can choose the constant <b>Obama</b> to represent president
+Obama, but you could just as well have chosen <b>c1</b>. Although you
+are free to choose any constant to refer to the entity you have in
+mind, you must stick to your choice throughout the document. Each new
+occurrence of the same constant in the document, thus, refers to the
+same entity. On the other hand, you are free to connect different
+constants to the same entity, as long as not in conflict with the yet
+to exlpain equal or inequal statements.</p>
+<h4 class="western">1.1.2 Predicates</h4>
+<p>A predicate stands for a certain relation between entities.
+Examples of predicates are:</p>
+<p><b>p</b></p>
+<p><b>dlkfjiwjef</b></p>
+<p><b>is_father_of</b></p>
+<p><b>dk</b></p>
+<p><b>likes</b></p>
+<p>Just as with constants, you are free to choose any predicate for a
+relation you want to refer to. Again, you must stick to your choice
+throughout the document. Each predicate has a fixed number of
+entities it expresses a relation between. In Folnuminqua, simple as
+it is, this number must always be exactly 2.</p>
+<p><b>inequal</b> and <b>equal </b>statements are not On the other
+hand, you are free to connect different constants to the same entity,
+as long as not in conflict with the yet to exlpain equal or inequal
+statements</p>
+<h3 class="western">1.2 Sentences</h3>
+<p>We will explain the sentences by giving examples.</p>
+<p>Compare it to: lets call Obama p1 and Hu Jintao p2. Then it is
+true that p1 and p2 are both presidents.</p>
+<p>The above statement expresses that the relation named p exists
+between c1 and c2 (and in that order, will be explained)</p>
+<p>Sentence:</p>
+<p><b>p(c1,c2)</b></p>
+<p>Explanation:</p>
+<p>we will call <b>c1</b> and <b>c2</b> constants, and <b>p</b> a
+predicate.</p>
+<p>Each constant stands for a certain entity (which could be a
+person, a table, an armadillo, you name it) as defined by the player.</p>
+<p>For example, <b>c1</b> could stand for your best friend <b>c2</b>
+for the child of your best friend.</p>
+<p>The predicate stands for a certain relation between entities. The
+above statement expresses that the relation named p exists between c1
+and c2 (and in that order, will be explained)</p>
+<p>For example: p could be defined as follows: <b>p(x,y)</b>
+expresses the relation “x is a parent of y”. In that case, the
+statement above, p(c1,c2), expresses: c1 is parent of c2.</p>
+<p>The order of constants is therefore important. p(c2,c1) and
+p(c1,c2) do not necessarily express the same information.</p>
+<p>Different constants may refer to the same entity, as long as not
+in conflict with the equal or inequal statements (see below)</p>
+<p>Constants and predicates are local names for entities and
+relations, in the sense that you can pick any you want. You don’t
+have to choose “Obama”. Compare it to: lets call Obama p1 and Hu
+Jintao p2. Then it is true that p1 and p2 are both presidents.</p>
+<p>In this game, only two place predicates are allowed. I.e. p(c1) is
+not allowed, and neither is p(c1,c2,c3,c4)</p>
+<p>equal(c1,c2,c3)</p>
+<p>This expresses that the constants c1, c2 and c3 refer to the same
+entity.</p>
+<p>Any nuymber of constants above or equal to 2 may be in the list.
+equal(c1) is incorrect, but equal(c1, c2,c3,c4,c5,c7) is correct.</p>
+<p>The order of the is not of any importance. equal(c2,c3,c1) has the
+same meaning.</p>
+<p>equal is not a predica</p>
+<p>unequal(c1,c2,c3)</p>
+<p>This expresses that the constants c1, c2, c3 refer to mutually
+distinct entities.</p>
+<p>For the rest it has the same properties as equal.</p>
+<h3 class="western">1.3 Documents</h3>
+<p>A document is a sequence of sentences separated by newlines:</p>
+<p>p(a,b)</p>
+<p>p(b,c)</p>
+<p>equal(b,c)</p>
+<p><br><br>
+</p>
+<p>The meaning of constants and predicates do never change within a
+document. p stands for the same relation and c1 and c2 for the same
+entities throughout the document.</p>
+<p>Which stand for some entities, and p is a relation. This statement
+expresses</p>
+<p>Example:</p>
+<p>p stands for the relation “x is a father of y”</p>
+<p><br><br>
+</p>
+<p>equal(a,b,c) a, band</p>
+<p>p({a},{c,d}) is an abbreviation for</p>
+<p>p(a,c)</p>
+<p>p(a,d)</p>
+</body>
+</html>

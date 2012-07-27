@@ -7,11 +7,15 @@ package org.ocbkc.swift.coord
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.general._
+import org.ocbkc.swift.OCBKC._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import net.liftweb.json._
 import java.io._
+import net.liftweb.util.Mailer
+import net.liftweb.util.Mailer._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
@@ -38,15 +42,17 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    /* var translationTouched:Boolean, var bridgeTouched:Boolean) */
 
    private def initialise = {  // load sessionhistory data from disk for this user (persistency info).
+         println("Core.initialise called")
       // Read output of the Clean command
       var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistant>
-      Player.currentUserId match
+      Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
       // cc stands for CoreContent
       // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
       val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
+      println("   directory to read in serialized corecontents: " +  ccRootDir.getAbsolutePath)
       val ccFiles = ccRootDir.listFiles()
       if( ccFiles != null && ccFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
@@ -138,6 +144,23 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          None
       else
          Some(HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer))
+   }
+
+   // call this when const has been updated, and you want to notify all followers.
+   def mailFollowersUpdate(const: Constitution, body:String ) =
+   {  def sendupdatemail(followerId:Int) =
+      {  println("sendupdatemail called")
+         val follower = Player.find(followerId.toString) match
+         {  case Full(player)  => player
+            case _             => throw new RuntimeException("Player with id " + followerId + " not found.")
+         }
+         println("   follower id = " + followerId)
+         println("   follower email = " + follower.email.get)
+         Mailer.sendMail(From("cg@xs4all.nl"), Subject("Constitution " + const.id + " has been updated..."), To(follower.email.get), new PlainMailBodyType(body))
+         println("   mail sent!")
+      }
+
+      const.followers.map( sendupdatemail )
    }
 
    object Test

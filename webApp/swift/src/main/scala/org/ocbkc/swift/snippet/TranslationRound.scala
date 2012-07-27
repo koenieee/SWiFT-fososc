@@ -83,7 +83,7 @@ class TranslationRound
    
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
-            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.cc.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.cc.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "cols" -> "100"), // todo: how to make text area page width?
+            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.cc.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.cc.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "style" -> "width: 100%;"), // todo: how to make text area page width?
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission)

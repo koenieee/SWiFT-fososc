@@ -1,0 +1,25 @@
+<lift:surround with="default" at="content">
+<h1>Constitutions</h1>
+
+<lift:Constitutions.list form="POST">
+<!-- 
+
+[&y2012.03.23.09:16:56& for next increment, use design pattern used in pocketchange app. of the book "exploring lift"]
+
+<&y2012.03.21.17:54:06& WIW: use pocketchange  as example to finish this. I think I need to work with a Template to generate the table. Or perhaps I can simply put the lift:Cosntitutions.list tag around the <tr> directly?>
+
+<table>
+   <tr><td>Constitution</td><td>Description</td><td>
+   <tr><td><top:link2consti /></td><td><top:descr /></td></tr>
+</table>
+
+-->
+
+<top:constisInTable/>
+
+<top:createNewBt />
+
+</lift:Constitutions.list>
+
+
+</lift:surround>
