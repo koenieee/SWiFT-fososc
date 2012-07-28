@@ -1,0 +1,33 @@
+<lift:surround with="default" at="content">
+
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+<lift:ConstitutionHistoric form="POST">
+
+<h1><top:title /> (historic version)</h1>
+<h1>Version: <top:revisionDatetime /></h1>
+Info
+
+<table>
+   <tr><td>Creationdate:</td>             <td> <top:creationDate /></td>      </tr>
+   <tr><td>Created by:</td>               <td><top:creator /></td>            </tr>
+<!--
+   <tr><td>Description:</td>              <td><top:description /></td>        </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Number of followers:</td>      <td><top:numberOfFollowers /></td>  </tr>
+-->
+</table>
+
+<hr />
+
+<table>
+   <tr><td colspan="2"><hr />                             </td></tr>
+   <tr><td colspan="2"><top:constitutionText /></td>           </tr>
+   <tr><td colspan="2"><hr />    </td>                         </tr>
+</table>
+</lift:ConstitutionHistoric>
+
+</lift:surround>

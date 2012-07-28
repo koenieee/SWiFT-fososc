@@ -31,8 +31,8 @@ class History
    {  println("historyTableRows")
       if( const == null ) println("   bug: const == null")
       const.getHistory.flatMap( revcom => bind( "top", chooseTemplate("top", "row", ns),            
-         // TODO "view"               -> SHtml.link("constitution?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")), // <&y2012.07.12.20:59:23& seems to be some additional garbage returned by ObjectId.toString, look up in jgit comunity how to get rid of it.>
-         "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")), // <&y2012.07.12.20:59:23& seems to be some additional garbage returned by ObjectId.toString, look up in jgit comunity how to get rid of it.>
+         "view"               -> SHtml.link("constitutionhistoric?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")),
+         "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
          "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
          "publishDescription" -> Text(revcom.getFullMessage()),
          "date"               -> Text(revcom.getCommitTime().toString),

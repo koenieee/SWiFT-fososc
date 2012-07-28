@@ -15,7 +15,7 @@ import org.ocbkc.swift.parser._
 import GlobalConstant.jgit
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
-import org.eclipse.jgit.revwalk.RevCommit
+import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -136,6 +136,15 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       out.close()
    }
 
+   
+   case class HisCon(val content:Elem, val creationDatetimeMillis:Long)
+
+   def historicContentInScalaXML(commitId:String):Option[HisCon] =
+   {  val rw = new RevWalk(GlobalConstant.jgitRepo)
+      val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
+      Some(HisCon(<p>TODO</p>, revcom.getCommitTime().toLong * 1000 ))
+   }
+   
    def getHistory:List[RevCommit] =
    {  import scala.collection.JavaConverters._ 
       jgit.log().addPath( htmlFileName ).call().asScala.toList
