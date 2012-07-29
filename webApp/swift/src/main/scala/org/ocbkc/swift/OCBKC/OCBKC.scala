@@ -16,6 +16,7 @@ import GlobalConstant.jgit
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
+import org.gitective.core.BlobUtils
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -69,11 +70,16 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
-   {  val contentWrapped = "<lift:children>" + plainContent + "</lift:children>"
+   {  plaintTextXMLfragment2ScalaXMLinLiftChildren(plainContent)
+   }
+
+   def plaintTextXMLfragment2ScalaXMLinLiftChildren(plain:String):Elem =
+   {  val contentWrapped = "<lift:children>" + plain + "</lift:children>"
       println("   contentWrapped:String = " + contentWrapped)
       val xml = XML.loadString( contentWrapped )
       xml
    }
+
    /* <? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
    */
 
@@ -140,9 +146,12 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    case class HisCon(val content:Elem, val creationDatetimeMillis:Long)
 
    def historicContentInScalaXML(commitId:String):Option[HisCon] =
-   {  val rw = new RevWalk(GlobalConstant.jgitRepo)
+   {  import GlobalConstant.jgitRepo
+      val rw = new RevWalk(jgitRepo)
       val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
-      Some(HisCon(<p>TODO</p>, revcom.getCommitTime().toLong * 1000 ))
+      val hisCon = BlobUtils.getContent(jgitRepo, revcom, htmlFileName)
+      val hisConXML = plaintTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
+      Some(HisCon(hisConXML, revcom.getCommitTime().toLong * 1000 ))
    }
    
    def getHistory:List[RevCommit] =
