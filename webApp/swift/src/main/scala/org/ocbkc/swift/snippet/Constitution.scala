@@ -15,10 +15,11 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 
-object Error extends Enumeration {
-  type Error = Value
-  val noPublishDescriptionError = Value
-}
+abstract class Error
+
+case class NoPublishDescriptionError()  extends Error
+
+case class ErrorInHtml(val errMsg:String) extends Error
 
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
@@ -32,7 +33,7 @@ class ConstitutionSnippet
    object ErrorRequestVar extends RequestVar[List[Error]](Nil)
    val errorsLR = ErrorRequestVar.is // extract errors list from request var
    println("   errorsLR = "  + errorsLR)
-   println("   find noPublishDescriptionError command gives: " + errorsLR.find( _ == noPublishDescriptionError ))
+   println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toInt }
          case _         => { throw new RuntimeException("  No user id found.") }
@@ -126,15 +127,19 @@ class ConstitutionSnippet
 
       def processPublishBtn() = 
       {  println("ConstitutionSnippet.processPublishBtn called")
-         var errors:List[Error] = Nil
+         var errors:List[_ <: Error] = Nil
          if( const.isDefined ) // <&y2012.06.30.19:41:13& SHOULDDO: and only if something changed (you can probably check this with jgit)>
          {  val constLoc = const.get
             if( publishDescriptionTAcontent.equals("") ) // <&y2012.07.01.19:01:51& MUSTDO: or only containing white space characters>
             {  println("   no publish description found, give feedback to player (s)he should provide one!")
-               errors = noPublishDescriptionError :: errors
+               errors = NoPublishDescriptionError :: errors
             }
             else
-            {  constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
+            {  // first check for syntactic correctness of html file
+               constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
+               {  case constLoc.XMLandErr(Some(xml), _)  => constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
+                  case constLoc.XMLandErr(None, errMsg)  => {  println("   Error in html: " + errMsg); } // <&y2012.07.30.20:13:05& show error to user> /* error = ErrorInHtml(errMsg) :: errors */
+               }
             }
             S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ))
          }
@@ -204,7 +209,12 @@ class ConstitutionSnippet
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
                                                             "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
-                                                            "noPublishDescriptionError" -> { if( errorsLR.find( _ == noPublishDescriptionError ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
+                                                            "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
+                                                            /* "errorInHtml" -> { errorsLR.find( { case _:ErrorInHtml; case _ => false } ) match
+                                                                                { case Some()   => 
+                                                                                  case None     => emptyNode
+                                                                                }
+                                                            */
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
                                                             "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
                                                             "constitutionEditor" -> constitutionEditor)
