@@ -71,7 +71,7 @@ class ConstitutionSnippet
             sesCoordLR.mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
 
       }
-
+/*  <&y2012.07.29.14:31:05& perhaps for future version allow intermediate changes (not yet published)
       def processSaveBtn() =
       {  println("processSaveBtn called")
          if( const.isDefined )
@@ -83,6 +83,8 @@ class ConstitutionSnippet
          }
 
       }
+
+*/
  
       def processGeneralSaveBtn() =
       {  println("processGeneralSaveBtn called")
@@ -200,8 +202,8 @@ class ConstitutionSnippet
                                                       else
                                                          bind( "top", chooseTemplate("top","edit", ns),
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
-                                                            "saveBt" -> SHtml.button("Save", () => processSaveBtn),
-                                                            "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf, "style" -> "width: 99%;" ),
+                                                            //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
+                                                            "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( _ == noPublishDescriptionError ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
                                                             "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf, "style" -> "width: 99%;"),
