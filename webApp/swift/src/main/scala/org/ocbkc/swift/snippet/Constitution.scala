@@ -14,12 +14,13 @@ import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
+import org.xml.sax.SAXParseException 
 
 abstract class Error
 
 case class NoPublishDescriptionError()  extends Error
 
-case class ErrorInHtml(val errMsg:String, val html:String) extends Error
+case class ErrorInHtml(val saxParseException:SAXParseException, val html:String) extends Error
 
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
@@ -137,7 +138,7 @@ class ConstitutionSnippet
             {  // first check for syntactic correctness of html file
                constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
                {  case constLoc.XMLandErr(Some(xml), _)  => constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
-                  case constLoc.XMLandErr(None, errMsg)  => {  println("   Error in html: " + errMsg); errors = ErrorInHtml(errMsg, constitutionTAcontent) :: errors }
+                  case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception, constitutionTAcontent) :: errors }
                }
             }
             S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ))
@@ -214,7 +215,7 @@ class ConstitutionSnippet
                                                             "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "errorInHtml" -> { errHtml match 
-                                                            { case Some(ErrorInHtml(msg, _))    => Text(msg)
+                                                            { case Some(ErrorInHtml(e, _))    => Text("Error on line " + e.getLineNumber() + ", at character " + e.getColumnNumber() + ": " + e.getMessage())
                                                                                   case None     => emptyNode
                                                                                 }
                                                                              },        
