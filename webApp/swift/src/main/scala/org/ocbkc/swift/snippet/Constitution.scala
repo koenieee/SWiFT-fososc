@@ -19,7 +19,7 @@ abstract class Error
 
 case class NoPublishDescriptionError()  extends Error
 
-case class ErrorInHtml(val errMsg:String) extends Error
+case class ErrorInHtml(val errMsg:String, val html:String) extends Error
 
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
@@ -29,7 +29,6 @@ class ConstitutionSnippet
    var publishDescriptionTAcontent:String = ""
    var const:Option[Constitution] = None // <&y2012.07.04.18:52:11& refactor: constitution must always be present for this page to be rendered (with its buttons), otherwise redirect to error page>
 
-   import Error._
    object ErrorRequestVar extends RequestVar[List[Error]](Nil)
    val errorsLR = ErrorRequestVar.is // extract errors list from request var
    println("   errorsLR = "  + errorsLR)
@@ -127,18 +126,18 @@ class ConstitutionSnippet
 
       def processPublishBtn() = 
       {  println("ConstitutionSnippet.processPublishBtn called")
-         var errors:List[_ <: Error] = Nil
+         var errors:List[Error] = Nil
          if( const.isDefined ) // <&y2012.06.30.19:41:13& SHOULDDO: and only if something changed (you can probably check this with jgit)>
          {  val constLoc = const.get
             if( publishDescriptionTAcontent.equals("") ) // <&y2012.07.01.19:01:51& MUSTDO: or only containing white space characters>
             {  println("   no publish description found, give feedback to player (s)he should provide one!")
-               errors = NoPublishDescriptionError :: errors
+               errors = NoPublishDescriptionError() :: errors
             }
             else
             {  // first check for syntactic correctness of html file
                constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
                {  case constLoc.XMLandErr(Some(xml), _)  => constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
-                  case constLoc.XMLandErr(None, errMsg)  => {  println("   Error in html: " + errMsg); } // <&y2012.07.30.20:13:05& show error to user> /* error = ErrorInHtml(errMsg) :: errors */
+                  case constLoc.XMLandErr(None, errMsg)  => {  println("   Error in html: " + errMsg); errors = ErrorInHtml(errMsg, constitutionTAcontent) :: errors }
                }
             }
             S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ))
@@ -181,9 +180,13 @@ class ConstitutionSnippet
       }
 
       if( constLoc != null) const = Some(constLoc)
-
-      lazy val constitutionEditor = SHtml.textarea(constLoc.plainContent, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" )
-
+      val errHtml = errorsLR.find( { case _:ErrorInHtml => true; case _ => false } )
+ 
+      lazy val constitutionEditor = SHtml.textarea( { errHtml match
+                                                     { case Some(ErrorInHtml(_, html))   => html
+                                                       case None     => constLoc.plainContent
+                                                     }
+                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" )
       editmode = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
          case _          => false
@@ -210,16 +213,16 @@ class ConstitutionSnippet
                                                             //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
                                                             "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
-                                                            /* "errorInHtml" -> { errorsLR.find( { case _:ErrorInHtml; case _ => false } ) match
-                                                                                { case Some()   => 
+                                                            "errorInHtml" -> { errHtml match 
+                                                            { case Some(ErrorInHtml(msg, _))    => Text(msg)
                                                                                   case None     => emptyNode
                                                                                 }
-                                                            */
+                                                                             },        
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
                                                             "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
                                                             "constitutionEditor" -> constitutionEditor)
                                               },
-                           "view"    -> {    if( editmode ) 
+                           "view"    -> {    if( editmode )
                                                 emptyNode
                                              else
                                                 bind( "top", chooseTemplate("top","view", ns), 
