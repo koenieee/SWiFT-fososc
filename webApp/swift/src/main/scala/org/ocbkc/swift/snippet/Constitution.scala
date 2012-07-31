@@ -212,7 +212,7 @@ class ConstitutionSnippet
                                                          bind( "top", chooseTemplate("top","edit", ns),
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
-                                                            "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf),
+                                                            "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf, "style" -> "width: 99%;"),
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "errorInHtml" -> { errHtml match 
                                                             { case Some(ErrorInHtml(e, _))    => Text("Error on line " + e.getLineNumber() + ", at character " + e.getColumnNumber() + ": " + e.getMessage())
@@ -220,7 +220,7 @@ class ConstitutionSnippet
                                                                                 }
                                                                              },        
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
-                                                            "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf),
+                                                            "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf, "style" -> "width: 99%;"),
                                                             "constitutionEditor" -> constitutionEditor)
                                               },
                            "view"    -> {    if( editmode )
