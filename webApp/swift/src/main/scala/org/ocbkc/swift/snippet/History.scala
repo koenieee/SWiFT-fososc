@@ -33,12 +33,14 @@ class History
       const.getHistory.flatMap(
       revcom => 
       {  val playerId = revcom.getAuthorIdent.getName
+         val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+
          bind( "top", chooseTemplate("top", "row", ns),            
             "view"               -> SHtml.link("constitutionhistoric?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")),
             "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
             "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
             "publishDescription" -> Text(revcom.getFullMessage()),
-            "date"               -> Text(revcom.getCommitTime().toString),
+            "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
             "author"             -> Text
                                     (  Player.find(playerId) match
                                        {  case Full(player)  => player.swiftDisplayName
