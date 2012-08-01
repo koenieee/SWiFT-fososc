@@ -58,7 +58,7 @@ class ConstitutionHistoric
 
       val answer   = bind( "top", ns, 
                            "title"              -> Text("Constitution " + const.id.toString),
-                           "revisionDatetime"   -> Text(df.format(historicConst.creationDatetimeMillis*1000).toString),
+                           "revisionDatetime"   -> Text(df.format(historicConst.creationDatetimeMillis).toString),
                            "constitutionText"   -> historicConst.content,
                            "creationDate"       -> Text(df.format(const.creationTime).toString),
                            "creator"            -> Text(const.creatorUserID.toString)
