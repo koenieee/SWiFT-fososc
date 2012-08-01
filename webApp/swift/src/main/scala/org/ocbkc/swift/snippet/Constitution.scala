@@ -34,8 +34,9 @@ class ConstitutionSnippet
    object ContentB4ReloadRequestVar extends RequestVar[Option[ContentB4Reload]](None)
    object ErrorRequestVar extends RequestVar[List[Error]](Nil)
    val errorsLR = ErrorRequestVar.is // extract errors list from request var
-   val contentB4ReloadOpt = ContentB4ReloadRequestVar.is
    println("   errorsLR = "  + errorsLR)
+   val contentB4ReloadOpt = ContentB4ReloadRequestVar.is
+   println("   contentB4ReloadOpt = " + contentB4ReloadOpt )
    println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toInt }
@@ -144,7 +145,7 @@ class ConstitutionSnippet
                   case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception) :: errors }
                }
             }
-            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ), () => ContentB4ReloadRequestVar(Some(contB4Rel)))
+            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
          }
          else
          {  S.redirectTo("constitutions")
@@ -186,11 +187,12 @@ class ConstitutionSnippet
       if( constLoc != null) const = Some(constLoc)
       val errHtml = errorsLR.find( { case _:ErrorInHtml => true; case _ => false } )
  
-      lazy val constitutionEditor = SHtml.textarea( { errHtml match
-                                                     { case Some(ErrorInHtml(_))   => contentB4ReloadOpt.get.constitutionTAcontent // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
-                                                       case None     => constLoc.plainContent
-                                                     }
-                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" )
+      lazy val constitutionEditor = SHtml.textarea( { errorsLR match
+                                                      {  case List() => constLoc.plainContent
+                                                         case _      => { println("   error in html, so prefill constitution editor with text before reload"); contentB4ReloadOpt.get.constitutionTAcontent } // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
+                                                      }
+                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" 
+                                                  )
       editmode = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
          case _          => false
