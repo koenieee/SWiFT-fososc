@@ -17,7 +17,7 @@ object Player extends Player with MetaMegaProtoUser[Player] {
   override def fieldOrder = List(id, firstName, lastName, email, locale, timezone, password, textArea)
 
   // comment this line out to require email validations
- 
+
   override def skipEmailValidation = true
 }
 
@@ -32,7 +32,13 @@ class Player extends MegaProtoUser[Player] {
     override def textareaRows  = 10
     override def textareaCols = 50
     override def displayName = "Personal Essay"
+ 
+   
   }
+   def swiftDisplayName:String =
+   {  firstName.get + " " + lastName.get + " (id: " + userIdAsString + ")"
+   }
+
 }
 
 }

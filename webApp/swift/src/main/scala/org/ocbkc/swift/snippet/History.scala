@@ -28,16 +28,26 @@ class History
    }
 
    def historyTableRows(ns:NodeSeq):NodeSeq =
-   {  println("historyTableRows")
+   {  println("historyTableRows called")
       if( const == null ) println("   bug: const == null")
-      const.getHistory.flatMap( revcom => bind( "top", chooseTemplate("top", "row", ns),            
-         "view"               -> SHtml.link("constitutionhistoric?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")),
-         "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
-         "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
-         "publishDescription" -> Text(revcom.getFullMessage()),
-         "date"               -> Text(revcom.getCommitTime().toString),
-         "author"             -> Text(revcom.getAuthorIdent().toString)
-         ))
+      const.getHistory.flatMap(
+      revcom => 
+      {  val playerId = revcom.getAuthorIdent.getName
+         bind( "top", chooseTemplate("top", "row", ns),            
+            "view"               -> SHtml.link("constitutionhistoric?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")),
+            "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
+            "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
+            "publishDescription" -> Text(revcom.getFullMessage()),
+            "date"               -> Text(revcom.getCommitTime().toString),
+            "author"             -> Text
+                                    (  Player.find(playerId) match
+                                       {  case Full(player)  => player.swiftDisplayName
+                                          case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, pease report it)" }
+                                       }
+                                    )
+            )
+      }
+      )         
    }
 
    def processDiffButton() =

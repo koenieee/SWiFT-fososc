@@ -15,6 +15,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 import org.xml.sax.SAXParseException 
+import org.ocbkc.swift.model.Player
 
 abstract class Error
 
@@ -175,10 +176,21 @@ class ConstitutionSnippet
       /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
       val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
       var constLoc:Constitution = null // workaround for tuple error, note (object:ClassA, ..) = (null, ...) leads to match error in scala.
-      val (errorRetrievingConstitution:Boolean, errorMsg:String, creator:Int, creationDate:Long, title:String) = S.param("id") match
+      var creator:Player = null
+      val (errorRetrievingConstitution:Boolean, errorMsg:String, creatorId:Int, creationDate:Long, title:String) = S.param("id") match
       {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                              {  case Some(constLoc2) => { println("   Constitution id:" + idLoc); constLoc = constLoc2; (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.id) }
-                                 case None        => { (true, "No constitution with this id exists.", 0, 0L, "Constitution not found") }
+                              {  case Some(constLoc2) => 
+                                 {  println("   Constitution id:" + idLoc)
+                                    constLoc = constLoc2
+                                    creator = Player.find(constLoc.creatorUserID) match
+                                    {  case Full(player)  => player
+                                       case _             => throw new RuntimeException("Player with id " + constLoc.creatorUserID + " not found.")
+                                    }                                 
+                                    (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.id) 
+                                 }
+                                 case None        => 
+                                 { (true, "No constitution with this id exists.", 0, 0L, "Constitution not found") 
+                                 }
                               }
          case _           => S.redirectTo("constitutions") //(true, "Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].", 0, 0L, "Constitution not found")
    //    case HalfFull => Always better then empty ;-)
@@ -237,7 +249,7 @@ class ConstitutionSnippet
                                                    "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.id)))
 
                                         },
-                           "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.toString) else emptyNode },
+                           "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
                            "title"              -> Text(title),
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
