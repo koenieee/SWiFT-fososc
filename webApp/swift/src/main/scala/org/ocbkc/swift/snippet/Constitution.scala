@@ -20,7 +20,9 @@ abstract class Error
 
 case class NoPublishDescriptionError()  extends Error
 
-case class ErrorInHtml(val saxParseException:SAXParseException, val html:String) extends Error
+case class ErrorInHtml(val saxParseException:SAXParseException) extends Error
+
+case class ContentB4Reload(val constitutionTAcontent:String, val descriptionTFcontent:String, val publishDescriptionTAcontent:String)
 
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
@@ -29,9 +31,10 @@ class ConstitutionSnippet
    var descriptionTFcontent:String = ""
    var publishDescriptionTAcontent:String = ""
    var const:Option[Constitution] = None // <&y2012.07.04.18:52:11& refactor: constitution must always be present for this page to be rendered (with its buttons), otherwise redirect to error page>
-
+   object ContentB4ReloadRequestVar extends RequestVar[Option[ContentB4Reload]](None)
    object ErrorRequestVar extends RequestVar[List[Error]](Nil)
    val errorsLR = ErrorRequestVar.is // extract errors list from request var
+   val contentB4ReloadOpt = ContentB4ReloadRequestVar.is
    println("   errorsLR = "  + errorsLR)
    println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
@@ -70,7 +73,6 @@ class ConstitutionSnippet
          
          if( changes )
             sesCoordLR.mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
-
       }
 /*  <&y2012.07.29.14:31:05& perhaps for future version allow intermediate changes (not yet published)
       def processSaveBtn() =
@@ -127,6 +129,7 @@ class ConstitutionSnippet
 
       def processPublishBtn() = 
       {  println("ConstitutionSnippet.processPublishBtn called")
+         val contB4Rel = ContentB4Reload(constitutionTAcontent, descriptionTFcontent, publishDescriptionTAcontent)
          var errors:List[Error] = Nil
          if( const.isDefined ) // <&y2012.06.30.19:41:13& SHOULDDO: and only if something changed (you can probably check this with jgit)>
          {  val constLoc = const.get
@@ -138,10 +141,10 @@ class ConstitutionSnippet
             {  // first check for syntactic correctness of html file
                constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
                {  case constLoc.XMLandErr(Some(xml), _)  => constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
-                  case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception, constitutionTAcontent) :: errors }
+                  case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception) :: errors }
                }
             }
-            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ))
+            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => ErrorRequestVar( errors ), () => ContentB4ReloadRequestVar(Some(contB4Rel)))
          }
          else
          {  S.redirectTo("constitutions")
@@ -184,7 +187,7 @@ class ConstitutionSnippet
       val errHtml = errorsLR.find( { case _:ErrorInHtml => true; case _ => false } )
  
       lazy val constitutionEditor = SHtml.textarea( { errHtml match
-                                                     { case Some(ErrorInHtml(_, html))   => html
+                                                     { case Some(ErrorInHtml(_))   => contentB4ReloadOpt.get.constitutionTAcontent // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
                                                        case None     => constLoc.plainContent
                                                      }
                                                     }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" )
@@ -212,17 +215,18 @@ class ConstitutionSnippet
                                                          bind( "top", chooseTemplate("top","edit", ns),
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
-                                                            "descriptionTextfield" -> SHtml.text(constLoc.shortDescription, processDescriptionTf, "style" -> "width: 99%;"),
+                                                            "descriptionTextfield" -> SHtml.text(contentB4ReloadOpt match { case Some(cB4rl) => cB4rl.descriptionTFcontent; case None => constLoc.shortDescription }, processDescriptionTf, "style" -> "width: 99%;"),
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "errorInHtml" -> { errHtml match 
-                                                            { case Some(ErrorInHtml(e, _))    => Text("Error on line " + e.getLineNumber() + ", at character " + e.getColumnNumber() + ": " + e.getMessage())
-                                                                                  case None     => emptyNode
-                                                                                }
+                                                                              {  case Some(ErrorInHtml(e))  => Text("Error on line " + e.getLineNumber() + ", at character " + e.getColumnNumber() + ": " + e.getMessage())
+                                                                                 case None                  => emptyNode
+                                                                              }
                                                                              },        
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),
-                                                            "publishDescriptionTextfield" -> SHtml.text("", processPublishDescriptionTf, "style" -> "width: 99%;"),
-                                                            "constitutionEditor" -> constitutionEditor)
-                                              },
+                                                            "publishDescriptionTextfield" -> SHtml.text(contentB4ReloadOpt match { case Some(cB4rl) => cB4rl.publishDescriptionTAcontent; case None => "" }, processPublishDescriptionTf, "style" -> "width: 99%;"),
+                                                            "constitutionEditor" -> constitutionEditor
+                                                             )
+                                               },
                            "view"    -> {    if( editmode )
                                                 emptyNode
                                              else
