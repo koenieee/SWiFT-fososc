@@ -61,7 +61,13 @@ class ConstitutionHistoric
                            "revisionDatetime"   -> Text(df.format(historicConst.creationDatetimeMillis).toString),
                            "constitutionText"   -> historicConst.content,
                            "creationDate"       -> Text(df.format(const.creationTime).toString),
-                           "creator"            -> Text(const.creatorUserID.toString)
+                           "creator"            -> Text(
+                                       Player.find(const.creatorUserID) match
+                                       {  case Full(player)  => player.swiftDisplayName
+                                          case _             => { println("    bug: Player with id " + const.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." }
+                                       }
+                                                       )
+
                            // "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode } <&y2012.07.28.20:23:17& todo>
                      )
       answer
