@@ -30,9 +30,18 @@ package ses
 
 import Round._
 class Core(/* val player: User, var text: Text,*/ var round: Round)
-{  val gameCore: TraitGameCore = new NotUna()
+{  println("ses.Core.constructor called")
+   val gameCore: TraitGameCore = new NotUna()
    var cc: CoreContent = null
    val sesHis = new SessionHistory()
+
+   def currentPlayer = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
+   {  case Full(player) => player
+      case _            => 
+      {  println("   ERROR: I'm afraid no player is logged in..."); throw new RuntimeException("   ERROR: I'm afraid no player is logged in...") // there should always be a player if a Coord object is being created.
+      }
+   } // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
+
    initialise
 
    // ...Touched: the user has edited this field in this session at least once.

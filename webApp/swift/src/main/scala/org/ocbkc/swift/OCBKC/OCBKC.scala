@@ -251,4 +251,9 @@ object Constitution
    }
 }
 
+object ConstiSelectionProcedure extends Enumeration
+{  type ConstiSelectionProcedure = Value
+   val NoProc, OneToStartWith    = Value
+}
+
 }
