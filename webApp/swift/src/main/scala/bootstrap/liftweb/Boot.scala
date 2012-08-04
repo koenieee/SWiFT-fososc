@@ -15,6 +15,7 @@ import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
 import org.eclipse.jgit.api._
 import java.io._
+import org.ocbkc.swift.snippet.sesCoord
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -22,6 +23,7 @@ import java.io._
  */
 class Boot {
   def boot {
+   println("Boot.boot called")
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -51,7 +53,7 @@ class Boot {
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
-      Menu(Loc("startSession", "startSession" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
       )
@@ -104,7 +106,29 @@ class Boot {
       jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
       jgitInitCommand.call()
     }
+
+   LiftRules.rewrite.append 
+   {  case RewriteRequest( ParsePath("constiTrainingDecision" :: Nil, _, _, _),
+                           _,
+                           _
+                         ) =>
+         {  println("LiftRules.rewrite rule called. Pattern: constiTrainingDecision")
+            val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
+            val player = sesCoordLR.currentPlayer
+            if( player.isFirstTimePlayer )
+            {  println("   player is first time player")
+               RewriteResponse("selectConstitution" :: Nil)
+            }
+            else
+            {  println("   player is NOT first time player")
+               RewriteResponse("startSession" :: Nil)
+            }
+         } // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
+   }
+
+    println("Boot.boot finished")
   }
+
 
   /**
    * Force the request to be UTF-8
