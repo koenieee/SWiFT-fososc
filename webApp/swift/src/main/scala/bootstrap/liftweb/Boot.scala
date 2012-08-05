@@ -107,23 +107,18 @@ class Boot {
       jgitInitCommand.call()
     }
 
-   LiftRules.rewrite.append 
-   {  case RewriteRequest( ParsePath("constiTrainingDecision" :: Nil, _, _, _),
-                           _,
-                           _
-                         ) =>
-         {  println("LiftRules.rewrite rule called. Pattern: constiTrainingDecision")
-            val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
-            val player = sesCoordLR.currentPlayer
-            if( player.isFirstTimePlayer )
-            {  println("   player is first time player")
-               RewriteResponse("selectConstitution" :: Nil)
-            }
-            else
-            {  println("   player is NOT first time player")
-               RewriteResponse("startSession" :: Nil)
-            }
-         } // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
+ // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
+
+   def dispatch4ConstiTrainingDecision = 
+   {  qwer
+   }
+
+   LiftRules.viewDispatch.append
+   {  // This is an explicit dispatch to a particular method based on the path
+      case List("constiTrainingDecision") =>
+         Left(() => Full( () => dispatch4ConstiTrainingDecision )
+   }
+
    }
 
     println("Boot.boot finished")
