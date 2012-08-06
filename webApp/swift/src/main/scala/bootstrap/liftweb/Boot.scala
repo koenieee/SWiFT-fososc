@@ -13,6 +13,7 @@ import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
@@ -113,13 +114,17 @@ class Boot {
    {  println("dispatch4ConstiTrainingDecision called")
       val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
       val player = sesCoordLR.currentPlayer
-      if( player.isFirstTimePlayer )
-      {  println("   player is first time player")
-         S.redirectTo("selectConstitution")
-      }
-      else
-      {  println("   player is NOT first time player")
-         S.redirectTo("startSession")
+      player.constiSelectionProcedure match
+      {  case OneToStartWith  =>
+            if( player.isFirstTimePlayer )
+            {  println("   player is first time player")
+               S.redirectTo("selectConstitution")
+            }
+            else
+            {  println("   player is NOT first time player")
+               S.redirectTo("startSession")
+            }
+         case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; println("  " + msg); throw new RuntimeException(msg) }
       }
    }
 
