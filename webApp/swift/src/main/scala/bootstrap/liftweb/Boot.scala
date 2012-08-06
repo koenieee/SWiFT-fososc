@@ -50,10 +50,35 @@ class Boot {
 	       "Static Content")))
 
      */
+
+/* TODO in row to be removed, this approach turns out not to work. Perhaps git stash it somewhere.
+   def studyConsttitionLink = 
+   {  println("studyConsttitionLink called")
+      "studyConstitution?id=" + 
+      {  Player.currentUser match 
+         {  case Full(player) =>
+               player.firstChosenConstitution match
+               {  case Some(const) => const.id.toString
+                  case _           => println("   BUG: no first chosen constition found"); "BugNoFirstChosenConstitutionFound"
+               }
+            case _              => println("   BUG: no player found"); "BugNoPlayerFound" // or is this no bug? Perhaps lift always renders the menu item, even if it is not displayed.
+         }
+      } :: Nil
+   }
+*/
+
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
+      Menu(Loc("Study Constitution", "studyConsttition" :: Nil, "Study Chosen Constitution", If(() =>
+         {  Player.currentUser match
+            {  case Full(player) => {  if( player.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !player.firstChosenConstitution.isEmpty
+                                       else false
+                                    }
+               case _            => false
+            }
+         }, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
