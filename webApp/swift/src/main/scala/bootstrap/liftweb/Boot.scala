@@ -72,8 +72,9 @@ class Boot {
       Menu(Loc("Help", "help" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
       Menu(Loc("Study Constitution", "studyConsttition" :: Nil, "Study Chosen Constitution", If(() =>
-         {  Player.currentUser match
-            {  case Full(player) => {  if( player.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !player.firstChosenConstitution.isEmpty
+         {  val sesCoordLR = sesCoord.is // <&y2012.08.08.20:19:05& temporary alternative, remove in future and do with persistent fields of Player>
+            Player.currentUser match
+            {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !sesCoord.firstChosenConstitution.isEmpty
                                        else false
                                     }
                case _            => false
@@ -139,9 +140,9 @@ class Boot {
    {  println("dispatch4ConstiTrainingDecision called")
       val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
       val player = sesCoordLR.currentPlayer
-      player.constiSelectionProcedure match
+      sesCoordLR.constiSelectionProcedure match
       {  case OneToStartWith  =>
-            if( player.isFirstTimePlayer )
+            if( sesCoordLR.isFirstTimePlayer )
             {  println("   player is first time player")
                S.redirectTo("selectConstitution")
             }

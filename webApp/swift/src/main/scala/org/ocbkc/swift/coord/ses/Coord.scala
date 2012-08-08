@@ -9,6 +9,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -34,6 +35,15 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    val gameCore: TraitGameCore = new NotUna()
    var cc: CoreContent = null
    val sesHis = new SessionHistory()
+   
+   /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
+   // BEGIN temporary solution for constiSelectionProcedure
+   var isFirstTimePlayer:Boolean = true // <&y2012.08.04.19:43:17& set this to true after first session has been completed (or other conditions?)>
+   val constiSelectionProcedure = OneToStartWith // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
+   var firstChosenConstitution:Option[Constitution] = None // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
+
+   // END
+
 
    def currentPlayer = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
    {  case Full(player) => player

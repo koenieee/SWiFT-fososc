@@ -6,6 +6,7 @@ import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.snippet.sesCoord
 
 /**
  * The singleton that has methods for accessing the database
@@ -28,7 +29,6 @@ object Player extends Player with MetaMegaProtoUser[Player] {
  */
 class Player extends MegaProtoUser[Player] {
    def getSingleton = Player // what's the "meta" server
-
    // define an additional field for a personal essay
    object textArea extends MappedTextarea(this, 2048) {
     override def textareaRows  = 10
@@ -40,10 +40,11 @@ class Player extends MegaProtoUser[Player] {
    {  firstName.get + " " + lastName.get + " (id: " + userIdAsString + ")"
    }
 
+/*
    val constiSelectionProcedure = OneToStartWith // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
    var firstChosenConstitution:Option[Constitution] = None // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
    var isFirstTimePlayer:Boolean = true // <&y2012.08.04.19:43:17& set this to true after first session has been completed (or other conditions?)>
-
+*/
 }
 
 }
