@@ -46,7 +46,7 @@ object GlobalConstant
 }
 
 object TestSettings
-{  val AUTOLOGIN = true
+{  val AUTOLOGIN = false
    val AUTOTRANSLATION = false
 }
 

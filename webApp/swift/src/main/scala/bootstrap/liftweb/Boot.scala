@@ -68,14 +68,18 @@ class Boot {
 */
    // part of ...
 
-   def playerChoseFirstConstitution:Boolean =
-   {  val sesCoordLR = sesCoord.is
-      Player.currentUser match
-      {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !sesCoord.firstChosenConstitution.isEmpty
-                                 else false
-                              }
-         case _            => false
+   // returns also false when no player is logged in.
+   def playerChoseFirstConstitution:Option[Boolean] =
+   {  if(sesCoord.set_?)
+      {  val sesCoordLR = sesCoord.is
+         Player.currentUser match
+         {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ Some(!sesCoord.firstChosenConstitution.isEmpty)
+                                    else Some(false)
+                                 }
+            case _            => Some(false)
+         }
       }
+      else None
    }
 
   // returns -1 when no player is logged in
@@ -88,13 +92,17 @@ class Boot {
          -1
     }
 
+    def playerIsLoggedIn:Boolean = 
+    { Player.currentUser.isDefined
+    }
+
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( Player.currentUser.isDefined && (playedSessions > 2) ), () => RedirectResponse("/index")) ) ),
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => playerChoseFirstConstitution, () => RedirectResponse("/index")) )),
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playerIsLoggedIn && (playedSessions > 2) ), () => RedirectResponse("/index")) ) ),
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => { playerIsLoggedIn && playerChoseFirstConstitution.get }, () => RedirectResponse("/index")) )), // note: get method is safe because of definition of &&: only evaluates second argument if first is false. And if the first is true then playerChoseFirstConstitution is defined.
+      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
       )
 
