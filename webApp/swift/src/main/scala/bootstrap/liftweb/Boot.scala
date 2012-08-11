@@ -52,8 +52,8 @@ class Boot {
      */
 
 /* TODO in row to be removed, this approach turns out not to work. Perhaps git stash it somewhere.
-   def studyConsttitionLink = 
-   {  println("studyConsttitionLink called")
+   def studyConstitutionLink = 
+   {  println("studyConstitutionLink called")
       "studyConstitution?id=" + 
       {  Player.currentUser match 
          {  case Full(player) =>
@@ -71,7 +71,7 @@ class Boot {
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
-      Menu(Loc("Study Constitution", "studyConsttition" :: Nil, "Study Chosen Constitution", If(() =>
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() =>
          {  val sesCoordLR = sesCoord.is // <&y2012.08.08.20:19:05& temporary alternative, remove in future and do with persistent fields of Player>
             Player.currentUser match
             {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !sesCoord.firstChosenConstitution.isEmpty
@@ -142,12 +142,12 @@ class Boot {
       val player = sesCoordLR.currentPlayer
       sesCoordLR.constiSelectionProcedure match
       {  case OneToStartWith  =>
-            if( sesCoordLR.isFirstTimePlayer )
-            {  println("   player is first time player")
+            if( sesCoordLR.firstChosenConstitution.isEmpty )
+            {  println("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
                S.redirectTo("selectConstitution")
             }
             else
-            {  println("   player is NOT first time player")
+            {  println("   player has already selected a constitution in the past, so redirect to play the session!")
                S.redirectTo("startSession")
             }
          case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; println("  " + msg); throw new RuntimeException(msg) }
