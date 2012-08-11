@@ -66,20 +66,24 @@ class Boot {
       } :: Nil
    }
 */
+   // part of ...
+   def playerChoseFirstConstitution:Boolean =
+   {  val sesCoordLR = sesCoord.is // <&y2012.08.08.20:19:05& temporary alternative, remove in future and do with persistent fields of Player>
+      Player.currentUser match
+      {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !sesCoord.firstChosenConstitution.isEmpty
+                                 else false
+                              }
+         case _            => false
+      }
+   }
+
+   def playedSessions = 1 // <&y2012.08.11.14:30:26& TODO implement>
 
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() =>
-         {  val sesCoordLR = sesCoord.is // <&y2012.08.08.20:19:05& temporary alternative, remove in future and do with persistent fields of Player>
-            Player.currentUser match
-            {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ !sesCoord.firstChosenConstitution.isEmpty
-                                       else false
-                                    }
-               case _            => false
-            }
-         }, () => RedirectResponse("/index")) ) ),// <&y2012.05.21.00:15:10& change 2nd parameter back to "constitutions" when constitution support is realised.>
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playedSessions > 10 ), () => RedirectResponse("/index")) ) ),
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => playerChoseFirstConstitution, () => RedirectResponse("/index")) )),
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = Player.currentUser.isDefined; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => {Player.currentUser.isDefined}, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
