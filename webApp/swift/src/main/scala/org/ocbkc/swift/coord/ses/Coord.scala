@@ -9,7 +9,6 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.OCBKC._
-import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -63,11 +62,14 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    private def initialise = {  // load sessionhistory data from disk for this user (persistency info).
       println("Core.initialise called")
       // Read output of the Clean command
-      var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistant>
+      var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistent>
       Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
+
+      if( prefix.toInt != 1 ) // <&y2012.08.13.23:44:03& TODO remove this if, as soon as persistency of constiSelectionProcedure is realised. Now only intended for testing purposes: each time user 1 logs in again, his game-session history is erased so that the constiSelectionProcedure can be tested.>
+      {
       // cc stands for CoreContent
       // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
       val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
@@ -83,6 +85,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          }
 
          ccFiles map readCc
+      }
       }
    }
    // var sesHis:SessionHistory = new SessionHistory 

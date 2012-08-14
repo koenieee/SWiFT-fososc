@@ -9,7 +9,6 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
-import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
@@ -25,19 +24,22 @@ class StudyConstitution
       
    val consti:Constitution = 
       if( sesCoordLR.constiSelectionProcedure == OneToStartWith )
+      {  println("   constiSelectionProcedure == OneToStartWith")
          sesCoordLR.firstChosenConstitution.get // should always be there, because if no constitution has been chosen this page should be hidden.
-      else // <&y2012.08.11.12:36:47& framework for future processing, the next is currenlty not used.>
+      }
+      else
+      {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")
+      }
+
+/* <&y2012.08.11.12:36:47& framework for future processing, the next is currenlty not used.>
+
          S.param("id") match
          {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
                                  { case Some(constLoc)   => { println("   Constitution id:" + idLoc); sesCoord.firstChosenConstitution = Some(constLoc); constLoc }
                                    case None             => { println("   BUG: constitution with id " + idLoc + " not found"); S.redirectTo("notfound") }
                                  }
             case _            => { println("   BUG: no id URL-parameter in studyConstitution.html given"); S.redirectTo("errorIdNotFound") }
-         }
-
-   if( sesCoordLR.constiSelectionProcedure == OneToStartWith )
-   {  
-   }
+*/
 
   val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toInt }

@@ -13,7 +13,6 @@ import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
-import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
@@ -96,11 +95,12 @@ class Boot {
     { Player.currentUser.isDefined
     }
 
+
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playerIsLoggedIn && (playedSessions > 2) ), () => RedirectResponse("/index")) ) ),
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => { playerIsLoggedIn && playerChoseFirstConstitution.get }, () => RedirectResponse("/index")) )), // note: get method is safe because of definition of &&: only evaluates second argument if first is false. And if the first is true then playerChoseFirstConstitution is defined.
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playerIsLoggedIn && (playedSessions >= OneToStartWith.minSesionsB4access2allConstis) ), () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => ( playerIsLoggedIn && ( playerChoseFirstConstitution match { case Some(b) => b; case None => { println("  WARNING: None returned here, while it should return Some, assuming Some(false)."); false } } ) && ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) ), () => RedirectResponse("/index")))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))

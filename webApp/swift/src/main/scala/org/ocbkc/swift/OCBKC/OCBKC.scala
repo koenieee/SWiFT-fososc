@@ -251,9 +251,10 @@ object Constitution
    }
 }
 
-object ConstiSelectionProcedure extends Enumeration
-{  type ConstiSelectionProcedure = Value
-   val NoProc, OneToStartWith    = Value
+abstract class ConstiSelectionProcedure
+case object NoProc extends ConstiSelectionProcedure
+case object OneToStartWith extends ConstiSelectionProcedure
+{  val minSesionsB4access2allConstis = 2
 }
 
 }

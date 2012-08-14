@@ -4,8 +4,7 @@ package model {
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
-import org.ocbkc.swift.OCBKC.ConstiSelectionProcedure._
-import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.snippet.sesCoord
 
 /**

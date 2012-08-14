@@ -14,7 +14,8 @@ import System.err.println
 import org.ocbkc.swift.model._
 
 class SelectConstitution
-{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+{  println("Constructor SelectConstitution called")
+   val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
 
    // if the URL contains an id for a constitution, then the choice has been made. So redirect to studyConstitution. Direct redirection ot studuConstitution after the choice cannot be done, because first the field firstChosenConstitution has to be set right, so that SiteMap (see Boot.scala) gives the user access to the studyConstitution link.
    S.param("id") match
@@ -24,7 +25,7 @@ class SelectConstitution
                                                             sesCoordLR.firstChosenConstitution = consti
                                                             S.redirectTo("studyConstitution")
                                                          }
-                                case None             => { S.redirectTo("notfound.html") }
+                                case None             => { S.redirectTo("notfound") }
                               }
                            }
       case _            => Unit // = do nothing, and just continue running the constructor of SelectConstitution
