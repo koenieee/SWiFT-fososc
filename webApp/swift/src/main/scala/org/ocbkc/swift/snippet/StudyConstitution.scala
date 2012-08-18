@@ -59,7 +59,7 @@ class StudyConstitution
 
       val answer   = bind( "top", ns, 
                            "constitutionId"     -> Text(consti.id.toString),
-                           "constitutionText"   -> consti.contentInScalaXML,
+                           "constitutionText"   -> consti.contentLastReleaseInScalaXML,
                            "creationDate"       -> Text(df.format(consti.creationTime).toString),
                            "creator"            -> Text(
                                        Player.find(consti.creatorUserID) match

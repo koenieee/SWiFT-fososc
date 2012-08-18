@@ -12,6 +12,7 @@ import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
+import org.ocbkc.swift.model.Player
 import GlobalConstant.jgit
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
@@ -31,9 +32,9 @@ object TestSerialization
    }
 }
 
-
 object ConstitutionTypes
-{  type ConstiId = Int
+{  type ConstiId  = Int
+   type VersionId = String // which should be a git-commit hash.
 }
 
 import ConstitutionTypes._
@@ -43,9 +44,10 @@ import ConstitutionTypes._
    
 */
 
-type alias VersionId == String // which should be a git-commit hash.
 
+/* Perhaps for future work:
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
+*/
 
 case class Constitution(val id:ConstiId, // unique identifier for this constitution
                         val creationTime:Long,
@@ -56,7 +58,14 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
                         var followers:List[Int] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
                        )
 {  val htmlFileName = "constitution" + id + ".html"
+   var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
+   def lastReleaseCommitId:Option[String] =
+   {  commitIdsReleases match
+      {  case Nil          => None
+         case newest::tail => Some(newest)
+      }
+   }
    // create html file which holds the constitution
    save(Constitution.templateNewConstitution(id))
 
@@ -65,20 +74,33 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    {  val content:String = scala.io.Source.fromFile(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName).mkString
       content
    }
+
+   def plainContentLastRelease:String =
+   {  "not implemented yet"
+   }
 /* &y2012.06.23.14:39:56& just use followers.contains(...) directly.
    def followedByUser(userId:Int):boolean = 
    {  followers.contains(userId) 
    }
 */
    def gitUserId(liftUserId:String) = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
-   {  new PersonIdent(liftUserId, "swiftgame")   }
+   {  new PersonIdent(liftUserId, "swiftgame")
+   }
    
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
-   {  plaintTextXMLfragment2ScalaXMLinLiftChildren(plainContent)
+   {  plainTextXMLfragment2ScalaXMLinLiftChildren(plainContent)
    }
 
-   def plaintTextXMLfragment2ScalaXMLinLiftChildren(plain:String):Elem =
+   // None means: no version released yet.
+   def contentLastReleaseInScalaXML:Option[Elem] =
+   {  lastReleaseCommitId match
+      {  case None            => None
+         case Some(commitid)  => Some(historicContentInScalaXML(commitid).get.content)
+      }
+   }
+
+   def plainTextXMLfragment2ScalaXMLinLiftChildren(plain:String):Elem =
    {  val contentWrapped = "<lift:children>" + plain + "</lift:children>"
       println("   contentWrapped:String = " + contentWrapped)
       val xml = XML.loadString( contentWrapped )
@@ -113,7 +135,7 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       out.close()
    }
    
-   def currentVersionId:VersionId
+   def currentVersionId:VersionId =
    {  // TODO
       "not implemented yet"
    }
@@ -138,7 +160,13 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       println("   modified files " + status.getModified() )
       println("   changed files " + status.getChanged() )
       println("   untracked files " + status.getUntracked() )
-      jgit.commit().setAuthor(username).setCommitter(username).setMessage(commitMsg).call()
+      val revcom:RevCommit = jgit.commit().setAuthor(username).setCommitter(username).setMessage(commitMsg).call()
+
+      // Determine whether this version will become the new release
+      if(  getHistory.length - commitIdsReleases.length == 2 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is two steps ahead of the latest release commit it will become the newest release.
+      {  println("  new commit (with id " + revcom.name + ") is the new release!")
+         commitIdsReleases ::= revcom.name
+      }
    }
 
    def restore(commitId:RevCommit, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
@@ -174,7 +202,7 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       val rw = new RevWalk(jgitRepo)
       val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
       val hisCon = BlobUtils.getContent(jgitRepo, revcom, htmlFileName)
-      val hisConXML = plaintTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
+      val hisConXML = plainTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
       Some(HisCon(hisConXML, revcom.getCommitTime().toLong * 1000 ))
    }
    
@@ -292,12 +320,12 @@ package scoring
 /* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
 */
 object ConstiScores
-{  def firstN(c:Constitution, N: Int, sps:ScorePerSession:) =
-   {  
+{  def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
+   {  //TODO
    }
 
-   def inversePlayingTimeIfCorrect(c:Constitution, p:Player, s:Session) =
-   {  
+   def inversePlayingTimeIfCorrect(c:Constitution, p:Player/* TODO , s:Session */) =
+   {  //TODO
    }
 
 /* &y2012.08.15.11:17:14& Elegant way, but perhaps too complicated (= inefficient in execution) for the problem
@@ -310,9 +338,9 @@ object ConstiScores
 */
 }
 
-abstract class ScorePerSession extends ( TODOin => TODOout )
+abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
 {  // unspecified method defining types of apply
-   def apply(in:TODOin):TODOout
+   /* TODO def apply(in:TODOin):TODOout */
 }
 
 abstract class ConstiSelectionProcedure
