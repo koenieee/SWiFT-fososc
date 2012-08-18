@@ -23,6 +23,7 @@ class SelectConstitution
                               consti match
                               { case Some(constLoc)   => {  println("   Constitution id:" + idLoc )
                                                             sesCoordLR.firstChosenConstitution = consti
+                                                            sesCoordLR.timeFirstChosenConstitution = Some(System.currentTimeMillis)
                                                             S.redirectTo("studyConstitution")
                                                          }
                                 case None             => { S.redirectTo("notfound") }

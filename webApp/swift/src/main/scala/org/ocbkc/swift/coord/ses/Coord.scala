@@ -8,6 +8,7 @@ import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
+import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.OCBKC._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
@@ -40,6 +41,10 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    var isFirstTimePlayer:Boolean = true // <&y2012.08.04.19:43:17& set this to true after first session has been completed (or other conditions?)>
    val constiSelectionProcedure = OneToStartWith // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
    var firstChosenConstitution:Option[Constitution] = None // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
+   var timeFirstChosenConstitution:Option[Long] = None
+
+   // for coming increment the following will not yet be used.
+   var studyHistory:StudyHistory = new StudyHistory
 
    // END
 
@@ -68,7 +73,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          case _         => { throw new RuntimeException("  No user id found.") }
       }
 
-      if( prefix.toInt != 1 ) // <&y2012.08.13.23:44:03& TODO remove this if, as soon as persistency of constiSelectionProcedure is realised. Now only intended for testing purposes: each time user 1 logs in again, his game-session history is erased so that the constiSelectionProcedure can be tested.>
+      if( prefix.toInt != 1 || !CLEARSESHISPLAYER1AFTEREACHLOGIN ) // <&y2012.08.13.23:44:03& TODO remove this if, as soon as persistency of constiSelectionProcedure is realised. Now only intended for testing purposes: each time user 1 logs in again, his game-session history is erased so that the constiSelectionProcedure can be tested.>
       {
       // cc stands for CoreContent
       // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>

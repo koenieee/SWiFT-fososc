@@ -191,7 +191,7 @@ case class CoreContent( var timingInfo: TimingInfo,
    var parseWarningMsgTxtCTLplayer:String = ""
 }
 
-// <&y2012.01.08.18:25:04& or this object belong to the Coord?>
+// <&y2012.01.08.18:25:04& or should this object belong to Coord?>
 class SessionHistory
 {  var coreContents:List[CoreContent] = Nil
    def correctCcs = coreContents.filter( cc => cc.answerPlayerCorrect )
