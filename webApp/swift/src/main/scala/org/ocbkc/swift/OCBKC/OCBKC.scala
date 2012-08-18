@@ -286,23 +286,6 @@ class ConstitutionStudyHistory(val consti:Constitution)
 // TODO implement for next increment
 case class TimeInterval(val startTime:Long, val endTime:Long)
 
-// ConstiVerReleaPro = Constitutional Version Release Protocol
-abstract class ConstiVeReleaPro
-abstract class ConstiTrait4ConstiVeReleaProTemplate
-{  def getReleasedVersion
-}
-
-// FixSamB4ReNeVer = FixedSampleSizeB4releasingNextVersion = fixed sample size before releasing next version
-case class FixSamB4ReNeVer extends ConstiVeReleaPro
-
-// Support for FixSamB4ReNeVer
-
-trait ConstiTrait4FixSamB4ReNeVer extends ConstiTraits4ConstiVeReleaPro
-{  def getReleasedVersion =
-   {  plainContent
-   }
-}
-
 package scoring
 {
 
