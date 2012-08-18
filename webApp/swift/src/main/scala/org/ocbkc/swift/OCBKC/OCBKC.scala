@@ -42,6 +42,11 @@ import ConstitutionTypes._
    <? &y2012.06.03.14:21:23& previous>
    
 */
+
+type alias VersionId == String // which should be a git-commit hash.
+
+case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
+
 case class Constitution(val id:ConstiId, // unique identifier for this constitution
                         val creationTime:Long,
                         val creatorUserID:Int,
@@ -108,6 +113,11 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       out.close()
    }
    
+   def currentVersionId:VersionId
+   {  // TODO
+      "not implemented yet"
+   }
+
    // Adds and commits constitutionText using jgit
    def publish(constitutionText:String, commitMsg:String, userId:String) =
    {  println("Constitution.publish called")
@@ -251,10 +261,82 @@ object Constitution
    }
 }
 
+class StudyHistory
+{  private var constitutionStudyHistories:List[ConstitutionStudyHistory] = Nil
+
+   /* OUT: false: not successful (interval overlapping another one)
+   */
+   def addInterval(consti:Constitution, i:TimeInterval):Boolean =
+   {  // TODO next milestone not now
+      true
+   }
+
+   def getIntervals(consti:Constitution):List[TimeInterval] =
+   {  // TODO next milestone not now
+
+      Nil
+   }
+}
+
+// TODO implement for next increment
+class ConstitutionStudyHistory(val consti:Constitution)
+{  var studyTimeIntervals:List[TimeInterval] = Nil
+}
+
+// TODO implement for next increment
+case class TimeInterval(val startTime:Long, val endTime:Long)
+
+// ConstiVerReleaPro = Constitutional Version Release Protocol
+abstract class ConstiVeReleaPro
+abstract class ConstiTrait4ConstiVeReleaProTemplate
+{  def getReleasedVersion
+}
+
+// FixSamB4ReNeVer = FixedSampleSizeB4releasingNextVersion = fixed sample size before releasing next version
+case class FixSamB4ReNeVer extends ConstiVeReleaPro
+
+// Support for FixSamB4ReNeVer
+
+trait ConstiTrait4FixSamB4ReNeVer extends ConstiTraits4ConstiVeReleaPro
+{  def getReleasedVersion =
+   {  plainContent
+   }
+}
+
+package scoring
+{
+
+/* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
+*/
+object ConstiScores
+{  def firstN(c:Constitution, N: Int, sps:ScorePerSession:) =
+   {  
+   }
+
+   def inversePlayingTimeIfCorrect(c:Constitution, p:Player, s:Session) =
+   {  
+   }
+
+/* &y2012.08.15.11:17:14& Elegant way, but perhaps too complicated (= inefficient in execution) for the problem
+   val inversePlayingTimeIfCorrect =
+      new ScorePerSession
+      {  def apply(c:Constitution, ) =
+         {  
+         }
+      }
+*/
+}
+
+abstract class ScorePerSession extends ( TODOin => TODOout )
+{  // unspecified method defining types of apply
+   def apply(in:TODOin):TODOout
+}
+
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSesionsB4access2allConstis = 2
 }
 
+}
 }
