@@ -44,7 +44,7 @@ class History
             "author"             -> Text
                                     (  Player.find(playerId) match
                                        {  case Full(player)  => player.swiftDisplayName
-                                          case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, pease report it)" }
+                                          case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, please report it)" }
                                        }
                                     )
             )

@@ -18,7 +18,9 @@ import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 import org.gitective.core.BlobUtils
-import org.xml.sax.SAXParseException 
+import org.xml.sax.SAXParseException
+import GlobalConstant.jgitRepo
+
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
 
@@ -44,7 +46,6 @@ import ConstitutionTypes._
    
 */
 
-
 /* Perhaps for future work:
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
@@ -60,12 +61,22 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
 {  val htmlFileName = "constitution" + id + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
+   def firstReleaseExists = ( commitIdsReleases != Nil )
+
    def lastReleaseCommitId:Option[String] =
    {  commitIdsReleases match
       {  case Nil          => None
          case newest::tail => Some(newest)
       }
    }
+
+   def lastReleaseVersionInfo:Option[ConstiVersionInfo] =
+   {  lastReleaseCommitId match
+      {  case Some(id)     => getConstiVersionInfo(id)
+         case None         => None
+      }
+   }
+
    // create html file which holds the constitution
    save(Constitution.templateNewConstitution(id))
 
@@ -148,8 +159,8 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       val fullPath2Const = htmlFileName
 
       // now add and commit to git repo
-      val username = gitUserId(userId) // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
-      println("   jgit author id = " + username.toString)
+      val gUserId = gitUserId(userId) // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
+      println("   jgit author id = " + gUserId.toString)
       println("   now adding and committing: " + fullPath2Const )
       //jgit.status
       val addCommand = jgit.add()
@@ -160,11 +171,13 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       println("   modified files " + status.getModified() )
       println("   changed files " + status.getChanged() )
       println("   untracked files " + status.getUntracked() )
-      val revcom:RevCommit = jgit.commit().setAuthor(username).setCommitter(username).setMessage(commitMsg).call()
-
       // Determine whether this version will become the new release
-      if(  getHistory.length - commitIdsReleases.length == 2 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is two steps ahead of the latest release commit it will become the newest release.
-      {  println("  new commit (with id " + revcom.name + ") is the new release!")
+      val isRelease:Boolean = ( getHistory.length - commitIdsReleases.length > 1 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
+         
+      val revcom:RevCommit = jgit.commit().setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call()
+      println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
+      if( isRelease )
+      {  jgit.tag.setName("release").setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
          commitIdsReleases ::= revcom.name
       }
    }
@@ -193,13 +206,26 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
       out.println(constSer)
       out.close()
    }
-
    
+   case class ConstiVersionInfo(val commitId:String, val creationDatetimeMillis:Long, val publisher:Player, val publishDescription:String)   
+   // <&y2012.08.19.13:56:24& refactor rest of code to use this method instead of calling jgit on the spot (as long as that is not in conflict with efficiency issues)>
+   def getConstiVersionInfo(commitId:String):Option[ConstiVersionInfo] =
+   {  val rw = new RevWalk(jgitRepo)
+      val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
+      // TODO: if revcom doesn't exist None, for this catch the right exceptions...
+      val playerId = revcom.getAuthorIdent.getName
+      val publisher:Player = Player.find(playerId) match
+      {  case Full(player)  => player
+         case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found."; println("   " + errmsg); throw new RuntimeException(errmsg) }
+      }
+
+      Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
+   }
+
    case class HisCon(val content:Elem, val creationDatetimeMillis:Long)
 
    def historicContentInScalaXML(commitId:String):Option[HisCon] =
-   {  import GlobalConstant.jgitRepo
-      val rw = new RevWalk(jgitRepo)
+   {  val rw = new RevWalk(jgitRepo)
       val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
       val hisCon = BlobUtils.getContent(jgitRepo, revcom, htmlFileName)
       val hisConXML = plainTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
@@ -223,7 +249,9 @@ object Constitution
    */
 
    def deserialize =
-   /* <&y2012.06.04.17:03:35& problem here: exception occurs. I think it has something to do with the fact that the serialized Constitution object doesn't contain the last value (predecessorId), don't know why...> */
+   /* <&y2012.06.04.17:03:35& problem here: exception occurs. I think it has something to do with the fact that the serialized Constitution object doesn't contain the last value (predecessorId), don't know why...> 
+   TODO <&y2012.08.22.15:46:35& also read in release tags into commitIdsReleases>
+   */
 
    {  println("Constitution.deserialize called")
       val constObjDir = new File(GlobalConstant.CONSTITUTIONOBJECTDIR)

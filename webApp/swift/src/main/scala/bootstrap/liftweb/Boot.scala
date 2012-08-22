@@ -69,7 +69,8 @@ class Boot {
 
    // returns also false when no player is logged in.
    def playerChoseFirstConstitution:Option[Boolean] =
-   {  if(sesCoord.set_?)
+   {  println("Boot.playerChoseFirstConstitution called")
+      val r = if(sesCoord.set_?)
       {  val sesCoordLR = sesCoord.is
          Player.currentUser match
          {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ Some(!sesCoord.firstChosenConstitution.isEmpty)
@@ -79,16 +80,22 @@ class Boot {
          }
       }
       else None
+
+      println("   return value = " + r)
+      r
    }
 
   // returns -1 when no player is logged in
    def playedSessions:Long = 
-    { if(sesCoord.set_?)
+    { val r = if(sesCoord.set_?)
       {  val sesCoordLR = sesCoord.is
          sesCoordLR.sesHis.totalNumber
       }
       else
          -1
+
+      println("   playedSessions = " + r)
+      r
     }
 
     def playerIsLoggedIn:Boolean = 
@@ -100,7 +107,7 @@ class Boot {
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playerIsLoggedIn && (playedSessions >= OneToStartWith.minSesionsB4access2allConstis) ), () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => ( playerIsLoggedIn && ( playerChoseFirstConstitution match { case Some(b) => b; case None => { println("  WARNING: None returned here, while it should return Some, assuming Some(false)."); false } } ) && ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) ), () => RedirectResponse("/index")))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => { val r = ( playerIsLoggedIn && ( playerChoseFirstConstitution match { case Some(b) => b; case None => { println("  WARNING: None returned here, while it should return Some, assuming Some(false)."); false } } ) && ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) ); println(" Loc(Study Constitution) access = " + r); r }, () => RedirectResponse("/index")))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))

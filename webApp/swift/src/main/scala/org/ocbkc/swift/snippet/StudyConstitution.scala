@@ -31,6 +31,11 @@ class StudyConstitution
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")
       }
 
+   if( !consti.firstReleaseExists )
+   {  val errmsg = " BUG: there doesn't exist a release of this constitution"
+      println(errmsg)
+      throw new RuntimeException(errmsg)
+   }
 /* <&y2012.08.11.12:36:47& framework for future processing, the next is currenlty not used.>
 
          S.param("id") match
@@ -56,10 +61,11 @@ class StudyConstitution
       val emptyNode = <div></div> // <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
 
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
-
+      val releaseInfo = consti.lastReleaseVersionInfo.get
       val answer   = bind( "top", ns, 
                            "constitutionId"     -> Text(consti.id.toString),
-                           "constitutionText"   -> consti.contentLastReleaseInScalaXML,
+                           "versionDateTime"    -> Text(df.format(releaseInfo.creationDatetimeMillis)),
+                           "constitutionText"   -> consti.contentLastReleaseInScalaXML.get,
                            "creationDate"       -> Text(df.format(consti.creationTime).toString),
                            "creator"            -> Text(
                                        Player.find(consti.creatorUserID) match
