@@ -46,9 +46,9 @@ object GlobalConstant
 }
 
 object TestSettings
-{  val AUTOLOGIN                        = true
+{  val AUTOLOGIN                        = false
    val AUTOTRANSLATION                  = false
-   val CLEARSESHISPLAYER1AFTEREACHLOGIN = false
+   val CLEARSESHISPLAYER1AFTEREACHLOGIN = true
    println("ERROR: set CLEARSESHISPLAYER1AFTEREACHLOGIN back to true (and AUTOLOGIN to false)!")
 }
 
