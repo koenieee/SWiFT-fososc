@@ -54,7 +54,7 @@ class Restore
      
       val answer   = bind( "top", ns, 
                            "publicationDate"    -> Text(commit.getCommitTime.toString),
-                           "constId"            -> Text(const.id.toString),
+                           "constId"            -> Text(const.constiId.toString),
                            "returnMsg"          -> Text("TODO")
                          )
       answer

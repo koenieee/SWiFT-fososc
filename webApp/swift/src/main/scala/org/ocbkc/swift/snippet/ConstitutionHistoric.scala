@@ -45,7 +45,7 @@ class ConstitutionHistoric
 
 /*      
    def processSomeBtn() =
-   {  S.redirectTo("history?id=" + const.get.id)
+   {  S.redirectTo("history?id=" + const.get.constiId)
    }
 */
    def render(ns: NodeSeq): NodeSeq =
@@ -57,7 +57,7 @@ class ConstitutionHistoric
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
       val answer   = bind( "top", ns, 
-                           "title"              -> Text("Constitution " + const.id.toString),
+                           "title"              -> Text("Constitution " + const.constiId.toString),
                            "revisionDatetime"   -> Text(df.format(historicConst.creationDatetimeMillis).toString),
                            "constitutionText"   -> historicConst.content,
                            "creationDate"       -> Text(df.format(const.creationTime).toString),

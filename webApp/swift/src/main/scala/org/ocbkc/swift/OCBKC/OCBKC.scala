@@ -20,10 +20,9 @@ import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 import org.gitective.core.BlobUtils
 import org.xml.sax.SAXParseException
 import GlobalConstant.jgitRepo
-
+import net.liftweb.mapper._
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
-
 
 */
 object TestSerialization
@@ -50,15 +49,16 @@ import ConstitutionTypes._
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
-case class Constitution(val id:ConstiId, // unique identifier for this constitution
+case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
                         val creationTime:Long,
                         val creatorUserID:Int,
                         var averageScore:Int, // redundant, for efficiency
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
                         var followers:List[Int] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
-                       )
-{  val htmlFileName = "constitution" + id + ".html"
+                       ) extends LongKeyedMapper[Constitution] with IdPK
+{  def getSingleton = ConstitutionMetaMapperObj
+   val htmlFileName = "constitution" + id + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
    def firstReleaseExists = ( commitIdsReleases != Nil )
@@ -78,7 +78,7 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    }
 
    // create html file which holds the constitution
-   save(Constitution.templateNewConstitution(id))
+   save(Constitution.templateNewConstitution(constiId))
 
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
    def plainContent:String =
@@ -238,8 +238,12 @@ case class Constitution(val id:ConstiId, // unique identifier for this constitut
    }
 }
 
+object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil) with LongKeyedMetaMapper[Constitution]
+{
+}
+
 object Constitution
-{  var constis:List[Constitution] = Nil
+{  var constis:List[Constitution] = Nil // <&y2012.08.27.20:16:28& TODO: remove, this is now arranged by the Mapper framework>
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
    /*
    def create():Constitution =
@@ -270,7 +274,7 @@ object Constitution
          }
          
          constitutionFiles map readConst
-         constis = constis.sortWith((c1,c2) => c1.id < c2.id )
+         constis = constis.sortWith((c1,c2) => c1.constiId < c2.constiId )
          val highestIdFile       = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
          val in:BufferedReader   = new BufferedReader(new FileReader(highestIdFile))
          var inStr:String        = in.readLine()
@@ -301,15 +305,17 @@ object Constitution
 <p>...</p>
 """
    def create(creatorUserID:Int):Constitution = 
-   {  highestId += 1
+   {  println("Constitutions(Singleton Object).create called")
+      println("   creatorUserID = " + creatorUserID)
+      highestId += 1
       val now = currentTimeMillis().toLong
       val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
       c
    }
 
-   def getById(id:Int):Option[Constitution] =
-   {  constis.find( _.id == id )
+   def getById(constiId:Int):Option[Constitution] =
+   {  constis.find( _.constiId == constiId )
    }
 
    def remove(c:Constitution) = 

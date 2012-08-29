@@ -21,11 +21,11 @@ class StudyConstitution
    val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    // <&y2012.08.11.12:10:18& better get right constitution from Player info, not from URL id. Or no, that is difficult when someone has access to more than one constitution to study. Just do a check here whether he or she may see the constitution here!>
 
-      
+   val player = sesCoordLR.currentPlayer
    val consti:Constitution = 
       if( sesCoordLR.constiSelectionProcedure == OneToStartWith )
       {  println("   constiSelectionProcedure == OneToStartWith")
-         sesCoordLR.firstChosenConstitution.get // should always be there, because if no constitution has been chosen this page should be hidden.
+         player.firstChosenConstitution.obj.open_! // should always be there, because if no constitution has been chosen this page should be hidden.
       }
       else
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")
@@ -53,7 +53,7 @@ class StudyConstitution
 
 /*      
    def processSomeBtn() =
-   {  S.redirectTo("history?id=" + consti.get.id)
+   {  S.redirectTo("history?id=" + consti.get.constiId)
    }
 */
    def render(ns: NodeSeq): NodeSeq =
@@ -63,7 +63,7 @@ class StudyConstitution
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       val releaseInfo = consti.lastReleaseVersionInfo.get
       val answer   = bind( "top", ns, 
-                           "constitutionId"     -> Text(consti.id.toString),
+                           "constitutionId"     -> Text(consti.constiId.toString),
                            "versionDateTime"    -> Text(df.format(releaseInfo.creationDatetimeMillis)),
                            "constitutionText"   -> consti.contentLastReleaseInScalaXML.get,
                            "creationDate"       -> Text(df.format(consti.creationTime).toString),

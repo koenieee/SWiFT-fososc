@@ -15,9 +15,7 @@ import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
 
 class PlayerStats
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
-	
-
+{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    def optionToUI(opt:Option[Any]):String =
    {  opt match
       {  case None         => "not applicable"
@@ -26,7 +24,16 @@ class PlayerStats
    }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  bind( "top", ns, 
+   {  // begin test (remove when done)
+      println("Playerstats.render called")
+      val player = sesCoordLR.currentPlayer
+      var rts = player.ridiculousTestString.is
+      println("Current value player.ridiculousTestString = " + rts)
+      player.ridiculousTestString("Last action was accessing statistics").save
+      rts = player.ridiculousTestString.is
+      println("Updated value player.ridiculousTestString = " + rts)
+      // end test
+      bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
             "numberCorrect"     -> Text("" + sesCoord.sesHis.numberCorrect),

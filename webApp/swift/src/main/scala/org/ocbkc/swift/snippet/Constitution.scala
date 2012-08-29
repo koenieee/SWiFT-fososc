@@ -52,7 +52,7 @@ class ConstitutionSnippet
       }
 
       def processHistoryBtn() =
-      {  S.redirectTo("history?id=" + const.get.id)
+      {  S.redirectTo("history?id=" + const.get.constiId)
       }
 
       def updateConstitutionContent(const:Constitution) =
@@ -82,7 +82,7 @@ class ConstitutionSnippet
          if( const.isDefined )
          {  val constLoc = const.get
             updateConstitutionContent(constLoc)
-            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true")
+            S.redirectTo("constitution?id=" + constLoc.constiId + "&edit=true")
          } else // <&y2012.06.23.17:46:32& perhaps refactor, this cannot happen, because there is no save button when there is no constitution.>
          {  S.redirectTo("constitutions")
          }
@@ -98,7 +98,7 @@ class ConstitutionSnippet
             if( editmode )
             {  updateConstitutionContent(constLoc)
             }
-            S.redirectTo("constitution?id=" + constLoc.id + { if( editmode ) "&edit=true" else "" })
+            S.redirectTo("constitution?id=" + constLoc.constiId + { if( editmode ) "&edit=true" else "" })
          } else // <&y2012.06.23.17:46:32& perhaps refactor, this cannot happen, because there is no save button when there is no constitution.>
          {  S.redirectTo("constitutions")
          }
@@ -112,7 +112,7 @@ class ConstitutionSnippet
              S.redirectTo("constitutions")
           }
           else
-             S.redirectTo("constitution?id=" + const.id + "&edit=false")
+             S.redirectTo("constitution?id=" + const.constiId + "&edit=false")
       }
 
       def processDescriptionTf(descriptionTFcontentLoc:String) =
@@ -146,7 +146,7 @@ class ConstitutionSnippet
                   case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception) :: errors }
                }
             }
-            S.redirectTo("constitution?id=" + constLoc.id + "&edit=true", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
+            S.redirectTo("constitution?id=" + constLoc.constiId + "&edit=true", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
          }
          else
          {  S.redirectTo("constitutions")
@@ -186,10 +186,10 @@ class ConstitutionSnippet
                                     {  case Full(player)  => player
                                        case _             => throw new RuntimeException("Player with id " + constLoc.creatorUserID + " not found.")
                                     }                                 
-                                    (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.id) 
+                                    (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.constiId) 
                                  }
                                  case None        => 
-                                 { (true, "No constitution with this id exists.", 0, 0L, "Constitution not found") 
+                                 {  S.redirectTo("constitutionNotFound")//(true, "No constitution with this id exists.", 0, 0L, "Constitution not found")
                                  }
                               }
          case _           => S.redirectTo("constitutions") //(true, "Cannot retrieve constitution: incorrect parameters in URL: use /constitution?id=[some number here].", 0, 0L, "Constitution not found")
@@ -246,7 +246,7 @@ class ConstitutionSnippet
                                              else
                                                 bind( "top", chooseTemplate("top","view", ns), 
                                                    "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
-                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.id)))
+                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)))
 
                                         },
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
@@ -260,23 +260,23 @@ class ConstitutionSnippet
 
 object MailMessage
 {  def update2text(const:Constitution):String =
-"""Constitution """ + const.id + """ has been updated. If you want to review the changes please visit this link:
+"""Constitution """ + const.constiId + """ has been updated. If you want to review the changes please visit this link:
 
-""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
 
    def newfollower(const:Constitution) =
-"""Constitution """ + const.id + """ has a new follower. Visit this link to see all followers:
+"""Constitution """ + const.constiId + """ has a new follower. Visit this link to see all followers:
 
-""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
 
    def lostfollower(const:Constitution) =
-"""Constitution """ + const.id + """ lost a follower. Visit this link to see all followers:
+"""Constitution """ + const.constiId + """ lost a follower. Visit this link to see all followers:
 
-""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.id + """
+""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
 

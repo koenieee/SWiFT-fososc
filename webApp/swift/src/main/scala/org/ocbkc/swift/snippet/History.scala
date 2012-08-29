@@ -36,8 +36,8 @@ class History
          val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
          bind( "top", chooseTemplate("top", "row", ns),            
-            "view"               -> SHtml.link("constitutionhistoric?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("view")),
-            "restore"            -> SHtml.link("restore?constid=" + const.id + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
+            "view"               -> SHtml.link("constitutionhistoric?constid=" + const.constiId + "&commitid=" + revcom.name(), () => Unit, Text("view")),
+            "restore"            -> SHtml.link("restore?constid=" + const.constiId + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
             "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
             "publishDescription" -> Text(revcom.getFullMessage()),
             "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
@@ -56,7 +56,7 @@ class History
    {  println("processDiffButton called")
       if( checkedCommits.size != 2)
       {  println("   checkedCommits.size != 2, so cannot do diff.")
-         S.redirectTo("history?id=" + const.id) // <&y2012.07.13.19:22:38& add error param here>
+         S.redirectTo("history?id=" + const.constiId) // <&y2012.07.13.19:22:38& add error param here>
       }
 
       checkedCommits match
@@ -79,7 +79,7 @@ class History
    def render(ns: NodeSeq): NodeSeq =
    {  
       bind( "top", ns, 
-            "constname"    -> Text(const.id.toString),
+            "constname"    -> Text(const.constiId.toString),
             "diffBt"       -> SHtml.button("Show difference", processDiffButton),
             "history"      -> historyTableRows(ns) 
           )
