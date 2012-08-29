@@ -49,7 +49,7 @@ object TestSettings
 {  val AUTOLOGIN                        = false
    val AUTOTRANSLATION                  = false
    val CLEARSESHISPLAYER1AFTEREACHLOGIN = true
-   println("ERROR: set CLEARSESHISPLAYER1AFTEREACHLOGIN back to true (and AUTOLOGIN to false)!")
+   if( !CLEARSESHISPLAYER1AFTEREACHLOGIN ) println("ERROR: set CLEARSESHISPLAYER1AFTEREACHLOGIN back to true (and AUTOLOGIN to false)!")
 }
 
 }
