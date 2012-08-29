@@ -68,26 +68,23 @@ class Boot {
    // part of ...
 
    // returns also false when no player is logged in.
-   def playerChoseFirstConstitution:Option[Boolean] =
-   {  println("Boot.playerChoseFirstConstitution called")
-      val r = if(sesCoord.set_?)
-      {  val sesCoordLR = sesCoord.is
-         Player.currentUser match
-         {  case Full(player) => {  if( sesCoord.constiSelectionProcedure == OneToStartWith) /* TODO check whether number of session played < N, then make true, otherwise false */ Some(!sesCoord.firstChosenConstitution.isEmpty)
-                                    else Some(false)
-                                 }
-            case _            => Some(false)
-         }
-      }
-      else None
-
+   // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
+   def playerLoggedInAndChoseFirstConstitution:Boolean =
+   {  println("Boot.playerLoggedInAndChoseFirstConstitution called")
+      val r =  playerIsLoggedIn &&
+               {  Player.currentUser match
+                  {  case Full(player) => player.firstChosenConstitution.defined_?
+                     case _            => throw new RuntimeException("   no player found.") // This cannot happen.
+                  }
+               }
       println("   return value = " + r)
       r
    }
 
   // returns -1 when no player is logged in
+  // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
    def playedSessions:Long = 
-    { val r = if(sesCoord.set_?)
+    { val r = if(playerIsLoggedIn)
       {  val sesCoordLR = sesCoord.is
          sesCoordLR.sesHis.totalNumber
       }
@@ -99,15 +96,54 @@ class Boot {
     }
 
     def playerIsLoggedIn:Boolean = 
-    { Player.currentUser.isDefined
-    }
+    { val r = Player.currentUser.isDefined
+      if(r) // test, remove
+      {  Player.currentUser match
+         {  case Full(player) => {  val rtb = player.ridiculousTestBoolean.is
+                                    val rts = player.ridiculousTestString.is
+                                    println("player.ridiculousTestBoolean = " + rtb)
+                                    player.ridiculousTestBoolean(false) 
+                                 }
+            case _ => Unit
+         }
+      }
 
+      r
+    }
 
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
-      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", If(() => ( playerIsLoggedIn && (playedSessions >= OneToStartWith.minSesionsB4access2allConstis) ), () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution", If(() => { val r = ( playerIsLoggedIn && ( playerChoseFirstConstitution match { case Some(b) => b; case None => { println("  WARNING: None returned here, while it should return Some, assuming Some(false)."); false } } ) && ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) ); println(" Loc(Study Constitution) access = " + r); r }, () => RedirectResponse("/index")))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
+      Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", 
+         If(() =>
+         {  println("Loc(Constitutions) called")
+            if(playerIsLoggedIn)
+            {  val sesCoordLR = sesCoord.is
+            
+               sesCoordLR.constiSelectionProcedure match 
+               {  case OneToStartWith =>
+                  {  playedSessions >= OneToStartWith.minSesionsB4access2allConstis
+                  }
+                  case NoProc => true
+                  case proc   =>
+                  {  val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."
+                     println("  " + msg)
+                     throw new RuntimeException(msg)
+                  }
+               }
+            }
+            else
+               false            
+         },
+         () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
+         If(() => {  val r = ( playerLoggedInAndChoseFirstConstitution &&
+                        ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) )
+                     println(" Loc(Study Constitution) access = " + r)
+                     r 
+                  },
+            () => RedirectResponse("/index")
+           ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
@@ -166,11 +202,17 @@ class Boot {
 
    def dispatch4ConstiTrainingDecision = 
    {  println("dispatch4ConstiTrainingDecision called")
-      val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
+      val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
+      // begin test (remove)
       val player = sesCoordLR.currentPlayer
+      val rts = player.ridiculousTestString.is
+      println("Current value player.ridiculousTestString = " + rts)
+      player.ridiculousTestString("Last action was pressing Play").save
+      // end test
+
       sesCoordLR.constiSelectionProcedure match
       {  case OneToStartWith  =>
-            if( sesCoordLR.firstChosenConstitution.isEmpty )
+            if( !player.firstChosenConstitution.defined_? )
             {  println("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
                S.redirectTo("selectConstitution")
             }
