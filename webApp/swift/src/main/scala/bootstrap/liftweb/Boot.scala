@@ -220,6 +220,7 @@ class Boot {
             {  println("   player has already selected a constitution in the past, so redirect to play the session!")
                S.redirectTo("startSession")
             }
+         case NoProc          => S.redirectTo("startSession")
          case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; println("  " + msg); throw new RuntimeException(msg) }
       }
    }
