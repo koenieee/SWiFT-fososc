@@ -1,0 +1,6 @@
+echo "Sure you want to erase all persistency info?"
+rm -ri persist/constobjs/*
+rm -i lift_proto.db.*
+rm -ri ./src/main/webapp/constitutions/*
+rm -ri ./src/main/webapp/constitutions/.*
+rm -ri users/*
