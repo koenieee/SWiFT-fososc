@@ -58,7 +58,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         var followers:List[Int] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
                        ) extends LongKeyedMapper[Constitution] with IdPK
 {  def getSingleton = ConstitutionMetaMapperObj
-   val htmlFileName = "constitution" + id + ".html"
+   val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
    def firstReleaseExists = ( commitIdsReleases != Nil )
@@ -72,7 +72,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
 
    def lastReleaseVersionInfo:Option[ConstiVersionInfo] =
    {  lastReleaseCommitId match
-      {  case Some(id)     => getConstiVersionInfo(id)
+      {  case Some(commitid)     => getConstiVersionInfo(commitid)
          case None         => None
       }
    }
@@ -198,7 +198,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       err.println("  Constitution-object serialised to: " + constSer)
       // write constitution-object to file with unique name
 
-      var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/Constitution" + id)
+      var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/Constitution" + constiId)
       err.println("   creating file: " + outFile.getAbsolutePath)
       // outFile.getParentFile().mkdirs() these should already exist
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
