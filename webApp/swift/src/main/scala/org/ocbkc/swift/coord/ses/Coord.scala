@@ -39,7 +39,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
    // BEGIN temporary solution for constiSelectionProcedure
    var isFirstTimePlayer:Boolean = true // <&y2012.08.04.19:43:17& set this to true after first session has been completed (or other conditions?)>
-   val constiSelectionProcedure:ConstiSelectionProcedure = NoProc // OneToStartWith // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
+   val constiSelectionProcedure:ConstiSelectionProcedure = NoProc //OneToStartWith // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
    var timeFirstChosenConstitution:Option[Long] = None
 
    // for coming increment the following will not yet be used.
