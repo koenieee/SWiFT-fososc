@@ -230,6 +230,11 @@ class Boot {
       case List("constiTrainingDecision") =>
          Left(() => Full( dispatch4ConstiTrainingDecision ))
    }
+   // check whether admin account exists, if not: create it
+   Player.find(By(Player.name, "admin") match
+   {  case Full(_)      => Unit // do nothing, player exists.
+      case None         => Player.create.email("cg@xs4all.nl").password("rapunzlia") // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+   }
 
     println("Boot.boot finished")
   }
