@@ -1,6 +1,11 @@
-echo "Sure you want to erase all persistency info?"
-rm -ri persist/constobjs/*
-rm -i lift_proto.db.*
-rm -ri ./src/main/webapp/constitutions/*
-rm -ri ./src/main/webapp/constitutions/.*
-rm -ri users/*
+read -p "Sure you want to erase all persistency info? [capital Y] " k
+
+if [ "$k" == "Y" ]; then
+   rm -r persist/constobjs/*
+   rm lift_proto.db.*
+   rm -r src/main/webapp/constitutions/*
+   rm -r src/main/webapp/constitutions/.*
+   rm -r users/*
+else
+   echo "Erasing skipped, you didn't press [Y]... Sorry my friend."
+fi;
