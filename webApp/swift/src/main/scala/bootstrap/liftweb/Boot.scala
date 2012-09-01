@@ -7,7 +7,7 @@ import _root_.net.liftweb.http.provider._
 import _root_.net.liftweb.sitemap._
 import _root_.net.liftweb.sitemap.Loc._
 import Helpers._
-import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor}
+import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor, By}
 import _root_.java.sql.{Connection, DriverManager}
 import System._
 import _root_.org.ocbkc.swift.model._
@@ -230,12 +230,20 @@ class Boot {
       case List("constiTrainingDecision") =>
          Left(() => Full( dispatch4ConstiTrainingDecision ))
    }
-   // check whether admin account exists, if not: create it
-   Player.find(By(Player.name, "admin") match
-   {  case Full(_)      => Unit // do nothing, player exists.
-      case None         => Player.create.email("cg@xs4all.nl").password("rapunzlia") // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+   
+   println("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
+   Player.find(By(Player.firstName, "Admin")) match
+   {  case Full(player) => {  println("   Admin account already exists, my beloved friend.")
+                              println("   password = " + player.password.is )
+                              Unit 
+                           } // do nothing, player exists.
+      case _            => {  println("   Doesn't exist: creating it...")
+                              val p = Player.create.firstName("Admin").email("cg@xs4all.nl").password("asdfghjkl").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              p.save
+                              // println("   password = " + p.password.is )
+                           }
    }
-
+   
     println("Boot.boot finished")
   }
 
