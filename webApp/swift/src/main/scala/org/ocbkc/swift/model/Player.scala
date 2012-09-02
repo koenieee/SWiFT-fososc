@@ -20,12 +20,16 @@ object Player extends Player with MetaMegaProtoUser[Player] {
 
    // comment this line out to require email validations
    override def skipEmailValidation = true
-/*
+
    override def create:Player =
    {  println("   Player.create called") 
-      super.create.ridiculousTestBoolean(true).ridiculousTestString("just created")
+      val p = super.create.constiSelectionProcedureInner(CSP2int(OneToStartWith))
+      p.save
+      p
    }
-*/
+
+   val int2CSP = Map(0->NoProc, 1->OneToStartWith)
+   val CSP2int = int2CSP.map(_.swap)
 }
 
 /**
@@ -44,7 +48,12 @@ class Player extends MegaProtoUser[Player] {
    {  firstName.get + " " + lastName.get + " (id: " + userIdAsString + ")"
    }
 
-WIW doens't work - isn't instance   object constiSelectionProcedure extends MappedLongForeignKey(this, ConstiSelectionProcedure) // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
+   // because I don't know how to make a MappedField referring to singleton objects, work with integers and a Map (see object Player) to connect them to the singleton objects, which is used by a wrapper method constiSelectionProcedure.
+   def constiSelectionProcedure =
+   {  Player.int2CSP(constiSelectionProcedureInner)
+   }
+
+   object constiSelectionProcedureInner extends MappedInt(this) // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
 
    object firstChosenConstitution extends MappedLongForeignKey(this, ConstitutionMetaMapperObj) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
 

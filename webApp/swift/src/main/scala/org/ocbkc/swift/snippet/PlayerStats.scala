@@ -24,15 +24,8 @@ class PlayerStats
    }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  // begin test (remove when done)
-      println("Playerstats.render called")
+   {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
-      var rts = player.ridiculousTestString.is
-      println("Current value player.ridiculousTestString = " + rts)
-      player.ridiculousTestString("Last action was accessing statistics").save
-      rts = player.ridiculousTestString.is
-      println("Updated value player.ridiculousTestString = " + rts)
-      // end test
       bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),

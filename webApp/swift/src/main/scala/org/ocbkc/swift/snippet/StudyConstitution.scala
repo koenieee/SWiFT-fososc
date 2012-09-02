@@ -23,7 +23,7 @@ class StudyConstitution
 
    val player = sesCoordLR.currentPlayer
    val consti:Constitution = 
-      if( sesCoordLR.constiSelectionProcedure == OneToStartWith )
+      if( player.constiSelectionProcedure == OneToStartWith )
       {  println("   constiSelectionProcedure == OneToStartWith")
          player.firstChosenConstitution.obj.open_! // should always be there, because if no constitution has been chosen this page should be hidden.
       }

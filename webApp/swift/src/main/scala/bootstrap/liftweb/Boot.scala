@@ -97,17 +97,6 @@ class Boot {
 
     def playerIsLoggedIn:Boolean = 
     { val r = Player.currentUser.isDefined
-      if(r) // test, remove
-      {  Player.currentUser match
-         {  case Full(player) => {  val rtb = player.ridiculousTestBoolean.is
-                                    val rts = player.ridiculousTestString.is
-                                    println("player.ridiculousTestBoolean = " + rtb)
-                                    player.ridiculousTestBoolean(false) 
-                                 }
-            case _ => Unit
-         }
-      }
-
       r
     }
 
@@ -119,8 +108,8 @@ class Boot {
          {  println("Loc(Constitutions) called")
             if(playerIsLoggedIn)
             {  val sesCoordLR = sesCoord.is
-            
-               sesCoordLR.constiSelectionProcedure match 
+               val player = sesCoordLR.currentPlayer
+               player.constiSelectionProcedure match 
                {  case OneToStartWith =>
                   {  playedSessions >= OneToStartWith.minSesionsB4access2allConstis
                   }
@@ -203,14 +192,9 @@ class Boot {
    def dispatch4ConstiTrainingDecision = 
    {  println("dispatch4ConstiTrainingDecision called")
       val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
-      // begin test (remove)
       val player = sesCoordLR.currentPlayer
-      val rts = player.ridiculousTestString.is
-      println("Current value player.ridiculousTestString = " + rts)
-      player.ridiculousTestString("Last action was pressing Play").save
-      // end test
 
-      sesCoordLR.constiSelectionProcedure match
+      player.constiSelectionProcedure match
       {  case OneToStartWith  =>
             if( !player.firstChosenConstitution.defined_? )
             {  println("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
