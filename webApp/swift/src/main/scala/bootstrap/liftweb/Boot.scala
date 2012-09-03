@@ -81,6 +81,15 @@ class Boot {
       r
    }
 
+   def playerIsAdmin(player:Player):Boolean =
+   {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
+   }
+
+   // assumes playerIsLoggedIn
+   def loggedInPlayerIsAdmin:Boolean =
+   {  playerIsAdmin(Player.currentUser.open_!)
+   }
+
   // returns -1 when no player is logged in
   // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
    def playedSessions:Long = 
@@ -109,17 +118,20 @@ class Boot {
             if(playerIsLoggedIn)
             {  val sesCoordLR = sesCoord.is
                val player = sesCoordLR.currentPlayer
-               player.constiSelectionProcedure match 
-               {  case OneToStartWith =>
-                  {  playedSessions >= OneToStartWith.minSesionsB4access2allConstis
+               playerIsAdmin(player) ||
+                  {  player.constiSelectionProcedure match
+                     {  case OneToStartWith =>
+                        {  playedSessions >= OneToStartWith.minSesionsB4access2allConstis
+                        }
+                        case NoProc => true
+                        case proc   =>
+                        {  val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."
+                           println("  " + msg)
+                           throw new RuntimeException(msg)
+                           false // will not be reached but for type correctness?
+                        }
+                     }
                   }
-                  case NoProc => true
-                  case proc   =>
-                  {  val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."
-                     println("  " + msg)
-                     throw new RuntimeException(msg)
-                  }
-               }
             }
             else
                false            
@@ -133,8 +145,8 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
       )
 
@@ -216,15 +228,13 @@ class Boot {
    }
    
    println("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
-   Player.find(By(Player.firstName, "Admin")) match
+   Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  println("   Admin account already exists, my beloved friend.")
-                              println("   password = " + player.password.is )
                               Unit 
                            } // do nothing, player exists.
       case _            => {  println("   Doesn't exist: creating it...")
-                              val p = Player.create.firstName("Admin").email("cg@xs4all.nl").password("asdfghjkl").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjkl").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                               p.save
-                              // println("   password = " + p.password.is )
                            }
    }
    

@@ -25,6 +25,7 @@ object GlobalConstant
    val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
+   val ADMINFIRSTNAME = "Admin"
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 
