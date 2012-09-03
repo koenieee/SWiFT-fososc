@@ -61,7 +61,12 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
-   def firstReleaseExists = ( commitIdsReleases != Nil )
+   def firstReleaseExists = 
+   {  println("firstReleaseExists")
+      val r = ( commitIdsReleases != Nil )
+      println("   returns: " + r)
+      r
+   }
 
    def lastReleaseCommitId:Option[String] =
    {  commitIdsReleases match
@@ -173,13 +178,13 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       println("   untracked files " + status.getUntracked() )
       // Determine whether this version will become the new release
          
-      val revcom:RevCommit = jgit.commit().setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call()
+      val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
 
       val isRelease:Boolean = ( getHistory.length - commitIdsReleases.length > 1 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
       if( isRelease )
       {  println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
-         jgit.tag.setName("release").setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
-
+         // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
+         jgit.tag.setName("release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
          commitIdsReleases ::= revcom.name
       }
    }
@@ -188,9 +193,9 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  val gitUi = gitUserId(liftUserId)
       val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
  
-      val commitMsg = "Restored version of " + dateFormat.format(commitId.getCommitTime().toLong*1000)
-      jgit.checkout().addPath(htmlFileName).setStartPoint(commitId).call()
-      jgit.commit().setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call()
+      val commitMsg = "Restored version of " + dateFormat.format(commitId.getCommitTime.toLong*1000)
+      jgit.checkout.addPath(htmlFileName).setStartPoint(commitId).call
+      jgit.commit.setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call
    }
 
    /* Only serializes the object - not the html text which is already stored... */
@@ -255,7 +260,7 @@ object Constitution
    */
 
    def deserialize =
-   /* <&y2012.06.04.17:03:35& problem here: exception occurs. I think it has something to do with the fact that the serialized Constitution object doesn't contain the last value (predecessorId), don't know why...> 
+   /*
    TODO <&y2012.08.22.15:46:35& also read in release tags into commitIdsReleases>
    */
 
