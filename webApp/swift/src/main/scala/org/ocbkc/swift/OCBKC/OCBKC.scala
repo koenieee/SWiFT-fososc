@@ -184,7 +184,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       if( isRelease )
       {  println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
          // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
-         jgit.tag.setName("release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+         jgit.tag.setName("consti" + constiId + "release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
          commitIdsReleases ::= revcom.name
       }
    }
@@ -278,6 +278,8 @@ object Constitution
             println("   serialized form: " + inStr)
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const
+            // reconstruct releases from git repo
+            qwer
          }
          
          constitutionFiles map readConst
