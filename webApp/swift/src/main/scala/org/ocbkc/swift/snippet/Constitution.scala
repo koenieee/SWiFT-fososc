@@ -47,8 +47,8 @@ class ConstitutionSnippet
 
    def render(ns: NodeSeq): NodeSeq =
    {  println("ConstitutionSnippet.render")
-      def processEditBtn(id:Int) =
-      {  S.redirectTo("constitution?id=" + id + "&edit=true")
+      def processEditBtn(constiId:Int) =
+      {  S.redirectTo("constitution?id=" + constiId + "&edit=true")
       }
 
       def processHistoryBtn() =
@@ -179,14 +179,14 @@ class ConstitutionSnippet
       var creator:Player = null
       val (errorRetrievingConstitution:Boolean, errorMsg:String, creatorId:Int, creationDate:Long, title:String) = S.param("id") match
       {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                              {  case Some(constLoc2) => 
+                              {  case Some(constLoc2) =>
                                  {  println("   Constitution id:" + idLoc)
                                     constLoc = constLoc2
                                     creator = Player.find(constLoc.creatorUserID) match
                                     {  case Full(player)  => player
                                        case _             => throw new RuntimeException("Player with id " + constLoc.creatorUserID + " not found.")
-                                    }                                 
-                                    (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.constiId) 
+                                    }
+                                    (false, "", constLoc.creatorUserID, constLoc.creationTime, "Constitution " + constLoc.constiId)
                                  }
                                  case None        => 
                                  {  S.redirectTo("constitutionNotFound")//(true, "No constitution with this id exists.", 0, 0L, "Constitution not found")

@@ -172,12 +172,14 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       println("   changed files " + status.getChanged() )
       println("   untracked files " + status.getUntracked() )
       // Determine whether this version will become the new release
-      val isRelease:Boolean = ( getHistory.length - commitIdsReleases.length > 1 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
          
       val revcom:RevCommit = jgit.commit().setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call()
-      println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
+
+      val isRelease:Boolean = ( getHistory.length - commitIdsReleases.length > 1 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
       if( isRelease )
-      {  jgit.tag.setName("release").setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+      {  println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
+         jgit.tag.setName("release").setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+
          commitIdsReleases ::= revcom.name
       }
    }
@@ -231,9 +233,9 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       val hisConXML = plainTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
       Some(HisCon(hisConXML, revcom.getCommitTime().toLong * 1000 ))
    }
-   
+
    def getHistory:List[RevCommit] =
-   {  import scala.collection.JavaConverters._ 
+   {  import scala.collection.JavaConverters._
       jgit.log().addPath( htmlFileName ).call().asScala.toList
    }
 }
