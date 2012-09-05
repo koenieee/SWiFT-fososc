@@ -73,7 +73,7 @@ class Boot {
    {  println("Boot.playerLoggedInAndChoseFirstConstitution called")
       val r =  playerIsLoggedIn &&
                {  Player.currentUser match
-                  {  case Full(player) => player.firstChosenConstitution.defined_?
+                  {  case Full(player) => player.firstChosenConstitution.is // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set?>
                      case _            => throw new RuntimeException("   no player found.") // This cannot happen.
                   }
                }

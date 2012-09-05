@@ -53,9 +53,13 @@ class Player extends MegaProtoUser[Player] {
    {  Player.int2CSP(constiSelectionProcedureInner)
    }
 
-   object constiSelectionProcedureInner extends MappedInt(this) // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc.
-
-   object firstChosenConstitution extends MappedLongForeignKey(this, ConstitutionMetaMapperObj) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
+   object constiSelectionProcedureInner extends MappedInt(this) // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc
+/*
+   def firstChosenConstitution:Option[Constitution] =
+   {   
+   }
+*/
+   object firstChosenConstitution extends MappedInt(this) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
 
 
 }

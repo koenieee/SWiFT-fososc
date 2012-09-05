@@ -25,7 +25,7 @@ class StudyConstitution
    val consti:Constitution = 
       if( player.constiSelectionProcedure == OneToStartWith )
       {  println("   constiSelectionProcedure == OneToStartWith")
-         player.firstChosenConstitution.obj.open_! // should always be there, because if no constitution has been chosen this page should be hidden.
+         Constitution.getById(player.firstChosenConstitution.is) // should always be there, because if no constitution has been chosen this page should be hidden.
       }
       else
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")

@@ -24,7 +24,7 @@ class SelectConstitution
                               val consti = Constitution.getById(idLoc.toInt) 
                               consti match
                               { case Some(constLoc)   => {  println("   Found constitution with this id" )
-                                                            player.firstChosenConstitution(constLoc).save
+                                                            player.firstChosenConstitution(constLoc.constiId).save
                                                             sesCoordLR.timeFirstChosenConstitution = Some(System.currentTimeMillis)
                                                             println("   now redirecting player to studyConstitution")
                                                             S.redirectTo("studyConstitution")
