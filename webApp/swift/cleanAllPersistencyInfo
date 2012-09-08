@@ -4,7 +4,7 @@ if [ "$k" == "Y" ]; then
    rm -r persist/constobjs/*
    rm lift_proto.db.*
    rm -r src/main/webapp/constitutions/*
-   rm -r src/main/webapp/constitutions/.*
+   rm -fr src/main/webapp/constitutions/.*
    rm -r users/*
 else
    echo "Erasing skipped, you didn't press [Y]... Sorry my friend."
