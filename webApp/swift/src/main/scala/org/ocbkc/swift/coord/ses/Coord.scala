@@ -173,7 +173,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
 
    // call this when const has been updated, and you want to notify all followers.
    def mailFollowersUpdate(const: Constitution, body:String ) =
-   {  def sendupdatemail(followerId:Int) =
+   {  def sendupdatemail(followerId:Long) =
       {  println("sendupdatemail called")
          val follower = Player.find(followerId.toString) match
          {  case Full(player)  => player

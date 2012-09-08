@@ -47,8 +47,7 @@ class Constitutions
       def processCreateNewBt() =
       {  println("Constitutions.processCreateNewBt called")
          val const:Constitution = Player.currentUserId match
-         {  case Full(id)  => {  val id1 = id.asInstanceOf[String].toInt
-                                 Constitution.create(id1)
+         {  case Full(id)  => {  Constitution.create(id.toLong)
                               }
             case _         => { throw new RuntimeException("  No user id found.") }
          }

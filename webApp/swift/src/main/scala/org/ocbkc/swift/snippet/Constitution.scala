@@ -177,7 +177,7 @@ class ConstitutionSnippet
       val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
       var constLoc:Constitution = null // workaround for tuple error, note (object:ClassA, ..) = (null, ...) leads to match error in scala.
       var creator:Player = null
-      val (errorRetrievingConstitution:Boolean, errorMsg:String, creatorId:Int, creationDate:Long, title:String) = S.param("id") match
+      val (errorRetrievingConstitution:Boolean, errorMsg:String, creatorId:Long, creationDate:Long, title:String) = S.param("id") match
       {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
                               {  case Some(constLoc2) =>
                                  {  println("   Constitution id:" + idLoc)
