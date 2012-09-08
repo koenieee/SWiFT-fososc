@@ -25,7 +25,7 @@ class StudyConstitution
    val consti:Constitution = 
       if( player.constiSelectionProcedure == OneToStartWith )
       {  println("   constiSelectionProcedure == OneToStartWith")
-         Constitution.getById(player.firstChosenConstitution.is) // should always be there, because if no constitution has been chosen this page should be hidden.
+         Constitution.getById(player.firstChosenConstitution.is).get // should always be there, because if no constitution has been chosen this page should be hidden.
       }
       else
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")
@@ -64,7 +64,7 @@ class StudyConstitution
       val releaseInfo = consti.lastReleaseVersionInfo.get
       val answer   = bind( "top", ns, 
                            "constitutionId"     -> Text(consti.constiId.toString),
-                           "versionDateTime"    -> Text(df.format(releaseInfo.creationDatetimeMillis)),
+                           "versionDateTime"    -> Text(df.format(releaseInfo.creationDatetimePOSIX*1000)),
                            "constitutionText"   -> consti.contentLastReleaseInScalaXML.get,
                            "creationDate"       -> Text(df.format(consti.creationTime).toString),
                            "creator"            -> Text(
