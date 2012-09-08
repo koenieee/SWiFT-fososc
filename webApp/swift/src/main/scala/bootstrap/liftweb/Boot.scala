@@ -73,7 +73,7 @@ class Boot {
    {  println("Boot.playerLoggedInAndChoseFirstConstitution called")
       val r =  playerIsLoggedIn &&
                {  Player.currentUser match
-                  {  case Full(player) => player.firstChosenConstitution.is // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set?>
+                  {  case Full(player) => player.firstChosenConstitution != -1 // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set? Now doing it with the protocol that -1 means not defined.>
                      case _            => throw new RuntimeException("   no player found.") // This cannot happen.
                   }
                }
@@ -208,7 +208,7 @@ class Boot {
 
       player.constiSelectionProcedure match
       {  case OneToStartWith  =>
-            if( !player.firstChosenConstitution.defined_? )
+            if( player.firstChosenConstitution.is == -1 )
             {  println("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
                S.redirectTo("selectConstitution")
             }
@@ -233,12 +233,57 @@ class Boot {
                               Unit 
                            } // do nothing, player exists.
       case _            => {  println("   Doesn't exist: creating it...")
-                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjkl").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                               p.save
                            }
    }
-   
+      
+   // TODO: before doing this, erase all persistency information, but not without a warning to the developer
+
+   if(TestSettings.CREATETESTUSERBASE)
+   {  Player.create.firstName("Aap").email("aap@test.org").password("asdfghjk").validated(true).save
+      Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true).save
+   }
+
+   if(TestSettings.CREATEDUMMYCONSTITUTIONS)
+   {  // erase persistent info first, but not before warning to developer
+      val p1 = Player.create.firstName("Aap1").email("aap1@test.org").password("asdfghjk").validated(true)
+      val p2 = Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true)
+      p1.save; p2.save
+      
+
+      val consti1 = Constitution.create(p1.id.is)
+
+      consti1.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 1</p>
+"""      ,
+         "publish decription 1",
+         p1.id.toString
+      )
+
+      consti1.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 2</p>
+"""      ,
+         "publish decription 2",
+         p2.id.toString
+      )
+
+      consti1.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 3</p>
+"""      ,
+         "publish decription 3",
+         p2.id.toString
+      )
+
+   }
     println("Boot.boot finished")
+
   }
 
 
