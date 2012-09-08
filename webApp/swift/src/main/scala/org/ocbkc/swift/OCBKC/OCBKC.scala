@@ -50,12 +50,12 @@ case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
 case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
-                        val creationTime:Long,
-                        val creatorUserID:Int,
+                        val creationTime:Long, // creationTime in unix time in seconds
+                        val creatorUserID:Long,
                         var averageScore:Int, // redundant, for efficiency
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
-                        var followers:List[Int] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
+                        var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
                        ) extends LongKeyedMapper[Constitution] with IdPK
 {  def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
@@ -168,23 +168,34 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       println("   jgit author id = " + gUserId.toString)
       println("   now adding and committing: " + fullPath2Const )
       //jgit.status
-      val addCommand = jgit.add()
-      println("   isUpdate() (should be false) " + addCommand.isUpdate())
-      addCommand.addFilepattern( fullPath2Const ).call()
-      val status = jgit.status().call()
-      println("   added files " + status.getAdded() )
-      println("   modified files " + status.getModified() )
-      println("   changed files " + status.getChanged() )
-      println("   untracked files " + status.getUntracked() )
+      val addCommand = jgit.add
+      println("   isUpdate() (should be false) " + addCommand.isUpdate)
+      addCommand.addFilepattern( fullPath2Const ).call
+      val status = jgit.status.call
+      println("   added files " + status.getAdded )
+      println("   modified files " + status.getModified )
+      println("   changed files " + status.getChanged )
+      println("   untracked files " + status.getUntracked )
       // Determine whether this version will become the new release
          
       val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
-
-      val isRelease:Boolean = ( getHistory.length - commitIdsReleases.length > 1 ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
+/*
+Try out:
+getHistory.length, commitIdsReleases.length, isRelease
+1 1 false
+2 1 true
+3 3 false
+4 3 true
+5 5 false
+*/
+      val isRelease:Boolean = ( getHistory.length > (commitIdsReleases.length * 2 + 1 ) ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
+      // <& &y2012.09.07.13:10:21& this test doesn't work: all become releases after initial difference is realised. How solve.>
+      println("   getHistory.length = " + getHistory.length)
+      println("   commitIdsReleases.length = " + commitIdsReleases.length)
       if( isRelease )
       {  println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
          // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
-         jgit.tag.setName("release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+         jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
          commitIdsReleases ::= revcom.name
       }
    }
@@ -214,7 +225,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       out.close()
    }
    
-   case class ConstiVersionInfo(val commitId:String, val creationDatetimeMillis:Long, val publisher:Player, val publishDescription:String)   
+   case class ConstiVersionInfo(val commitId:String, val creationDatetimePOSIX:Long, val publisher:Player, val publishDescription:String)   
    // <&y2012.08.19.13:56:24& refactor rest of code to use this method instead of calling jgit on the spot (as long as that is not in conflict with efficiency issues)>
    def getConstiVersionInfo(commitId:String):Option[ConstiVersionInfo] =
    {  val rw = new RevWalk(jgitRepo)
@@ -229,14 +240,14 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
    }
 
-   case class HisCon(val content:Elem, val creationDatetimeMillis:Long)
+   case class HisCon(val content:Elem, val creationDatetimePOSIX:Long)
 
    def historicContentInScalaXML(commitId:String):Option[HisCon] =
    {  val rw = new RevWalk(jgitRepo)
       val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
       val hisCon = BlobUtils.getContent(jgitRepo, revcom, htmlFileName)
       val hisConXML = plainTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
-      Some(HisCon(hisConXML, revcom.getCommitTime().toLong * 1000 ))
+      Some(HisCon(hisConXML, revcom.getCommitTime().toLong ))
    }
 
    def getHistory:List[RevCommit] =
@@ -311,7 +322,7 @@ object Constitution
 
 <p>...</p>
 """
-   def create(creatorUserID:Int):Constitution = 
+   def create(creatorUserID:Long):Constitution = 
    {  println("Constitutions(Singleton Object).create called")
       println("   creatorUserID = " + creatorUserID)
       highestId += 1
