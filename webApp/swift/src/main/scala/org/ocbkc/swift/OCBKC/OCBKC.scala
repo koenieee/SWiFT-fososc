@@ -289,6 +289,8 @@ object Constitution
             println("   serialized form: " + inStr)
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const
+            // reconstruct releases from git repo
+            qwer
          }
          
          constitutionFiles map readConst
