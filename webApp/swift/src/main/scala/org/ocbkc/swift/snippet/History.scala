@@ -36,11 +36,16 @@ class History
          val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
          bind( "top", chooseTemplate("top", "row", ns),            
-            "view"               -> SHtml.link("constitutionhistoric?constid=" + const.constiId + "&commitid=" + revcom.name(), () => Unit, Text("view")),
-            "restore"            -> SHtml.link("restore?constid=" + const.constiId + "&commitid=" + revcom.name(), () => Unit, Text("restore")),
+            "view"               -> SHtml.link("constitutionhistoric?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("view")),
+            "restore"            -> SHtml.link("restore?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("restore")),
             "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
             "publishDescription" -> Text(revcom.getFullMessage()),
             "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
+            "isRelease"          -> {  println("   isRelease?")
+                                       println("   const.commitIdsReleases: " + const.commitIdsReleases)
+                                       println("   searching revcom.name = " + revcom.name)
+                                       if(!const.commitIdsReleases.find(_.equals(revcom.name)).isEmpty) Text("R") else Text("~R")
+                                    },
             "author"             -> Text
                                     (  Player.find(playerId) match
                                        {  case Full(player)  => player.swiftDisplayName
