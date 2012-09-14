@@ -21,6 +21,9 @@ import org.gitective.core.BlobUtils
 import org.xml.sax.SAXParseException
 import GlobalConstant.jgitRepo
 import net.liftweb.mapper._
+import scala.util.matching._
+import scala.util.matching.Regex._
+
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
 
@@ -234,7 +237,7 @@ getHistory.length, commitIdsReleases.length, isRelease
       val playerId = revcom.getAuthorIdent.getName
       val publisher:Player = Player.find(playerId) match
       {  case Full(player)  => player
-         case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found."; println("   " + errmsg); throw new RuntimeException(errmsg) }
+         case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found. No, I'm not angry, just very very disappointed..."; println("   " + errmsg); throw new RuntimeException(errmsg) }
       }
 
       Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
@@ -281,7 +284,11 @@ object Constitution
       val constitutionFiles = constObjDir.listFiles(fileFilter)
       if( constitutionFiles != null && constitutionFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
-
+         // retrieve all tags needed for reconstructing releases.
+         val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asBuffer(jgit.tagList.call)
+         println("   names of tags found:")
+         taglist.map( ref => println(ref.getName) )
+ 
          def readConst(file:File):Unit =
          {  println("   converting to Constitution-object: " + file.getPath() )
             val in:BufferedReader   = new BufferedReader(new FileReader(file))
@@ -290,7 +297,17 @@ object Constitution
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const
             // reconstruct releases from git repo
-            qwer
+            def tagPointsToReleaseOf(tag:Ref, consti:Constitution):Boolean =
+            {  val regex = new Regex("consti" + consti.constiId)
+               val m     = regex.findFirstMatchIn(tag.getName)
+               
+               m.isDefined
+            }
+            
+            val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
+            // <&y2012.09.14.09:50:04& I don't get this working: consult jgit group/Web, and when no answer found: post message on jgit mailinglist. Problem is that I do not get the commit id's of the>: const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
+            println("   commitIdsReleases just read from git repo:")
+            const.commitIdsReleases.map( println(_) )
          }
          
          constitutionFiles map readConst
@@ -302,7 +319,7 @@ object Constitution
          println("   read from file: highestId = " + highestId)
       }
       else
-      {  println("   No serialised Constitution objects found in permanent storage!")
+      {  println("   No serialised Constitution objects found in permanent storage! Lets start the day completely empty... Like a Zen buddhist.")
       }
    }
 
