@@ -16,6 +16,7 @@ import org.ocbkc.swift.OCBKC._
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
+import scala.util.Random
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -251,37 +252,46 @@ class Boot {
       val p2 = Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true)
       p1.save; p2.save
       
+      // randomly create between 
+      val minconstis = 5
+      val maxconstis = 50
+      val minhis = 1
+      val maxhis = 50
+      
+      val randomSeq = new Random()
+      val numconstis = minconstis + randomSeq.nextInt(maxconstis - minconstis)
+      def randomSizeHis = minhis + randomSeq.nextInt(maxhis - minhis)
+      def randomPlayer:Player = pickRandomElementFromList(Player.findAll(), randomSeq).get // assumed may be that there are players
+      
+      // <&y2012.09.15.13:34:56& move to general lib>
+      def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
+      {  list match
+         {  case Nil => None
+            case _   => Some(list(rs.nextInt( list.length - 1 )))
+         }
+      }
 
-      val consti1 = Constitution.create(p1.id.is)
+      val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
+      println("randomConstiCreationList =")
+      println(randomConstiCreationList)
+      randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
 
-      consti1.publish(
+      def generateConstiHis(creator: Player, sizeHis:Int) =
+      {  val consti = Constitution.create(creator.id.is)
+         val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
+         randomHisCreationList.map( 
+            { case (idx, publisher) =>            
+               consti.publish(
 """<h2>Article 1</h2>
 
-<p>publication 1</p>
-"""      ,
-         "publish decription 1",
-         p1.id.toString
-      )
-
-      consti1.publish(
-"""<h2>Article 1</h2>
-
-<p>publication 2</p>
-"""      ,
-         "publish decription 2",
-         p2.id.toString
-      )
-
-      consti1.publish(
-"""<h2>Article 1</h2>
-
-<p>publication 3</p>
-"""      ,
-         "publish decription 3",
-         p2.id.toString
-      )
-
+<p>publication """ + idx + """</p>
+""", "publication " + idx, publisher.id.toString)
+            }
+         )
+         Unit
+      }
    }
+
     println("Boot.boot finished")
 
   }

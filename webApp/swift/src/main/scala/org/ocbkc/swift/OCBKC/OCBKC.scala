@@ -305,7 +305,9 @@ object Constitution
             }
             
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
-            // <&y2012.09.14.09:50:04& I don't get this working: consult jgit group/Web, and when no answer found: post message on jgit mailinglist. Problem is that I do not get the commit id's of the>: const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
+            // <&y2012.09.14.09:50:04& I don't get this working: consult jgit group/Web, and when no answer found: post message on jgit mailinglist. Problem is that I do not get the commit id's of the>: 
+            const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.peel(tag).getPeeledObjectId.name ).reverse.toList
+            //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             println("   commitIdsReleases just read from git repo:")
             const.commitIdsReleases.map( println(_) )
          }
@@ -393,6 +395,11 @@ package scoring
 object ConstiScores
 {  def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
    {  //TODO
+      /* >>> SUC
+      val firstNperPlayerList = TODOgetAllPlayers.map(firstNplayer(c, N, sps, _))
+      firstNperPlayerList.sum / firstNperPlayerList.length
+         <<< EUC
+      */
    }
 
    def inversePlayingTimeIfCorrect(c:Constitution, p:Player/* TODO , s:Session */) =
