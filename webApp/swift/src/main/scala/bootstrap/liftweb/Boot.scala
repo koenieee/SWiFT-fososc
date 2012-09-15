@@ -261,7 +261,11 @@ class Boot {
       val randomSeq = new Random()
       val numconstis = minconstis + randomSeq.nextInt(maxconstis - minconstis)
       def randomSizeHis = minhis + randomSeq.nextInt(maxhis - minhis)
-      def randomPlayer:Player = pickRandomElementFromList(Player.findAll(), randomSeq).get // assumed may be that there are players
+      def randomPlayer:Player =
+      {  val p = pickRandomElementFromList(Player.findAll(), randomSeq).get // assumed may be that there are players
+         println("   random player = " + p)
+         p
+      }
       
       // <&y2012.09.15.13:34:56& move to general lib>
       def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
