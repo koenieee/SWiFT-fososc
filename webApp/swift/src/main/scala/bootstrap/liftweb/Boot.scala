@@ -247,7 +247,8 @@ class Boot {
    }
 
    if(TestSettings.CREATEDUMMYCONSTITUTIONS)
-   {  // erase persistent info first, but not before warning to developer
+   {  // <&y2012.09.15.20:58:31& erase persistent info first, but not before warning to developer>
+      // NOTE: Now you HAVE to do that manually!
       val p1 = Player.create.firstName("Aap1").email("aap1@test.org").password("asdfghjk").validated(true)
       val p2 = Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true)
       p1.save; p2.save

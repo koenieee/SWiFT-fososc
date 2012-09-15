@@ -71,8 +71,6 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          case _         => { throw new RuntimeException("  No user id found.") }
       }
 
-      if( prefix.toInt != 1 || !CLEARSESHISPLAYER1AFTEREACHLOGIN ) // <&y2012.08.13.23:44:03& TODO remove this if, as soon as persistency of constiSelectionProcedure is realised. Now only intended for testing purposes: each time user 1 logs in again, his game-session history is erased so that the constiSelectionProcedure can be tested.>
-      {
       // cc stands for CoreContent
       // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
       val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
@@ -88,7 +86,6 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
          }
 
          ccFiles map readCc
-      }
       }
    }
    // var sesHis:SessionHistory = new SessionHistory 

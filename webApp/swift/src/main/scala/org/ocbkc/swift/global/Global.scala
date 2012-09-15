@@ -49,12 +49,9 @@ object GlobalConstant
 object TestSettings
 {  val AUTOLOGIN                        = false
    val AUTOTRANSLATION                  = false
-   val CLEARSESHISPLAYER1AFTEREACHLOGIN = true
    val CREATETESTUSERBASE               = false
-   val CREATEDUMMYCONSTITUTIONS         = true // creates a number of constitutions with several updates and releases.
+   val CREATEDUMMYCONSTITUTIONS         = false // creates a number of constitutions with several updates and releases.
    if( CREATETESTUSERBASE && CREATEDUMMYCONSTITUTIONS) throw new RuntimeException("Tests CREATETESTUSERBASE and CREATEDUMMYCONSTITUTIONS are mutually exclusive")
-
-   if( !CLEARSESHISPLAYER1AFTEREACHLOGIN ) println("ERROR: set CLEARSESHISPLAYER1AFTEREACHLOGIN back to true (and AUTOLOGIN to false)!")
 }
 
 }
