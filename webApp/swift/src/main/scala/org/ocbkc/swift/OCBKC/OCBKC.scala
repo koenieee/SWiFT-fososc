@@ -393,7 +393,16 @@ package scoring
 /* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
 */
 object ConstiScores
-{  def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
+{  // MSS = minimal sample size
+   def percentageCorrectMSS(c:Constitution, minPlayers:Int, minSessionsPerPlayer:Int):Option[Double] =
+   {
+   }
+
+   def percentageCorrect(c:Constitution):Option[Double] =
+   {  c. qwer
+   }
+
+   def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
    {  //TODO
       /* >>> SUC
       val firstNperPlayerList = TODOgetAllPlayers.map(firstNplayer(c, N, sps, _))
