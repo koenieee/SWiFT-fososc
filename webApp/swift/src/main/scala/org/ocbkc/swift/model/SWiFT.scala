@@ -70,18 +70,8 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
 // #BS: only put inforeps that directly represents the subject matter, so no control structures, but only the content produced by the player, etc.
 */
 
-case class TimingInfo(  var startTime: Long, 
-                        var stopTime: Long, 
-                        var startTimeTranslation: Long,
-                        var stopTimeTranslation: Long
-                     )
-{  def this() = this(0,0,0,0)
-}
-
-
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
-case class CoreContent( var timingInfo: TimingInfo,
-                        var textNL: String,
+case class CoreContent( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer: String,
                         var textCTLbyComputer: String,
@@ -100,16 +90,23 @@ case class CoreContent( var timingInfo: TimingInfo,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
                         var subjectNL:String,
-                        var answerPlayerCorrect: scala.Boolean
                       )
-{  def this() = this(new TimingInfo(),"","","","","","","","","",None,None,"",None,"","","","","","",false)
+
+)
+{  object startTime extends MappedLong(this)
+   object stopTime extends MappedLong(this)
+   object startTimeTranslation extends MappedLong(this)
+   object stopTimeTranslation extends MappedLong(this)
+   object answerPlayerCorrect extends MappedBoolean(this)
+
+   // delete: def this() = this(new TimingInfo(),"","","","","","","","","",None,None,"",None,"","","","","","",false)
    def durationTranslation:Option[Long] = 
-   {  if(timingInfo.startTimeTranslation == 0 || timingInfo.stopTimeTranslation == 0) None else Some(timingInfo.stopTimeTranslation - timingInfo.startTimeTranslation)
+   {  if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
    }
 
    var textCTLplayerUpdated4terParsing = false
-   def textCTLbyPlayer = textCTLbyPlayer_
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_ = t }
+   def textCTLbyPlayer = textCTLbyPlayer_.is
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_(t) }
 
    //var textCTLbyPlayerCleanFormat_ :Option[String] = None
    var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
