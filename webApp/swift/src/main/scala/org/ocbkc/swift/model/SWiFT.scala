@@ -6,9 +6,13 @@ import org.ocbkc.swift.logilang._
 import System.err.println
 import _root_.net.liftweb.mapper._
 import net.liftweb.db.ConnectionIdentifier
-import net.liftweb.common.Box
+import net.liftweb.common._
 import java.sql.ResultSet
 import org.ocbkc.swift.OCBKC._
+import net.liftweb.json._
+import java.io._
+import org.ocbkc.swift.global.GlobalConstant._
+
 /*
 class Source extends Enumeration
 {  type Source = Value
@@ -194,10 +198,9 @@ case class CoreContent( var textNL: String,
    var parseWarningMsgTxtCTLplayer:String = ""
 
    def serialize =
-   {  // serialize cc
-      implicit val formats = Serialization.formats(NoTypeHints)
-      var ccSer:String = Serialization.write(cc)
-      err.println("  corecontents serialised to: " + ccSer)
+   {  implicit val formats = Serialization.formats(NoTypeHints)
+      var ccSer:String = Serialization.write(this)
+      println("  corecontents serialised to: " + ccSer)
       // write session to file with unique name, e.g.: playerName/corecontent/
 
       var prefix:String = ""
@@ -207,8 +210,8 @@ case class CoreContent( var textNL: String,
       }
 
       // <&y2012.01.07.17:59:19& MUSTDO: what happens with Player.CurrentUserId, if someone deletes his user account, will the number be reused for another, new, user, if so that would be a problem>
-      var outFile = new File(CORECONTENTOBJECTDIR + "/cc" + cc.id )
-      err.println("   creating file: " + outFile.getAbsolutePath)
+      var outFile = new File(CORECONTENTOBJECTDIR + "/cc" + this.id )
+      println("   creating file: " + outFile.getAbsolutePath)
       // <&y2012.01.07.18:15:09& in following I get runtime exception: couldn't find file. Perhaps applicatio doesn't have right? Or perhaps I may not use / in filenames>
       outFile.getParentFile().mkdirs()
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
@@ -217,6 +220,28 @@ case class CoreContent( var textNL: String,
       out.close()
 
       val testDeSer:CoreContent = Serialization.read[CoreContent](ccSer)
+   }
+
+   def copyJsonSerializedFieldsFrom(cc:CoreContent) =
+   {  this.textNL = cc.textNL
+      this.questionNL = cc.questionNL
+      this.questionCTLcomputer = cc.questionCTLcomputer
+      this.textCTLbyComputer = cc.textCTLbyComputer
+      this.bridgeCTL2NLcomputer = cc.bridgeCTL2NLcomputer
+      this.algoDefComputer = cc.algoDefComputer
+      this.answerComputerCTL = cc.answerComputerCTL
+      this.answerComputerNL = cc.answerComputerNL
+      this.textCTLbyPlayer_  = cc.textCTLbyPlayer_ 
+      this.constantsByPlayer = cc.constantsByPlayer
+      this.predsByPlayer = cc.predsByPlayer
+      this.bridgeCTL2NLplayer = cc.bridgeCTL2NLplayer
+      this.algoDefPlayer = cc.algoDefPlayer
+      this.answerPlayerCTL = cc.answerPlayerCTL
+      this.answerPlayerNL = cc.answerPlayerNL
+      this.questionRelatedBridgeStats = cc.questionRelatedBridgeStats
+      this.hurelanRole1NL = cc.hurelanRole1NL
+      this.hurelanRole2NL = cc.hurelanRole2NL
+      this.subjectNL = cc.subjectNL
    }
 }
 
@@ -243,19 +268,13 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
    // possibly confusing: createInstance is used when READING info. that was made persistent... 
    override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,CoreContent) => Unit]]) : CoreContent =
    {  val cc = super.createInstance(dbId, rs, mapFuncs)
-         // MUSTDO <&y2012.09.18.10:49:52& read the rest from JSON serialised stuff>
-         /* >>> SUC
       val ccFile  = new File(GlobalConstant.CORECONTENTOBJECTDIR + "/" + cc.id)
-      implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
-      def readCc(file:File):Unit =
-      {  val in:BufferedReader   = new BufferedReader(new FileReader(file))
-         var inStr:String        = in.readLine()
-         val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
-         sesHis.coreContents ::= ccLoc
-      }
-
-      ccFiles map readC
-      <<< EUC */
+      implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
+      val in:BufferedReader   = new BufferedReader(new FileReader(ccFile))
+      var inStr:String        = in.readLine()
+      val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
+      cc.copyJsonSerializedFieldsFrom(ccLoc)
+      
       cc
    }
 }
