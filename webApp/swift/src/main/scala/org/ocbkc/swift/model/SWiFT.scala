@@ -4,6 +4,11 @@ import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 import System.err.println
+import _root_.net.liftweb.mapper._
+import net.liftweb.db.ConnectionIdentifier
+import net.liftweb.common.Box
+import java.sql.ResultSet
+import org.ocbkc.swift.OCBKC._
 /*
 class Source extends Enumeration
 {  type Source = Value
@@ -89,24 +94,24 @@ case class CoreContent( var textNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
-                        var subjectNL:String,
-                      )
-
-)
-{  object startTime extends MappedLong(this)
+                        var subjectNL:String
+                      ) extends LongKeyedMapper[CoreContent] with IdPK
+{  def getSingleton = CoreContentMetaMapperObj
+   // object player extends MappedLongForeignKey(this, Player)
+   object startTime extends MappedLong(this)
    object stopTime extends MappedLong(this)
    object startTimeTranslation extends MappedLong(this)
    object stopTimeTranslation extends MappedLong(this)
    object answerPlayerCorrect extends MappedBoolean(this)
-
-   // delete: def this() = this(new TimingInfo(),"","","","","","","","","",None,None,"",None,"","","","","","",false)
+   
+   def this() = this("","","","","","","","","",None,None,"",None,"","","","","","")
    def durationTranslation:Option[Long] = 
    {  if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
    }
 
    var textCTLplayerUpdated4terParsing = false
-   def textCTLbyPlayer = textCTLbyPlayer_.is
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_(t) }
+   def textCTLbyPlayer = textCTLbyPlayer_
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_ = t }
 
    //var textCTLbyPlayerCleanFormat_ :Option[String] = None
    var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
@@ -134,6 +139,7 @@ case class CoreContent( var textNL: String,
       else
          textCTLbyPlayerScalaFormat_
    }
+
 
 
    // <&y2012.02.19.11:26:28& coulddo: also make getter and setter for constantsByPlayer predsByPlayer, in style of textCTLbyPlayerCleanFormat>
@@ -186,6 +192,72 @@ case class CoreContent( var textNL: String,
 
    var parseErrorMsgTextCTLplayer:String = ""
    var parseWarningMsgTxtCTLplayer:String = ""
+
+   def serialize =
+   {  // serialize cc
+      implicit val formats = Serialization.formats(NoTypeHints)
+      var ccSer:String = Serialization.write(cc)
+      err.println("  corecontents serialised to: " + ccSer)
+      // write session to file with unique name, e.g.: playerName/corecontent/
+
+      var prefix:String = ""
+      Player.currentUserId match
+      {  case Full(id)  => { prefix = id }
+         case _         => { throw new RuntimeException("  No user id found.") }
+      }
+
+      // <&y2012.01.07.17:59:19& MUSTDO: what happens with Player.CurrentUserId, if someone deletes his user account, will the number be reused for another, new, user, if so that would be a problem>
+      var outFile = new File(CORECONTENTOBJECTDIR + "/cc" + cc.id )
+      err.println("   creating file: " + outFile.getAbsolutePath)
+      // <&y2012.01.07.18:15:09& in following I get runtime exception: couldn't find file. Perhaps applicatio doesn't have right? Or perhaps I may not use / in filenames>
+      outFile.getParentFile().mkdirs()
+      // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
+      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
+      out.println(ccSer)
+      out.close()
+
+      val testDeSer:CoreContent = Serialization.read[CoreContent](ccSer)
+   }
+}
+
+// "join" of player and corecontent
+case class PlayerCoreContent_join extends LongKeyedMapper[PlayerCoreContent_join] with IdPK
+{  def getSingleton = PlayerCoreContent_join
+   object player extends MappedLongForeignKey(this, Player)
+   object coreContent extends MappedLongForeignKey(this, CoreContentMetaMapperObj)
+}
+
+object PlayerCoreContent_join extends PlayerCoreContent_join with LongKeyedMetaMapper[PlayerCoreContent_join]
+{  def join(player:Player, cc:CoreContent)
+   {  this.create.player(player).coreContent(cc)
+   }
+}
+
+
+object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[CoreContent]
+{  override def create =
+   {  super.create
+   }
+   
+
+   // possibly confusing: createInstance is used when READING info. that was made persistent... 
+   override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,CoreContent) => Unit]]) : CoreContent =
+   {  val cc = super.createInstance(dbId, rs, mapFuncs)
+         // MUSTDO <&y2012.09.18.10:49:52& read the rest from JSON serialised stuff>
+         /* >>> SUC
+      val ccFile  = new File(GlobalConstant.CORECONTENTOBJECTDIR + "/" + cc.id)
+      implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
+      def readCc(file:File):Unit =
+      {  val in:BufferedReader   = new BufferedReader(new FileReader(file))
+         var inStr:String        = in.readLine()
+         val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
+         sesHis.coreContents ::= ccLoc
+      }
+
+      ccFiles map readC
+      <<< EUC */
+      cc
+   }
 }
 
 // <&y2012.01.08.18:25:04& or should this object belong to Coord?>

@@ -18,6 +18,9 @@ import java.io._
 import net.liftweb.util.Mailer
 import net.liftweb.util.Mailer._
 import net.liftweb.common.{Box,Empty,Failure,Full}
+import org.ocbkc.swift.model._
+import _root_.net.liftweb.mapper.By
+
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
 
@@ -70,23 +73,10 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
+      
+      val ccs = PlayerCoreContent_join.findAll(By(PlayerCoreContent_join.player, currentPlayer)).map{ join => join.coreContent.obj.open_! }
 
-      // cc stands for CoreContent
-      // <&y2012.06.03.00:54:10& SHOULDDO: refactor, move this to CoreContent singleton object in the same way as Constitution>
-      val ccRootDir  = new File("users/userId" + prefix + "/CoreContent/")
-      println("   directory to read in serialized corecontents: " +  ccRootDir.getAbsolutePath)
-      val ccFiles = ccRootDir.listFiles()
-      if( ccFiles != null && ccFiles.length != 0 )
-      {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
-         def readCc(file:File):Unit =
-         {  val in:BufferedReader   = new BufferedReader(new FileReader(file))
-            var inStr:String        = in.readLine()
-            val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
-            sesHis.coreContents ::= ccLoc
-         }
-
-         ccFiles map readCc
-      }
+      sesHis.coreContents = ccs
    }
    // var sesHis:SessionHistory = new SessionHistory 
    // <&y2012.01.02.23:15:26& initialise SessionHistory object with data made persistant in the past>
@@ -101,13 +91,14 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    def URtranslation:String =  
    {  round = Trans
       cc = gameCore.initialiseCoreContent
-      cc.timingInfo.startTime = System.currentTimeMillis()
-      cc.timingInfo.startTimeTranslation = cc.timingInfo.startTime
+      cc.startTime(System.currentTimeMillis).save
+      cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
    }
 
    def URstopTranslation =
-   {  cc.timingInfo.stopTimeTranslation  = System.currentTimeMillis()
+   {  cc.stopTimeTranslation(System.currentTimeMillis).save
+      Unit
    }
 
    def URstopBridgeConstruction =
@@ -126,30 +117,8 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
-      cc.timingInfo.stopTime = System.currentTimeMillis()
+      cc.stopTime(System.currentTimeMillis).save
       sesHis.coreContents ::= cc
-      // serialize cc
-      implicit val formats = Serialization.formats(NoTypeHints)
-      var ccSer:String = Serialization.write(cc)
-      err.println("  corecontents serialised to: " + ccSer)
-      // write session to file with unique name, e.g.: playerName/corecontent/
-      var prefix:String = ""
-      Player.currentUserId match
-      {  case Full(id)  => { prefix = id }
-         case _         => { throw new RuntimeException("  No user id found.") }
-      }
-
-      // <&y2012.01.07.17:59:19& MUSTDO: what happens with Player.CurrentUserId, if someone deletes his user account, will the number be reused for another, new, user, if so that would be a problem>
-      var outFile = new File("users/userId" + prefix + "/CoreContent/" + cc.timingInfo.startTime)
-      err.println("   creating file: " + outFile.getAbsolutePath)
-      // <&y2012.01.07.18:15:09& in following I get runtime exception: couldn't find file. Perhaps applicatio doesn't have right? Or perhaps I may not use / in filenames>
-      outFile.getParentFile().mkdirs()
-      // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
-      val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
-      out.println(ccSer)
-      out.close()
-
-      val testDeSer:CoreContent = Serialization.read[CoreContent](ccSer)
       
       res
    }

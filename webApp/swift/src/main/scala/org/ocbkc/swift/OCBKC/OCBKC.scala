@@ -52,6 +52,7 @@ import ConstitutionTypes._
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
+// <&y2012.09.18.10:39:31& IMPORTANT: currently the following class doesn't make use of its integration in the Mapper framework (the LongKeyedMetaMapper extension).
 case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
                         val creationTime:Long, // creationTime in unix time in seconds
                         val creatorUserID:Long,
@@ -421,11 +422,13 @@ abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
    /* TODO def apply(in:TODOin):TODOout */
 }
 
+
+
+}
+
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSesionsB4access2allConstis = 2
-}
-
 }
 }

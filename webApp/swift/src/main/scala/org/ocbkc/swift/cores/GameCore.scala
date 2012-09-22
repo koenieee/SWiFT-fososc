@@ -249,9 +249,9 @@ class NotUna extends TraitGameCore
       // <&y2012.05.19.21:20:06& as soon as answerInCTL2NL is ported to scala, do the following differently (= translate answerPlayerCTL into answerPlayerNL> 
       cc.answerPlayerNL = cc.answerComputerNL.replaceAll("""(minimally )[0-9]+""", "$1" + cc.answerPlayerCTL) // <_&y2012.05.19.21:11:46& dangerous, if there are other digits in the string...>
 
-      cc.answerPlayerCorrect = cc.answerPlayerNL.equals(cc.answerComputerNL)
+      cc.answerPlayerCorrect(cc.answerPlayerNL.equals(cc.answerComputerNL)).save
 
-      (cc.answerPlayerCorrect, cc.answerPlayerNL, "TODO: reasonercomment (needed?)", cc.answerPlayerCTL)
+      (cc.answerPlayerCorrect.is, cc.answerPlayerNL, "TODO: reasonercomment (needed?)", cc.answerPlayerCTL)
       // <<< EUC
    }
 }
