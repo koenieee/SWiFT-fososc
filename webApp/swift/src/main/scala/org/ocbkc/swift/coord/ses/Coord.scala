@@ -119,7 +119,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
       // now:Calendar = System.currentTimeMillis()
       cc.stopTime(System.currentTimeMillis).save
       sesHis.coreContents ::= cc
-      
+      cc.serialize
       res
    }
 // <&y2012.02.21.19:22:56& refactor by using built-in parser of CoreContent.?>
