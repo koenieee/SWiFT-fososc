@@ -196,7 +196,7 @@ case class CoreContent( var textNL: String,
 
    var parseErrorMsgTextCTLplayer:String = ""
    var parseWarningMsgTxtCTLplayer:String = ""
-
+   /* <&y2012.09.26.12:38:17& COULDDO perhaps refactor: call the serialize method from CoreContentMetaMapperObj.save (by overriding the latter method). Without additional checks, that will however be less efficient, because at each save invocation a lot will be written over and over to disk...> */
    def serialize =
    {  implicit val formats = Serialization.formats(NoTypeHints)
       var ccSer:String = Serialization.write(this)
@@ -268,7 +268,7 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
    // possibly confusing: createInstance is used when READING info. that was made persistent... 
    override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,CoreContent) => Unit]]) : CoreContent =
    {  val cc = super.createInstance(dbId, rs, mapFuncs)
-      val ccFile  = new File(GlobalConstant.CORECONTENTOBJECTDIR + "/" + cc.id)
+      val ccFile  = new File(CORECONTENTOBJECTDIR + "/cc" + cc.id)
       implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
       val in:BufferedReader   = new BufferedReader(new FileReader(ccFile))
       var inStr:String        = in.readLine()

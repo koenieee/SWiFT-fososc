@@ -67,16 +67,16 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
 
    private def initialise = {  // load sessionhistory data from disk for this user (persistency info).
       println("Core.initialise called")
-      // Read output of the Clean command
       var prefix:String = "" // <&y2012.01.10.09:36:56& coulddo: refactor this, because it is also used when making things persistent>
       Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
-      
+      println("   reading corecontent objects from database...")
       val ccs = PlayerCoreContent_join.findAll(By(PlayerCoreContent_join.player, currentPlayer)).map{ join => join.coreContent.obj.open_! }
 
       sesHis.coreContents = ccs
+      println("   found " + ccs.length + " CoreContent objects for this player")
    }
    // var sesHis:SessionHistory = new SessionHistory 
    // <&y2012.01.02.23:15:26& initialise SessionHistory object with data made persistant in the past>
@@ -118,8 +118,9 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
       cc.stopTime(System.currentTimeMillis).save
-      sesHis.coreContents ::= cc
-      cc.serialize
+      sesHis.coreContents ::= cc      
+      cc.serialize // serialize the JSON part
+      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
       res
    }
 // <&y2012.02.21.19:22:56& refactor by using built-in parser of CoreContent.?>
