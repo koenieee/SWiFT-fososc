@@ -265,14 +265,14 @@ object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil)
 }
 
 object Constitution
-{  var constis:List[Constitution] = Nil // <&y2012.08.27.20:16:28& TODO: remove, this is now arranged by the Mapper framework>
+{  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
-   /*
+   
    def create():Constitution =
    {  // if no user is given assume 'master' user, TODO <&y2012.05.24.20:44:12& determine fixed number for this, for now I used ID 0>
       create(0)
    }
-   */
+   
 
    def deserialize =
    /*
@@ -327,7 +327,7 @@ object Constitution
    }
 
    def serialize = 
-   {  println("Constitution.serialize called")
+   {  println("object Constitution.serialize called")
       constis.map(_.serialize)
 
       var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
