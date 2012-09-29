@@ -51,7 +51,8 @@ object TestSettings
 {  val AUTOLOGIN                        = false
    val AUTOTRANSLATION                  = false
    val CREATETESTUSERBASE               = false
-   val CREATEDUMMYCONSTITUTIONS         = false // creates a number of constitutions with several updates and releases.
+   /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
+   val CREATEDUMMYCONSTITUTIONS         = true // creates a number of constitutions with several updates and releases.
    if( CREATETESTUSERBASE && CREATEDUMMYCONSTITUTIONS) throw new RuntimeException("Tests CREATETESTUSERBASE and CREATEDUMMYCONSTITUTIONS are mutually exclusive")
 }
 
