@@ -60,8 +60,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
-                       ) extends LongKeyedMapper[Constitution] with IdPK
-{  def getSingleton = ConstitutionMetaMapperObj
+                       )// extends LongKeyedMapper[Constitution] with IdPK
+{  //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
@@ -259,20 +259,20 @@ getHistory.length, commitIdsReleases.length, isRelease
       jgit.log().addPath( htmlFileName ).call().asScala.toList
    }
 }
-
+/* not yet used: for future increment
 object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil) with LongKeyedMetaMapper[Constitution]
 {
 }
-
+*/
 object Constitution
 {  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
-   
+   /*
    def create():Constitution =
    {  // if no user is given assume 'master' user, TODO <&y2012.05.24.20:44:12& determine fixed number for this, for now I used ID 0>
       create(0)
    }
-   
+   */
 
    def deserialize =
    /*
