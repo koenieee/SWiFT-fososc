@@ -45,6 +45,29 @@ object GlobalConstant
 
    val jgit = new Git(jgitRepo) // <? &y2012.06.30.18:53:23& or isn't this thread safe? I now share one jgit object accross user-sessions (I think... because I instantiate this thing in Boot.scala). Perhaps I should instantiate one per user-session...>
    println(jgit.status().call().getUntracked)
+
+   // create paths
+   createDirIfNotExists(CONSTITUTIONOBJECTDIR)
+   createDirIfNotExists(CONSTITUTIONHTMLDIR)
+   createDirIfNotExists(CORECONTENTOBJECTDIR)
+   
+/** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>
+  * @returns: false dir doesn't exist and could not be created; true: dir exists (if it didn't before, it was created succesfully)
+  */
+   def createDirIfNotExists(pathname:String):Boolean =
+   {  println("createDirIfNotExists called")
+      println("   arg pathname = " + pathname)
+      val outFile = new File(pathname + "/")
+      if( !outFile.exists )
+      {  println("   path " + pathname + " (this is a path to Pure Wisdom) doesn't exist yet")
+         val mkdirSuccess = outFile.mkdirs
+         println("   so creating...  succesful: " + { if(mkdirSuccess) "of course, as always, success is my middle name..." else "Fuck it, no... This is ruining my good humour." } )
+         mkdirSuccess
+      } else
+      {  println("   path already exists, dude, you woke me for nothin'... That means free time for me, humble method, I'm gonna continue my dreamy nap...")
+         true
+      }
+   }
 }
 
 object TestSettings
@@ -52,7 +75,7 @@ object TestSettings
    val AUTOTRANSLATION                  = false
    val CREATETESTUSERBASE               = false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS         = true // creates a number of constitutions with several updates and releases.
+   val CREATEDUMMYCONSTITUTIONS         = false // creates a number of constitutions with several updates and releases.
    if( CREATETESTUSERBASE && CREATEDUMMYCONSTITUTIONS) throw new RuntimeException("Tests CREATETESTUSERBASE and CREATEDUMMYCONSTITUTIONS are mutually exclusive")
 }
 
