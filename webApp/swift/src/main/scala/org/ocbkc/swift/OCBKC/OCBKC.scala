@@ -23,6 +23,7 @@ import GlobalConstant.jgitRepo
 import net.liftweb.mapper._
 import scala.util.matching._
 import scala.util.matching.Regex._
+import org.ocbkc.swift.model._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -391,17 +392,52 @@ case class TimeInterval(val startTime:Long, val endTime:Long)
 package scoring
 {
 
+object PlayerScores
+{  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
+   case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
+   def percentageCorrect(p:Player):Result_percentageCorrect = 
+   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
+      //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
+      val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
+      val totalNumber = ccs.length
+      val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
+      Result_percentageCorrect(percCorrect, totalNumber)
+   }
+   /*
+    // <&y2012.10.06.11:13:23& refactor PlayerStats using this instead?>
+   case class PlayerStats(sessionWithShortestDurationAndCorrectTranslation,  
+   {  
+   }
+   */
+}
+
 /* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
 */
+
 object ConstiScores
-{  // MSS = minimal sample size
-   def percentageCorrectMSS(c:Constitution, minPlayers:Int, minSessionsPerPlayer:Int):Option[Double] =
-   {
+/* <&y2012.10.06.19:40:31& add some confidence measure to this, for example average sample size>
+*/
+{  // <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
+   def averagePercentageCorrect(minimalSampleSizePerSession:Int):Option[Double] =
+   {  val players = Player.findAll
+      val percentages:List[Double] = players.map(
+                           player => 
+                           {  val res = PlayerScores.percentageCorrect(player)
+                              if( res.totalNumberOfSessions < minimalSampleSizePerSession )
+                              {  None
+                              }
+                              {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
+                              }
+                           } ).collect{ case Some(p) => p }
+      def add(p1:Double, p2:Double) = p1 + p2
+      val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)
+      
+      avPercCor
    }
 
-   def percentageCorrect(c:Constitution):Option[Double] =
-   {  c. qwer
-   }
+   /** Helpfunction: returns the total number of sessions played by a player, the number of correct sessions, and the average playing time per correct session. 
+     *
+    **/
 
    def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
    {  //TODO
@@ -412,7 +448,7 @@ object ConstiScores
       */
    }
 
-   def inversePlayingTimeIfCorrect(c:Constitution, p:Player/* TODO , s:Session */) =
+   def inversePlayingTimeIfCorrect(c:Constitution /* TODO */) =
    {  //TODO
    }
 
@@ -425,14 +461,12 @@ object ConstiScores
       }
 */
 }
-
+/* idea put on hold for now:
 abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
 {  // unspecified method defining types of apply
    /* TODO def apply(in:TODOin):TODOout */
 }
-
-
-
+*/
 }
 
 abstract class ConstiSelectionProcedure
