@@ -52,6 +52,7 @@ import ConstitutionTypes._
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
+// <&y2012.09.18.10:39:31& IMPORTANT: currently the following class doesn't make use of its integration in the Mapper framework (the LongKeyedMetaMapper extension).
 case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
                         val creationTime:Long, // creationTime in unix time in seconds
                         val creatorUserID:Long,
@@ -59,8 +60,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
-                       ) extends LongKeyedMapper[Constitution] with IdPK
-{  def getSingleton = ConstitutionMetaMapperObj
+                       )// extends LongKeyedMapper[Constitution] with IdPK
+{  //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
@@ -258,13 +259,13 @@ getHistory.length, commitIdsReleases.length, isRelease
       jgit.log().addPath( htmlFileName ).call().asScala.toList
    }
 }
-
+/* not yet used: for future increment
 object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil) with LongKeyedMetaMapper[Constitution]
 {
 }
-
+*/
 object Constitution
-{  var constis:List[Constitution] = Nil // <&y2012.08.27.20:16:28& TODO: remove, this is now arranged by the Mapper framework>
+{  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
    /*
    def create():Constitution =
@@ -326,7 +327,7 @@ object Constitution
    }
 
    def serialize = 
-   {  println("Constitution.serialize called")
+   {  println("object Constitution.serialize called")
       constis.map(_.serialize)
 
       var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
@@ -430,11 +431,13 @@ abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
    /* TODO def apply(in:TODOin):TODOout */
 }
 
+
+
+}
+
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSesionsB4access2allConstis = 2
-}
-
 }
 }

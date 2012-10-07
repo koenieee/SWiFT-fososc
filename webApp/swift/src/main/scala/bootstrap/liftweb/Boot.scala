@@ -39,7 +39,7 @@ class Boot {
 
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
-    Schemifier.schemify(true, Schemifier.infoF _, Player)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj)
 
     // Build SiteMap
     /* originally generated code:
@@ -242,7 +242,7 @@ class Boot {
    // TODO: before doing this, erase all persistency information, but not without a warning to the developer
 
    if(TestSettings.CREATETESTUSERBASE)
-   {  Player.create.firstName("Aap").email("aap@test.org").password("asdfghjk").validated(true).save
+   {  Player.create.firstName("Aap1").email("aap1@test.org").password("asdfghjk").validated(true).save
       Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true).save
    }
 
