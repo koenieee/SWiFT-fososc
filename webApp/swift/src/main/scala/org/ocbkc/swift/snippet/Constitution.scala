@@ -146,7 +146,7 @@ class ConstitutionSnippet
                   case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception) :: errors }
                }
             }
-            S.redirectTo("constitution?id=" + constLoc.constiId + "&edit=true", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
+            S.redirectTo("constitution?id=" + constLoc.constiId + "&edit=true#kippetje", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
          }
          else
          {  S.redirectTo("constitutions")
