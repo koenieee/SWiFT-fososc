@@ -418,17 +418,25 @@ object ConstiScores
 /* <&y2012.10.06.19:40:31& add some confidence measure to this, for example average sample size>
 */
 {  // <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
-   def averagePercentageCorrect(minimalSampleSizePerSession:Int):Option[Double] =
-   {  val players = Player.findAll
-      val percentages:List[Double] = players.map(
-                           player => 
-                           {  val res = PlayerScores.percentageCorrect(player)
-                              if( res.totalNumberOfSessions < minimalSampleSizePerSession )
-                              {  None
-                              }
-                              {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
-                              }
-                           } ).collect{ case Some(p) => p }
+   def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
+   {  if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+      val players = Player.findAll
+      // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
+      val percentages:List[Double] =
+      players.filter(
+         p => ( p.firstChosenConstitution.get == constiId )
+      ).map(
+         player => 
+         {  val res = PlayerScores.percentageCorrect(player)
+            if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer 
+            && res.totalNumberOfSessions <= OneToStartWith.minSesionsB4access2allConstis)
+            {  None
+            }
+            {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
+            }
+         } 
+      ).collect{ case Some(p) => p }
+
       def add(p1:Double, p2:Double) = p1 + p2
       val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)
       
@@ -438,7 +446,7 @@ object ConstiScores
    /** Helpfunction: returns the total number of sessions played by a player, the number of correct sessions, and the average playing time per correct session. 
      *
     **/
-
+/* [&y2012.10.08.17:42:22& still needed?]
    def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
    {  //TODO
       /* >>> SUC
@@ -447,7 +455,7 @@ object ConstiScores
          <<< EUC
       */
    }
-
+*/
    def inversePlayingTimeIfCorrect(c:Constitution /* TODO */) =
    {  //TODO
    }
