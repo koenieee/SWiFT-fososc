@@ -17,6 +17,7 @@ import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
 import scala.util.Random
+import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -296,6 +297,9 @@ class Boot {
          Unit
       }
    }
+   
+   // initialise widgets
+   TableSorter.init
 
     println("Boot.boot finished")
 
