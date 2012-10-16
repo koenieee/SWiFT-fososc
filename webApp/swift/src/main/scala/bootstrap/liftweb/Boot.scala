@@ -264,7 +264,7 @@ class Boot {
       val numconstis = minconstis + randomSeq.nextInt(maxconstis - minconstis)
       def randomSizeHis = minhis + randomSeq.nextInt(maxhis - minhis)
       def randomPlayer:Player =
-      {  val p = pickRandomElementFromList(Player.findAll(), randomSeq).get // assumed may be that there are players
+      {  val p = pickRandomElementFromList(Player.findAll, randomSeq).get // assumed may be that there are players
          println("   random player = " + p)
          p
       }
@@ -299,22 +299,77 @@ class Boot {
    }
    
    if(TestSettings.SIMULATEPLAYING)
-   {  /* strategy:
-         - create function which simulates playing of one game
-         - randomly pick a first constitution for a player
-         - 
-      */
-      val minsessionsPerPlayer = 5
-      val maxsessionsPerPlayer = 15 // perhaps relate to minSesionsB4access2allConstis
-      val randomSeq = new Random
-      val 
-
+   {  /* This simulation is not intended to simulate all aspects (at least not in the current stage, it may be later extended). It should for now be sufficient to test constitutional scoring calculation.
       
+         strategy:
+         - First create a sequence of events (simply a list). After that "played" the list of events. The events are sorted by time they happen, and they are tupled with the simulated time at which they should occur. E.g. List( ( player 1 chooses constitution c1, time = 1s), (player 2 , etc.) )
+         - An idea may be that the events are simply the function calls themselves!
+         - The order of creation of the sequence is:
+            - for each player, create the complete sequence of events for that player, which consists of:
+               - choose a constitution
+               - play a session
+               - repeat the previous step a random number of times
+            - then calculate the union of the event-sequences of each player, sorted by event time.
+      */
 
+      // START Configuration of test
+      val minSessionsPerPlayer = 5
+      val maxSessionsPerPlayer = 15 // perhaps relate to minSesionsB4access2allConstis
+      val minTimeBetweenSessions = 1000 * 5 // ms
+      val maxTimeBetweenSessions = 1000 * 60 * 60 // ms
+      val minDurationTranslation = 1000 * 10 // ms
+      val maxDurationTranslation = 1000 * 60 * 20 // ms
+
+      // END configuration of test
+
+      val randomSeq = new Random
+
+      // for each player, create the complete sequence of events for that player, which consists of:
+     
+      val players = Player.findAll
+
+      players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
+
+      /*
+      */
+      def mapWithLeftContext[A,B,C](inList:List[A], leftContext:B, f:(A,B) => (C,B) ):List[C] =
+      {  inList match
+         {  case x::xs  => {  val (newX, nextLeftContext) = f(x,leftContext)
+                              newX::mapWithLeftContext(xs, nextLeftContext, f)
+                           }
+            case List() => List()
+         }
+      }
+
+      // TODO: replace result type with more specific type if possible
+      def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[Any] =
+      {  //- simulate choosing a constitution to play with (also see selectConstitution.scala)
+         val chooseConstiEvent = List() // TODO
+
+         // simulate playing sessions      
+         val sessionsEvents = if( numberOfSessions > 0 )
+         {  val sessionIndices = List.range(0, numberOfSessions-1)
+            
+            def f(sessionIndex:Int, endTimeLastSession:Long):(List[Any], Long) =
+            {  val session = simulatePlayingSession(p, endTimeLastSession)
+               val endTime = 0L // TODOextractEndTime(session)
+               (session, endTime)
+            }
+
+            mapWithLeftContext(sessionIndices, 0L, f)
+         }
+         else List()
+
+         chooseConstiEvent ++ sessionsEvents
+      }
    }
 
-   def simulateGameSession(p:Player)
-   {
+   def simulatePlayingSession(p:Player, startAfter:Long):List[Any] =
+   {  /* >>> SUC
+      val pause = minTimeBetweenSessions + randomSeq.nextInt(maxTimeBetweenSessions - minTimeBetweenSessions)
+      SystemAndExtras.currentTimeMillisVar += pause
+         <<< EUC */
+      List() // TODO
    }
 
    // initialise widgets
