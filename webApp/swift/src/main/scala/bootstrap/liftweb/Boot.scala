@@ -301,6 +301,7 @@ class Boot {
 
   }
 
+LiftRules.useXhtmlMimeType = false
 
   /**
    * Force the request to be UTF-8

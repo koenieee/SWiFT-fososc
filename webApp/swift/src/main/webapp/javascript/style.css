@@ -1,0 +1,8 @@
+/* WYSIWYG EDITOR */
+
+/* Toolbar */
+.toolbar   { border: 1px solid #666666; height: 26px; background-color:#cccccc; }
+
+/* Command Buttons */
+.button     { width: 20px; height: 20px; border: 0px solid transparent; margin: 1px; padding: 0px; background: transparent; }
+.buttonOver { width: 20px; height: 20px; border: 1px solid #999999; margin: 0; padding: 0px; }
