@@ -25,7 +25,7 @@ class SelectConstitution
                               consti match
                               { case Some(constLoc)   => {  println("   Found constitution with this id" )
                                                             player.firstChosenConstitution(constLoc.constiId).save
-                                                            sesCoordLR.timeFirstChosenConstitution = Some(System.currentTimeMillis)
+                                                            player.timeFirstChosenConstitution(System.currentTimeMillis).save
                                                             println("   now redirecting player to studyConstitution")
                                                             S.redirectTo("studyConstitution")
                                                          }
