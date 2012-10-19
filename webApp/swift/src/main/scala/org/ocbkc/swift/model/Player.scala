@@ -60,8 +60,7 @@ class Player extends MegaProtoUser[Player] {
    }
 */
    object firstChosenConstitution extends MappedInt(this) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
-
-
+   object timeFirstChosenConstitution extends MappedLong(this)
 }
 
 }

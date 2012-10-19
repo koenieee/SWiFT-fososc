@@ -449,13 +449,12 @@ object ConstiScores
 /* [&y2012.10.08.17:42:22& still needed?]
    def firstN(c:Constitution, N: Int, sps:ScorePerSession) =
    {  //TODO
-      /* >>> SUC
       val firstNperPlayerList = TODOgetAllPlayers.map(firstNplayer(c, N, sps, _))
       firstNperPlayerList.sum / firstNperPlayerList.length
-         <<< EUC
-      */
    }
-*/
+
+   <<< EUC */
+
    def inversePlayingTimeIfCorrect(c:Constitution /* TODO */) =
    {  //TODO
    }
