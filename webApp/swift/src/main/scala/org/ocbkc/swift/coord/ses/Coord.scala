@@ -10,6 +10,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -49,7 +50,6 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
 
    // END
 
-
    def currentPlayer = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
    {  case Full(player) => player
       case _            => 
@@ -86,6 +86,12 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    // user requests to prepare session
    def URprepare = 
    {  
+   }
+
+   def URchooseFirstConstitution(constiId:ConstiId) =
+   {  val player = currentPlayer
+      player.firstChosenConstitution(constiId).save
+      player.timeFirstChosenConstitution(System.currentTimeMillis).save
    }
 
    def URtranslation:String =  
