@@ -19,6 +19,8 @@ class Source extends Enumeration
    val SOURCE, TRANSLATION = Value   
 }
 */
+
+// [&y2012.10.20.21:26:10& never used this up until now. It was intended to hold the current state of the session in Coord.scala. Remove it?]
 object Round extends Enumeration
 {  type Round = Value
    val NotStarted, Trans, Qattack, Qdefence = Value

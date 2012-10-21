@@ -18,7 +18,10 @@ import java.io._
 import org.ocbkc.swift.snippet.sesCoord
 import scala.util.Random
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
-
+import org.ocbkc.swift.test._
+import org.ocbkc.swift.test.Types._
+import org.ocbkc.swift.test.TestHelpers._
+import org.ocbkc.swift.coord._
 /**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
@@ -299,7 +302,10 @@ class Boot {
    }
    
    if(TestSettings.SIMULATEPLAYING)
-   {  /* This simulation is not intended to simulate all aspects (at least not in the current stage, it may be later extended). It should for now be sufficient to test constitutional scoring calculation.
+   {  /* This simulation is not intended to simulate all aspects (at least not in the current stage, it may be later extended). It should for now be sufficient to test constitutional scoring calculation. Assumptions now are:
+            - Users have already been created
+            - Constitutions have already been created
+            - Each user works in one simulated "session" (they don't log off, and only have one session per user)
       
          strategy:
          - First create a sequence of events (simply a list). After that "played" the list of events. The events are sorted by time they happen, and they are tupled with the simulated time at which they should occur. E.g. List( ( player 1 chooses constitution c1, time = 1s), (player 2 , etc.) )
@@ -311,10 +317,12 @@ class Boot {
                - repeat the previous step a random number of times
             - then calculate the union of the event-sequences of each player, sorted by event time.
       */
-
+      println("TestSettings.SIMULATEPLAYING set, so test now carried out...")
       // START Configuration of test
       val minSessionsPerPlayer = 5
       val maxSessionsPerPlayer = 15 // perhaps relate to minSesionsB4access2allConstis
+      val minTimeBeforeChoosingConsti = 1000 * 5 // ms
+      val maxTimeBeforeChoosingConsti = 1000 * 60 * 60 * 24 // ms
       val minTimeBetweenSessions = 1000 * 5 // ms
       val maxTimeBetweenSessions = 1000 * 60 * 60 // ms
       val minDurationTranslation = 1000 * 10 // ms
@@ -342,34 +350,51 @@ class Boot {
       }
 
       // TODO: replace result type with more specific type if possible
-      def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[Any] =
-      {  //- simulate choosing a constitution to play with (also see selectConstitution.scala)
-         val chooseConstiEvent = List() // TODO
+      def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[SimulatedEvent] =
+      {  // create simulated session for player
+         val sesCoordLR = new ses.CoreSimu(p)
+      
+         //- simulate choosing a constitution to play with (also see selectConstitution.scala)
+         if(Constitution.count < 1) throw new RuntimeException("simulatePlayingSessions: No constitutions created yet")
 
-         // simulate playing sessions      
+         val randomConstiId = 1 + randomSeq.nextInt(Constitution.count - 1)
+         val chooseConstiEvent = List((randomPause(minTimeBeforeChoosingConsti, maxTimeBeforeChoosingConsti, randomSeq), () => sesCoordLR.URchooseFirstConstitution(randomConstiId)))
+
+         // simulate playing sessions
          val sessionsEvents = if( numberOfSessions > 0 )
          {  val sessionIndices = List.range(0, numberOfSessions-1)
             
-            def f(sessionIndex:Int, endTimeLastSession:Long):(List[Any], Long) =
-            {  val session = simulatePlayingSession(p, endTimeLastSession)
+            def f(sessionIndex:Int, endTimeLastSession:Long):(List[SimulatedEvent], Long) =
+            {  val session = simulatePlayingSession(p, endTimeLastSession, sesCoordLR)
                val endTime = 0L // TODOextractEndTime(session)
                (session, endTime)
             }
 
-            mapWithLeftContext(sessionIndices, 0L, f)
+            mapWithLeftContext(sessionIndices, 0L, f).flatten
          }
          else List()
-
-         chooseConstiEvent ++ sessionsEvents
+      
+         val ret = chooseConstiEvent ++ sessionsEvents
+         println("   ret = " + chooseConstiEvent)
+         ret
       }
-   }
 
-   def simulatePlayingSession(p:Player, startAfter:Long):List[Any] =
-   {  /* >>> SUC
-      val pause = minTimeBetweenSessions + randomSeq.nextInt(maxTimeBetweenSessions - minTimeBetweenSessions)
-      SystemAndExtras.currentTimeMillisVar += pause
-         <<< EUC */
-      List() // TODO
+      def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
+      {  List( 
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoord.URtranslation ) // startSession
+         /* >>> SUC
+            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoord.URtranslation// translationRound
+
+         // bridgeConstructionRound
+
+         // algorithmicDefenceRound
+
+         // algorithmicDefenceRoundStage2
+
+         // finaliseSession
+            <<< EUC */
+         )
+      }
    }
 
    // initialise widgets

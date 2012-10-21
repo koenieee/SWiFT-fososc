@@ -265,6 +265,11 @@ object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil)
 {
 }
 */
+
+/** 
+  * @param constiId constitution id, must be a number between 1 and this.count. Constitutions started being numbered from id = 1, and then without skipping any natural number up to the highestId.
+
+  */
 object Constitution
 {  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
@@ -274,6 +279,10 @@ object Constitution
       create(0)
    }
    */
+
+   def count =
+   {  constis.size
+   }
 
    def deserialize =
    /*

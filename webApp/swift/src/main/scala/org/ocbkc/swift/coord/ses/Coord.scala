@@ -11,6 +11,7 @@ import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
+import org.ocbkc.swift.test._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -33,11 +34,34 @@ import org.ocbkc.swift.parser._
 package ses
 {
 
-import Round._
-class Core(/* val player: User, var text: Text,*/ var round: Round)
-{  println("ses.Core.constructor called")
+//import Round._
+
+
+// in trait, make for easy reuse for creating test simulation sessions.
+trait CoreTrait
+{  var cc: CoreContent = null
    val gameCore: TraitGameCore = new NotUna()
-   var cc: CoreContent = null
+
+   def currentPlayer:Player
+
+   def URchooseFirstConstitution(constiId:ConstiId) =
+   {  val player = currentPlayer
+      player.firstChosenConstitution(constiId).save
+      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+   }
+
+   def URtranslation:String =  
+   {  //round = Trans
+      cc = gameCore.initialiseCoreContent
+      cc.startTime(SystemWithTesting.currentTimeMillis).save
+      cc.startTimeTranslation(cc.startTime.is).save
+      cc.textNL
+   }
+}
+
+class Core(/* val player: User, var text: Text,v ar round: Round */) extends CoreTrait
+{  println("ses.Core.constructor called")
+
    val sesHis = new SessionHistory()
    
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
@@ -50,7 +74,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
 
    // END
 
-   def currentPlayer = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
+   override def currentPlayer = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
    {  case Full(player) => player
       case _            => 
       {  println("   ERROR: I'm afraid no player is logged in..."); throw new RuntimeException("   ERROR: I'm afraid no player is logged in...") // there should always be a player if a Coord object is being created.
@@ -88,12 +112,19 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    {  
    }
 
-   def URchooseFirstConstitution(constiId:ConstiId) =
+   override def URchooseFirstConstitution(constiId:ConstiId) =
    {  val player = currentPlayer
       player.firstChosenConstitution(constiId).save
       player.timeFirstChosenConstitution(System.currentTimeMillis).save
    }
 
+   def URchooseFirstConstitution(player:Player, constiId:ConstiId) =
+   {  //val player = currentPlayer
+      player.firstChosenConstitution(constiId).save
+      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+   }
+
+/*
    def URtranslation:String =  
    {  round = Trans
       cc = gameCore.initialiseCoreContent
@@ -101,7 +132,7 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
       cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
    }
-
+*/
    def URstopTranslation =
    {  cc.stopTimeTranslation(System.currentTimeMillis).save
       Unit
@@ -164,6 +195,11 @@ class Core(/* val player: User, var text: Text,*/ var round: Round)
    object Test
    {  var initConstitutions:Boolean = true
    }
+}
+
+// simulation of Core for testing purposes
+class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
+{  override def currentPlayer = currentPlayerVal
 }
 
 
