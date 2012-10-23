@@ -328,18 +328,12 @@ class Boot {
       val minDurationTranslation = 1000 * 10 // ms
       val maxDurationTranslation = 1000 * 60 * 20 // ms
 
-      // END configuration of test
+      // subfunctions
 
-      val randomSeq = new Random
-
-      // for each player, create the complete sequence of events for that player, which consists of:
-     
-      val players = Player.findAll
-
-      players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
-
-      /*
-      */
+      /**  @param f: function which maps element if inList (A) to value of type C, and gets a value of type B as context information originating from the previous time f was applied to the element at the left. 
+        *
+        */
+      // <&y2012.10.23.23:40:37& todo: move to general lib>
       def mapWithLeftContext[A,B,C](inList:List[A], leftContext:B, f:(A,B) => (C,B) ):List[C] =
       {  inList match
          {  case x::xs  => {  val (newX, nextLeftContext) = f(x,leftContext)
@@ -349,7 +343,8 @@ class Boot {
          }
       }
 
-      // TODO: replace result type with more specific type if possible
+      val randomSeq = new Random
+
       def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[SimulatedEvent] =
       {  // create simulated session for player
          val sesCoordLR = new ses.CoreSimu(p)
@@ -381,20 +376,50 @@ class Boot {
 
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
       {  List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoord.URtranslation ) // startSession
-         /* >>> SUC
-            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoord.URtranslation// translationRound
-
-         // bridgeConstructionRound
-
-         // algorithmicDefenceRound
-
-         // algorithmicDefenceRoundStage2
-
-         // finaliseSession
-            <<< EUC */
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
+            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified)
          )
       }
+
+      // END configuration of test
+
+
+      // for each player, create the complete sequence of events for that player, which consists of:
+     
+      val players = Player.findAll
+
+      val simulatedEventsGroupedByPlayer:List[List[SimulatedEvent]] = players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
+      
+      def toAbsoluteTimes(eventList:List[SimulatedEvent]) =
+      {  def f(event:SimulatedEvent, cummulativeTime:Long):(SimulatedEvent, Long) =
+         {  val newCummulTime = cummulativeTime + event._1
+            ((newCummulTime, event._2), newCummulTime)
+         }
+
+         mapWithLeftContext(eventList, 0L, f)
+      }
+
+      val simulatedEvent = simulatedEventsGroupedByPlayer.map{ eventPlayer => toAbsoluteTimes(eventPlayer) }
+
+      val simulatedEventsAbsoluteTimes = simulatedEventsGroupedByPlayer
+                                          .map{ eventPlayer => toAbsoluteTimes(eventPlayer) }
+                                          .flatten
+                                          .sortWith{ case Tuple2(event1, event2) => (event1._1 < event2._1) }
+      // COULDDO now turn eventList back into list with pause times between events instead of times from the start of the event queue, and adapt runEvent (it simplifies runEvent).
+
+      // run eventList
+      def runSimulatedEvent(event:SimulatedEvent) =
+      {  println("runSimulatedEvent")
+         val timeOfEvent = event._1 + SystemWithTesting.startTimeSimulatedClock - SystemWithTesting.currentTimeMillis
+         SystemWithTesting.pause(timeOfEvent)
+         println("   time:" + timeOfEvent )
+         println("   event:" + event._2 )
+         event._2()
+      }   
+         
+      simulatedEventsAbsoluteTimes.map(runSimulatedEvent)
+
+      // TODO: replace result type with more specific type if possible
    }
 
    // initialise widgets

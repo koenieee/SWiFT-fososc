@@ -40,6 +40,7 @@ package ses
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait
 {  var cc: CoreContent = null
+   val sesHis = new SessionHistory()
    val gameCore: TraitGameCore = new NotUna()
 
    def currentPlayer:Player
@@ -57,12 +58,26 @@ trait CoreTrait
       cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
    }
+
+   def URalgorithmicDefenceStage1:FolnuminquaQuery =
+   {  gameCore.algorithmicDefenceGenerator
+   }
+
+   def URalgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
+   {  val res = gameCore.doAlgorithmicDefence
+      // Session completed: store this session for future analysis/score calculations
+      // now:Calendar = System.currentTimeMillis()
+      cc.stopTime(System.currentTimeMillis).save
+      sesHis.coreContents ::= cc      
+      cc.serialize // serialize the JSON part
+      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+      res
+   }
 }
 
 class Core(/* val player: User, var text: Text,v ar round: Round */) extends CoreTrait
 {  println("ses.Core.constructor called")
 
-   val sesHis = new SessionHistory()
    
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
    // BEGIN temporary solution for constiSelectionProcedure
@@ -145,7 +160,7 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    def URquestionAttack:QuestionAndCorrectAnswer = 
    {  gameCore.generateQuestionAndCorrectAnswer
    }
-
+/*
    def URalgorithmicDefenceStage1:FolnuminquaQuery =
    {  gameCore.algorithmicDefenceGenerator
    }
@@ -160,6 +175,7 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
       res
    }
+*/
 // <&y2012.02.21.19:22:56& refactor by using built-in parser of CoreContent.?>
    def testSyntaxTranslation:String = 
    {  cc.ParseTextCTLbyPlayer
@@ -200,6 +216,14 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
 // simulation of Core for testing purposes
 class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
 {  override def currentPlayer = currentPlayerVal
+
+   // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
+   def URalgorithmicDefenceSimplified =
+   {  cc.stopTime(SystemWithTesting.currentTimeMillis).save
+      cc.serialize
+      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+      sesHis.coreContents ::= cc
+   }
 }
 
 

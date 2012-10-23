@@ -7,8 +7,9 @@ package org.ocbkc.swift.test
 {  
    // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
-{  var currentTimeMillisVar_simu:Long = 0L
-   
+{  val startTimeSimulatedClock:POSIXtime = System.currentTimeMillis
+   var currentTimeMillisVar_simu:POSIXtime = startTimeSimulatedClock // take the current time as the start time of the simulated clock
+
    def currentTimeMillis:POSIXtime =
    {  if(TestSettings.SIMULATECLOCK)
       {  currentTimeMillisVar_simu
@@ -22,15 +23,15 @@ object SystemWithTesting
 /** @param min in milliseconds
 * @param max in milliseconds
 */
-   def pause(min:Int, max:Int, randomSeq:Random) =
-   {  val pause = min + randomSeq.nextInt(max - min)
+   def pause(min:Long, max:Long, randomSeq:Random) =
+   {  val pause = min + randomSeq.nextInt((max - min).toInt).toLong
       SystemWithTesting.currentTimeMillisVar_simu += pause
    }
 
 
 /** @param duration in milliseconds
 */
-   def pause(duration:Int) =
+   def pause(duration:Long) =
    {  SystemWithTesting.currentTimeMillisVar_simu += duration
    }
 }
