@@ -26,7 +26,8 @@
     <repository>
       <id>scala-tools.releases</id>
       <name>Scala-Tools Dependencies Repository for Releases</name>
-      <url>http://scala-tools.org/repo-releases</url>
+      <url>https://oss.sonatype.org/content/groups/scala-tools/</url>
+      <!-- &y2012.10.08.17:21:18& Previously was: http://scala-tools.org/repo-releases</url> -->
     </repository>
     <repository>
       <id>java.net.maven2</id>
@@ -51,13 +52,13 @@
    <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-json-ext_2.9.1</artifactId>
-      <version>2.4-M4</version>
+      <version>2.4</version>
    </dependency>
 
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_2.9.1</artifactId>
-      <version>2.4-M4</version>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -104,7 +105,7 @@
     <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-            <version>2.1</version> <!-- &y2012.06.23.12:45:19& I tried newest version 2.4, but I won't download... -->
+            <version>2.4</version> <!-- &y2012.06.23.12:45:19& I tried newest version 2.4, but I won't download... -->
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
@@ -116,6 +117,11 @@
      <artifactId>gitective-core</artifactId>
      <version>0.9.9</version>
    </dependency>
+    <dependency>
+      <groupId>net.liftweb</groupId>
+      <artifactId>lift-widgets_2.9.1</artifactId>
+      <version>2.4</version>
+    </dependency>
   </dependencies>
 
   <build>

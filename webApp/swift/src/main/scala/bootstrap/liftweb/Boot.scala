@@ -17,6 +17,7 @@ import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
 import scala.util.Random
+import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -259,7 +260,7 @@ class Boot {
       val minhis = 1
       val maxhis = 50
       
-      val randomSeq = new Random()
+      val randomSeq = new Random
       val numconstis = minconstis + randomSeq.nextInt(maxconstis - minconstis)
       def randomSizeHis = minhis + randomSeq.nextInt(maxhis - minhis)
       def randomPlayer:Player =
@@ -296,6 +297,28 @@ class Boot {
          Unit
       }
    }
+   
+   if(TestSettings.SIMULATEPLAYING)
+   {  /* strategy:
+         - create function which simulates playing of one game
+         - randomly pick a first constitution for a player
+         - 
+      */
+      val minsessionsPerPlayer = 5
+      val maxsessionsPerPlayer = 15 // perhaps relate to minSesionsB4access2allConstis
+      val randomSeq = new Random
+      val 
+
+      
+
+   }
+
+   def simulateGameSession(p:Player)
+   {
+   }
+
+   // initialise widgets
+   TableSorter.init
 
     println("Boot.boot finished")
 
