@@ -41,7 +41,7 @@ package ses
 trait CoreTrait
 {  var cc: CoreContent = null
    val sesHis = new SessionHistory()
-   val gameCore: TraitGameCore = new NotUna()
+   val gameCore: TraitGameCore = new NotUna(currentPlayer.id.open_!)
 
    def currentPlayer:Player
 

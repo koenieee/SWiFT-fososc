@@ -100,7 +100,8 @@ case class CoreContent( var textNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
-                        var subjectNL:String
+                        var subjectNL:String,
+                        val userId:Long
                       ) extends LongKeyedMapper[CoreContent] with IdPK
 {  def getSingleton = CoreContentMetaMapperObj
    // object player extends MappedLongForeignKey(this, Player)
@@ -110,7 +111,7 @@ case class CoreContent( var textNL: String,
    object stopTimeTranslation extends MappedLong(this)
    object answerPlayerCorrect extends MappedBoolean(this)
    
-   def this() = this("","","","","","","","","",None,None,"",None,"","","","","","")
+   def this(userId:Long) = this("","","","","","","","","",None,None,"",None,"","","","","","",userId)
    def durationTranslation:Option[Long] = 
    {  if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
    }
@@ -205,11 +206,7 @@ case class CoreContent( var textNL: String,
       println("  corecontents serialised to: " + ccSer)
       // write session to file with unique name, e.g.: playerName/corecontent/
 
-      var prefix:String = ""
-      Player.currentUserId match
-      {  case Full(id)  => { prefix = id }
-         case _         => { throw new RuntimeException("  No user id found.") }
-      }
+      var prefix:String = userId.toString
 
       // <&y2012.01.07.17:59:19& MUSTDO: what happens with Player.CurrentUserId, if someone deletes his user account, will the number be reused for another, new, user, if so that would be a problem>
       var outFile = new File(CORECONTENTOBJECTDIR + "/cc" + this.id )

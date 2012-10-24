@@ -36,7 +36,9 @@ package gameCoreHelperTypes
 import gameCoreHelperTypes._
 
 trait TraitGameCore
-{  def initialiseCoreContent:CoreContent // <does this really belong here?>
+{  val playerId:Long
+
+   def initialiseCoreContent:CoreContent // <does this really belong here?>
    def generateText:String
    def algorithmicDefenceGenerator:FolnuminquaQuery
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
@@ -55,16 +57,16 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 
 // helper class for return type of generateQuestionAndCorrectAnswer
 
-class NotUna extends TraitGameCore
+class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
-   
+   playerId = playerIdInit
    /* This doesn't only generate the text, but everything: the ctf text, the nl text, the question for the attack, and the answer based on the text. (Note that for the latter, the Clean program actually applies the reasoner to textCTLbyComputer, it is not "baked in".)      
    */
    var cc:CoreContent = null
 
    def initialiseCoreContent:CoreContent = 
    {  // regex must contain exactly 1 group which will be returned as a match.
-      cc = new CoreContent()
+      cc = new CoreContent(playerId)
       def extractRegExGroup(regexStr:String, sbc: String):String =
       {  val regex = new Regex(regexStr)
          val m     = regex.findFirstMatchIn(sbc)
