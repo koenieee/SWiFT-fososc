@@ -41,7 +41,7 @@ package ses
 trait CoreTrait
 {  var cc: CoreContent = null
    val sesHis = new SessionHistory()
-   val gameCore: TraitGameCore = new NotUna(currentPlayer.id.open_!)
+   val gameCore: TraitGameCore = new NotUna(currentPlayer.id.get)
 
    def currentPlayer:Player
 
@@ -58,6 +58,12 @@ trait CoreTrait
       cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
    }
+
+   def URstopTranslation =
+   {  cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+      Unit
+   }
+
 
    def URalgorithmicDefenceStage1:FolnuminquaQuery =
    {  gameCore.algorithmicDefenceGenerator
@@ -148,10 +154,6 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
       cc.textNL
    }
 */
-   def URstopTranslation =
-   {  cc.stopTimeTranslation(System.currentTimeMillis).save
-      Unit
-   }
 
    def URstopBridgeConstruction =
    {
@@ -218,8 +220,10 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
 {  override def currentPlayer = currentPlayerVal
 
    // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
-   def URalgorithmicDefenceSimplified =
+   def URalgorithmicDefenceSimplified(winSession:Boolean) =
    {  cc.stopTime(SystemWithTesting.currentTimeMillis).save
+      //cc.
+      cc.answerPlayerCorrect(winSession).save
       cc.serialize
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
       sesHis.coreContents ::= cc

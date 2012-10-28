@@ -327,6 +327,8 @@ class Boot {
       val maxTimeBetweenSessions = 1000 * 60 * 60 // ms
       val minDurationTranslation = 1000 * 10 // ms
       val maxDurationTranslation = 1000 * 60 * 20 // ms
+      val minDurationAlgoDef = 1000 * 2 // ms
+      val maxDurationAlgoDef = 1000 * 60 // ms
 
       // subfunctions
 
@@ -375,9 +377,11 @@ class Boot {
       }
 
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
-      {  List( 
+      {  val winSession = randomSeq.nextBoolean
+         List( 
             (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
-            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified)
+            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
+            (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession))
          )
       }
 
@@ -410,9 +414,8 @@ class Boot {
       // run eventList
       def runSimulatedEvent(event:SimulatedEvent) =
       {  println("runSimulatedEvent")
-         val timeOfEvent = event._1 + SystemWithTesting.startTimeSimulatedClock - SystemWithTesting.currentTimeMillis
-         SystemWithTesting.pause(timeOfEvent)
-         println("   time:" + timeOfEvent )
+         SystemWithTesting.currentTimeMillis = SystemWithTesting.startTimeMillis_simu + event._1
+         println("   time:" + SystemWithTesting.currentTimeMillis )
          println("   event:" + event._2 )
          event._2()
       }   

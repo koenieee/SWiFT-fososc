@@ -100,8 +100,7 @@ case class CoreContent( var textNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
-                        var subjectNL:String,
-                        val userId:Long
+                        var subjectNL:String
                       ) extends LongKeyedMapper[CoreContent] with IdPK
 {  def getSingleton = CoreContentMetaMapperObj
    // object player extends MappedLongForeignKey(this, Player)
@@ -110,10 +109,14 @@ case class CoreContent( var textNL: String,
    object startTimeTranslation extends MappedLong(this)
    object stopTimeTranslation extends MappedLong(this)
    object answerPlayerCorrect extends MappedBoolean(this)
+   object userId extends MappedLong(this)
    
-   def this(userId:Long) = this("","","","","","","","","",None,None,"",None,"","","","","","",userId)
-   def durationTranslation:Option[Long] = 
-   {  if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
+   def this() = this("","","","","","","","","",None,None,"",None,"","","","","","")
+   def durationTranslation:Option[Long] = // <&y2012.10.28.19:58:50& TODO: refactor with checking if startTimeTranslation is defined?>
+   {  println("   durationTranslation called")
+      println("   startTimeTranslation.is == " + startTimeTranslation.is)
+      println("   stopTimeTranslation.is == " + stopTimeTranslation.is)
+      if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
    }
 
    var textCTLplayerUpdated4terParsing = false

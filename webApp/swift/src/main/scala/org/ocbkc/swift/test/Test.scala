@@ -7,8 +7,9 @@ package org.ocbkc.swift.test
 {  
    // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
-{  val startTimeSimulatedClock:POSIXtime = System.currentTimeMillis
-   var currentTimeMillisVar_simu:POSIXtime = startTimeSimulatedClock // take the current time as the start time of the simulated clock
+{  val startTimeMillis_simu:POSIXtime = System.currentTimeMillis
+   private var currentTimeMillisVar_simu:POSIXtime = startTimeMillis_simu // take the current time as the start time of the simulated clock
+   private var lastTimeMillis_simu:POSIXtime = currentTimeMillisVar_simu
 
    def currentTimeMillis:POSIXtime =
    {  if(TestSettings.SIMULATECLOCK)
@@ -17,6 +18,13 @@ object SystemWithTesting
       else
       {  System.currentTimeMillis
       }
+   }
+
+   // &y2012.10.29.00:34:11& perhaps use this method as few times as possible, and use pause instead (the latter enforces chronological order...)
+   def currentTimeMillis_= (newTime:POSIXtime):Unit =
+   {  if(newTime < lastTimeMillis_simu ) throw new RuntimeException("   timeOfEvent is smaller than of last position of clock, clock may only move forward.")
+      lastTimeMillis_simu = currentTimeMillisVar_simu
+      currentTimeMillisVar_simu = newTime
    }
 
 

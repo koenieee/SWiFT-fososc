@@ -36,8 +36,7 @@ package gameCoreHelperTypes
 import gameCoreHelperTypes._
 
 trait TraitGameCore
-{  val playerId:Long
-
+{  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
    def initialiseCoreContent:CoreContent // <does this really belong here?>
    def generateText:String
    def algorithmicDefenceGenerator:FolnuminquaQuery
@@ -59,14 +58,15 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
-   playerId = playerIdInit
+   val playerId = playerIdInit
    /* This doesn't only generate the text, but everything: the ctf text, the nl text, the question for the attack, and the answer based on the text. (Note that for the latter, the Clean program actually applies the reasoner to textCTLbyComputer, it is not "baked in".)      
    */
    var cc:CoreContent = null
 
    def initialiseCoreContent:CoreContent = 
    {  // regex must contain exactly 1 group which will be returned as a match.
-      cc = new CoreContent(playerId)
+      cc = new CoreContent
+      cc.userId(playerId)
       def extractRegExGroup(regexStr:String, sbc: String):String =
       {  val regex = new Regex(regexStr)
          val m     = regex.findFirstMatchIn(sbc)
@@ -121,7 +121,7 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       var sbClean:String = ""
       val ran:Int = currentTimeMillis().toInt
       // <&y2011.11.23.21:08:25& check whether scala Ints indeed fit in Clean ints>
-      err.println("generateNewSessionBundle: currentTimeMillis = " + ran)
+      err.println("generateNewSessionBundle: use as random number = " + ran)
       sbClean = ( ( "../../textgenerator " + ran ) !!)
       
       cc.textNL = extractNl(sbClean)
