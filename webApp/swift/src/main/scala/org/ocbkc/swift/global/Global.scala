@@ -27,6 +27,7 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
+   val MINsESSIONSb4ACCESS2ALLcONSTIS = 5
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 
@@ -75,6 +76,7 @@ object Types
 {  type POSIXtime = Long
 }
 
+// <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
    val AUTOTRANSLATION                 = false

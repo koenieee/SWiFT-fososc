@@ -488,6 +488,6 @@ abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
 case object OneToStartWith extends ConstiSelectionProcedure
-{  val minSesionsB4access2allConstis = 2
+{  val minSesionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
 }
 }
