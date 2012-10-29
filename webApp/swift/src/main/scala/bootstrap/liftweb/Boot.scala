@@ -246,16 +246,17 @@ class Boot {
    // TODO: before doing this, erase all persistency information, but not without a warning to the developer
 
    if(TestSettings.CREATETESTUSERBASE)
-   {  Player.create.firstName("Aap1").email("aap1@test.org").password("asdfghjk").validated(true).save
-      Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true).save
+   {  val randomSeq = new Random
+      val minimalNumberOfPlayers = 5
+      val maximumNumberOfPlayers = 100
+      val numberOfPlayers =  minimalNumberOfPlayers + randomSeq.nextInt(maximumNumberOfPlayers - minimalNumberOfPlayers)
+      println("   numberOfPlayers = " + numberOfPlayers)
+      List.range(1, numberOfPlayers).foreach(n => Player.create.firstName("Aap" + n).email("aap" + n + "@test.org").password("asdfghjk").validated(true).save)
    }
 
    if(TestSettings.CREATEDUMMYCONSTITUTIONS)
    {  // <&y2012.09.15.20:58:31& erase persistent info first, but not before warning to developer>
       // NOTE: Now you HAVE to do that manually!
-      val p1 = Player.create.firstName("Aap1").email("aap1@test.org").password("asdfghjk").validated(true)
-      val p2 = Player.create.firstName("Aap2").email("aap2@test.org").password("asdfghjk").validated(true)
-      p1.save; p2.save
       
       // randomly create between 
       val minconstis = 5
@@ -320,7 +321,7 @@ class Boot {
       println("TestSettings.SIMULATEPLAYING set, so test now carried out...")
       // START Configuration of test
       val minSessionsPerPlayer = 5
-      val maxSessionsPerPlayer = 15 // perhaps relate to minSesionsB4access2allConstis
+      val maxSessionsPerPlayer = 200 // perhaps relate to minSesionsB4access2allConstis
       val minTimeBeforeChoosingConsti = 1000 * 5 // ms
       val maxTimeBeforeChoosingConsti = 1000 * 60 * 60 * 24 // ms
       val minTimeBetweenSessions = 1000 * 5 // ms
