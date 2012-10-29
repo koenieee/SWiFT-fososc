@@ -9,6 +9,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.scoring._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
@@ -35,7 +36,7 @@ class Constitutions
             // <&y2012.03.23.19:20:18& displayNoneIfEmpty doesn't work, don't know why>
             def displayNoneIfEmpty(d:String):String = if( d.equals("") ) "None" else d
             val doc =  Elem(null, "table", Null, TopScope,  
-            <tr><td>ID</td><td>description</td><td>APC</td></tr>::Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(c => <tr><td><a href={ "constitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>TODO</td></tr>): _*  )
+            <tr><td>ID</td><td>description</td><td>PCA</td></tr>::Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(c => <tr><td><a href={ "constitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ ConstiScores.averagePercentageCorrect(4, c.constiId) }</td></tr>): _*  )
             // <&y2012.05.28.12:13:54& perhaps more elegant to refer to constitutions by using a html-parameter>
             // <&y2012.06.29.22:54:28& COULDDO optimise sorting function, by doing it only once, it is now done everytime.>
             println("   doc = " + doc)

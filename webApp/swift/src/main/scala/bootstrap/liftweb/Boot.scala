@@ -320,8 +320,8 @@ class Boot {
       */
       println("TestSettings.SIMULATEPLAYING set, so test now carried out...")
       // START Configuration of test
-      val minSessionsPerPlayer = 5
-      val maxSessionsPerPlayer = 200 // perhaps relate to minSesionsB4access2allConstis
+      val minSessionsPerPlayer = 3
+      val maxSessionsPerPlayer = 20 // perhaps relate to minSesionsB4access2allConstis
       val minTimeBeforeChoosingConsti = 1000 * 5 // ms
       val maxTimeBeforeChoosingConsti = 1000 * 60 * 60 * 24 // ms
       val minTimeBetweenSessions = 1000 * 5 // ms
