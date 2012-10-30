@@ -12,6 +12,6 @@ class TableSorterDemo {
   val options = TableSorter.options(headers,sortList)
   
   def render(xhtml: NodeSeq) :NodeSeq = {
-    TableSorter("myTable", options)
+    TableSorter("#myTable", options)
   }  
 }

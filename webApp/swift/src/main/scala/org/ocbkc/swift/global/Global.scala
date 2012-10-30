@@ -80,11 +80,11 @@ object Types
 object TestSettings
 {  val AUTOLOGIN                       = false
    val AUTOTRANSLATION                 = false
-   val CREATETESTUSERBASE              = true
+   val CREATETESTUSERBASE              = false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = true // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYING                 = true
-   val SIMULATECLOCK                   = true
+   val CREATEDUMMYCONSTITUTIONS        = false // creates a number of constitutions with several updates and releases, but also some users.
+   val SIMULATEPLAYING                 = false
+   val SIMULATECLOCK                   = false
 }
 
 }
