@@ -51,18 +51,12 @@ class Constitutions
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
-               <thead><tr><td>ID</td><td>description</td><td>PCA</td></tr></thead>::{
-                  Elem(
-                     null,
-                     "tbody",
-                     Null,
-                     TopScope,
-                        Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ ConstiScores.averagePercentageCorrect(4, c.constiId) }</td></tr>): _* 
-                  )
-                  } 
+               <thead><tr><th>ID</th><th>description</th><th>PCA</th></tr></thead>,
+               <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
+                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ ConstiScores.averagePercentageCorrect(4, c.constiId) }</td></tr>)
+               }
+               </tbody>
             )
-t
             // <&y2012.05.28.12:13:54& perhaps more elegant to refer to constitutions by using a html-parameter>
             // <&y2012.06.29.22:54:28& COULDDO optimise sorting function, by doing it only once, it is now done everytime.>
             println("   doc = " + doc)
