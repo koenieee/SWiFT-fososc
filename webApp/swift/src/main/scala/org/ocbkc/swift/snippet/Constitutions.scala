@@ -14,19 +14,19 @@ import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
 import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
+import org.ocbkc.swift.general.GUIdisplayHelpers._
 
 
 class Constitutions
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
 
-   // /* >>> Code in progress
-
-   val headers = List( (0, Sorter("text")), (2, Sorter("float")) )
+   // <&y2012.10.31.21:14:24& TODO Koen assignment: fix bug: sort links + decimals>
+   val headers = List( (0, Sorter("digit")), (2, Sorter("float")), (3, Sorter("shortDate") ))
+   
    val sortList = (0,Sorting.DSC) :: Nil
 
    val options = TableSorter.options(headers,sortList)
 
-   //    <<< */
    def list(ns: NodeSeq): NodeSeq =
    {  def displayConstis:NodeSeq = 
       {  /*
@@ -45,15 +45,17 @@ class Constitutions
             // val doc =  <ul> Constitution.constis.map(c => <li> Constitution { c.constiId } </li>).foldLeft("")((a,b) => a b) </ul>
             // <&y2012.03.23.19:20:18& displayNoneIfEmpty doesn't work, don't know why>
             def displayNoneIfEmpty(d:String):String = if( d.equals("") ) "None" else d
+            implicit val displayIfNone = "-"
+            val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
             val doc = 
             Elem(
                null,
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
-               <thead><tr><th>ID</th><th>description</th><th>PCA</th></tr></thead>,
+               <thead><tr><th>ID</th><th>description</th><th>PCA</th><th>Creation date</th></tr></thead>,
                <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ ConstiScores.averagePercentageCorrect(4, c.constiId) }</td></tr>)
+                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(4, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
                </tbody>
             )

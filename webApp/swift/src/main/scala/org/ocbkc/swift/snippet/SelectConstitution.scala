@@ -12,13 +12,15 @@ import org.ocbkc.swift.OCBKC._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.general.GUIdisplayHelpers._
+import org.ocbkc.swift.OCBKC.scoring._
 
 class SelectConstitution
 {  println("Constructor SelectConstitution called")
    val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    val player = sesCoordLR.currentPlayer
 
-   // if the URL contains an id for a constitution, then the choice has been made. So redirect to studyConstitution. Direct redirection ot studuConstitution after the choice cannot be done, because first the field firstChosenConstitution has to be set right, so that SiteMap (see Boot.scala) gives the user access to the studyConstitution link.
+   // if the URL contains an id for a constitution, then the choice has been made. So redirect to studyConstitution. Direct redirection ot studuConstitution after the choice cannot be done, because first790623 the field firstChosenConstitution has to be set right, so that SiteMap (see Boot.scala) gives the user access to the studyConstitution link.
    S.param("id") match
    {  case Full(idLoc)  => {  println("   URL parameter id = " + idLoc)
                               val consti = Constitution.getById(idLoc.toInt) 
@@ -46,6 +48,9 @@ class SelectConstitution
             sesCoord.Test.initConstitutions = false
          }
          */
+         implicit val displayIfNone = "-"
+         val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+
          if( Constitution.constis.size == 0 )
             Text("There is no constitution population yet...")
          else
@@ -53,8 +58,18 @@ class SelectConstitution
             // val doc =  <ul> Constitution.constis.map(c => <li> Constitution { c.constiId } </li>).foldLeft("")((a,b) => a b) </ul>
             // <&y2012.03.23.19:20:18& displayNoneIfEmpty doesn't work, don't know why>
             def displayNoneIfEmpty(d:String):String = if( d.equals("") ) "None" else d
-            val doc =  Elem(null, "table", Null, TopScope,  
-            <tr><td>ID</td><td>description</td></tr>::Constitution.constis.filter( c => c.firstReleaseExists ).sortWith((c1,c2) => c1.constiId > c2.constiId ).map(c => <tr><td><a href={ "selectConstitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td></tr>): _*  )
+            val doc = 
+            Elem(
+               null,
+               "table",
+               new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
+               TopScope,  
+               <thead><tr><th>id</th><th>description</th><th>PCA</th><th>Creation date</th></tr></thead>,
+               <tbody>{ Constitution.constis.filter( c => c.firstReleaseExists ).sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
+                           c => <tr><td><a href={ "selectConstitution?id=" + c.constiId  }>Constitution { c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(4, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+               }
+               </tbody>
+            )
             // <&y2012.05.28.12:13:54& perhaps more elegant to refer to constitutions by using a html-parameter>
             // <&y2012.06.29.22:54:28& COULDDO optimise sorting function, by doing it only once, it is now done everytime.>
             println("   doc = " + doc)
