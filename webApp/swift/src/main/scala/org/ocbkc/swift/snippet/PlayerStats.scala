@@ -13,19 +13,17 @@ import org.ocbkc.swift.model.Player
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
+import org.ocbkc.swift.global.GlobalConstant._
+import org.ocbkc.swift.general.GUIdisplayHelpers._
+
 
 class PlayerStats
 {  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
-   def optionToUI(opt:Option[Any]):String =
-   {  opt match
-      {  case None         => "not applicable"
-         case Some(thing)  => thing.toString
-      }
-   }
 
    def render(ns: NodeSeq): NodeSeq =
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
+      implicit val displayAsNoneAs = "not applicable"
       bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
