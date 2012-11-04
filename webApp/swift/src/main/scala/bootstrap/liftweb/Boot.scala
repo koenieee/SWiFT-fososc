@@ -420,6 +420,8 @@ class Boot {
          println("   event:" + event._2 )
          event._2()
       }   
+
+
          
       simulatedEventsAbsoluteTimes.map(runSimulatedEvent)
 
@@ -428,8 +430,15 @@ class Boot {
 
    // initialise widgets
    TableSorter.init
-
-    println("Boot.boot finished")
+/* to add in separate branch
+      if (Props.devMode || Props.testMode) {
+        LiftRules.liftRequest.append({case r if (r.path.partPath match {
+          case "console" :: _ => true
+          case _ => false}
+        ) => false})
+      }
+*/
+      println("Boot.boot finished")
 
   }
 
