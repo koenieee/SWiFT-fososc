@@ -430,14 +430,16 @@ class Boot {
 
    // initialise widgets
    TableSorter.init
-/* to add in separate branch
-      if (Props.devMode || Props.testMode) {
-        LiftRules.liftRequest.append({case r if (r.path.partPath match {
-          case "console" :: _ => true
-          case _ => false}
-        ) => false})
-      }
-*/
+
+   // make it possible to inspect lift database by going to server-address/console
+   if (Props.devMode || Props.testMode) {
+      println("   make it possible to inspect lift database by going to server-address/console")
+     LiftRules.liftRequest.append({case r if (r.path.partPath match {
+       case "console" :: _ => true
+       case _ => false}
+     ) => false})
+   }
+
       println("Boot.boot finished")
 
   }
