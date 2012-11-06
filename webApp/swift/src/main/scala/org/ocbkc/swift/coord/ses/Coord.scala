@@ -79,6 +79,11 @@ trait CoreTrait
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
       res
    }
+
+  
+   def numOfSessionsAfterConstiAccess =
+   {  sesHis.totalNumber - OneToStartWith.minSesionsB4access2allConstis
+   }
 }
 
 class Core(/* val player: User, var text: Text,v ar round: Round */) extends CoreTrait
