@@ -406,7 +406,22 @@ object PlayerScores
    case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
 
    def percentageCorrect(p:Player):Result_percentageCorrect = 
-   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
+   {  percentageCorrect(p, -1)
+   }
+
+   /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
+     * 
+     */
+   def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
+   {  def takeNOSorAll(ccs:List[CoreContent]) =
+      {  if( numOfSessions > -1 )
+            ccs.take(numOfSessions)
+         else
+            ccs
+      }
+
+      val ccs:List[CoreContent] = takeNOSorAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get })
+
       //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
       val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
       val totalNumber = ccs.length
@@ -474,7 +489,7 @@ object ConstiScores
       val percentages:List[Double] =
       playersWithThisRelease.map(
          player => 
-         {  val res = PlayerScores.percentageCorrect(player) // TODO only count sessions < minSesionsB4access2allConstis
+         {  val res = PlayerScores.percentageCorrect(player, OneToStartWith.minSesionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
             if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer )
             {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
             }
