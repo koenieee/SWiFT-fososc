@@ -32,7 +32,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = Constitution(1,15,2,0,"Lets go organic!",None, List())
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List())
       const1.serialize
    }
 }
@@ -465,7 +465,7 @@ object ConstiScores
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
-      val playersWithThisRelease = players.filter(
+      val playersWithThisRelease:List[Player] = players.filter(
          p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
       )
 
@@ -478,12 +478,13 @@ object ConstiScores
             if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer )
             {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
             }
+            else
             {  None            
             }
          } 
       ).collect{ case Some(p) => p }
 
-      println("   percentages: " + playersWithThisRelease)
+      println("   percentages: " + percentages)
 
       def add(p1:Double, p2:Double) = p1 + p2
       val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)

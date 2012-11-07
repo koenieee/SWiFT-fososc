@@ -72,7 +72,6 @@ object GlobalConstant
    }
 }
 
-
 object Types
 {  type POSIXtime = Long
 }
@@ -80,12 +79,12 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
-   val AUTOTRANSLATION                 = true // false
-   val CREATETESTUSERBASE              = true // false
+   val AUTOTRANSLATION                 = false // true
+   val CREATETESTUSERBASE              = false // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = true // false // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYING                 = true // false
-   val SIMULATECLOCK                   = true // false
+   val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
+   val SIMULATEPLAYING                 = false // true
+   val SIMULATECLOCK                   = false // true
 }
 
 }
