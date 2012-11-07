@@ -47,7 +47,10 @@ trait CoreTrait
 
    def URchooseFirstConstitution(constiId:ConstiId) =
    {  val player = currentPlayer
+      val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.
+
       player.firstChosenConstitution(constiId).save
+      player.releaseOfFirstChosenConstitution(consti.lastReleaseCommitId.get).save // get is possible because the player is only presented constitutions which HAVE a last release.
       player.timeFirstChosenConstitution(System.currentTimeMillis).save
    }
 

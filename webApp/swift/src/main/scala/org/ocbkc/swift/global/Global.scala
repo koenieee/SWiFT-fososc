@@ -28,6 +28,7 @@ object GlobalConstant
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 5
+   val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 
@@ -71,7 +72,6 @@ object GlobalConstant
    }
 }
 
-
 object Types
 {  type POSIXtime = Long
 }
@@ -79,12 +79,12 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
-   val AUTOTRANSLATION                 = false
-   val CREATETESTUSERBASE              = false
+   val AUTOTRANSLATION                 = false // true
+   val CREATETESTUSERBASE              = false // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = false // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYING                 = false
-   val SIMULATECLOCK                   = false
+   val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
+   val SIMULATEPLAYING                 = false // true
+   val SIMULATECLOCK                   = false // true
 }
 
 }

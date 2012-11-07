@@ -32,7 +32,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = Constitution(1,15,2,0,"Lets go organic!",None, List())
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List())
       const1.serialize
    }
 }
@@ -404,6 +404,7 @@ package scoring
 object PlayerScores
 {  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
    case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
+
    def percentageCorrect(p:Player):Result_percentageCorrect = 
    {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
       //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
@@ -412,6 +413,21 @@ object PlayerScores
       val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
       Result_percentageCorrect(percCorrect, totalNumber)
    }
+/* >>> SUC
+   case class Result_averageTranslationTime(val averageTranslationTime:Option[Double], val totalNumOfSessionsWithCorrectTranslations:Int)
+/**
+  * @return only includes time of correct translation
+  */
+   def averageTranslationTime(p:Player):Result_percentageCorrect = 
+   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
+      //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
+      val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
+      val totalNumber = ccs.length
+      val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
+      Result_percentageCorrect(percCorrect, totalNumber)
+   }
+
+   <<< */
    /*
     // <&y2012.10.06.11:13:23& refactor PlayerStats using this instead?>
    case class PlayerStats(sessionWithShortestDurationAndCorrectTranslation,  
@@ -427,24 +443,48 @@ object ConstiScores
 /* <&y2012.10.06.19:40:31& add some confidence measure to this, for example average sample size>
 */
 {  // <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
+/**
+  * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
+  */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
-   {  if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+   {  Constitution.getById(constiId) match
+      {  case Some(consti) => 
+            consti.lastReleaseCommitId match
+            {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+               case None => None
+            }
+         case None => None
+      }
+   }
+
+/**
+  * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
+  */
+   def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId, releaseId:String):Option[Double] =
+   {  println("averagePercentageCorrect called")
+      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
+      val playersWithThisRelease:List[Player] = players.filter(
+         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
+      )
+
+      println("   playersWithThisRelease:" + playersWithThisRelease)
+      
       val percentages:List[Double] =
-      players.filter(
-         p => ( p.firstChosenConstitution.get == constiId )
-      ).map(
+      playersWithThisRelease.map(
          player => 
-         {  val res = PlayerScores.percentageCorrect(player)
-            if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer 
-            && res.totalNumberOfSessions <= OneToStartWith.minSesionsB4access2allConstis)
-            {  None
-            }
+         {  val res = PlayerScores.percentageCorrect(player) // TODO only count sessions < minSesionsB4access2allConstis
+            if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer )
             {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
+            }
+            else
+            {  None            
             }
          } 
       ).collect{ case Some(p) => p }
+
+      println("   percentages: " + percentages)
 
       def add(p1:Double, p2:Double) = p1 + p2
       val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)
@@ -478,9 +518,9 @@ object ConstiScores
 */
 }
 /* idea put on hold for now:
-abstract class ScorePerSession /* TODO extends ( TODOin => TODOout ) */
+abstract class ScorePerSession // TODO extends ( TODOin => TODOout )
 {  // unspecified method defining types of apply
-   /* TODO def apply(in:TODOin):TODOout */
+   // TODO def apply(in:TODOin):TODOout
 }
 */
 }
