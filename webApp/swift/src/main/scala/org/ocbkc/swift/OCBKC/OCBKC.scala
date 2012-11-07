@@ -1,3 +1,5 @@
+package org.ocbkc.swift.OCBKC
+{  
 import _root_.scala.xml._
 //import org.ocbkc.swift.model._
 import System._
@@ -411,6 +413,21 @@ object PlayerScores
       val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
       Result_percentageCorrect(percCorrect, totalNumber)
    }
+/* >>> SUC
+   case class Result_averageTranslationTime(val averageTranslationTime:Option[Double], val totalNumOfSessionsWithCorrectTranslations:Int)
+/**
+  * @return only includes time of correct translation
+  */
+   def averageTranslationTime(p:Player):Result_percentageCorrect = 
+   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
+      //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
+      val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
+      val totalNumber = ccs.length
+      val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
+      Result_percentageCorrect(percCorrect, totalNumber)
+   }
+
+   <<< */
    /*
     // <&y2012.10.06.11:13:23& refactor PlayerStats using this instead?>
    case class PlayerStats(sessionWithShortestDurationAndCorrectTranslation,  
@@ -430,8 +447,12 @@ object ConstiScores
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
-   {  Constitution.getById(constiId).lastReleaseCommitId match
-      {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+   {  Constitution.getById(constiId) match
+      {  case Some(consti) => 
+            consti.lastReleaseCommitId match
+            {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+               case None => None
+            }
          case None => None
       }
    }
@@ -453,12 +474,11 @@ object ConstiScores
       val percentages:List[Double] =
       playersWithThisRelease.map(
          player => 
-         {  val res = PlayerScores.percentageCorrect(player)
-            if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer 
-            && res.totalNumberOfSessions <= OneToStartWith.minSesionsB4access2allConstis)
-            {  None
-            }
+         {  val res = PlayerScores.percentageCorrect(player) // TODO only count sessions < minSesionsB4access2allConstis
+            if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer )
             {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
+            }
+            {  None            
             }
          } 
       ).collect{ case Some(p) => p }
