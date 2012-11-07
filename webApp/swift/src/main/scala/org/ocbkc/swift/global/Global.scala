@@ -28,6 +28,7 @@ object GlobalConstant
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 5
+   val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 

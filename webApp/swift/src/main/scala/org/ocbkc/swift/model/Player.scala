@@ -6,6 +6,8 @@ import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.snippet.sesCoord
+import org.ocbkc.swift.global._
+
 
 /**
  * The singleton that has methods for accessing the database
@@ -60,6 +62,7 @@ class Player extends MegaProtoUser[Player] {
    }
 */
    object firstChosenConstitution extends MappedInt(this) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
+   object releaseOfFirstChosenConstitution extends MappedString(this, Global.GIThASHsIZE)
    object timeFirstChosenConstitution extends MappedLong(this)
 }
 
