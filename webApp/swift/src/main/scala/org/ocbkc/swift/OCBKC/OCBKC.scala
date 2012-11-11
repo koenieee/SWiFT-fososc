@@ -1,7 +1,6 @@
 package org.ocbkc.swift.OCBKC
 {  
 import _root_.scala.xml._
-//import org.ocbkc.swift.model._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
@@ -10,7 +9,6 @@ import net.liftweb.json._
 import java.io._
 import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
-//import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.model.Player
 import GlobalConstant.jgit
