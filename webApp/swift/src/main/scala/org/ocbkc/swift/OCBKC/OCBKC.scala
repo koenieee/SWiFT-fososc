@@ -403,6 +403,14 @@ object PlayerScores
 {  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
    case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
 
+   // <&y2012.11.11.16:05:26& TODO: move to more general lib?>
+   def takeNumOrAll[A](list:List[A], num:Int) =
+   {  if( num > -1 )
+         list.take(num)
+      else
+         list
+   }
+
    def percentageCorrect(p:Player):Result_percentageCorrect = 
    {  percentageCorrect(p, -1)
    }
@@ -411,36 +419,43 @@ object PlayerScores
      * 
      */
    def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
-   {  def takeNOSorAll(ccs:List[CoreContent]) =
-      {  if( numOfSessions > -1 )
-            ccs.take(numOfSessions)
-         else
-            ccs
-      }
+   {  println("percentageCorrect called")
 
-      val ccs:List[CoreContent] = takeNOSorAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get })
+      val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+
 
       //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
       val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
       val totalNumber = ccs.length
+
+      println("   Number of sessions taken into consideration: " + totalNumber)
+      println("   Datetimes of sessions taken into consideration: " + ccs.map(cc => cc.startTime.get))
+
       val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
       Result_percentageCorrect(percCorrect, totalNumber)
    }
-/* >>> SUC
-   case class Result_averageTranslationTime(val averageTranslationTime:Option[Double], val totalNumOfSessionsWithCorrectTranslations:Int)
-/**
-  * @return only includes time of correct translation
+
+   case class Result_averageDurationTranslation(val averageDurationTranslation:Option[Double], val sampleSize: Int)
+/** @return only includes time of correct translations
   */
-   def averageTranslationTime(p:Player):Result_percentageCorrect = 
-   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
-      //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
-      val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
-      val totalNumber = ccs.length
-      val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
-      Result_percentageCorrect(percCorrect, totalNumber)
+   def averageDurationTranslation(p:Player):Result_averageDurationTranslation =
+   {  averageDurationTranslation(p, -1)
    }
 
-   <<< */
+
+/** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
+  * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
+  */
+   def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
+   {  val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+      
+      val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
+      val durationsCorrectTranslations = correctCcs.map(cc => cc.durationTranslation.get)
+      val numberCorrect = correctCcs.length
+      val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
+      Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
+   }
+
    /*
     // <&y2012.10.06.11:13:23& refactor PlayerStats using this instead?>
    case class PlayerStats(sessionWithShortestDurationAndCorrectTranslation,  
@@ -503,6 +518,49 @@ object ConstiScores
       val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)
       
       avPercCor
+   }
+   // COULDDO: refactor, extract generalities from averageDurationTranslation and averagePercentageCorrect
+   def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] = 
+   {  Constitution.getById(constiId) match
+      {  case Some(consti) => 
+            consti.lastReleaseCommitId match
+            {  case Some(lastReleaseCommitId) => averageDurationTranslation(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+               case None => None
+            }
+         case None => None
+      }
+   }
+
+   def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId, releaseId:String):Option[Double] = 
+   {  println("averageDurationTranslation called")
+      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+      val players = Player.findAll
+      // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
+      val playersWithThisRelease:List[Player] = players.filter(
+         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
+      )
+
+      println("   playersWithThisRelease:" + playersWithThisRelease)
+      
+      val averageDurationTranslationPerPlayer:List[Double] =
+      playersWithThisRelease.map(
+         player => 
+         {  val res = PlayerScores.averageDurationTranslation(player, OneToStartWith.minSesionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
+            if( res.sampleSize >= minimalNumberOfSessionsPerPlayer ) // COULDDO perhaps rename minimalNumberOfSessionsPerPlayer also to minimalSampleSize
+            {  res.averageDurationTranslation // note: will also be None when the player didn't play any sessions yet
+            }
+            else
+            {  None            
+            }
+         } 
+      ).collect{ case Some(p) => p }
+
+      println("   averageDurationTranslations: " + averageDurationTranslationPerPlayer)
+
+      def add(p1:Double, p2:Double) = p1 + p2
+      val averageDurationTranslations = if(averageDurationTranslationPerPlayer.isEmpty) None else Some((averageDurationTranslationPerPlayer.fold(0d)(add))/averageDurationTranslationPerPlayer.size)
+      
+      averageDurationTranslations
    }
 
    /** Helpfunction: returns the total number of sessions played by a player, the number of correct sessions, and the average playing time per correct session. 

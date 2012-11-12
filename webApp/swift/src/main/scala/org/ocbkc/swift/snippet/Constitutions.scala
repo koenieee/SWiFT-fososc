@@ -15,7 +15,7 @@ import System.err.println
 import org.ocbkc.swift.model._
 import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
 import org.ocbkc.swift.general.GUIdisplayHelpers._
-
+import org.ocbkc.swift.global._
 
 class Constitutions
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
@@ -53,9 +53,9 @@ class Constitutions
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
-               <thead><tr><th>ID</th><th>description</th><th>PCA</th><th>Creation date</th></tr></thead>,
+               <thead><tr><th>id</th><th>description</th><th>PCA</th><th>ATT</th><th>Creation date</th></tr></thead>,
                <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(4, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
                </tbody>
             )

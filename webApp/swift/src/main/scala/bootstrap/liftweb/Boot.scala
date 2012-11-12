@@ -319,9 +319,10 @@ class Boot {
             - then calculate the union of the event-sequences of each player, sorted by event time.
       */
       println("TestSettings.SIMULATEPLAYING set, so test now carried out...")
-      // START Configuration of test
-      val minSessionsPerPlayer = 3
-      val maxSessionsPerPlayer = 20 // perhaps relate to minSesionsB4access2allConstis
+      // >>> Configuration of test
+      // TODO: move to GlobalConstants
+      val minSessionsPerPlayer = 0
+      val maxSessionsPerPlayer = 8 // perhaps relate to minSesionsB4access2allConstis
       val minTimeBeforeChoosingConsti = 1000 * 5 // ms
       val maxTimeBeforeChoosingConsti = 1000 * 60 * 60 * 24 // ms
       val minTimeBetweenSessions = 1000 * 5 // ms
@@ -386,7 +387,7 @@ class Boot {
          )
       }
 
-      // END configuration of test
+      // <<< configuration of test
 
 
       // for each player, create the complete sequence of events for that player, which consists of:

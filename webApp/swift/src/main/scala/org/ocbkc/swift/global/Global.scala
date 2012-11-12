@@ -27,8 +27,20 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
-   val MINsESSIONSb4ACCESS2ALLcONSTIS = 5
+   val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
+
+   // Scoring
+
+   abstract class ScoringConstants // purely intended for commentary purposes.
+
+   object AveragePercentageCorrect extends ScoringConstants
+   {  val minimalNumberOfSessionsPerPlayer = 2
+   }
+   
+   object AverageDurationTranslation extends ScoringConstants
+   {  val minimalNumberOfSessionsPerPlayer = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
+   }
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 
@@ -85,6 +97,9 @@ object TestSettings
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val SIMULATEPLAYING                 = false // true
    val SIMULATECLOCK                   = false // true
+   // vim swap false true: s/false \/\/ true/true \/\/ false/gc
+   // vim swap true false: s/true \/\/ false/false \/\/ true/gc
+
 }
 
 }
