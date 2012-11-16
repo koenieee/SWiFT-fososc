@@ -41,6 +41,12 @@ object GlobalConstant
    object AverageDurationTranslation extends ScoringConstants
    {  val minimalNumberOfSessionsPerPlayer = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
    }
+
+   object AverageFluency extends ScoringConstants
+   {  val minimalSampleSizePerPlayer   = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
+      val fluencyConstantK             = 1000000
+   }
+
    /*
    val jgitRepo = new Repository(new File(new File(CONSTITUTIONHTMLDIR)))
 

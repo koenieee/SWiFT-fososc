@@ -356,7 +356,7 @@ object Constitution
    {  println("Constitutions(Singleton Object).create called")
       println("   creatorUserID = " + creatorUserID)
       highestId += 1
-      val now = currentTimeMillis().toLong
+      val now = currentTimeMillis.toLong
       val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
       c
@@ -478,7 +478,7 @@ object ConstiScores
    {  Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
-            {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+            {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, lastReleaseCommitId)
                case None => None
             }
          case None => None
@@ -488,7 +488,7 @@ object ConstiScores
 /**
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
-   def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId, releaseId:String):Option[Double] =
+   def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] =
    {  println("averagePercentageCorrect called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
@@ -524,14 +524,14 @@ object ConstiScores
    {  Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
-            {  case Some(lastReleaseCommitId) => averageDurationTranslation(minimalNumberOfSessionsPerPlayer, constiId, lastReleaseCommitId)
+            {  case Some(lastReleaseCommitId) => averageDurationTranslation(minimalNumberOfSessionsPerPlayer, lastReleaseCommitId)
                case None => None
             }
          case None => None
       }
    }
 
-   def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId, releaseId:String):Option[Double] = 
+   def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
    {  println("averageDurationTranslation called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
@@ -561,6 +561,56 @@ object ConstiScores
       val averageDurationTranslations = if(averageDurationTranslationPerPlayer.isEmpty) None else Some((averageDurationTranslationPerPlayer.fold(0d)(add))/averageDurationTranslationPerPlayer.size)
       
       averageDurationTranslations
+   }
+
+   def applyWhenBothDefined[A,B,C](g:(A,B) => C, a:Option[A], b:Option[B]):Option[C] =
+   {  if( a == None || b == None )
+         None
+      else
+         Some(g(a.get, b.get))
+   }
+
+   def averageFluency(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
+   {  Constitution.getById(constiId) match
+      {  case Some(consti) => 
+            consti.lastReleaseCommitId match
+            {  case Some(lastReleaseCommitId) => averageFluency(minimalSampleSize, lastReleaseCommitId, k)
+               case None => None
+            }
+         case None => None
+      }
+   }
+
+   def averageFluency(minimalSampleSize: Int, releaseId:String, k:Double):Option[Double] =
+   {  val adt = averageDurationTranslation(minimalSampleSize, releaseId) 
+      val apc = averagePercentageCorrect(minimalSampleSize, releaseId)
+      applyWhenBothDefined( (_:Double)/(_:Double)*k, apc, adt)
+   }
+
+
+   // perhaps not needed anymore, found an "absolute" score for fluency
+   def fluency1stGT2nd(releaseId1:String, releaseId2:String, minimalSampleSize: Int):Option[Boolean] =
+   {  val adt1 = averageDurationTranslation(minimalSampleSize, releaseId1) 
+      val adt2 = averageDurationTranslation(minimalSampleSize, releaseId2)
+
+      val ratio_adt1adt2 = applyWhenBothDefined( (_:Double)/(_:Double), adt1, adt2)
+
+      val apc1 = averagePercentageCorrect(minimalSampleSize, releaseId1)
+      val apc2 = averagePercentageCorrect(minimalSampleSize, releaseId2)
+
+      val ratio_apc1apc2 = applyWhenBothDefined( (_:Double)/(_:Double), apc1, apc2)
+      /*
+         if( apc1 == None || apc2 == None )
+            None
+         else
+            Some(apc1.get/apc2.get) // TODO: division by zero error.
+      
+      if( ratio_adt1adt2 == None || ratio_apc1apc2 == None )
+      {  None
+      } else
+      {  Some(ratio_adt1adt2.get > ratio_apc1apc2.get)
+      } */
+      applyWhenBothDefined( (_:Double) > (_:Double), ratio_adt1adt2, ratio_apc1apc2)
    }
 
    /** Helpfunction: returns the total number of sessions played by a player, the number of correct sessions, and the average playing time per correct session. 

@@ -53,9 +53,9 @@ class Constitutions
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
-               <thead><tr><th>id</th><th>description</th><th>PCA</th><th>ATT</th><th>Creation date</th></tr></thead>,
+               <thead><tr><th>id</th><th>description</th><th>fluency</th><th>PCA</th><th>ADT (ms)</th><th>Creation date</th></tr></thead>,
                <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
                </tbody>
             )
