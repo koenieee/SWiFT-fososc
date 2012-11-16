@@ -17,7 +17,7 @@ import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sort
 
 class TableSorterConstitutions
 {  val headers = List( (0, Sorter("text")), (2, Sorter("digit")), (3, Sorter("digit")) )
-   val sortList = List( (0,Sorting.DSC))
+   val sortList = List( (2,Sorting.DSC))
 
    val options = TableSorter.options(headers,sortList)
 
