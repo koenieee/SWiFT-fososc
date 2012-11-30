@@ -18,9 +18,7 @@ import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.global._
 
 class ConstiGameTable
-{  /* >>> Unfinished code
-   val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
-      <<< */
+{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
 
 // <&y2012.11.19.22:33:08& refactor: make one buildConstiTable for different snippets (constitutions.html, selectConstitution.html etc.)>
 
@@ -34,24 +32,26 @@ class ConstiGameTable
                            c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
       <<< */
 
-   Constitution.constis.filter(TODOconstisOfThisPlayer).flatMap({ row =>
+   sesCoordLR.currentPlayer.followedConstis.flatMap({ row =>
       bind("constiColumn", chooseTemplate("top", "constiColumn", template),
       "id" -> <a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a>,
       "description" -> displayNoneIfEmpty(c.shortDescription),
       "fluency" -> optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)),
-      "PCA" -> TODO,
-      "ADT" -> TODO,
-      "creationDate" -> TODO
-      })
+      "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
+      "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
+      "creationDate" -> df.format(c.creationTime).toString
+      )}
+   )
 
    def render(ns: NodeSeq): NodeSeq =
    {  val answer   = bind( "top", ns, 
-                           "collaborationConstiTable"  -> buildCollaborationConstiTable(ns),
+                           "collaborationConstiTable"  -> buildCollaborationConstiTable(ns)
                          )
 
       answer
    }
 }
+}
+}
+}
 
-}
-}

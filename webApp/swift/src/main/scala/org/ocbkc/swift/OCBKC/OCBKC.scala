@@ -257,7 +257,36 @@ getHistory.length, commitIdsReleases.length, isRelease
    {  import scala.collection.JavaConverters._
       jgit.log().addPath( htmlFileName ).call().asScala.toList
    }
+
+   def addFollower(p:Player) = 
+   {  FollowerConsti_join.create.player(p).constiId(this.constiId).save
+   }
+
+   def removeFollower(p:Player) = 
+   {  getFollowerConsti_join(p)    
+   }
+
+   def getFollowerConsti_join(p:Player):Option[FollowerConsti_join] =
+   {  FollowerConsti_join.findAll(By(FollowerConsti_join.player, p), By(FollowerConsti_join.constiId, this.constiId)) match // <&y2012.11.28.23:32:32& not sure whether this works: By ..., By, what I want is an AND.
+      {  case List(fcj)    => Some(fcj)
+         case x::(y::xs)   => throw new RuntimeException("duplicate FollowerConsti_join in database.")
+         case _            => None
+      }
+   }
 }
+
+class FollowerConsti_join extends LongKeyedMapper[FollowerConsti_join] with IdPK
+{  def getSingleton = FollowerConsti_join
+   object player extends MappedLongForeignKey(this, Player)
+   object constiId extends MappedLong(this)
+}
+
+object FollowerConsti_join extends FollowerConsti_join with LongKeyedMetaMapper[FollowerConsti_join]
+{  def join(player:Player, constiId:ConstiId)
+   {  this.create.player(player).constiId(constiId)
+   }
+}
+
 /* not yet used: for future increment
 object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil) with LongKeyedMetaMapper[Constitution]
 {

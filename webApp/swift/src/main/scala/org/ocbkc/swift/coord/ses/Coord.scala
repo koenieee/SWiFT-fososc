@@ -83,7 +83,6 @@ trait CoreTrait
       res
    }
 
-  
    def numOfSessionsAfterConstiAccess =
    {  sesHis.totalNumber - OneToStartWith.minSesionsB4access2allConstis
    }
@@ -201,22 +200,17 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
          Some(HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer))
    }
 
-   // call this when const has been updated, and you want to notify all followers.
-   def mailFollowersUpdate(const: Constitution, body:String ) =
-   {  def sendupdatemail(followerId:Long) =
-      {  println("sendupdatemail called")
-         val follower = Player.find(followerId.toString) match
-         {  case Full(player)  => player
-            case _             => throw new RuntimeException("Player with id " + followerId + " not found.")
-         }
-         println("   follower id = " + followerId)
-         println("   follower email = " + follower.email.get)
-         Mailer.sendMail(From("cg@xs4all.nl"), Subject("Constitution " + const.constiId + " has been updated..."), To(follower.email.get), new PlainMailBodyType(body))
-         println("   mail sent!")
-      }
-
-      const.followers.map( sendupdatemail )
+   override def addFollower(p:Player, c:Constitution) =
+   {  val userId = p.userIdAsString
+      c.addFollower(p)
    }
+
+   override def removeFollower(p:Player, c:Constitution) =
+   {  val userId = p.userIdAsString
+      c.removeFollower(p)
+   }
+
+
 
    object Test
    {  var initConstitutions:Boolean = true

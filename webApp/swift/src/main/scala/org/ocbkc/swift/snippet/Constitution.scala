@@ -74,7 +74,7 @@ class ConstitutionSnippet
          }
          
          if( changes )
-            sesCoordLR.mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
+            mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
       }
 /*  <&y2012.07.29.14:31:05& perhaps for future version allow intermediate changes (not yet published)
       def processSaveBtn() =
@@ -90,7 +90,23 @@ class ConstitutionSnippet
       }
 
 */
- 
+   // call this when const has been updated, and you want to notify all followers.
+   def mailFollowersUpdate(const: Constitution, body:String ) =
+   {  def sendupdatemail(followerId:Long) =
+      {  println("sendupdatemail called")
+         val follower = Player.find(followerId.toString) match
+         {  case Full(player)  => player
+            case _             => throw new RuntimeException("Player with id " + followerId + " not found.")
+         }
+         println("   follower id = " + followerId)
+         println("   follower email = " + follower.email.get)
+         Mailer.sendMail(From("cg@xs4all.nl"), Subject("Constitution " + const.constiId + " has been updated..."), To(follower.email.get), new PlainMailBodyType(body))
+         println("   mail sent!")
+      }
+
+      const.followers.map( sendupdatemail )
+   }
+
       def processGeneralSaveBtn() =
       {  println("processGeneralSaveBtn called")
          if( const.isDefined )
@@ -161,15 +177,12 @@ class ConstitutionSnippet
       {  if( const.isDefined ) // <&y2012.06.23.14:52:50& necessary? The checkbox shouldn't even show when there is no constitution defined>
          {  val constLoc = const.get
             if( checked )
-            {  if( !constLoc.followers.contains(currentUserId))
-               {  constLoc.followers ::= currentUserId
-                  sesCoordLR.mailFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
-               }
+            {  sesCoordLR.addFollower(sesCoordLR.currentPlayer, constLoc)
+               mailFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
             }                  
             else
-            {  constLoc.followers = constLoc.followers.filterNot( _ == currentUserId )
-               sesCoordLR.mailFollowersUpdate(constLoc, MailMessage.lostfollower(constLoc))
-               // <&y2012.06.27.14:00:21& send mail to unfollowerto confirm.>
+            {  sesCoordLR.removeFollower(sesCoordLR.currentPlayer, constLoc )
+               // <&y2012.06.27.14:00:21& send mail to unfollower to confirm.>
             }  
          }
       }
