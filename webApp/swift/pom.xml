@@ -44,7 +44,8 @@
     <pluginRepository>
       <id>scala-tools.releases</id>
       <name>Scala-Tools Plugins Repository for Releases</name>
-      <url>http://scala-tools.org/repo-releases</url>
+      <url>http://oss.sonatype.org/content/groups/scala-tools</url>
+      <!-- OLD <url>http://scala-tools.org/repo-releases</url> -->
     </pluginRepository>
   </pluginRepositories>
 
