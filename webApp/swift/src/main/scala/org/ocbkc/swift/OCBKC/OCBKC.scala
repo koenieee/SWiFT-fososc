@@ -278,7 +278,7 @@ getHistory.length, commitIdsReleases.length, isRelease
 class FollowerConsti_join extends LongKeyedMapper[FollowerConsti_join] with IdPK
 {  def getSingleton = FollowerConsti_join
    object player extends MappedLongForeignKey(this, Player)
-   object constiId extends MappedLong(this)
+   object constiId extends MappedInt(this)
 }
 
 object FollowerConsti_join extends FollowerConsti_join with LongKeyedMetaMapper[FollowerConsti_join]

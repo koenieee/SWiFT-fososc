@@ -22,35 +22,32 @@ class ConstiGameTable
 
 // <&y2012.11.19.22:33:08& refactor: make one buildConstiTable for different snippets (constitutions.html, selectConstitution.html etc.)>
 
-   def buildCollaborationConstiTable(ns: NodeSeq) = {
-   // Calls bind repeatedly, once for each Entry in entries
-   /* >>> Unfinished code
-
-    &y2012.11.19.22:40:54& WIW Use this to complete the code that is under it:
-
-   <tbody>{ .map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
-      <<< */
-
-   sesCoordLR.currentPlayer.followedConstis.flatMap({ row =>
-      bind("constiColumn", chooseTemplate("top", "constiColumn", template),
-      "id" -> <a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a>,
-      "description" -> displayNoneIfEmpty(c.shortDescription),
-      "fluency" -> optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)),
-      "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
-      "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
-      "creationDate" -> df.format(c.creationTime).toString
-      )}
-   )
+   def buildCollaborationConstiTable(ns: NodeSeq):NodeSeq = {
+      // Calls bind repeatedly, once for each Constitution that is followed
+    
+      val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+      implicit val displayNoneAs = "-"
+      sesCoordLR.currentPlayer.followedConstis.flatMap{ constiId
+      => {  val c = Constitution.getById(constiId).get // .get, because SHOULD always exist, otherwise some other bug exists.
+            bind("constiColumn", chooseTemplate("top", "tableRows", ns) WIW nex time print chooseTemplate to log,
+               "id" -> <a href="constitution?id={ constiId  }">{ constiId }</a>,
+               "description" -> c.shortDescription,
+               "fluency" -> optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)),
+               "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
+               "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
+               "creationDate" -> df.format(c.creationTime).toString
+            )
+         }
+      }
+   }   
 
    def render(ns: NodeSeq): NodeSeq =
    {  val answer   = bind( "top", ns, 
-                           "collaborationConstiTable"  -> buildCollaborationConstiTable(ns)
+                           "tableRows"  -> buildCollaborationConstiTable(ns)
                          )
 
       answer
    }
-}
 }
 }
 }

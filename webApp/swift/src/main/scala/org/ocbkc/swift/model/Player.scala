@@ -66,7 +66,7 @@ class Player extends MegaProtoUser[Player] {
    object releaseOfFirstChosenConstitution extends MappedString(this, GlobalConstant.GIThASHsIZE)
    object timeFirstChosenConstitution extends MappedLong(this)
    def followedConstis:List[ConstiId] =
-   {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId}
+   {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.is}
    }
 }
 

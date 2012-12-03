@@ -200,12 +200,12 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
          Some(HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer))
    }
 
-   override def addFollower(p:Player, c:Constitution) =
+   def addFollower(p:Player, c:Constitution) =
    {  val userId = p.userIdAsString
       c.addFollower(p)
    }
 
-   override def removeFollower(p:Player, c:Constitution) =
+   def removeFollower(p:Player, c:Constitution) =
    {  val userId = p.userIdAsString
       c.removeFollower(p)
    }

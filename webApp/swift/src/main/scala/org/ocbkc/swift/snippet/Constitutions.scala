@@ -43,8 +43,6 @@ class Constitutions
          else
          {  // val doc =  """"<ul>""" + Constitution.constis.map(c => """  <li> Constitution """ + c.constiId + "</li>").foldLeft("")((a,b) => a + "\n" + b) + "\n</ul>"
             // val doc =  <ul> Constitution.constis.map(c => <li> Constitution { c.constiId } </li>).foldLeft("")((a,b) => a b) </ul>
-            // <&y2012.03.23.19:20:18& displayNoneIfEmpty doesn't work, don't know why>
-            def displayNoneIfEmpty(d:String):String = if( d.equals("") ) "None" else d
             implicit val displayIfNone = "-"
             val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
             val doc = 
@@ -55,7 +53,7 @@ class Constitutions
                TopScope,  
                <thead><tr><th>id</th><th>description</th><th>fluency</th><th>PCA</th><th>ADT (ms)</th><th>Creation date</th></tr></thead>,
                <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+                           c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ c.shortDescription }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
                </tbody>
             )

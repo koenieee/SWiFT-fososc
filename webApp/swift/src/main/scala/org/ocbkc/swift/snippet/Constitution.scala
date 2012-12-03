@@ -16,6 +16,8 @@ import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 import org.xml.sax.SAXParseException 
 import org.ocbkc.swift.model.Player
+import net.liftweb.util.Mailer
+import net.liftweb.util.Mailer._
 
 abstract class Error
 
