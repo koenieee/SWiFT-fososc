@@ -191,6 +191,7 @@ getHistory.length, commitIdsReleases.length, isRelease
 4 3 true
 5 5 false
 */
+      /* &y2012.12.05.21:27:58& WIW: refactor this: going to next release must be separate function. Then it can be both called by this method (a check at this point is necesary because it is possible there was not a new version while the sample size was sufficiently large), or after a player session (to find out if the sample size is already large enough for a next release) */
       val isRelease:Boolean = ( getHistory.length > (commitIdsReleases.length * 2 + 1 ) ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
       // <& &y2012.09.07.13:10:21& this test doesn't work: all become releases after initial difference is realised. How solve.>
       println("   getHistory.length = " + getHistory.length)
@@ -433,6 +434,25 @@ class ConstitutionStudyHistory(val consti:Constitution)
 // TODO implement for next increment
 case class TimeInterval(val startTime:Long, val endTime:Long)
 
+package release
+{  object Manager
+   {/** Determines whether it is time for the next release of a constitution.
+      *
+      */
+      def gotoNextReleaseIf(consti:Constitution) =
+      {  // Determine whether sample size on this release is high enough
+         if( ConstiScores.sampleSizeSufficient4FluencyScore(consti) )
+         {  qwer
+         }
+         {
+         }
+            
+      }
+   }
+
+
+}
+
 package scoring
 {
 
@@ -447,6 +467,8 @@ object PlayerScores
       else
          list
    }
+
+
 
    def percentageCorrect(p:Player):Result_percentageCorrect = 
    {  percentageCorrect(p, -1)
@@ -664,6 +686,12 @@ object ConstiScores
 
    def inversePlayingTimeIfCorrect(c:Constitution /* TODO */) =
    {  //TODO
+   }
+
+   def sampleSizeSufficient4FluencyScore(constiId:ConstiId):Boolean =
+   {  // the sample size is sufficiently large, if the fluency score exists.
+      !( averageFluency(AverageFluency.minimalSampleSizePerPlayer, constiId, AverageFluency.fluencyConstantK).isEmpty )
+      // <&y2012.12.05.21:04:38& refactor: create averageFluency etc. scoring function which already reads these global constants minimalSampleSize etc.
    }
 
 /* &y2012.08.15.11:17:14& Elegant way, but perhaps too complicated (= inefficient in execution) for the problem
