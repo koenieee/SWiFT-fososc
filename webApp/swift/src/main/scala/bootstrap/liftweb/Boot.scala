@@ -43,7 +43,7 @@ class Boot {
 
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
 
     // Build SiteMap
     /* originally generated code:
@@ -358,6 +358,7 @@ class Boot {
          if(Constitution.count < 1) throw new RuntimeException("simulatePlayingSessions: No constitutions created yet")
 
          val randomConstiId = 1 + randomSeq.nextInt(Constitution.count - 1)
+         
          val chooseConstiEvent = List((randomPause(minTimeBeforeChoosingConsti, maxTimeBeforeChoosingConsti, randomSeq), () => sesCoordLR.URchooseFirstConstitution(randomConstiId)))
 
          // simulate playing sessions

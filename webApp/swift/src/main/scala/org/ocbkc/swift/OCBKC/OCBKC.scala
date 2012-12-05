@@ -259,11 +259,19 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
    def addFollower(p:Player) = 
-   {  FollowerConsti_join.create.player(p).constiId(this.constiId).save
+   {  if(!followers.contains(p.id.is))
+      {  FollowerConsti_join.create.player(p).constiId(this.constiId).save
+         followers = p.id.is::followers
+      }
    }
 
-   def removeFollower(p:Player) = 
-   {  getFollowerConsti_join(p)    
+   def removeFollower(p:Player):Unit = 
+   {  getFollowerConsti_join(p) match
+      {  case Some(fcj) => { if(!fcj.delete_!) throw new RuntimeException("Couldn't remove player " + p + " as follower from consti " + this + " from the database.") }
+         case _         => println("   player wasn't a follower anyway, nothing to remove. Why did you disturb me from my Devine nap...")
+      }
+      followers = followers.filter(_ != p.id.is)
+      Unit
    }
 
    def getFollowerConsti_join(p:Player):Option[FollowerConsti_join] =

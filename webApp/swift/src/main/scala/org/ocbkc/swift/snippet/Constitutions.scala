@@ -13,20 +13,19 @@ import org.ocbkc.swift.OCBKC.scoring._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
-import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
+//import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.global._
 
 class Constitutions
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
-
-   // <&y2012.10.31.21:14:24& TODO Koen assignment: fix bug: sort links + decimals>
+/*
    val headers = List( (0, Sorter("digit")), (2, Sorter("float")), (3, Sorter("shortDate") ))
    
    val sortList = (0,Sorting.DSC) :: Nil
 
    val options = TableSorter.options(headers,sortList)
-
+*/
    def list(ns: NodeSeq): NodeSeq =
    {  def displayConstis:NodeSeq = 
       {  /*
@@ -51,7 +50,7 @@ class Constitutions
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
-               <thead><tr><th>id</th><th>description</th><th>fluency</th><th>PCA</th><th>ADT (ms)</th><th>Creation date</th></tr></thead>,
+               <thead><tr><th>id</th><th>description</th><th>fluency</th><th>APC</th><th>ADT (ms)</th><th>Creation date</th></tr></thead>,
                <tbody>{ Constitution.constis.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
                            c => <tr><td><a href={ "constitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ c.shortDescription }</td><td>{ optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
@@ -80,7 +79,6 @@ class Constitutions
                            "createNewBt"    -> SHtml.button("Create", processCreateNewBt) // <&y2012.05.25.10:09:21& disable button when no user is logged in>
                          )
       answer
-      //TableSorter("#constitutionsTable", options)
    }
 }
 
