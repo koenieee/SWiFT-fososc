@@ -22,7 +22,7 @@ class InviteToConstitutionDesign
    {  object IncludeInvitationText extends RewriteRule {
       // (prefix: String, label: String, attributes: MetaData, scope: NamespaceBinding, child: Node*): Elem 
         override def transform(n: Node): Seq[Node] = n match {
-          case Elem("top", "invitationtext", _, _, invitationText) => invitationText
+          case Elem("top", "invitationtext", _, _, invitationText@_*) => invitationText
           case other => other
         }
       }
@@ -30,7 +30,7 @@ class InviteToConstitutionDesign
       val includeInvitationTextTranform = new RuleTransformer(IncludeInvitationText)
 
       if( sesCoordLR.numOfSessionsAfterConstiAccess == 0 )
-         ns.map( includeInvitationTextTranform(_) )
+         includeInvitationTextTranform.transform(ns)
       else
          NodeSeq.Empty // return an empty nodeseq
    }
