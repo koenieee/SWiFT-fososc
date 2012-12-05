@@ -41,8 +41,8 @@ class ConstitutionSnippet
    val contentB4ReloadOpt = ContentB4ReloadRequestVar.is
    println("   contentB4ReloadOpt = " + contentB4ReloadOpt )
    println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
-   val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
-      {  case Full(id)  => { id.toInt }
+   val currentUserId:Long = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
+      {  case Full(id)  => { id.toLong }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
    var editmode = false
