@@ -64,6 +64,11 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
+   // <&y2012.12.07.20:25:56& MUSTDO optimization necessary (function memoization)? In this way it is probably very costly...>
+   def getLatestCommitId:RevCom =
+   {  getHistory(0)
+   }
+
    def firstReleaseExists = 
    {  println("firstReleaseExists")
       val r = ( commitIdsReleases != Nil )
@@ -192,16 +197,28 @@ getHistory.length, commitIdsReleases.length, isRelease
 5 5 false
 */
       /* &y2012.12.05.21:27:58& WIW: refactor this: going to next release must be separate function. Then it can be both called by this method (a check at this point is necesary because it is possible there was not a new version while the sample size was sufficiently large), or after a player session (to find out if the sample size is already large enough for a next release) */
-      val isRelease:Boolean = ( getHistory.length > (commitIdsReleases.length * 2 + 1 ) ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
-      // <& &y2012.09.07.13:10:21& this test doesn't work: all become releases after initial difference is realised. How solve.>
       println("   getHistory.length = " + getHistory.length)
       println("   commitIdsReleases.length = " + commitIdsReleases.length)
-      if( isRelease )
-      {  println("  new commit (with id " + revcom.name + ") is the new release: " + isRelease )
-         // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
-         jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(gUserId).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
-         commitIdsReleases ::= revcom.name
+      gotoNextReleaseIfSufficientSampleSize
+   }
+
+   def gotoNextReleaseIfSufficientSampleSize =
+   {  // Determine whether sample size on this release is high enough
+      if( ConstiScores.sampleSizeSufficient4FluencyScore(this) )
+      {  gotoNextRelease
       }
+   }
+   
+   /**
+     *
+     */
+   def gotoNextRelease =
+   {  println("gotoNextRelease")
+      val revcom = lastReleaseCommitId.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet.")
+      // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
+      println("  new commit (with id " + revcom.name + ") is the new release." )
+      jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(TODOadmin).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+      commitIdsReleases ::= revcom.name
    }
 
    def restore(commitId:RevCommit, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
@@ -433,25 +450,6 @@ class ConstitutionStudyHistory(val consti:Constitution)
 
 // TODO implement for next increment
 case class TimeInterval(val startTime:Long, val endTime:Long)
-
-package release
-{  object Manager
-   {/** Determines whether it is time for the next release of a constitution.
-      *
-      */
-      def gotoNextReleaseIf(consti:Constitution) =
-      {  // Determine whether sample size on this release is high enough
-         if( ConstiScores.sampleSizeSufficient4FluencyScore(consti) )
-         {  qwer
-         }
-         {
-         }
-            
-      }
-   }
-
-
-}
 
 package scoring
 {
