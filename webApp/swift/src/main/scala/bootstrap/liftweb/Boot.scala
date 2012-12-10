@@ -234,21 +234,23 @@ class Boot {
    }
    
    println("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
-   Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+   val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  println("   Admin account already exists, my beloved friend.")
-                              GlobalConstants.Admin = Some(player)
-                              Unit 
+                              GlobalConstant.admin = Some(player)
+                              player 
                            } // do nothing, player exists.
       case _            => {  println("   Doesn't exist: creating it...")
                               val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
-                              p.save                              
+                              p.save
+                              p
                            }
 
-      GlobalConstants.Admin = Some(player)
    }
-      
-   // TODO: before doing this, erase all persistency information, but not without a warning to the developer
 
+   GlobalConstant.admin = Some(admin)
+
+
+   // TODO: before doing this, erase all persistency information, but not without a warning to the developer
    if(TestSettings.CREATETESTUSERBASE)
    {  val randomSeq = new Random
       val minimalNumberOfPlayers = 5
