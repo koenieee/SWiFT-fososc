@@ -16,6 +16,8 @@ import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 import org.eclipse.jgit.lib.ObjectId
+import org.ocbkc.swift.jgit._
+
 /*
 object Error extends Enumeration {
   type Error = Value
@@ -32,14 +34,14 @@ class Restore
       case _            => S.redirectTo("constitutions")
    }
 
-   val commit:RevCommit = S.param("commitid") match
-   {  case Full(commitidLoc)  => {  val rw = new RevWalk(GlobalConstant.jgitRepo)
-                                    rw.parseCommit(ObjectId.fromString(commitidLoc))
-                                 }
-      case _            => S.redirectTo("constitutions")
+   val commitId = S.param("commitid") match
+   {  case Full(commitId) => commitId
+      case _              => S.redirectTo("constitutions")
    }
 
-   println("   commitid = " + commit.name)
+   val commit:RevCommit = JgitUtils.revComFromCommitId(commitId).getOrElse(S.redirectTo("constitutions"))
+
+   println("   commitid = " + commitId)
 
    // Try restoring
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
@@ -47,7 +49,7 @@ class Restore
          case _         => { throw new RuntimeException("  No user id found.") }
       }
    println("   Trying to restore...")
-   const.restore(commit, currentUserId.toString) 
+   const.restore(commitId, currentUserId.toString) 
 
    def render(ns: NodeSeq): NodeSeq =
    {  println("Restore.render")

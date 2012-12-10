@@ -22,6 +22,9 @@ import net.liftweb.mapper._
 import scala.util.matching._
 import scala.util.matching.Regex._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.jgit.Translations._
+import org.ocbkc.swift.jgit._
+
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -60,13 +63,20 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
                        )// extends LongKeyedMapper[Constitution] with IdPK
-{  //def getSingleton = ConstitutionMetaMapperObj
+{  import scoring._
+
+   //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
    // <&y2012.12.07.20:25:56& MUSTDO optimization necessary (function memoization)? In this way it is probably very costly...>
-   def getLatestCommitId:RevCom =
-   {  getHistory(0)
+   def latestCommitId:Option[RevCommit] =
+   {  val h = getHistory
+
+      if( h.size > 0)
+         Some(getHistory(0))
+      else
+         None
    }
 
    def firstReleaseExists = 
@@ -107,9 +117,6 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  followers.contains(userId) 
    }
 */
-   def gitUserId(liftUserId:String) = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
-   {  new PersonIdent(liftUserId, "swiftgame")
-   }
    
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
@@ -196,7 +203,6 @@ getHistory.length, commitIdsReleases.length, isRelease
 4 3 true
 5 5 false
 */
-      /* &y2012.12.05.21:27:58& WIW: refactor this: going to next release must be separate function. Then it can be both called by this method (a check at this point is necesary because it is possible there was not a new version while the sample size was sufficiently large), or after a player session (to find out if the sample size is already large enough for a next release) */
       println("   getHistory.length = " + getHistory.length)
       println("   commitIdsReleases.length = " + commitIdsReleases.length)
       gotoNextReleaseIfSufficientSampleSize
@@ -204,7 +210,7 @@ getHistory.length, commitIdsReleases.length, isRelease
 
    def gotoNextReleaseIfSufficientSampleSize =
    {  // Determine whether sample size on this release is high enough
-      if( ConstiScores.sampleSizeSufficient4FluencyScore(this) )
+      if( ConstiScores.sampleSizeSufficient4FluencyScore(constiId) )
       {  gotoNextRelease
       }
    }
@@ -214,19 +220,23 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def gotoNextRelease =
    {  println("gotoNextRelease")
-      val revcom = lastReleaseCommitId.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet.")
+      val revcom = latestCommitId.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet."))
+      //val revcom = JgitUtils.revComFromCommitId(commitId)
+
       // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
       println("  new commit (with id " + revcom.name + ") is the new release." )
-      jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(TODOadmin).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+      jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(revcom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
       commitIdsReleases ::= revcom.name
    }
 
-   def restore(commitId:RevCommit, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
-   {  val gitUi = gitUserId(liftUserId)
+   def restore(commitId:String, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
+   {  val revcom:RevCommit = JgitUtils.revComFromCommitId(commitId).getOrElse(throw new RuntimeException("this commit id doesn't exist, should be impossible, though, 'cause you restore is always called with an existing commitId... >:-("))
+   
+      val gitUi = gitUserId(liftUserId)
       val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
  
-      val commitMsg = "Restored version of " + dateFormat.format(commitId.getCommitTime.toLong*1000)
-      jgit.checkout.addPath(htmlFileName).setStartPoint(commitId).call
+      val commitMsg = "Restored version of " + dateFormat.format(revcom.getCommitTime.toLong*1000)
+      jgit.checkout.addPath(htmlFileName).setStartPoint(revcom).call
       jgit.commit.setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call
    }
 
@@ -249,16 +259,17 @@ getHistory.length, commitIdsReleases.length, isRelease
    case class ConstiVersionInfo(val commitId:String, val creationDatetimePOSIX:Long, val publisher:Player, val publishDescription:String)   
    // <&y2012.08.19.13:56:24& refactor rest of code to use this method instead of calling jgit on the spot (as long as that is not in conflict with efficiency issues)>
    def getConstiVersionInfo(commitId:String):Option[ConstiVersionInfo] =
-   {  val rw = new RevWalk(jgitRepo)
-      val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
-      // TODO: if revcom doesn't exist None, for this catch the right exceptions...
-      val playerId = revcom.getAuthorIdent.getName
-      val publisher:Player = Player.find(playerId) match
-      {  case Full(player)  => player
-         case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found. No, I'm not angry, just very very disappointed..."; println("   " + errmsg); throw new RuntimeException(errmsg) }
+   {  JgitUtils.revComFromCommitId(commitId) match
+      {  case Some(revcom) =>
+         {  val playerId = revcom.getAuthorIdent.getName
+            val publisher:Player = Player.find(playerId) match
+            {  case Full(player)  => player
+               case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found. No, I'm not angry, just very very disappointed..."; println("   " + errmsg); throw new RuntimeException(errmsg) }
+            }
+            Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
+         }
+         case None => None
       }
-
-      Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
    }
 
    case class HisCon(val content:Elem, val creationDatetimePOSIX:Long)
@@ -688,7 +699,7 @@ object ConstiScores
 
    def sampleSizeSufficient4FluencyScore(constiId:ConstiId):Boolean =
    {  // the sample size is sufficiently large, if the fluency score exists.
-      !( averageFluency(AverageFluency.minimalSampleSizePerPlayer, constiId, AverageFluency.fluencyConstantK).isEmpty )
+      !( averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, constiId, GlobalConstant.AverageFluency.fluencyConstantK).isEmpty )
       // <&y2012.12.05.21:04:38& refactor: create averageFluency etc. scoring function which already reads these global constants minimalSampleSize etc.
    }
 

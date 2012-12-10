@@ -13,6 +13,8 @@ import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.storage.file._
 import java.io._
+import org.ocbkc.swift.jgit.Translations._
+import org.ocbkc.swift.model._
 
 object GlobalConstant
 {  val TEST = true
@@ -27,7 +29,8 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
-   var Admin:Player:Option[Player] = None
+   var admin:Option[Player] = None
+   var adminGitUserId = admin match { case Some(admin) => Some(gitUserId(admin)); case _ => None } // MUSTDO: admin.flatMap{ gitUserId(_) } // perhaps also better put in org.ocbkc.swift.jgit.Translations._ ?
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
 
