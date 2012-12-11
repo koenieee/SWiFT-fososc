@@ -385,6 +385,8 @@ class Boot {
          ret
       }
 
+      /** @todo startAfter not used: delete it?
+        */
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
       {  val winSession = randomSeq.nextBoolean
          List( 
@@ -394,6 +396,23 @@ class Boot {
          )
       }
 
+      // >>> Simulate creation and editing of constis
+      def simulateConstiCreation(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent] =
+      {  List(
+            (randomPause(minTimeBeforeFirstConstiCreation, maxTimeBeforeFirstConstiCreation, randomSeq), () => Constitution.create(p.id.is))
+             )
+      }
+
+       def simulateConstiEditing(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent] =
+      {  List(
+            (randomPause(minTimeBetweenConstiEdits, maxTimeBetweenConstiEdits, randomSeq), () => Constitution.create(p.id.is))
+             )
+      }
+     
+
+      // <<< Simulate creation and editing of constis
+
+      
       // <<< configuration of test
 
 
