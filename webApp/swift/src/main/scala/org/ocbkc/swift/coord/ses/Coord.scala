@@ -86,11 +86,14 @@ trait CoreTrait
    def numOfSessionsAfterConstiAccess =
    {  sesHis.totalNumber - OneToStartWith.minSesionsB4access2allConstis
    }
+
+   def accessToConstiGame:Boolean =
+   {  numOfSessionsAfterConstiAccess >= 0
+   }
 }
 
 class Core(/* val player: User, var text: Text,v ar round: Round */) extends CoreTrait
 {  println("ses.Core.constructor called")
-
    
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
    // BEGIN temporary solution for constiSelectionProcedure

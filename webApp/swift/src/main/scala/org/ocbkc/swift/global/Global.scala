@@ -104,9 +104,10 @@ object TestSettings
    val AUTOTRANSLATION                 = true // false
    val CREATETESTUSERBASE              = true // false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = true // false // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYING                 = true // false
-   val SIMULATECLOCK                   = true // false
+   val CREATEDUMMYCONSTITUTIONS        = false // false // creates a number of constitutions with several updates and releases, but also some users.
+   val SIMULATEPLAYING                 = true // mutually exclusive with CREATEDUMMYCONSTITUTIONS
+   val SIMULATECLOCK                   = true // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
+   if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
 
