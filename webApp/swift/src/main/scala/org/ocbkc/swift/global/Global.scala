@@ -96,6 +96,7 @@ object GlobalConstant
 
 object Types
 {  type POSIXtime = Long
+   type DurationInMillis = Long
 }
 
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>

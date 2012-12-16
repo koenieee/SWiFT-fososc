@@ -45,7 +45,8 @@ object SystemWithTesting
 }
 
 object Types
-{  type SimulatedEvent = (POSIXtime, () => Any) 
+{   type SimulatedEvent = () => Any
+    type DelayedSimulatedEvent = (POSIXtime, SimulatedEvent)
 }
 
 object TestHelpers

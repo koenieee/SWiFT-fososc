@@ -12,6 +12,8 @@ import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.model.Player
 import GlobalConstant.jgit
+import org.ocbkc.swift.jgit._
+import org.ocbkc.swift.jgit.JgitUtils._
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
@@ -203,12 +205,16 @@ getHistory.length, commitIdsReleases.length, isRelease
       }
    }
 
-   def restore(commitId:RevCommit, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
-   {  val gitUi = gitUserId(liftUserId)
+   /** @param commitId must be a commit id backed by a git-commit. If not, consider as programming error.
+     * 
+     */
+   def restore(commitId:String, liftUserId:String)
+   {  val revcom = revComFromCommitId(commitId).get
+      val gitUi = gitUserId(liftUserId)
       val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
- 
-      val commitMsg = "Restored version of " + dateFormat.format(commitId.getCommitTime.toLong*1000)
-      jgit.checkout.addPath(htmlFileName).setStartPoint(commitId).call
+
+      val commitMsg = "Restored version of " + dateFormat.format(revcom.getCommitTime.toLong*1000)
+      jgit.checkout.addPath(htmlFileName).setStartPoint(revcom).call
       jgit.commit.setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call
    }
 

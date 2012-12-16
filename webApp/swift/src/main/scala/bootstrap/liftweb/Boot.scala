@@ -355,7 +355,7 @@ class Boot {
 
       val randomSeq = new Random
 
-      def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[SimulatedEvent] =
+      def simulatePlayingSessions(p:Player, numberOfSessions:Int):List[DelayedSimulatedEvent] =
       {  // create simulated session for player
          val sesCoordLR = new ses.CoreSimu(p)
       
@@ -370,7 +370,7 @@ class Boot {
          val sessionsEvents = if( numberOfSessions > 0 )
          {  val sessionIndices = List.range(0, numberOfSessions-1)
             
-            def f(sessionIndex:Int, endTimeLastSession:Long):(List[SimulatedEvent], Long) =
+            def f(sessionIndex:Int, endTimeLastSession:Long):(List[DelayedSimulatedEvent], Long) =
             {  val session = simulatePlayingSession(p, endTimeLastSession, sesCoordLR)
                val endTime = 0L // TODOextractEndTime(session)
                (session, endTime)
@@ -385,7 +385,7 @@ class Boot {
          ret
       }
 
-      def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
+      def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
       {  val winSession = randomSeq.nextBoolean
          List( 
             (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
@@ -401,10 +401,10 @@ class Boot {
      
       val players = Player.findAll
 
-      val simulatedEventsGroupedByPlayer:List[List[SimulatedEvent]] = players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
+      val simulatedEventsGroupedByPlayer:List[List[DelayedSimulatedEvent]] = players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
       
-      def toAbsoluteTimes(eventList:List[SimulatedEvent]) =
-      {  def f(event:SimulatedEvent, cummulativeTime:Long):(SimulatedEvent, Long) =
+      def toAbsoluteTimes(eventList:List[DelayedSimulatedEvent]) =
+      {  def f(event:DelayedSimulatedEvent, cummulativeTime:Long):(DelayedSimulatedEvent, Long) =
          {  val newCummulTime = cummulativeTime + event._1
             ((newCummulTime, event._2), newCummulTime)
          }
@@ -421,7 +421,7 @@ class Boot {
       // COULDDO now turn eventList back into list with pause times between events instead of times from the start of the event queue, and adapt runEvent (it simplifies runEvent).
 
       // run eventList
-      def runSimulatedEvent(event:SimulatedEvent) =
+      def runSimulatedEvent(event:DelayedSimulatedEvent) =
       {  println("runSimulatedEvent")
          SystemWithTesting.currentTimeMillis = SystemWithTesting.startTimeMillis_simu + event._1
          println("   time:" + SystemWithTesting.currentTimeMillis )
