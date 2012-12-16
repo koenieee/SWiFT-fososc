@@ -338,17 +338,6 @@ class Boot {
       val minDurationAlgoDef = 1000 * 2 // ms
       val maxDurationAlgoDef = 1000 * 60 // ms
 
-      val maxConstis = 40
-      val minConstis = 10
-      val minEditsPerConsti = 2
-      val maxEditsPerConsti = 40
-      // <&y2012.12.12.16:58:33& MUSTDO populate with first consti from the start, otherwise players can't begin!>
-      // <&y2012.12.12.16:59:21& MUSTDO refactor such that also in simulation Player can only start playing consti game AFTER he played sufficient sessions>
-      val minTimeBeforeFirstConstiCreation = 1000 * 60 * 60
-      val maxTimeBeforeFirstConstiCreation = 1000 * 60
-      val minTimeBetweenConstiEdits = 1000 * 10 // ms
-      val maxTimeBetweenConstiEdits = 1000 * 60 * 3600 // ms, i TIP: relate this to simulateplaying settings
-
       // subfunctions
 
       /**  @param f: function which maps element if inList (A) to value of type C, and gets a value of type B as context information originating from the previous time f was applied to the element at the left. 
@@ -396,9 +385,7 @@ class Boot {
          ret
       }
 
-      /** @todo startAfter not used: delete it? DONE
-        */
-      def simulatePlayingSession(p:Player, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
+      def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[SimulatedEvent]  =
       {  val winSession = randomSeq.nextBoolean
          List( 
             (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
@@ -407,61 +394,6 @@ class Boot {
          )
       }
 
-      val doNothing = Unit
-
-      // >>> Simulate creation and editing of constis
-      def simulateConstiCreation(p:Player, sesCoordLR:ses.CoreSimu):List[SimulatedEvent] =
-      {  List(
-            (randomPause(minTimeBeforeFirstConstiCreation, maxTimeBeforeFirstConstiCreation, randomSeq), () => 
-               {  if( ( sesCoordLR.numOfSessionsAfterConstiAccess >= 0  ) && ( Constitution.constis.size < maxConstis ) )
-                     Constitution.create(p.id.is)
-                  else
-                     doNothing
-               }
-            )
-         )
-      }
-
-      // <&y2012.12.12.16:42:58& refactor Constitution such that it can also work with the simulated clock (for creation time, edit time etc.>
-      var simSessions:Map[Player, ses.CoreSimu] = Nil // map with simulated sessions, for each player
-
-      def simulateConstiGameEvent:List[SimulatedEvent] =
-      {  // pick a random consti
-         // pick random player with which is allowed to edit:
-         pickRandomElementFromList( players.filter( p => p.accessToConstiGame) ) match
-         {  case Some(player) => { if(Random
-                                 } f(player)
-            case None         => Nil
-         }
-      }
-
-      /** @param player must have access to consti game.
-        *
-        */
-      def simulateConstiEditEvent(player:Player) =
-      {  val randomConstiId = 1 + randomSeq.nextInt(Constitution.count - 1)
-         val consti = Constitution.getById(randomConstiId)
-
-         List(
-            (randomPause(minTimeBetweenConstiEdits, maxTimeBetweenConstiEdits, randomSeq), () =>
-               {  consti.publish(
-                  """<h2>Article 1</h2>
-
-                  <p>publication """ + randomSeq.nextString(20) + """</p>
-""", randomSeq.nextString(6), p.id.toString
-                  )
-               }
-            )
-         )  
-      }
-     
-      def simulateConstiGame(p:Player) =
-      {  WIW: perhaps it is better to interleave different players, because the total number of constis is limited. I.e. also choose the player randomly here.
-      }
-
-      // <<< Simulate creation and editing of constis
-
-      
       // <<< configuration of test
 
 
@@ -469,7 +401,7 @@ class Boot {
      
       val players = Player.findAll
 
-      val simulatedEventsGroupedByPlayer:List[List[SimulatedEvent]] = players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) ) ++ players.map( p => simulateConstiGame(p)
+      val simulatedEventsGroupedByPlayer:List[List[SimulatedEvent]] = players.map( p => simulatePlayingSessions(p, randomSeq.nextInt(maxSessionsPerPlayer - minSessionsPerPlayer) ) )
       
       def toAbsoluteTimes(eventList:List[SimulatedEvent]) =
       {  def f(event:SimulatedEvent, cummulativeTime:Long):(SimulatedEvent, Long) =
