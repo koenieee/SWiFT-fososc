@@ -100,7 +100,8 @@ trait SimulatedEntity
 
       def applyDelayFunctions() =
       {  println("applyDelayFuctions called")
-         val result = delayedStatesMap.mapValues{ delayFunction => delayFunction() }
+         //val result = delayedStatesMap.map{ case (state, delayFunction) => (state, delayFunction()) }
+         val result = delayedStatesMap.mapValues{ delayFunction => delayFunction() } // <&y2012.12.17.21:50:44& strange behaviour here, which doens't happen with previous line. It is as if the function application is stored, and not its result. Just run the test to see it (TestSimulation.main)
          println("   delayedStates after applying delay functions:" + result)
          println("   delayedStates after applying delay functions:" + result)
          println("   delayedStates after applying delay functions:" + result)
