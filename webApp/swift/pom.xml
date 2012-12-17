@@ -106,7 +106,7 @@
     <dependency>
         <groupId>commons-io</groupId>
         <artifactId>commons-io</artifactId>
-            <version>2.4</version> <!-- &y2012.06.23.12:45:19& I tried newest version 2.4, but I won't download... -->
+            <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
