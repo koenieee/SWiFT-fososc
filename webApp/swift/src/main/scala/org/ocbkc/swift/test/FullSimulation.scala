@@ -8,8 +8,6 @@ Jn_A_Jn_B_C ==> Jn(A, Jn(B,C))
 OptJn: Option of a join A and B.
 */
 
-package org.ocbkc.swift.test.fullsimulation
-
 import org.ocbkc.swift.test._
 import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.global.Types._
@@ -17,13 +15,28 @@ import scala.collection.immutable.HashMap
 import scala.util.Random
 import System.out.println
 
-object TestSimulation
-{  def main(args: Array[String]) =
-   {  println("TestSimulation.main called")
-      if( args.length != 0 ) 
-         println("Usage: command without arguments")
-      else
-         TestRun.no1()
+package org.ocbkc.generic.test.simulation
+{
+
+/** The object that runs the complete simulation and has the Power to move the clock, to blow LIFE into the SimuEntities by making them move from one state to the other and executing their processes. They are just all little puppets moving in the light its Light.
+  */
+object SimuGod
+{  def run =
+   {  
+      // 
+      TransitionUtils.getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(SimEntity.simEntities.map{ se => se.proposeTransitionTo })
+   }
+}
+
+/** Keeps track of all existing SimEntities
+  */
+object SimEntity
+{  var simEntities:List[SimEntity] = Nil
+
+   def register(se:SimEntity) =
+   {  println("SimEntity.register called")
+      if( simEntities.contains(se) ) throw new RuntimeException("   you tried to register the same simulated entity again, I'm known to be hospitable, but not to that extend, my friend...")
+      simEntities = se :: simEntities
    }
 }
 
@@ -35,8 +48,7 @@ trait SimEntity
    var transitions:Map[State, List[State]] = Map()
    var proposedTransitionTo:Option[Jn_Jn_State_Delay_OptJn_SimProc_Duration] = None
    private val doNothing = Unit
-
-   // def transitions_=
+   SimEntity.register(this) 
 
    def proposeTransitionTo:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
    {  println("proposeTransitionTo called")
@@ -44,7 +56,7 @@ trait SimEntity
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimuGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
       
-      proposedTransitionTo = Some(transitionUtils.getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(transitions.get( current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.jn_State_Delay.state).get)) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
+      proposedTransitionTo = Some(TransitionUtils.genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(transitions.get( current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.jn_State_Delay.state).get)) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
       val ret = proposedTransitionTo.get  // .get, because None would be a bug.
       println("   proposedTransitionTo = " + ret)
       ret
@@ -71,9 +83,12 @@ trait SimEntity
 
    def updateTransitionModel
 
-   class State(val name:String) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values>
+   class State(name:String) extends org.ocbkc.generic.test.simulation.State(name) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values><&y2012.12.20.23:55:07& this is not a good idea I think (inner class of State : each instance of SimuEntity now gets its own qStart state! Find solution for this.>
 
    case class Jn_State_Delay(val state:State, val delay: DurationInMillis)
+   {  //override def toString = "Jn_State_Delay( state = " + state + ", delay = " + delay + ")"
+   }
+
    /** @todo exact purpose of this object? Isn't object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen enough?
      */
    object Jn_State_DelayGen
@@ -110,17 +125,7 @@ trait SimEntity
       }
    }
 
-   class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_State_DelayGen, val optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen])
-   {  def gen:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
-      {  Jn_Jn_State_Delay_OptJn_SimProc_Duration(
-            jn_State_DelayGen.gen, 
-            optJn_SimProc_DurationGen match 
-            {  case Some(jn_SimProc_DurationGen) => Some(jn_SimProc_DurationGen.gen)
-               case None => None
-            }
-         )
-      }
-   }
+   class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(jn_State_DelayGen:Jn_State_DelayGen, optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen]) extends Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(jn_State_DelayGen, optJn_SimProc_DurationGen) 
 
    object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen
    {  var jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen:List[Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen] = Nil
@@ -134,35 +139,7 @@ trait SimEntity
       }
    }  
 
-
-
-   case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_Delay , val optJn_SimProc_Duration: Option[Jn_SimProc_Duration])
-   {  //override def toString = "State( name = " + name + ", simProc = " + simProc + " )"
-      /** @returns 0 if there is no process attached to the state, otherwise the duration of the process.
-        *
-        */
-
-      def duration:Long =
-      {  optJn_SimProc_Duration match
-            {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.duration
-               case None => 0L
-            }
-      }
-
-      def simProc =
-      {  optJn_SimProc_Duration match
-         {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc
-            case None => None
-         }
-      }
-
-      def runSimProc =
-      {  optJn_SimProc_Duration match
-         {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc.run
-            case None => doNothing
-         }
-      }
-   }
+   case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(jn_State_Delay:Jn_State_Delay , optJn_SimProc_Duration: Option[Jn_SimProc_Duration]) extends Jn_Jn_State_Delay_OptJn_SimProc_Duration(jn_State_Delay, optJn_SimProc_Duration)
 
    object State
    {  var states:List[State] = Nil
@@ -180,33 +157,85 @@ trait SimEntity
    /** @todo <&y2012.12.18.10:35:14& how to refactor to prevent such long names?>
     * Note: the value of the hashmap is the delay-generator (not the duration generator for the SimProc)!
     */
-   object transitionUtils
-   {  def getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(states:List[State]):Jn_Jn_State_Delay_OptJn_SimProc_Duration = 
-      {  println("transitionUtils.getFirstState")
-         val first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = applyTimingFunctions(states).sortWith{ case (jn_Jn_State_Delay_OptJn_SimProc_Duration1, jn_Jn_State_Delay_OptJn_SimProc_Duration2) => ( jn_Jn_State_Delay_OptJn_SimProc_Duration1.jn_State_Delay.delay < jn_Jn_State_Delay_OptJn_SimProc_Duration2.jn_State_Delay.delay ) }(0) // (0) always possible because empty list is considered to be a bug
-         println("   first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = " + first_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
-         first_Jn_Jn_State_Delay_OptJn_SimProc_Duration
-      }
 
-      def applyTimingFunctions(states:List[State]) =
-      {  println("applyDelayFuctions called")
-         val result = states.map{ s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen }
-         println("   delayedStates after applying delay functions:" + result)
-         result
-      }
+}
+
+object TransitionUtils
+{  def genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(states:List[State]):Jn_Jn_State_Delay_OptJn_SimProc_Duration = 
+   {  println("TransitionUtils.getFirstState")
+      val first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(applyTimingFunctions(states))
+      println("   first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = " + first_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
+      first_Jn_Jn_State_Delay_OptJn_SimProc_Duration
+   }
+
+   def getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(jns_Jn_State_Delay_OptJn_SimProc_Duration: List[Jn_Jn_State_Delay_OptJn_SimProc_Duration] ):Jn_Jn_State_Delay_OptJn_SimProc_Duration =
+   {  jns_Jn_State_Delay_OptJn_SimProc_Duration.sortWith{ case (jn_Jn_State_Delay_OptJn_SimProc_Duration1, jn_Jn_State_Delay_OptJn_SimProc_Duration2) => ( jn_Jn_State_Delay_OptJn_SimProc_Duration1.jn_State_Delay.delay < jn_Jn_State_Delay_OptJn_SimProc_Duration2.jn_State_Delay.delay ) }(0)
+   }
+
+   def applyTimingFunctions(states:List[State]) =
+   {  println("applyDelayFuctions called")
+      val result = states.map{ s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen }
+      println("   delayedStates after applying delay functions:" + result)
+      result
    }
 }
 
-/*
+abstract class State(val name:String) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values>
+{  override def toString = "State( name = " + name + " )"
+}
 
+abstract class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
+{  def gen:Jn_State_Delay =
+   {  Jn_State_Delay(state, delayGen())
+   }
+}
 
-*/
+abstract case class SimProc(val name:String, val function:() => Any)
+{  def run =
+   {  function()
+   }
+}
 
-class Jn_SimProc_DurationGen( process:() => Any, duration:() => DurationInMillis)
+abstract case class Jn_SimProc_Duration(val simProc:SimProc, val duration: DurationInMillis )
+
+abstract class Jn_SimProc_DurationGen(val simProc:SimProc, val durationGen: () => DurationInMillis )
+{  def gen:Jn_SimProc_Duration =
+   {  Jn_SimProc_Duration(simProc, durationGen())
+   }
+}
+
+abstract class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_State_DelayGen, val optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen])
+{  def gen:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
+   {  Jn_Jn_State_Delay_OptJn_SimProc_Duration(
+         jn_State_DelayGen.gen, 
+         optJn_SimProc_DurationGen match 
+         {  case Some(jn_SimProc_DurationGen) => Some(jn_SimProc_DurationGen.gen)
+            case None => None
+         }
+      )
+   }
+}
 
 /** values in map: a function which produces a delay if it is called. It is a function because it in most cases the delay will not have a fixed duration, but depend on randomness and context info.
   * @todo is an empty map a programming error, or is there a use case for it? For now I assume the first.
   */
+
+// <&y2012.12.20.18:11:16& move following to separate file>
+}
+
+package org.ocbkc.swift.test.fullsimulation
+{
+import org.ocbkc.generic.test.simulation._
+
+object TestSimulation
+{  def main(args: Array[String]) =
+   {  println("TestSimulation.main called")
+      if( args.length != 0 ) 
+         println("Usage: command without arguments")
+      else
+         TestRun.no1()
+   }
+}
 
 class SimPlayer extends SimEntity
 {  // create additional states
@@ -237,9 +266,7 @@ class SimPlayer extends SimEntity
 }
 
 object TestRun
-{  
-// >>> test
-   def no1() =
+{  def no1() =
    {  println("TestRun.no1 called")
       val p1 = new SimPlayer
       println("   start state is " + p1.current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
@@ -248,5 +275,5 @@ object TestRun
       p1.proposeTransitionTo
       p1.doProposedTransition
    }
-// <<<
+}
 }
