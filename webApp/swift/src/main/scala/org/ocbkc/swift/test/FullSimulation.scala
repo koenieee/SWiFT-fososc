@@ -41,7 +41,7 @@ object SimEntity
 }
 
 trait SimEntity
-{  val qStart = State("qStart") // there is always at least a Start state
+{  val qStart = State("qStart") // there is always at least a Start state. Note: because it is an inner class (State), the State-type belongs to exactly one SmEntity instance.
    var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart, 0), None) // state qStart has no process attached to it, and starts immediately.
 
    var timeAtBeginningCurrentState:TimeInMillis = SystemWithTesting.currentTimeMillis
@@ -85,9 +85,6 @@ trait SimEntity
 
    class State(name:String) extends org.ocbkc.generic.test.simulation.State(name) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values><&y2012.12.20.23:55:07& this is not a good idea I think (inner class of State : each instance of SimuEntity now gets its own qStart state! Find solution for this.>
 
-   case class Jn_State_Delay(val state:State, val delay: DurationInMillis)
-   {  //override def toString = "Jn_State_Delay( state = " + state + ", delay = " + delay + ")"
-   }
 
    /** @todo exact purpose of this object? Isn't object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen enough?
      */
@@ -111,21 +108,14 @@ trait SimEntity
       }
    }
 
-   case class SimProc(val name:String, val function:() => Any)
+/** Innerclass, because SimProc are specifically tied to this entity.
+  *
+  */
+   class SimProc(val name:String, val function:() => Any) extends org.ocbkc.generic.test.simulation.SimProc(name, function)
    {  def run =
       {  function()
       }
    }
-
-   case class Jn_SimProc_Duration(val simProc:SimProc, val duration: DurationInMillis )
-
-   class Jn_SimProc_DurationGen(val simProc:SimProc, val durationGen: () => DurationInMillis )
-   {  def gen:Jn_SimProc_Duration =
-      {  Jn_SimProc_Duration(simProc, durationGen())
-      }
-   }
-
-   class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(jn_State_DelayGen:Jn_State_DelayGen, optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen]) extends Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(jn_State_DelayGen, optJn_SimProc_DurationGen) 
 
    object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen
    {  var jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen:List[Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen] = Nil
@@ -138,8 +128,6 @@ trait SimEntity
       {  jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find{ jn => ( jn.jn_State_DelayGen.state == state ) }.get
       }
    }  
-
-   case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(jn_State_Delay:Jn_State_Delay , optJn_SimProc_Duration: Option[Jn_SimProc_Duration]) extends Jn_Jn_State_Delay_OptJn_SimProc_Duration(jn_State_Delay, optJn_SimProc_Duration)
 
    object State
    {  var states:List[State] = Nil
@@ -157,7 +145,6 @@ trait SimEntity
    /** @todo <&y2012.12.18.10:35:14& how to refactor to prevent such long names?>
     * Note: the value of the hashmap is the delay-generator (not the duration generator for the SimProc)!
     */
-
 }
 
 object TransitionUtils
@@ -184,27 +171,31 @@ abstract class State(val name:String) // <&y2012.12.20.13:53:52& better turn int
 {  override def toString = "State( name = " + name + " )"
 }
 
-abstract class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
+case class Jn_State_Delay(val state:State, val delay: DurationInMillis)
+{  //override def toString = "Jn_State_Delay( state = " + state + ", delay = " + delay + ")"
+}
+
+class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
 {  def gen:Jn_State_Delay =
    {  Jn_State_Delay(state, delayGen())
    }
 }
 
-abstract case class SimProc(val name:String, val function:() => Any)
+abstract class SimProc(val name:String, val function:() => Any)
 {  def run =
    {  function()
    }
 }
 
-abstract case class Jn_SimProc_Duration(val simProc:SimProc, val duration: DurationInMillis )
+case class Jn_SimProc_Duration(val simProc:SimProc, val duration: DurationInMillis )
 
-abstract class Jn_SimProc_DurationGen(val simProc:SimProc, val durationGen: () => DurationInMillis )
+class Jn_SimProc_DurationGen(val simProc:SimProc, val durationGen: () => DurationInMillis )
 {  def gen:Jn_SimProc_Duration =
    {  Jn_SimProc_Duration(simProc, durationGen())
    }
 }
 
-abstract class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_State_DelayGen, val optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen])
+class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_State_DelayGen, val optJn_SimProc_DurationGen: Option[Jn_SimProc_DurationGen])
 {  def gen:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
    {  Jn_Jn_State_Delay_OptJn_SimProc_Duration(
          jn_State_DelayGen.gen, 
