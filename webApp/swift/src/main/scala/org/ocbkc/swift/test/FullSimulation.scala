@@ -18,6 +18,12 @@ import System.out.println
 package org.ocbkc.generic.test.simulation
 {
 
+object AuxiliaryDefs
+{  val doNothing = Unit
+}
+
+import AuxiliaryDefs._
+
 /** The object that runs the complete simulation and has the Power to move the clock, to blow LIFE into the SimuEntities by making them move from one state to the other and executing their processes. They are just all little puppets moving in the light its Light.
   */
 object SimuGod
@@ -47,7 +53,6 @@ trait SimEntity
    var timeAtBeginningCurrentState:TimeInMillis = SystemWithTesting.currentTimeMillis
    var transitions:Map[State, List[State]] = Map()
    var proposedTransitionTo:Option[Jn_Jn_State_Delay_OptJn_SimProc_Duration] = None
-   private val doNothing = Unit
    SimEntity.register(this) 
 
    def proposeTransitionTo:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
@@ -56,7 +61,7 @@ trait SimEntity
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimuGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
       
-      proposedTransitionTo = Some(TransitionUtils.genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(transitions.get( current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.jn_State_Delay.state).get)) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
+      proposedTransitionTo = Some(TransitionUtils.genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(transitions.get( current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.jn_State_Delay.state.asInstanceOf[this.State]).get)) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
       val ret = proposedTransitionTo.get  // .get, because None would be a bug.
       println("   proposedTransitionTo = " + ret)
       ret
@@ -204,6 +209,34 @@ class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_St
             case None => None
          }
       )
+   }
+}
+
+case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_Delay , val optJn_SimProc_Duration: Option[Jn_SimProc_Duration])
+{  //override def toString = "State( name = " + name + ", simProc = " + simProc + " )"
+   /** @returns 0 if there is no process attached to the state, otherwise the duration of the process.
+     *
+     */
+
+   def duration:Long =
+   {  optJn_SimProc_Duration match
+         {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.duration
+            case None => 0L
+         }
+   }
+
+   def simProc =
+   {  optJn_SimProc_Duration match
+      {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc
+         case None => None
+      }
+   }
+
+   def runSimProc =
+   {  optJn_SimProc_Duration match
+      {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc.run
+         case None => doNothing
+      }
    }
 }
 
