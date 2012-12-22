@@ -28,9 +28,37 @@ import AuxiliaryDefs._
   */
 object SimuGod
 {  def run =
-   {  
-      // 
-      TransitionUtils.getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(SimEntity.simEntities.map{ se => se.proposeTransitionTo })
+   {  // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
+      var unoccupiedEntities:List[SimuEntity] = SimuEntity.simEntities
+
+      val theChosenOnes_Jn_Delay_Duration = unoccupiedEntities.map{ se => (se, se.proposeTransition) }.sortWith{ case ((se1, jn_Delay_Duration1), (se2,jn_Delay_Duration2)) => jn_Delay_Duration1.delay < jn_Delay_Duration2.delay } TODOselect the first ones with the same delay
+      val theChosenOnes = theChosenOnes_Jn_Delay_Duration.map{ fe => fe._1 }
+      // move clock
+      SystemWithTesting.pause(delay)
+
+      theChosenOnes.map{ 
+         fEWJDD => {
+            val (theChosenOne, delay) = (firstEntityWithDelay._1, firstEntityWithDelay._2)
+            println("   theChosenOne = " + theChosenOne)
+            theChosenOne.doProposedTransition      
+         }
+      }
+
+      val theChosenOnes_Jn_Delay_Duration_sorted = theChosenOnes_Jn_Delay_Duration.sortWith{ case ( (_, Jn_Delay_Duration(_,d1), (_, Jn_Delay_Duration(_,d2))) => d1<d2(_, Jn_Delay_Duration(_,d1)(_, Jn_Delay_Duration(_,d1) }.
+      
+      val shortestDuration = theChosenOnes_Jn_Delay_Duration(0)._2.jn_Delay_Duration.duration
+
+      val theChosenOnes_Jn_Delay_Duration_WithShortestDuration = takeWhile{ (_, Jn_Delay_Duration(_,duration)) => duration == shortestDuration }      
+      // error here: what is it takes a view rounds before the process duration of a certain entity has passed?
+      val theChosenOnesWithShortestDuration = theChosenOnes_Jn_Delay_Duration_WithShortestDuration.map{ t => t._1 }
+
+      unoccupiedEntities = unoccupiedEntities -- theChosenOnesWithShortestDuration
+
+      SystemWithTesting.pause(shortestDuration)
+      }
+
+
+      // move clock to moment there is at least entity which is not busy
    }
 }
 
@@ -46,29 +74,47 @@ object SimEntity
    }
 }
 
+case class Jn_Delay_Duration(delay:TimeInMillis, duration:TimeInMillis)
+
 trait SimEntity
 {  val qStart = State("qStart") // there is always at least a Start state. Note: because it is an inner class (State), the State-type belongs to exactly one SmEntity instance.
    var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart, 0), None) // state qStart has no process attached to it, and starts immediately.
+   def currentState = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
 
    var timeAtBeginningCurrentState:TimeInMillis = SystemWithTesting.currentTimeMillis
    var transitions:Map[State, List[State]] = Map()
    var proposedTransitionTo:Option[Jn_Jn_State_Delay_OptJn_SimProc_Duration] = None
    SimEntity.register(this) 
 
-   def proposeTransitionTo:Jn_Jn_State_Delay_OptJn_SimProc_Duration =
-   {  println("proposeTransitionTo called")
+   /** @returns delay before proposed state
+     */
+   def proposeTransition:Jn_Delay_Duration =
+   {  println("proposeTransition called")
       val timeAfterCompletionCurrentState = timeAtBeginningCurrentState + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimuGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
       
-      proposedTransitionTo = Some(TransitionUtils.genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(transitions.get( current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.jn_State_Delay.state.asInstanceOf[this.State]).get)) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
+      proposedTransitionTo = Some(TransitionUtils. getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(
+                                                      applyTimingFunctions(
+                                                         transitions.get( currentState ).get
+                                                      )
+                                                   )
+                                 ) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
       val ret = proposedTransitionTo.get  // .get, because None would be a bug.
       println("   proposedTransitionTo = " + ret)
-      ret
+      Jn_Delay_Duration(ret.jn_State_Delay.delay, ret.jn_SimProc_Duration.duration)
    }
    
+   def applyTimingFunctions(states:List[State]) =
+   {  println("applyDelayFuctions called")
+      val result = states.map{ s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen }
+      println("   delayedStates after applying delay functions:" + result)
+      result
+   }
+
+   
    /** Very important: only call this method if you are certain this is the first transition that is going to take place within the COMPLETE simulation. In that way, the total system state can change consistently, you don't want a *later* transition to take place first.
-     * Doesn't update time, this is the responsibiltiy of the calling SimGod, it should do so just before calling this function.
+     * Doesn't update time, this is the responsibiltiy of the calling SimGod, it should do so just before calling this function. Moreover, the assumption is that the entity isn't influenced anymore by the environment for the duration of the process that is attached to the proposed state.
      */
    def doProposedTransition =
    {  println("doProposedTransition called")
@@ -107,20 +153,10 @@ trait SimEntity
       }
    }
 
-   class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
-   {  def gen:Jn_State_Delay =
-      {  Jn_State_Delay(state, delayGen())
-      }
-   }
-
-/** Innerclass, because SimProc are specifically tied to this entity.
+/** Innerclass, because SimProcs are specifically tied to this entity.
   *
   */
-   class SimProc(val name:String, val function:() => Any) extends org.ocbkc.generic.test.simulation.SimProc(name, function)
-   {  def run =
-      {  function()
-      }
-   }
+   class SimProc(name:String, function:() => Any) extends org.ocbkc.generic.test.simulation.SimProc(name, function)
 
    object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen
    {  var jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen:List[Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen] = Nil
@@ -153,22 +189,8 @@ trait SimEntity
 }
 
 object TransitionUtils
-{  def genAndGetFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(states:List[State]):Jn_Jn_State_Delay_OptJn_SimProc_Duration = 
-   {  println("TransitionUtils.getFirstState")
-      val first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(applyTimingFunctions(states))
-      println("   first_Jn_Jn_State_Delay_OptJn_SimProc_Duration = " + first_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
-      first_Jn_Jn_State_Delay_OptJn_SimProc_Duration
-   }
-
-   def getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(jns_Jn_State_Delay_OptJn_SimProc_Duration: List[Jn_Jn_State_Delay_OptJn_SimProc_Duration] ):Jn_Jn_State_Delay_OptJn_SimProc_Duration =
+{  def getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(jns_Jn_State_Delay_OptJn_SimProc_Duration: List[Jn_Jn_State_Delay_OptJn_SimProc_Duration] ):Jn_Jn_State_Delay_OptJn_SimProc_Duration =
    {  jns_Jn_State_Delay_OptJn_SimProc_Duration.sortWith{ case (jn_Jn_State_Delay_OptJn_SimProc_Duration1, jn_Jn_State_Delay_OptJn_SimProc_Duration2) => ( jn_Jn_State_Delay_OptJn_SimProc_Duration1.jn_State_Delay.delay < jn_Jn_State_Delay_OptJn_SimProc_Duration2.jn_State_Delay.delay ) }(0)
-   }
-
-   def applyTimingFunctions(states:List[State]) =
-   {  println("applyDelayFuctions called")
-      val result = states.map{ s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen }
-      println("   delayedStates after applying delay functions:" + result)
-      result
    }
 }
 
@@ -212,7 +234,7 @@ class Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen(val jn_State_DelayGen:Jn_St
    }
 }
 
-case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_Delay , val optJn_SimProc_Duration: Option[Jn_SimProc_Duration])
+case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_Delay, val optJn_SimProc_Duration: Option[Jn_SimProc_Duration])
 {  //override def toString = "State( name = " + name + ", simProc = " + simProc + " )"
    /** @returns 0 if there is no process attached to the state, otherwise the duration of the process.
      *
@@ -237,6 +259,10 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
       {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc.run
          case None => doNothing
       }
+   }
+
+   def state:State =
+   {  jn_State_Delay.state
    }
 }
 
@@ -294,9 +320,9 @@ object TestRun
    {  println("TestRun.no1 called")
       val p1 = new SimPlayer
       println("   start state is " + p1.current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
-      p1.proposeTransitionTo
+      p1.proposeTransition
       p1.doProposedTransition
-      p1.proposeTransitionTo
+      p1.proposeTransition
       p1.doProposedTransition
    }
 }
