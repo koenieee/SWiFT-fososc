@@ -299,7 +299,7 @@ object TestSimulation
       if( args.length != 0 ) 
          println("Usage: command without arguments")
       else
-         TestRun.no2()
+         TestRun.no3()
    }
 }
 
@@ -347,5 +347,12 @@ object TestRun
       val p1 = new SimPlayer
       SimGod.run(2)
    }  
+
+   def no3() =
+   {  println("TestRun.no3 called")
+      val p1 = new SimPlayer
+      val p2 = new SimPlayer
+      SimGod.run(2)
+   } 
 }
 }
