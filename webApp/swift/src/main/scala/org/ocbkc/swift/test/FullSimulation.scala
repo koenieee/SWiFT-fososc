@@ -9,7 +9,6 @@ OptJn: Option of a join A and B.
 */
 
 import org.ocbkc.swift.test._
-import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.global.Types._
 import scala.collection.immutable.HashMap
 import scala.util.Random
@@ -26,39 +25,45 @@ import AuxiliaryDefs._
 
 /** The object that runs the complete simulation and has the Power to move the clock, to blow LIFE into the SimuEntities by making them move from one state to the other and executing their processes. They are just all little puppets moving in the light its Light.
   */
-object SimuGod
-{  def run =
-   {  // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
-      var unoccupiedEntities:List[SimuEntity] = SimuEntity.simEntities
+object SimGod
+{  def run(iterations:Int) =
+   {  var unoccupiedEntities:List[SimEntity] = SimEntity.simEntities
+// WIW: &y2012.12.23.15:18:25& compile & test
+      for{ i <- 1 until (iterations + 1) }
+      {  // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
+         println(" itteration " + i)
+         println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+         println("  unoccupiedEntities = " + unoccupiedEntities)
+         val SimEntities_Jn_Start_Stop = unoccupiedEntities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) }.sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
 
-      val theChosenOnes_Jn_Delay_Duration = unoccupiedEntities.map{ se => (se, se.proposeTransition) }.sortWith{ case ((se1, jn_Delay_Duration1), (se2,jn_Delay_Duration2)) => jn_Delay_Duration1.delay < jn_Delay_Duration2.delay } TODOselect the first ones with the same delay
-      val theChosenOnes = theChosenOnes_Jn_Delay_Duration.map{ fe => fe._1 }
-      // move clock
-      SystemWithTesting.pause(delay)
+         val firstStartTime:POSIXtime = SimEntities_Jn_Start_Stop(0)._2.start
 
-      theChosenOnes.map{ 
-         fEWJDD => {
-            val (theChosenOne, delay) = (firstEntityWithDelay._1, firstEntityWithDelay._2)
-            println("   theChosenOne = " + theChosenOne)
-            theChosenOne.doProposedTransition      
+         println("  firstStartTime = " + firstStartTime)
+         val theChosenOnes_Jn_Start_Stop = SimEntities_Jn_Start_Stop.takeWhile{ case (_, Jn_Start_Stop(start,_)) => (start == firstStartTime) }
+         val theChosenOnes = theChosenOnes_Jn_Start_Stop.map{ fe => fe._1 }
+         println("  theChosenOnes = " + theChosenOnes)
+
+         // move clock
+         SystemWithTesting.currentTimeMillis = firstStartTime
+         println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+
+         theChosenOnes.map{
+            tCO => tCO.doProposedTransition
          }
+
+         val theChosenOnes_Jn_Start_Stop_sorted = theChosenOnes_Jn_Start_Stop.sortWith{ case ( (_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2)) ) => stop1 < stop2 }
+         
+         val firstStopTime = theChosenOnes_Jn_Start_Stop(0)._2.stop
+         println("  firstStopTime = " + firstStopTime )
+
+         // move clock to moment there is at least entity which is not busy
+         SystemWithTesting.currentTimeMillis = firstStopTime
+         println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+         val theChosenOnes_withFirstStopTime = theChosenOnes_Jn_Start_Stop_sorted.takeWhile{ case (_, Jn_Start_Stop(_,stop)) => stop == firstStopTime }.map{ t => t._1 }
+         val theChosenOnes_withLaterStopTimes = theChosenOnes -- theChosenOnes_withFirstStopTime
+
+         unoccupiedEntities = unoccupiedEntities -- theChosenOnes_withLaterStopTimes
       }
-
-      val theChosenOnes_Jn_Delay_Duration_sorted = theChosenOnes_Jn_Delay_Duration.sortWith{ case ( (_, Jn_Delay_Duration(_,d1), (_, Jn_Delay_Duration(_,d2))) => d1<d2(_, Jn_Delay_Duration(_,d1)(_, Jn_Delay_Duration(_,d1) }.
-      
-      val shortestDuration = theChosenOnes_Jn_Delay_Duration(0)._2.jn_Delay_Duration.duration
-
-      val theChosenOnes_Jn_Delay_Duration_WithShortestDuration = takeWhile{ (_, Jn_Delay_Duration(_,duration)) => duration == shortestDuration }      
-      // error here: what is it takes a view rounds before the process duration of a certain entity has passed?
-      val theChosenOnesWithShortestDuration = theChosenOnes_Jn_Delay_Duration_WithShortestDuration.map{ t => t._1 }
-
-      unoccupiedEntities = unoccupiedEntities -- theChosenOnesWithShortestDuration
-
-      SystemWithTesting.pause(shortestDuration)
-      }
-
-
-      // move clock to moment there is at least entity which is not busy
    }
 }
 
@@ -75,10 +80,23 @@ object SimEntity
 }
 
 case class Jn_Delay_Duration(delay:TimeInMillis, duration:TimeInMillis)
+{  def toJn_Start_Stop =
+   {  Jn_Start_Stop(SystemWithTesting.currentTimeMillis + delay, SystemWithTesting.currentTimeMillis + delay + duration)
+   }
+}
+
+
+/** @param start: absolute starting time
+  * @param stop: absolute stop time
+  */
+case class Jn_Start_Stop(start:POSIXtime, stop:POSIXtime)
+{
+}
+
 
 trait SimEntity
 {  val qStart = State("qStart") // there is always at least a Start state. Note: because it is an inner class (State), the State-type belongs to exactly one SmEntity instance.
-   var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart, 0), None) // state qStart has no process attached to it, and starts immediately.
+   var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart.asInstanceOf[org.ocbkc.generic.test.simulation.State], 0), None) // state qStart has no process attached to it, and starts immediately.
    def currentState = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
 
    var timeAtBeginningCurrentState:TimeInMillis = SystemWithTesting.currentTimeMillis
@@ -91,7 +109,7 @@ trait SimEntity
    def proposeTransition:Jn_Delay_Duration =
    {  println("proposeTransition called")
       val timeAfterCompletionCurrentState = timeAtBeginningCurrentState + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
-      if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimuGod is not infallible..
+      if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
       
       proposedTransitionTo = Some(TransitionUtils. getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(
@@ -102,7 +120,7 @@ trait SimEntity
                                  ) // <&y2012.12.16.22:07:43& .get here ok, or is there some use case that None isn't a bug?>
       val ret = proposedTransitionTo.get  // .get, because None would be a bug.
       println("   proposedTransitionTo = " + ret)
-      Jn_Delay_Duration(ret.jn_State_Delay.delay, ret.jn_SimProc_Duration.duration)
+      Jn_Delay_Duration(ret.jn_State_Delay.delay, ret.duration)
    }
    
    def applyTimingFunctions(states:List[State]) =
@@ -121,8 +139,6 @@ trait SimEntity
       proposedTransitionTo match
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
          {  jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
-            
-            // TODO: move to SimulationGod: SystemWithTesting.currentTimeMillis = SystemWithTesting.pause(delayedState.delay) // update system clock
             current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = proposedTransitionTo.get
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
@@ -283,7 +299,7 @@ object TestSimulation
       if( args.length != 0 ) 
          println("Usage: command without arguments")
       else
-         TestRun.no1()
+         TestRun.no2()
    }
 }
 
@@ -325,5 +341,11 @@ object TestRun
       p1.proposeTransition
       p1.doProposedTransition
    }
+
+   def no2() =
+   {  println("TestRun.no2 called")
+      val p1 = new SimPlayer
+      SimGod.run(2)
+   }  
 }
 }

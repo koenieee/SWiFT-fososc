@@ -10,6 +10,7 @@ object SystemWithTesting
 {  val startTimeMillis_simu:POSIXtime = System.currentTimeMillis
    private var currentTimeMillisVar_simu:POSIXtime = startTimeMillis_simu // take the current time as the start time of the simulated clock
    private var lastTimeMillis_simu:POSIXtime = currentTimeMillisVar_simu
+   val msgSimulateClockOff = "The simulated clock is turned off, so it makes no sense to call this method."
 
    def currentTimeMillis:POSIXtime =
    {  if(TestSettings.SIMULATECLOCK)
@@ -20,9 +21,16 @@ object SystemWithTesting
       }
    }
 
+   def currentTimeMillisAndTimeSinceLastEvent:(POSIXtime, DurationInMillis) =
+   {  if(TestSettings.SIMULATECLOCK) (currentTimeMillisVar_simu, currentTimeMillisVar_simu - lastTimeMillis_simu) 
+      else throw new RuntimeException(msgSimulateClockOff)
+   }
+
    // &y2012.10.29.00:34:11& perhaps use this method as few times as possible, and use pause instead (the latter enforces chronological order...)
+   /** @todo test TestSettings.SIMULATECLOCK
+     */
    def currentTimeMillis_= (newTime:POSIXtime):Unit =
-   {  if(newTime < lastTimeMillis_simu ) throw new RuntimeException("   timeOfEvent is smaller than of last position of clock, clock may only move forward.")
+   {  if(newTime < lastTimeMillis_simu ) throw new RuntimeException("   newTime (" + newTime + ") is smaller than of last position of clock (" + lastTimeMillis_simu + "), clock may only move forward, or stay in the same place.")
       lastTimeMillis_simu = currentTimeMillisVar_simu
       currentTimeMillisVar_simu = newTime
    }
