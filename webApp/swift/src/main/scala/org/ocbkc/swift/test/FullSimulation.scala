@@ -9,10 +9,12 @@ OptJn: Option of a join A and B.
 */
 
 import org.ocbkc.swift.test._
+import org.ocbkc.swift.test._
 import org.ocbkc.swift.global.Types._
 import scala.collection.immutable.HashMap
 import scala.util.Random
 import System.out.println
+import org.ocbkc.swift.global.TestSettings
 
 package org.ocbkc.generic.test.simulation
 {
@@ -29,11 +31,11 @@ object SimGod
 {  def run(iterations:Int) =
    {  var unoccupiedEntities:List[SimEntity] = SimEntity.simEntities
       var occupiedEntities_Jn_Start_Stop:List[(SimEntity, Jn_Start_Stop)] = Nil
-
+      TestSettings.SIMULATECLOCK = true
       for{ i <- 1 until (iterations + 1) }
       {  // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
          println(" itteration " + i)
-         println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+         //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillis)
          println("  unoccupiedEntities = " + unoccupiedEntities)
          val SimEntities_Jn_Start_Stop = unoccupiedEntities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) }.sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
 
@@ -47,15 +49,17 @@ object SimGod
          println("  theChosenOnes = " + theChosenOnes)
 
          // Now all information is collected about the first coming event. Now lets see who wins: one or more occupied stopping an activity, or one or more unoccupied entities (theChosenOnes) starting an activity.
-
+         println("   determine first coming event...")
          occupiedEntities_Jn_Start_Stop match
-         {  case Nil             => doTransitionsChosenOnes
+         {  case Nil             => { println("Unoccupied entity starting, because there are no occupied entities"); doTransitionsChosenOnes }
             case oE::later_oEs   => oE match
                                  {  case (_, Jn_Start_Stop(_,firstStopTime)) =>
                                     {  if( firstStopTime >= firstStartTime )
-                                          doTransitionsChosenOnes
+                                          { println("Unoccupied entity starting is first (or at the same time)"); doTransitionsChosenOnes }
                                        else 
-                                       {  SystemWithTesting.currentTimeMillis = firstStopTime
+                                       {  println("   occupied entity finishing is the first coming event")
+                                          SystemWithTesting.currentTimeMillis = firstStopTime
+                                          //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
                                           occupiedEntities_Jn_Start_Stop = later_oEs.partition{ case (_, Jn_Start_Stop(_,stop)) => stop == firstStopTime }._2 // all occupied entities with firstStopTime just became unoccupied, so drop them from the occupied list.
                                        }
                                     }
@@ -63,9 +67,10 @@ object SimGod
          }
 
          def doTransitionsChosenOnes =
-         {// move clock
+         {  println("run.doTransitionsChosenOnes called")
+            // move clock
             SystemWithTesting.currentTimeMillis = firstStartTime
-            println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+            //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
 
             theChosenOnes.map{
                tCO => tCO.doProposedTransition
@@ -78,7 +83,7 @@ object SimGod
 
             // move clock to moment there is at least entity which is not busy
             SystemWithTesting.currentTimeMillis = firstStopTime
-            println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+            //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
             occupiedEntities_Jn_Start_Stop = theChosenOnes_Jn_Start_Stop_sorted.partition{ case (_, Jn_Start_Stop(_,stop)) => stop == firstStopTime }._2
             
             unoccupiedEntities = unoccupiedEntities -- occupiedEntities_Jn_Start_Stop.map{ t => t._1 }
@@ -445,6 +450,42 @@ object TestRun
       {  
       }
    }
+
+/* Unfinished{
+   class SimTestPlayer4 extends SimEntity
+   {  // create additional states
+      println("SimPlayer constructor of " + this)
+      val qPlayTranslationSession = State("qPlayTranslationSession")
+      val qPlayConstiGame = State("qPlayConstiGame")
+      val qUnsubscribe = State("qUnsubscribe")
+
+      def delayFunction =
+      {  (30*1000 + Random.nextInt(10)).toLong
+      }
+
+      def durationFunction =
+      {  (30*1000 + Random.nextInt(10)).toLong
+      }
+
+      transitions = 
+      Map(
+         qStart -> List(qPlayTranslationSession),
+         qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
+         qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
+      )
+
+      // attach delaygenerators to states, processes to states, and durationgenerators to processes.
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+
+      c
+
+      override def updateTransitionModel =
+      {  
+      }
+   }
+}Unfinised */
+
    def no1() =
    {  println("TestRun.no1 called")
       val p1 = new SimTestPlayer
