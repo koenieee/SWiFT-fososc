@@ -26,22 +26,91 @@ object AuxiliaryDefs
 import AuxiliaryDefs._
 
 /** The object that runs the complete simulation and has the Power to move the clock, to blow LIFE into the SimuEntities by making them move from one state to the other and executing their processes. They are just all little puppets moving in the light its Light.
+
+Assumptions: as long as an entity is occupied it is not 
   */
 object SimGod
 {  def run(iterations:Int) =
-   {  var unoccupiedEntities:List[SimEntity] = SimEntity.simEntities
-      var occupiedEntities_Jn_Start_Stop:List[(SimEntity, Jn_Start_Stop)] = Nil
+   {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.simEntities
+      //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
+      var unoccupiedEntitiesWithProposedActivites:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by start time
+      //val uEWPA = unoccupiedEntitiesWithProposedActivites
+      var occupiedEntities_Jn_Start_Stop:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by stop time
+      //val oEJSS = occupiedEntities_Jn_Start_Stop
       TestSettings.SIMULATECLOCK = true
+
+      /* Draft 
+
+      each iteration starts at the end of the last activity. You have: occupied entities, unoccupied entities without proposed future activity, and unoccupied entities with proposed future activities.
+      Iteration:
+      */
       for{ i <- 1 until (iterations + 1) }
       {  // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
          println(" itteration " + i)
          //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillis)
          println("  unoccupiedEntities = " + unoccupiedEntities)
-         val SimEntities_Jn_Start_Stop = unoccupiedEntities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) }.sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
 
-         val firstStartTime:POSIXtime = SimEntities_Jn_Start_Stop(0)._2.start
+         // 1. If there are unoccupied entities without proposed future activities, first ask them to propose these.
+         if( unoccupiedEntitiesWithoutProposedActivites != Nil )
+         {  unoccupiedEntitiesWithProposedActivites = ( unoccupiedEntitiesWithProposedActivites ++ unoccupiedEntitiesWithoutProposedActivites.map{ se => (se, se.proposeTransition.toJn_Start_Stop) } ).sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
+         }
 
+         // 2. Determine the first coming event(s). These can be 2 things: completion of activity of one or more occupied entities, and/or the start of a proposed activity of an unoccupied entity. (Note: it is important to explicitly look at the list of UNoccupied entities, you don't want to start an entity which started during the last itteration to be started again!). [A] Move the clock to the time of the first coming event(s).  If these 2 things just mentioned coincide, do them both, in the following order: [B] first start the unoccupied entities and then "stop" the occupied entities (order because assumption is that system state changes by the first cannot influence the just occupied entities, because the time is to short (=0!). This is a random assumption, could also have decided the opposite, the point is that a choice must be made!). Completion of activity means moving the entity to the unoccupied entities list (without proposed future activities). Starting an unoccupied entity means calling its transition method, and then [MOV2OC] moving it to the list of occupied entities.
+            
+         val firstStartTimeUnoccupiedEntities:Option[POSIXtime] = if( unoccupiedEntitiesWithProposedActivites != Nil ) Some(unoccupiedEntitiesWithProposedActivites(0)._2.start) else None
          println("  firstStartTime = " + firstStartTime)
+         val firstStopTimeOccupiedEntities:POSIXtime = if( occupiedEntities_Jn_Start_Stop != Nil) Some(occupiedEntities_Jn_Start_Stop(0)._2.stop) else None
+         println("  firstStopTime = " + firstStopTime )
+
+         match firstStartTimeUnoccupiedEntities
+         {  case Some(fSTUE) =>
+            {  match firstStopTimeOccupiedEntities
+               {  case Some(fSTOE) =>  if( fSTUE < fSTOE )
+                                       {  // move clock [A]
+                                          SystemWithTesting.currentTimeMillis = fSTUE
+                                          startUnoccupiedEntitiesWithFirstStartTime(fSTUE)
+                                          // [B]
+
+                                       } else if( fSTUE == fSTOE )
+                                       {  SystemWithTesting.currentTimeMillis = fSTUE
+                                          startUnoccupiedEntitiesWithFirstStartTime(fSTUE)
+                                          ...
+                                       } else // fSTUE > fSTOE
+                                       {  System... = fSTOE
+                                          stopOccupiedEntitiesWithFirstStopTime(fSTOE)
+                                       }
+                  case None        =>  {  SystemWithTesting.currentTimeMillis = fSTUE
+                                          startUnoccupiedEntitiesWithFirstStartTime(fSTUE)
+                                       }
+               }
+            case None        =>
+            {  match firstStopTimeOccupiedEntities
+               {  case Some(fSTOE)  => {  SystemW ... 
+                                          stopOccupiedEntitiesWithFirstStopTime(first
+                                       }
+                  case None         => throw new RuntimeException ...
+               }
+         }
+
+         /** Assumption is that clock has already been moved to the right time
+           */
+         def startUnoccupiedEntitiesWithFirstStartTime(val firstStartTimeUnoccupiedEntities:POSIXtime) =
+         {  val unoccupiedEntitiesWithFirstStartTime = unoccupiedEntitiesWithProposedActivites.takeWhile{ case (_, Jn_Start_Stop(start,_)) => (start == firstStartTimeUnoccupiedEntities)
+            unoccupiedEntitiesWithFirstStartTime.map{                                    
+               u => u._1.doProposedTransition
+            }
+            // [MOVE2OC]
+            unoccupiedEntitiesWithProposedActivites = unoccupiedEntitiesWithProposedActivites -- unoccupiedEntitiesWithFirstStartTime
+            occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop ++ unoccupiedEntitiesWithFirstStartTime                                                                                            {
+         }
+
+         if( firstStartTimeUnoccupiedEntities < firstStopTimeOccupiedEntities )
+        
+         // 3. If in step 2 an occupied entity reached completion, the proposed activities of unoccupied entities must be erased (because the occupied entity which just finished may change the system state and thus the decisions of these unoccupied entities about future activities).
+         // 4. Repeat 1.
+
+
+
 
          
          val theChosenOnes_Jn_Start_Stop = SimEntities_Jn_Start_Stop.takeWhile{ case (_, Jn_Start_Stop(start,_)) => (start == firstStartTime) }
@@ -49,6 +118,7 @@ object SimGod
          println("  theChosenOnes = " + theChosenOnes)
 
          // Now all information is collected about the first coming event. Now lets see who wins: one or more occupied stopping an activity, or one or more unoccupied entities (theChosenOnes) starting an activity.
+         println("   occupiedEntities_Jn_Start_Stop = " + occupiedEntities_Jn_Start_Stop)
          println("   determine first coming event...")
          occupiedEntities_Jn_Start_Stop match
          {  case Nil             => { println("Unoccupied entity starting, because there are no occupied entities"); doTransitionsChosenOnes }
@@ -76,14 +146,14 @@ object SimGod
                tCO => tCO.doProposedTransition
             }
 
-            val theChosenOnes_Jn_Start_Stop_sorted = theChosenOnes_Jn_Start_Stop.sortWith{ case ( (_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2)) ) => stop1 < stop2 }
+            occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_StoptheChosenOnes_Jn_Start_Stop.sortWith{ case ( (_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2)) ) => stop1 < stop2 }
             
             val firstStopTime = theChosenOnes_Jn_Start_Stop(0)._2.stop
             println("  firstStopTime = " + firstStopTime )
 
             // move clock to moment there is at least entity which is not busy
-            SystemWithTesting.currentTimeMillis = firstStopTime
-            //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
+            SystemWithTesting.currentTimeMillis =  !4!!firstStopTime
+            //println("  (current time, time since last  clock-change) = " + SystemWithTesting.currentTimeMillisAndTimeSinceLastEvent)
             occupiedEntities_Jn_Start_Stop = theChosenOnes_Jn_Start_Stop_sorted.partition{ case (_, Jn_Start_Stop(_,stop)) => stop == firstStopTime }._2
             
             unoccupiedEntities = unoccupiedEntities -- occupiedEntities_Jn_Start_Stop.map{ t => t._1 }
@@ -99,7 +169,7 @@ object SimEntity
 
    def register(se:SimEntity) =
    {  println("SimEntity.register called")
-      if( simEntities.contains(se) ) throw new RuntimeException("   you tried to register the same simulated entity again, I'm known to be hospitable, but not to that extend, my friend...")
+      if( simEntities.contains(se) ) throw new Runtime ikikmkmosdd Exception("   you tried to register the same simulated entity again, I'm known to be hospitable, but not to that extend, my friend...")
       simEntities = se :: simEntities
    }
 }
