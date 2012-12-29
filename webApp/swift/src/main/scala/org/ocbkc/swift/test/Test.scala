@@ -35,7 +35,7 @@ object SystemWithTesting
       println("   param newTime = " + newTime)
       println("   so clock jumps " + ( newTime - currentTimeMillisVar_simu ) + " to the future" )
       if(newTime < currentTimeMillisVar_simu )
-      {  throw new RuntimeException("   propsed newTime (" + newTime + ") is smaller than of last position of clock (" + currentTimeMillisVar_simu + "), however, clock may only move forward, or stay in the same place.")
+      {  throw new RuntimeException("   proposed newTime (" + newTime + ") is smaller than of last position of clock (" + currentTimeMillisVar_simu + "), however, clock may only move forward, or stay in the same place.")
       }
       else
       {  //println("   lastTimeMillis_simu was " + lastTimeMillis_simu )

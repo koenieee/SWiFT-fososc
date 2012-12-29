@@ -30,7 +30,8 @@ import AuxiliaryDefs._
 Assumptions: as long as an entity is occupied it is not 
   */
 object SimGod
-{  def run(iterations:Int) =
+{  val debug = true
+   def run(iterations:Int) =
    {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.simEntities
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
       var unoccupiedEntitiesWithProposedActivities:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by start time
@@ -48,13 +49,24 @@ object SimGod
       for( i <- 1 until (iterations + 1) )
       {  environmentChange = false
          // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
-         println(" itteration " + i)
+         println(" \n################ Iteration " + i + "\n")
          //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillis)
          println("  unoccupiedEntitiesWithoutProposedActivities = " + unoccupiedEntitiesWithoutProposedActivities)
+         println("  unoccupiedEntitiesWithProposedActivities = " + unoccupiedEntitiesWithProposedActivities)
+         println("  occupiedEntitiesWithFirstStopTime = " + occupiedEntitiesWithFirstStopTime) // WIW rename occupiedEntitiesWithFirstStopTime to occupiedEntities_Jn_Start_Stop, only in this init of the itteration! &y2012.12.29.01:09:32&
+         if(debug)
+         {  if( occupiedEntitiesWithFirstStopTime.intersect( unoccupiedEntitiesWithProposedActivities ) != Nil )
+               throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint")
+            if( unoccupiedEntitiesWithProposedActivities.map{ case (u,_) => u }.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+            if( occupiedEntitiesWithFirstStopTime.map{ case (u,_) => u }.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+               throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+
+         }
 
          // 1. If there are unoccupied entities without proposed future activities, first ask them to propose these.
          if( unoccupiedEntitiesWithoutProposedActivities != Nil )
          {  unoccupiedEntitiesWithProposedActivities = ( unoccupiedEntitiesWithProposedActivities ++ unoccupiedEntitiesWithoutProposedActivities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) } ).sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
+            unoccupiedEntitiesWithoutProposedActivities = Nil
          }
 
          // 2. Determine the first coming event(s). These can be 2 things: completion of activity of one or more occupied entities, and/or the start of a proposed activity of an unoccupied entity. (Note: it is important to explicitly look at the list of UNoccupied entities, you don't want to start an entity which started during the last itteration to be started again!). [A] Move the clock to the time of the first coming event(s).  If these 2 things just mentioned coincide, do them both, in the following order: [B] first start the unoccupied entities and then "stop" the occupied entities (order because assumption is that system state changes by the first cannot influence the just occupied entities, because the time is to short (=0!). This is a random assumption, could also have decided the opposite, the point is that a choice must be made!). Completion of activity means moving the entity to the unoccupied entities list (without proposed future activities). Starting an unoccupied entity means calling its transition method, and then [MOV2OC] moving it to the list of occupied entities.
@@ -562,7 +574,7 @@ object TestRun
    def no6(numberOfPlayers:Int) =
    {  println("TestRun.no6 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
-      SimGod.run(10)
+      SimGod.run(100)      
    }
 
 }
