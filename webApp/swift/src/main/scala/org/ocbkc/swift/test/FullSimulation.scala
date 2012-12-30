@@ -387,7 +387,11 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
 // <&y2012.12.20.18:11:16& move following to separate file>
 }
 
-package org.ocbkc.swift.test.fullsimulation
+
+/** Intended to test the simulation library. So it is kinda meta test!
+  *
+  */
+package org.ocbkc.generic.test.simulation.test
 {
 import org.ocbkc.generic.test.simulation._
 
@@ -639,6 +643,85 @@ object TestRun
    {  println("TestRun.no8 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
       SimGod.run(1000)
+   }
+}
+}
+
+/** Simulates players playing the SWiFT game. Intended for testing purposes.
+  *
+  */
+package ocbkc.swift.test.simulation
+{
+import org.ocbkc.generic.test.simulation._
+import org.ocbkc.swift.coord.ses.CoreSimu
+import _root_.org.ocbkc.swift.model._
+
+
+/** Very coarse simulation.
+  * @param liftPlayer: the lift player object which will be "operated" by this simplayer object.
+  */
+
+class SimPlayer(val liftPlayer:Player) extends SimEntity
+{  // Some state information outside the generic.test.simulation framework
+   var sesCoord:CoreSimu = null 
+
+   // create additional states
+   println("SimPlayer constructor of " + this)
+   val qPlayTranslationSession = State("qPlayTranslationSession")
+   val qCreateSession = State("qCreateSession")
+   val qChooseFirstConsti = State("qChooseFirstConsti")
+   val qPlayConstiGame = State("qPlayConstiGame")
+   val qUnsubscribe = State("qUnsubscribe")
+
+   def delayFunction =
+   {  (15*1000 + Random.nextInt(30*1000)).toLong
+   }
+
+   def durationFunction =
+   {  (15*1000 + Random.nextInt(30*1000)).toLong
+   }
+
+   transitions = 
+   Map(
+      qStart -> List(qCreateSession),
+      qCreateSession -> List(qChooseFirstConsti),
+      qChooseFirstConsti -> List(qPlayTranslationSession),
+      qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
+      qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
+   )
+
+   /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
+     */
+   def simProcCreateSession =
+   {  sesCoord = new CoreSimu(liftPlayer)
+   }
+
+   def simProcPlayConstiGame =
+   {  // TODO
+   }
+
+   def simProcChooseFirstConsti =
+   {  println("simProcChooseFirstConsti called")
+
+      val ccount = Constitution.count
+      if( ccount > 0)
+      {  val randomConstiId = 1 + randomSeq.nextInt(ccount - 1)
+         sesCoordLR.URchooseFirstConstitution(randomConstiId)
+      } else
+      {  logAndThrow("No consti available to choose from!")
+      }
+   }
+
+   def simProcPlayTranslationSession =
+   {  //TODO
+   }
+
+   // attach delaygenerators to states, processes to states, and durationgenerators to processes.
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+
+   override def updateTransitionModel =
+   {  
    }
 }
 }
