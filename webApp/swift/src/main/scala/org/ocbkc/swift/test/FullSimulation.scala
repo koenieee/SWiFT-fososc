@@ -82,7 +82,7 @@ object SimGod
             }
 
             if( ( occupiedEntities ++ unoccupiedEntitiesWithProposedActivitiesStripped ++ unoccupiedEntitiesWithoutProposedActivities ).toSet != SimEntity.simEntities.toSet )
-            {  throw new RuntimeException("oh, you make may day, baby, yet another error to punish you SLAP SLAP SLAP: somehow SimuEntities have dropped of SimuGods radar...")
+            {  throw new RuntimeException("oh, you make may day, baby, yet another error to punish you SLAP SLAP SLAP: somehow SimuEntities have dropped of SimuGod's radar...")
             }
          }
 
@@ -157,8 +157,6 @@ object SimGod
          {  unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ unoccupiedEntitiesWithProposedActivities.map{case (u,_) => u }
             unoccupiedEntitiesWithProposedActivities = Nil
          }
-
-         // 4. Repeat 1.
       }
    }
 }
@@ -399,7 +397,7 @@ object TestSimulation
       if( args.length != 0 ) 
          println("Usage: command without arguments")
       else
-         TestRun.no6(4)
+         TestRun.no6(3)
    }
 }
 
@@ -460,7 +458,7 @@ object TestRun
       Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), None )
 
       override def updateTransitionModel =
-      {  
+      {
       }
    }
 
@@ -504,6 +502,37 @@ object TestRun
 
       def durationFunction =
       {  (30*1000 + Random.nextInt(10)).toLong
+      }
+
+      transitions = 
+      Map(
+         qStart -> List(qPlayTranslationSession),
+         qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
+         qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
+      )
+
+      // attach delaygenerators to states, processes to states, and durationgenerators to processes.
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+
+      override def updateTransitionModel =
+      {  
+      }
+   }
+
+   class SimTestPlayer4 extends SimEntity
+   {  // create additional states
+      println("SimPlayer constructor of " + this)
+      val qPlayTranslationSession = State("qPlayTranslationSession")
+      val qPlayConstiGame = State("qPlayConstiGame")
+      val qUnsubscribe = State("qUnsubscribe")
+
+      def delayFunction =
+      {  (15*1000 + Random.nextInt(30*1000)).toLong
+      }
+
+      def durationFunction =
+      {  (15*1000 + Random.nextInt(30*1000)).toLong
       }
 
       transitions = 
@@ -597,8 +626,19 @@ object TestRun
    def no6(numberOfPlayers:Int) =
    {  println("TestRun.no6 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
-      SimGod.run(100)      
+      SimGod.run(100)
    }
 
+   def no7(numberOfPlayers:Int) =
+   {  println("TestRun.no7 called")
+      for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer4
+      SimGod.run(1000)
+   }
+
+   def no8(numberOfPlayers:Int) =
+   {  println("TestRun.no8 called")
+      for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
+      SimGod.run(1000)
+   }
 }
 }
