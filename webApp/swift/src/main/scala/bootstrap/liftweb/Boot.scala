@@ -22,6 +22,8 @@ import org.ocbkc.swift.test._
 import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.test.TestHelpers._
 import org.ocbkc.swift.coord._
+import ocbkc.swift.test.simulation.jara._
+
 /**
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
@@ -307,8 +309,13 @@ class Boot {
          Unit
       }
    }
-   
-   if(TestSettings.SIMULATEPLAYING)
+     
+   if(TestSettings.SIMULATEPLAYINGWITHJARA)
+   {  // Initialise jara with 
+      
+   }
+
+   if(TestSettings.SIMULATEPLAYINGSIMULATIONSYSTEM1)
    {  /* This simulation is not intended to simulate all aspects (at least not in the current stage, it may be later extended). It should for now be sufficient to test constitutional scoring calculation. Assumptions now are:
             - Users have already been created
             - Constitutions have already been created

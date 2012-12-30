@@ -16,7 +16,11 @@ import scala.util.Random
 import System.out.println
 import org.ocbkc.swift.global.TestSettings
 
-package org.ocbkc.generic.test.simulation
+/** The jara simulation system (C) Chide Groenouwe.
+  * based on finite state machines with probabilisticly delayed transitions and processes attached to states.
+  */
+
+package org.ocbkc.generic.test.simulation.jara
 {
 
 object AuxiliaryDefs
@@ -190,7 +194,7 @@ case class Jn_Start_Stop(start:POSIXtime, stop:POSIXtime)
 
 trait SimEntity
 {  val qStart = State("qStart") // there is always at least a Start state. Note: because it is an inner class (State), the State-type belongs to exactly one SmEntity instance.
-   var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart.asInstanceOf[org.ocbkc.generic.test.simulation.State], 0), None) // state qStart has no process attached to it, and starts immediately.
+   var current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = new Jn_Jn_State_Delay_OptJn_SimProc_Duration(new Jn_State_Delay(qStart.asInstanceOf[org.ocbkc.generic.test.simulation.jara.State], 0), None) // state qStart has no process attached to it, and starts immediately.
    def currentState = { val cS = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]; println("currentState = " + cS); cS }
 
    var timeAtBeginningCurrentState:TimeInMillis = SystemWithTesting.currentTimeMillis
@@ -244,7 +248,7 @@ trait SimEntity
 
    def updateTransitionModel
 
-   class State(name:String) extends org.ocbkc.generic.test.simulation.State(name) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values><&y2012.12.20.23:55:07& this is not a good idea I think (inner class of State : each instance of SimuEntity now gets its own qStart state! Find solution for this.>
+   class State(name:String) extends org.ocbkc.generic.test.simulation.jara.State(name) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values><&y2012.12.20.23:55:07& this is not a good idea I think (inner class of State : each instance of SimuEntity now gets its own qStart state! Find solution for this.>
    {  override def toString = "State( name = " + name + ", hashCode = " + hashCode + " )"
    }
 
@@ -268,7 +272,7 @@ trait SimEntity
 /** Innerclass, because SimProcs are specifically tied to this entity.
   *
   */
-   class SimProc(name:String, function:() => Any) extends org.ocbkc.generic.test.simulation.SimProc(name, function)
+   class SimProc(name:String, function:() => Any) extends org.ocbkc.generic.test.simulation.jara.SimProc(name, function)
 
    object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen
    {  var jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen:List[Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen] = Nil
@@ -391,9 +395,9 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
 /** Intended to test the simulation library. So it is kinda meta test!
   *
   */
-package org.ocbkc.generic.test.simulation.test
+package org.ocbkc.generic.test.simulation.jara.test
 {
-import org.ocbkc.generic.test.simulation._
+import org.ocbkc.generic.test.simulation.jara._
 
 object TestSimulation
 {  def main(args: Array[String]) =
@@ -650,19 +654,41 @@ object TestRun
 /** Simulates players playing the SWiFT game. Intended for testing purposes.
   *
   */
-package ocbkc.swift.test.simulation
+package ocbkc.swift.test.simulation.jara
 {
-import org.ocbkc.generic.test.simulation._
+import org.ocbkc.generic.test.simulation.jara._
 import org.ocbkc.swift.coord.ses.CoreSimu
 import _root_.org.ocbkc.swift.model._
+import org.ocbkc.swift.OCBKC._
+import scala.util.Random
 
+object PlayingSimulator
+{  def start =
+   {  // Create simplayers and connect them to the lift players.
+      val players = Player.findAll
+      players.foreach{ new SimPlayer(_) }
+
+      // &y2012.12.30.22:42:57& WIW
+   }
+}
+
+
+/** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.
+  */
+object GlobalRandom
+{  val gb = new Random(837479112L)
+
+   def get =
+   {  gb
+   }
+}
 
 /** Very coarse simulation.
   * @param liftPlayer: the lift player object which will be "operated" by this simplayer object.
   */
 
 class SimPlayer(val liftPlayer:Player) extends SimEntity
-{  // Some state information outside the generic.test.simulation framework
+{  // Some state information outside the jara simulation system
    var sesCoord:CoreSimu = null 
 
    // create additional states
@@ -674,11 +700,11 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val qUnsubscribe = State("qUnsubscribe")
 
    def delayFunction =
-   {  (15*1000 + Random.nextInt(30*1000)).toLong
+   {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
    }
 
    def durationFunction =
-   {  (15*1000 + Random.nextInt(30*1000)).toLong
+   {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
    }
 
    transitions = 
@@ -705,10 +731,10 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
       val ccount = Constitution.count
       if( ccount > 0)
-      {  val randomConstiId = 1 + randomSeq.nextInt(ccount - 1)
-         sesCoordLR.URchooseFirstConstitution(randomConstiId)
+      {  val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount - 1)
+         sesCoord.URchooseFirstConstitution(randomConstiId)
       } else
-      {  logAndThrow("No consti available to choose from!")
+      {  throw new RuntimeException("No consti available to choose from!")
       }
    }
 
