@@ -31,6 +31,15 @@ Assumptions: as long as an entity is occupied it is not
   */
 object SimGod
 {  val debug = true
+
+   def sortByStop(sjs:List[(SimEntity, Jn_Start_Stop)]) =
+   {  sjs.sortWith{ case ((_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2))) => stop1 < stop2 }
+   }
+
+   def sortByStart(sjs:List[(SimEntity, Jn_Start_Stop)]) =
+   {  sjs.sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
+   }
+
    def run(iterations:Int) =
    {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.simEntities
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
@@ -53,19 +62,33 @@ object SimGod
          //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillis)
          println("  unoccupiedEntitiesWithoutProposedActivities = " + unoccupiedEntitiesWithoutProposedActivities)
          println("  unoccupiedEntitiesWithProposedActivities = " + unoccupiedEntitiesWithProposedActivities)
-         println("  occupiedEntitiesWithFirstStopTime = " + occupiedEntitiesWithFirstStopTime) // WIW rename occupiedEntitiesWithFirstStopTime to occupiedEntities_Jn_Start_Stop, only in this init of the itteration! &y2012.12.29.01:09:32&
+         println("  occupiedEntities_Jn_Start_Stop = " + occupiedEntities_Jn_Start_Stop) // WIW rename occupiedEntitiesWithFirstStopTime to occupiedEntities_Jn_Start_Stop, only in this init of the itteration! &y2012.12.29.01:09:32&
          if(debug)
-         {  if( occupiedEntitiesWithFirstStopTime.intersect( unoccupiedEntitiesWithProposedActivities ) != Nil )
-               throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint")
-            if( unoccupiedEntitiesWithProposedActivities.map{ case (u,_) => u }.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
-            if( occupiedEntitiesWithFirstStopTime.map{ case (u,_) => u }.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
-               throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+         {  val  occupiedEntities = occupiedEntities_Jn_Start_Stop.map{ case (u,_) => u }
+            val unoccupiedEntitiesWithProposedActivitiesStripped = unoccupiedEntitiesWithProposedActivities.map{ case (u,_) => u }
 
+            if( occupiedEntities.intersect( unoccupiedEntitiesWithProposedActivitiesStripped ) != Nil )
+            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint") 
+            }else
+            {  println("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are disjoint")
+            }
+
+            if( unoccupiedEntitiesWithProposedActivitiesStripped.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+            }
+
+            if( occupiedEntities.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+            }
+
+            if( ( occupiedEntities ++ unoccupiedEntitiesWithProposedActivitiesStripped ++ unoccupiedEntitiesWithoutProposedActivities ).toSet != SimEntity.simEntities.toSet )
+            {  throw new RuntimeException("oh, you make may day, baby, yet another error to punish you SLAP SLAP SLAP: somehow SimuEntities have dropped of SimuGods radar...")
+            }
          }
 
          // 1. If there are unoccupied entities without proposed future activities, first ask them to propose these.
          if( unoccupiedEntitiesWithoutProposedActivities != Nil )
-         {  unoccupiedEntitiesWithProposedActivities = ( unoccupiedEntitiesWithProposedActivities ++ unoccupiedEntitiesWithoutProposedActivities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) } ).sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
+         {  unoccupiedEntitiesWithProposedActivities = sortByStart( unoccupiedEntitiesWithProposedActivities ++ unoccupiedEntitiesWithoutProposedActivities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) } )
             unoccupiedEntitiesWithoutProposedActivities = Nil
          }
 
@@ -117,7 +140,7 @@ object SimGod
             }
             // [MOVE2OC]
             unoccupiedEntitiesWithProposedActivities = unoccupiedEntitiesWithProposedActivities -- unoccupiedEntitiesWithFirstStartTime
-            occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop ++ unoccupiedEntitiesWithFirstStartTime
+            occupiedEntities_Jn_Start_Stop = sortByStop( occupiedEntities_Jn_Start_Stop ++ unoccupiedEntitiesWithFirstStartTime )
             environmentChange = true
          }
 
