@@ -311,11 +311,19 @@ class Boot {
    }
      
    if(TestSettings.SIMULATEPLAYINGWITHJARA)
-   {  // Initialise jara with 
-      
+   {  val adminId = GlobalConstant.admin.get.id.is
+      val constiAlpha = Constitution.create(adminId)
+      constiAlpha.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 1</p>
+""", "publication 1", adminId.toString
+      )
+
+      PlayingSimulator.start(10)
    }
 
-   if(TestSettings.SIMULATEPLAYINGSIMULATIONSYSTEM1)
+   if(TestSettings.SIMULATEPLAYINGWITHFIRSTSIMSYSTEM)
    {  /* This simulation is not intended to simulate all aspects (at least not in the current stage, it may be later extended). It should for now be sufficient to test constitutional scoring calculation. Assumptions now are:
             - Users have already been created
             - Constitutions have already been created

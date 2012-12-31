@@ -9,8 +9,9 @@
   <artifactId>swift</artifactId>
   <version>0.1</version>
   <packaging>war</packaging>
-  <name>swift Project</name>
+  <name>SWiFT Project</name>
   <inceptionYear>2010</inceptionYear>
+<!--  <author>Chide Groenouwe</author> -->
   <properties>
     <scala.version>2.9.1</scala.version>
     <!-- Common plugin settings -->

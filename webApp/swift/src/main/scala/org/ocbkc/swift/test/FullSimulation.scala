@@ -33,6 +33,7 @@ import AuxiliaryDefs._
 
 Assumptions: as long as an entity is occupied it is not 
   */
+
 object SimGod
 {  val debug = true
 
@@ -409,7 +410,7 @@ object TestSimulation
    }
 }
 
-class SimPlayer extends SimEntity
+class SimTestPlayer extends SimEntity
 {  // create additional states
    println("SimPlayer constructor of " + this)
    val qPlayTranslationSession = State("qPlayTranslationSession")
@@ -663,15 +664,14 @@ import org.ocbkc.swift.OCBKC._
 import scala.util.Random
 
 object PlayingSimulator
-{  def start =
-   {  // Create simplayers and connect them to the lift players.
+{  def start(iterations:Int) =
+   {  println("PlayingSimulator.start called")
+      // Connect each lift player object to a simplayer.
       val players = Player.findAll
       players.foreach{ new SimPlayer(_) }
-
-      // &y2012.12.30.22:42:57& WIW
+      SimGod.run(iterations)
    }
 }
-
 
 /** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.
   */
@@ -699,6 +699,17 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val qPlayConstiGame = State("qPlayConstiGame")
    val qUnsubscribe = State("qUnsubscribe")
 
+/*
+   def delayqPlayConstiGame =
+   {  /* Later partly to be replaced with references to variables from outside the scope of this function
+   
+         durtot = total simulated duration from start simulation
+         dura   = actual duration spent on the process associated with this state
+         ...
+      */
+   }
+*/
+
    def delayFunction =
    {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
    }
@@ -715,6 +726,16 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
       qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
    )
+
+   // attach delaygenerators to states, processes to states, and durationgenerators to processes.
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => simProcCreateSession), () => 0)) )
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => simProcChooseFirstConsti), () => durationFunction)))
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => simProcPlayTranslationSession), () => durationFunction)))
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procConstiGame", () => simProcPlayConstiGame), () => durationFunction)) )
 
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
