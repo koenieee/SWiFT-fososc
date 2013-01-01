@@ -329,7 +329,8 @@ class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
 
 abstract class SimProc(val name:String, val function:() => Any)
 {  def run =
-   {  function()
+   {  println("Running SimProc " + name)
+      function()
    }
 }
 
@@ -414,7 +415,7 @@ class SimTestPlayer extends SimEntity
 {  // create additional states
    println("SimPlayer constructor of " + this)
    val qPlayTranslationSession = State("qPlayTranslationSession")
-   val qPlayConstiGame = State("qPlayConstiGame")
+   val qEditExistingConsti = State("qEditExistingConsti")
    val qUnsubscribe = State("qUnsubscribe")
 
    // >>> test
@@ -426,13 +427,13 @@ class SimTestPlayer extends SimEntity
    transitions = 
    Map(
       qStart -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
-      qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
+      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession),
+      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), None )
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), None )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, () => delayFunction), None )
 
    override def updateTransitionModel =
    {  
@@ -688,19 +689,22 @@ object GlobalRandom
   */
 
 class SimPlayer(val liftPlayer:Player) extends SimEntity
-{  // Some state information outside the jara simulation system
-   var sesCoord:CoreSimu = null 
+{  val ran = GlobalRandom.get
+
+   // Some state information outside the jara simulation system
+   var sesCoord:CoreSimu = null
+   val playerId = liftPlayer.id.get
 
    // create additional states
    println("SimPlayer constructor of " + this)
    val qPlayTranslationSession = State("qPlayTranslationSession")
    val qCreateSession = State("qCreateSession")
    val qChooseFirstConsti = State("qChooseFirstConsti")
-   val qPlayConstiGame = State("qPlayConstiGame")
-   val qUnsubscribe = State("qUnsubscribe")
+   val qEditExistingConsti = State("qEditExistingConsti")
+   //val qUnsubscribe = State("qUnsubscribe")
 
 /*
-   def delayqPlayConstiGame =
+   def delayqEditExistingConsti =
    {  /* Later partly to be replaced with references to variables from outside the scope of this function.
          Notation: *: given a priori (from the perspective of this function
    
@@ -739,42 +743,42 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       qStart -> List(qCreateSession),
       qCreateSession -> List(qChooseFirstConsti),
       qChooseFirstConsti -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
-      qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
+      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession),
+      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => simProcCreateSession), () => 0)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => procCreateSession), () => 0)) )
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => simProcChooseFirstConsti), () => durationFunction)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => procChooseFirstConsti), () => durationFunction)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => simProcPlayTranslationSession), () => durationFunction)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => procPlayTranslationSession), () => durationFunction)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procConstiGame", () => simProcPlayConstiGame), () => durationFunction)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", () => procEditExistingConsti), () => durationFunction)) )
 
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
-   def simProcCreateSession =
+   def procCreateSession =
    {  sesCoord = new CoreSimu(liftPlayer)
    }
 
-   def simProcPlayConstiGame =
-   {  /* >>> unfinished
-      val adminId = GlobalConstant.admin.get.id.is
-      val constiAlpha = Constitution.create(adminId)
-      constiAlpha.publish(
+   // &y2013.01.01.17:21:30& TODO: more states needed: edit existing consti or create new one
+   def procEditExistingConsti =
+   {  val ccount = Constitution.count
+      if(ccount < 1) throw new RuntimeException("No constitutions created yet")
+      val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
+      val consti = Constitution.getById(randomConstiId).get
+      consti.publish(
 """<h2>Article 1</h2>
 
-<p>""" + GlobalRandom.nextString(20) + """</p>
-""", "publication " + GlobalRandom.nextString(), adminId.toString
+<p>""" + GlobalRandom.get.nextString(20) + """</p>
+""", "publication COULDO", playerId.toString
       )
-   
-      */
    }
 
-   def simProcChooseFirstConsti =
-   {  println("simProcChooseFirstConsti called")
+   def procChooseFirstConsti =
+   {  println("procChooseFirstConsti called")
 
       val ccount = Constitution.count
       if( ccount > 0)
@@ -785,13 +789,18 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       }
    }
 
-   def simProcPlayTranslationSession =
-   {  //TODO
+   def procPlayTranslationSession =
+   {  /* >>> unfinished
+      val winSession = ran.nextBoolean
+      sesCoord.URtranslation
+      sesCoordLR.URstopTranslation
+      sesCoordLR.URalgorithmicDefenceSimplified(winSession)
+         <<< */
    }
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
 
    override def updateTransitionModel =
    {  

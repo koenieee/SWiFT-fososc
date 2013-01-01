@@ -320,7 +320,7 @@ class Boot {
 """, "publication 1", adminId.toString
       )
 
-      PlayingSimulator.start(10)
+      PlayingSimulator.start(100)
    }
 
    if(TestSettings.SIMULATEPLAYINGWITHFIRSTSIMSYSTEM)

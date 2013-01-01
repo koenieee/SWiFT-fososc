@@ -193,7 +193,7 @@ getHistory.length, commitIdsReleases.length, isRelease
 4 3 true
 5 5 false
 */
-      val isRelease:Boolean = ( getHistory.length > (commitIdsReleases.length * 2 + 1 ) ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
+      val isRelease:Boolean = ( getHistory.length == 1 ) || ( getHistory.length > (commitIdsReleases.length * 2 + 1 ) ) // TODO replace with real test, this one is just for testing purposes. If the current commit is more than one step ahead of the latest release commit it will become the newest release.
       // <& &y2012.09.07.13:10:21& this test doesn't work: all become releases after initial difference is realised. How solve.>
       println("   getHistory.length = " + getHistory.length)
       println("   commitIdsReleases.length = " + commitIdsReleases.length)
@@ -261,7 +261,7 @@ getHistory.length, commitIdsReleases.length, isRelease
 
    def getHistory:List[RevCommit] =
    {  import scala.collection.JavaConverters._
-      jgit.log().addPath( htmlFileName ).call().asScala.toList
+      jgit.log.addPath( htmlFileName ).call.asScala.toList
    }
 
    def addFollower(p:Player) = 
@@ -402,7 +402,6 @@ object Constitution
       val now = currentTimeMillis.toLong
       val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
-
       c
    }
 
