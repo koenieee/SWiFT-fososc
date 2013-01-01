@@ -255,9 +255,9 @@ class Boot {
    // TODO: before doing this, erase all persistency information, but not without a warning to the developer
    if(TestSettings.CREATETESTUSERBASE)
    {  val randomSeq = new Random
-      val minimalNumberOfPlayers = 5
-      val maximumNumberOfPlayers = 100
-      val numberOfPlayers =  minimalNumberOfPlayers + randomSeq.nextInt(maximumNumberOfPlayers - minimalNumberOfPlayers)
+      val minimalNumberOfPlayers = 3
+      val maximumNumberOfPlayers = 3
+      val numberOfPlayers =  minimalNumberOfPlayers + randomSeq.nextInt(maximumNumberOfPlayers - minimalNumberOfPlayers + 1)
       println("   numberOfPlayers = " + numberOfPlayers)
       List.range(1, numberOfPlayers).foreach(n => Player.create.firstName("Aap" + n).email("aap" + n + "@test.org").password("asdfghjk").validated(true).save)
    }

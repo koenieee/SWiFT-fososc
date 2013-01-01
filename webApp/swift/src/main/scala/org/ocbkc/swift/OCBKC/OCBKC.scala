@@ -402,6 +402,7 @@ object Constitution
       val now = currentTimeMillis.toLong
       val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
+
       c
    }
 

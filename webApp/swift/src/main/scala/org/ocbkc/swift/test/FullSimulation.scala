@@ -479,7 +479,7 @@ object TestRun
       val qUnsubscribe = State("qUnsubscribe")
 
       def delayFunction =
-      {  (30*1000 + Random.nextInt(1)).toLong
+      {  (30*1000 + Random.nextInt(2)).toLong
       }
 
       transitions = 
@@ -701,11 +701,27 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
 /*
    def delayqPlayConstiGame =
-   {  /* Later partly to be replaced with references to variables from outside the scope of this function
+   {  /* Later partly to be replaced with references to variables from outside the scope of this function.
+         Notation: *: given a priori (from the perspective of this function
    
-         durtot = total simulated duration from start simulation
-         dura   = actual duration spent on the process associated with this state
+         ta *           = actual time (now)
+         durTotAct *    = actual total simulated duration from start simulation
+         durProcAct *   = actual total duration spent on the process associated with this state
+         ratDes *       = desired ratio duration/dura
+         catchRat *     = catch up ratio
+         catchUpTime    = catch up time after which to achieve the desired ratio
+         durProcCatch   = duration to be spent on process in the catch up time to achieve the desired ratio
+         durProcPerExe * = duration of process each time it is executed frmo beginning to end. 
+         noCatchExes    = number of required executions of the process in the catch up time to achieve the desired ratio
+         delayCatch     = duration of delay before each execution of the process in the catch-up time, in agreement with achieving the desired ratio
          ...
+         
+         ratDes = ( durTotAct + durProcCatch ) / ( durTotAct * (1 + catchRat) )
+         => durProcCatch = ratDes * ( durTotAct * (1 + catchRat) ) - durTotAct
+
+         noCatchExes = durProcCatch / durProcPerExe
+         catchUpTime = catchRat * durTotAct
+         delayCatch = ( catchUpTime - durProcCatch ) / noCatchExes
       */
    }
 */
@@ -729,7 +745,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => simProcCreateSession), () => 0)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => simProcCreateSession), () => 0)) )
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => simProcChooseFirstConsti), () => durationFunction)))
 
@@ -744,7 +760,17 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    }
 
    def simProcPlayConstiGame =
-   {  // TODO
+   {  /* >>> unfinished
+      val adminId = GlobalConstant.admin.get.id.is
+      val constiAlpha = Constitution.create(adminId)
+      constiAlpha.publish(
+"""<h2>Article 1</h2>
+
+<p>""" + GlobalRandom.nextString(20) + """</p>
+""", "publication " + GlobalRandom.nextString(), adminId.toString
+      )
+   
+      */
    }
 
    def simProcChooseFirstConsti =
@@ -752,7 +778,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
       val ccount = Constitution.count
       if( ccount > 0)
-      {  val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount - 1)
+      {  val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
          sesCoord.URchooseFirstConstitution(randomConstiId)
       } else
       {  throw new RuntimeException("No consti available to choose from!")
