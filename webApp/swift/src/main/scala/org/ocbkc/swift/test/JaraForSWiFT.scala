@@ -81,17 +81,22 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
    }
 
+   def delayCreateNewConsti =
+   {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
+   }
+
    def durationFunction =
    {  (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
    }
 
-   transitions = 
+   transitions =
    Map(
       qStart -> List(qCreateSession),
       qCreateSession -> List(qChooseFirstConsti),
       qChooseFirstConsti -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession),
-      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession)
+      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
+      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti),
+      qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
@@ -99,6 +104,8 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => procCreateSession), () => 0)) )
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => procChooseFirstConsti), () => durationFunction)))
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", () => procCreateNewConsti), () => delayCreateNewConsti)))
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => procPlayTranslationSession), () => durationFunction)))
 
@@ -117,6 +124,16 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
       val consti = Constitution.getById(randomConstiId).get
       consti.publish(
+"""<h2>Article 1</h2>
+
+<p>""" + GlobalRandom.get.nextString(20) + """</p>
+""", "publication COULDO", playerId.toString
+      )
+   }
+
+   def procCreateNewConsti =
+   {  val newConsti = Constitution.create(playerId)
+      newConsti.publish(
 """<h2>Article 1</h2>
 
 <p>""" + GlobalRandom.get.nextString(20) + """</p>
@@ -144,7 +161,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    }
 
    override def updateTransitionModel =
-   {  
+   {
    }
 }
 }

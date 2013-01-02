@@ -415,7 +415,7 @@ class SimTestPlayer extends SimEntity
 {  // create additional states
    println("SimPlayer constructor of " + this)
    val qPlayTranslationSession = State("qPlayTranslationSession")
-   val qEditExistingConsti = State("qEditExistingConsti")
+   val qPlayConstiGame = State("qPlayConstiGame")
    val qUnsubscribe = State("qUnsubscribe")
 
    // >>> test
@@ -427,14 +427,13 @@ class SimTestPlayer extends SimEntity
    transitions = 
    Map(
       qStart -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti),
-      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
+      qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
+      qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), None )
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, () => delayFunction), None )
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, () => delayFunction), None )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), None )
 
    override def updateTransitionModel =
    {  
