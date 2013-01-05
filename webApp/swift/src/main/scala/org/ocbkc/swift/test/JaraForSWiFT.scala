@@ -174,15 +174,16 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    // initialise totaldurations
    initialiseTotalDurations
 
-   val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
+   val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
    val durationCreateNewConstiExp         = 5 * 60 * 1000
 
-   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 0.5, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
+   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 0.5, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
+   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConstiExp" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
-   WIW &y2013.01.05.19:22:10& define rest of delay functions
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
      */
@@ -192,16 +193,10 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    {  (90*1000 + GlobalRandom.get.nextInt(20*1000)).toLong
    }
 
-   def delayCreateNewConsti =
-   {  (90*1000 + GlobalRandom.get.nextInt(20*1000)).toLong
-   }
-
-   // TODO also create duration function in the style of DelayFunctionGenerator
-   def durationFunction =
-   {  0L
-   }
-
+   val durationPlayTranslationSession = DurationFunctionType1Generator.generate("durationPlayTranslationSession", durationPlayTranslationSessionExp, 0.25, ran)
    val durationEditExistingConsti = DurationFunctionType1Generator.generate("durationEditExistingConsti", durationEditExistingConstiExp, 0.25, ran)
+   val durationChooseFirstConsti = DurationFunctionType1Generator.generate("durationChooseFirstConsti", durationChooseFirstConstiExp, 0.25, ran)
+   val durationCreateNewConsti = DurationFunctionType1Generator.generate("durationCreateNewConsti", durationCreateNewConstiExp, 0.25, ran)
 
    transitions =
    Map(
@@ -217,13 +212,13 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => procCreateSession), () => 0)) )
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => procChooseFirstConsti), () => durationFunction)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, delayChooseFirstConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => procChooseFirstConsti), durationChooseFirstConsti)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", () => procCreateNewConsti), () => delayCreateNewConsti)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, delayCreateNewConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", () => procCreateNewConsti), durationCreateNewConsti)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => procPlayTranslationSession), () => durationFunction)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, delayPlayTranslationSession), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => procPlayTranslationSession), durationPlayTranslationSession)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, delayEditExistingConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", () => procEditExistingConsti), durationEditExistingConsti)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, delayEditExistingConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", () => procEditExistingConsti), durationEditExistingConsti)))
 
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
