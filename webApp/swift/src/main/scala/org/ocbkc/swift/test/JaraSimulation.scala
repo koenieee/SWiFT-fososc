@@ -202,6 +202,13 @@ trait SimEntity
    var transitions:Map[State, List[State]] = Map()
    var proposedTransitionTo:Option[Jn_Jn_State_Delay_OptJn_SimProc_Duration] = None
    SimEntity.register(this)
+   var totalDurations:Map[State, DurationInMillis] = Map()
+   var totalDurationsUpdated = false
+   /** Instance of subclass of this trait should always call this method after all states have been created.
+     */
+   def initialiseTotalDurations =
+   {  totalDurations = State.states.map( s => (s,0L) ).toMap
+   }
 
    /** @returns delay before proposed state
      */
@@ -210,7 +217,16 @@ trait SimEntity
       val timeAfterCompletionCurrentState = timeAtBeginningCurrentState + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
-      
+
+      // <{ update totalDurations
+      if( !totalDurationsUpdated ) // make sure only to update the duration for the latest process ONCE.
+      {  val state = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
+         totalDurations = totalDurations.updated(state, totalDurations(state) + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration)
+         // &y2013.01.05.12:50:49& this shows again that it would be better to refactor the join constructs, this doesn't feel so elegant.
+         println("   updated totalDuration for state " + state + " to " + totalDurations(state) + ".")
+         totalDurationsUpdated = true
+      }
+      // >}
       proposedTransitionTo = Some(TransitionUtils. getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(
                                                       applyTimingFunctions(
                                                          transitions.get( currentState ).getOrElse(throw new RuntimeException("Transition table seems to be incomplete, check if the state " + currentState + " occurs at the right hand side of a transition in the transition table."))
@@ -229,7 +245,6 @@ trait SimEntity
       result
    }
 
-   
    /** Very important: only call this method if you are certain this is the first transition that is going to take place within the COMPLETE simulation. In that way, the total system state can change consistently, you don't want a *later* transition to take place first.
      * Doesn't update time, this is the responsibiltiy of the calling SimGod, it should do so just before calling this function. Moreover, the assumption is that the entity isn't influenced anymore by the environment for the duration of the process that is attached to the proposed state.
      */
@@ -239,10 +254,12 @@ trait SimEntity
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
          {  jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
             current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = proposedTransitionTo.get
+
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
          case None               => doNothing
       }
+      totalDurationsUpdated = false
       updateTransitionModel
       Unit
    }

@@ -7,6 +7,7 @@ import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
 import net.liftweb.json._
 import java.io._
+import java.util.Date
 import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.parser._
@@ -24,6 +25,8 @@ import net.liftweb.mapper._
 import scala.util.matching._
 import scala.util.matching.Regex._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.test.SystemWithTesting
+
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -104,10 +107,15 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  followers.contains(userId) 
    }
 */
-   def gitUserId(liftUserId:String) = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
+   def gitUserId(liftUserId:String):PersonIdent = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
    {  new PersonIdent(liftUserId, "swiftgame")
    }
-   
+
+   def gitUserId(liftUserId:String, date:Date):PersonIdent =
+   {  val pi = gitUserId(liftUserId)
+      new PersonIdent(pi, date)
+   }
+  
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
    {  plainTextXMLfragment2ScalaXMLinLiftChildren(plainContent)
@@ -169,7 +177,14 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       val fullPath2Const = htmlFileName
 
       // now add and commit to git repo
-      val gUserId = gitUserId(userId) // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
+      // &y2013.01.02.11:57:40& TODO: refactor code such that simulation aspects do not appear in the. Perhaps refactor Constitution.scala: put common aspects in trait, and make subclass SimulatedConstitution and normal? Or use reflection to rewrite code if there is no simulation?
+      val gUserId = if( !TestSettings.SIMULATEPLAYINGWITHJARARUNNING )
+                    {   gitUserId(userId) // <&y2012.06.30.19:16:16& later refactor with general methods for translating jgit name to lift user name back and forth>
+                    }
+                    else
+                    {   gitUserId(userId, new Date(SystemWithTesting.currentTimeMillis))
+                    }
+
       println("   jgit author id = " + gUserId.toString)
       println("   now adding and committing: " + fullPath2Const )
       //jgit.status
@@ -396,10 +411,14 @@ object Constitution
 <p>...</p>
 """
    def create(creatorUserID:Long):Constitution = 
-   {  println("Constitutions(Singleton Object).create called")
+   {  println("Constitution(Singleton Object).create called")
       println("   creatorUserID = " + creatorUserID)
       highestId += 1
-      val now = currentTimeMillis.toLong
+      val now = if( !TestSettings.SIMULATEPLAYINGWITHJARARUNNING )
+                  currentTimeMillis.toLong
+                else
+                  SystemWithTesting.currentTimeMillis
+
       val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
       constis = c::constis
       c
