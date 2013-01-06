@@ -8,6 +8,7 @@ import org.ocbkc.swift.coord.ses.CoreSimu
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.OCBKC._
 import scala.util.Random
+import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.test.SystemWithTesting
 
@@ -16,7 +17,7 @@ object PlayingSimulator
 {  def start(iterations:Int) =
    {  println("PlayingSimulator.start called")
       // Connect each lift player object to a simplayer.
-      val players = Player.findAll
+      val players = Player.findAll.filterNot( _ == GlobalConstant.admin.get )
       players.foreach{ new SimPlayer(_) }
       SimGod.run(iterations)
    }
@@ -182,7 +183,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 0.5, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
    val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConstiExp" )
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 0.5, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class

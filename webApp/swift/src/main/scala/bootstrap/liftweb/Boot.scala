@@ -259,7 +259,7 @@ class Boot {
       val maximumNumberOfPlayers = 2
       val numberOfPlayers =  minimalNumberOfPlayers + randomSeq.nextInt(maximumNumberOfPlayers - minimalNumberOfPlayers + 1)
       println("   numberOfPlayers = " + numberOfPlayers)
-      List.range(1, numberOfPlayers).foreach(n => Player.create.firstName("Aap" + n).email("aap" + n + "@test.org").password("asdfghjk").validated(true).save)
+      List.range(1, numberOfPlayers + 1).foreach(n => Player.create.firstName("Aap" + n).email("aap" + n + "@test.org").password("asdfghjk").validated(true).save)
    }
 
    if(TestSettings.CREATEDUMMYCONSTITUTIONS)
