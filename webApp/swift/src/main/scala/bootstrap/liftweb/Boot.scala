@@ -22,6 +22,7 @@ import org.ocbkc.swift.test._
 import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.test.TestHelpers._
 import org.ocbkc.swift.coord._
+import org.ocbkc.generic.random._
 import ocbkc.swift.test.simulation.jara._
 
 /**
@@ -255,9 +256,7 @@ class Boot {
    // TODO: before doing this, erase all persistency information, but not without a warning to the developer
    if(TestSettings.CREATETESTUSERBASE)
    {  val randomSeq = new Random
-      val minimalNumberOfPlayers = 2
-      val maximumNumberOfPlayers = 2
-      val numberOfPlayers =  minimalNumberOfPlayers + randomSeq.nextInt(maximumNumberOfPlayers - minimalNumberOfPlayers + 1)
+      val numberOfPlayers = RandomExtras.nextBetween(randomSeq, 2, 2)
       println("   numberOfPlayers = " + numberOfPlayers)
       List.range(1, numberOfPlayers + 1).foreach(n => Player.create.firstName("Aap" + n).email("aap" + n + "@test.org").password("asdfghjk").validated(true).save)
    }
@@ -408,7 +407,7 @@ class Boot {
          List( 
             (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
             (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
-            (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession))
+            (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )
       }
 

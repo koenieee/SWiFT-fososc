@@ -22,6 +22,7 @@ import net.liftweb.util.Mailer._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.model._
 import _root_.net.liftweb.mapper.By
+import org.ocbkc.swift.global.Types._
 
 //import scala.util.parsing.combinator.Parsers._
 import org.ocbkc.swift.parser._
@@ -225,9 +226,14 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
 {  override def currentPlayer = currentPlayerVal
 
    // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
-   def URalgorithmicDefenceSimplified(winSession:Boolean) =
-   {  cc.stopTime(SystemWithTesting.currentTimeMillis).save
-      //cc.
+   def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
+   {  val cTM = SystemWithTesting.currentTimeMillis
+
+      cc.startTime(cTM).save
+      cc.startTimeTranslation(cTM).save
+      cc.stopTime(cTM + duration).save
+      cc.stopTimeTranslation(cTM + duration).save
+
       cc.answerPlayerCorrect(winSession).save
       cc.serialize
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save

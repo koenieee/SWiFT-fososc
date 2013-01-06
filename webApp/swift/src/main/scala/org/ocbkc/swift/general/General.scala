@@ -1,6 +1,13 @@
-package org.ocbkc.swift.general
+package org.ocbkc.generic.random
 {  
 import System._
+import scala.util.Random
+
+object RandomExtras
+{  def nextBetween(ranSeq: Random, min:Int, max:Int):Int = 
+   {  min + ranSeq.nextInt( max - min + 1 )
+   }
+}
 
 /*
 //import javax.mail._ <&y2012.06.25.19:45:04& remove this, because I found net.liftweb.util.Mailer.  to do this>

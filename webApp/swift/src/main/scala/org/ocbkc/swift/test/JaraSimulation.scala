@@ -290,7 +290,7 @@ trait SimEntity
 /** Innerclass, because SimProcs are specifically tied to this entity.
   *
   */
-   class SimProc(name:String, function:() => Any) extends org.ocbkc.generic.test.simulation.jara.SimProc(name, function)
+   class SimProc(name:String, function:(DurationInMillis) => Any) extends org.ocbkc.generic.test.simulation.jara.SimProc(name, function)
 
    object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen
    {  var jns_Jn_State_DelayGen_OptJn_SimProc_DurationGen:List[Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen] = Nil
@@ -344,10 +344,10 @@ class Jn_State_DelayGen(val state:State, val delayGen: () => DurationInMillis )
    }
 }
 
-abstract class SimProc(val name:String, val function:() => Any)
-{  def run =
+abstract class SimProc(val name:String, val function:(DurationInMillis) => Any)
+{  def run(d:DurationInMillis) =
    {  println("Running SimProc " + name)
-      function()
+      function(d)
    }
 }
 
@@ -393,7 +393,7 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
 
    def runSimProc =
    {  optJn_SimProc_Duration match
-      {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc.run
+      {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.simProc.run(jn_SimProc_Duration.duration) // pass the duration to the process, it may in some cases need this information.
          case None => doNothing
       }
    }
@@ -539,8 +539,8 @@ object TestRun
       )
 
       // attach delaygenerators to states, processes to states, and durationgenerators to processes.
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", d => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", d => println("process called")), () => durationFunction)) )
 
       override def updateTransitionModel =
       {  
@@ -570,8 +570,8 @@ object TestRun
       )
 
       // attach delaygenerators to states, processes to states, and durationgenerators to processes.
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", d => println("process called")), () => durationFunction)) )
+      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", d => println("process called")), () => durationFunction)) )
 
       override def updateTransitionModel =
       {  

@@ -92,19 +92,17 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
 {  /** @param randomDelayRatio the allowed deviation around the expected value of the expected value of the delay. (Note that the delay is calculated by the generated function, it doesn't (and shouldn't) have to be provided.) It will use a random distribution between [delay - (delay * randomDelayRatio), delay + (delay * randomDelayRatio)]. E.g. if the expected delay is 18 minutes, and randomDelayRatio = 0.5, then the delay will be randomly drawn from [ 18-9 = 9, 18+9 = 27]
      * @param name name used for debugging purposes. Convention: proc + name of proces. E.g. procStartGame
      */
-   def generate( ratDes:Double, catchRat:Double, durProcPerExe: DurationInMillis, randomDelayRatio: Double, durTotAct: () => DurationInMillis, durProcAct: () => DurationInMillis, ranseq: Random, name:String ) =
+   def generate( ratDes:Double, catchUpTime:DurationInMillis , durProcPerExe: DurationInMillis, randomDelayRatio: Double, durTotAct: () => DurationInMillis, durProcAct: () => DurationInMillis, ranseq: Random, name:String ) =
    {  //val ta = ( () => SystemWithTesting.currentTimeMillis )
       println("DelayFunctionType1Generator.generate called")
       if( durProcPerExe <= 0 ) throw new RuntimeException("   durProcPerExe should be > 0, while it is " + durProcPerExe)
       
       () =>
       {  println(name + " called")
-         println("   ratDes " + ratDes + ", catchRat = " + catchRat + ", durProcPerExe = " + durProcPerExe + ", durTotAct() = " + durTotAct() + ", durProcAct() = " + durProcAct() + ".")
+         println("   ratDes " + ratDes + ", catchUpTime = " + catchUpTime + ", durProcPerExe = " + durProcPerExe + ", durTotAct() = " + durTotAct() + ", durProcAct() = " + durProcAct() + ".")
          println("   current ratio = " + durProcAct().toDouble/durTotAct().toDouble)
 
-         val catchUpTime = catchRat * durTotAct()
-         println("    catchUpTime = " + catchUpTime )
-         val durProcCatch = ratDes * ( durTotAct() * (1 + catchRat) ) - durProcAct()
+         val durProcCatch = ratDes * ( durTotAct() + catchUpTime ) - durProcAct()
          /* if ^achterstand is too great, this number will be greater than catchUpTime */
          println("    durProcCatch = " + durProcCatch )
 
@@ -180,10 +178,10 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
    val durationCreateNewConstiExp         = 5 * 60 * 1000
 
-   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 0.5, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
-   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
-   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 0.5, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConstiExp" )
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 0.5, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
+   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
+   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConstiExp" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
@@ -211,25 +209,25 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", () => procCreateSession), () => 0)) )
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", procCreateSession(_)), () => 0)) )
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, delayChooseFirstConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", () => procChooseFirstConsti), durationChooseFirstConsti)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, delayChooseFirstConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", procChooseFirstConsti(_)), durationChooseFirstConsti)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, delayCreateNewConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", () => procCreateNewConsti), durationCreateNewConsti)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, delayCreateNewConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", procCreateNewConsti(_)), durationCreateNewConsti)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, delayPlayTranslationSession), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => procPlayTranslationSession), durationPlayTranslationSession)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, delayPlayTranslationSession), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", procPlayTranslationSession(_)), durationPlayTranslationSession)))
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, delayEditExistingConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", () => procEditExistingConsti), durationEditExistingConsti)))
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, delayEditExistingConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", procEditExistingConsti(_)), durationEditExistingConsti)))
 
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
-   def procCreateSession =
+   def procCreateSession(d: DurationInMillis) =
    {  sesCoord = new CoreSimu(liftPlayer)
       startTimeSession = Some(SystemWithTesting.currentTimeMillis)
    }
 
    // &y2013.01.01.17:21:30& TODO: more states needed: edit existing consti or create new one
-   def procEditExistingConsti =
+   def procEditExistingConsti(d: DurationInMillis) =
    {  val ccount = Constitution.count
       if(ccount < 1) throw new RuntimeException("No constitutions created yet")
       val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
@@ -242,7 +240,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       )
    }
 
-   def procCreateNewConsti =
+   def procCreateNewConsti(d: DurationInMillis) =
    {  val newConsti = Constitution.create(playerId)
       newConsti.publish(
 """<h2>Article 1</h2>
@@ -252,7 +250,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       )
    }
 
-   def procChooseFirstConsti =
+   def procChooseFirstConsti(d: DurationInMillis) =
    {  println("procChooseFirstConsti called")
 
       val ccount = Constitution.count
@@ -264,11 +262,12 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       }
    }
 
-   def procPlayTranslationSession =
+   def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
+      
       sesCoord.URtranslation
       sesCoord.URstopTranslation
-      sesCoord.URalgorithmicDefenceSimplified(winSession)
+      sesCoord.URalgorithmicDefenceSimplified(winSession, duration)
    }
 
    override def updateTransitionModel =
