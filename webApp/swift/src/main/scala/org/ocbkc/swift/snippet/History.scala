@@ -51,7 +51,9 @@ class History
                                        {  case Full(player)  => player.swiftDisplayName
                                           case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, please report it)" }
                                        }
-                                    )
+                                    ),
+            "APC"                -> WIW see whether there is code in another branch (or this branch) already doing this and copy it.
+
             )
       }
       )         
