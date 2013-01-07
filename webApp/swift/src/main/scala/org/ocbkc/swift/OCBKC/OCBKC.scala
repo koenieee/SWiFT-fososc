@@ -509,11 +509,13 @@ object PlayerScores
   * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
   */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
-   {  val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+   {  println("averageDurationTranslation called")
+      val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
       
       val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
       val durationsCorrectTranslations = correctCcs.map(cc => cc.durationTranslation.get)
       val numberCorrect = correctCcs.length
+      println("   numberCorrect = " + numberCorrect )
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
@@ -537,7 +539,8 @@ object ConstiScores
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
-   {  Constitution.getById(constiId) match
+   {  println("averagePercentageCorrect called")
+      Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
             {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, lastReleaseCommitId)
