@@ -107,6 +107,9 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  followers.contains(userId) 
    }
 */
+   def isRelease(commitId:String) =
+   {  !commitIdsReleases.find(_.equals(commitId)).isEmpty
+   }
    def gitUserId(liftUserId:String):PersonIdent = // <&y2012.07.23.17:16:15& refactor: move to more generic class in webapp>
    {  new PersonIdent(liftUserId, "swiftgame")
    }
@@ -160,8 +163,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       err.println("  saving file: " + outFile.getAbsolutePath)
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.print(constitutionText)
-      out.flush()
-      out.close()
+      out.flush
+      out.close
    }
    
    def currentVersionId:VersionId =
@@ -386,6 +389,7 @@ object Constitution
          var inStr:String        = in.readLine()
          highestId               = inStr.toInt
          println("   read from file: highestId = " + highestId)
+         in.close
       }
       else
       {  println("   No serialised Constitution objects found in permanent storage! Lets start the day completely empty... Like a Zen buddhist.")
@@ -646,6 +650,8 @@ object ConstiScores
       }
    }
 
+   /** @todo  &y2013.01.07.13:20:00& is there a check whether releaseId is indeed a release (and not another version)?
+     */
    def averageFluency(minimalSampleSize: Int, releaseId:String, k:Double):Option[Double] =
    {  val adt = averageDurationTranslation(minimalSampleSize, releaseId) 
       val apc = averagePercentageCorrect(minimalSampleSize, releaseId)

@@ -9,6 +9,9 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.scoring._
+import org.ocbkc.swift.global._
+import org.ocbkc.swift.general.GUIdisplayHelpers._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
@@ -29,22 +32,24 @@ class History
 
    def historyTableRows(ns:NodeSeq):NodeSeq =
    {  println("historyTableRows called")
+      implicit val displayIfNone = "-"
       if( const == null ) println("   bug: const == null")
       const.getHistory.flatMap(
       revcom => 
       {  val playerId = revcom.getAuthorIdent.getName
          val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+         val isRelease = const.isRelease(revcom.name)
 
          bind( "top", chooseTemplate("top", "row", ns),            
             "view"               -> SHtml.link("constitutionhistoric?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("view")),
             "restore"            -> SHtml.link("restore?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("restore")),
             "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
-            "publishDescription" -> Text(revcom.getFullMessage()),
+            "publishDescription" -> Text(revcom.getFullMessage),
             "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
             "isRelease"          -> {  println("   isRelease?")
                                        println("   const.commitIdsReleases: " + const.commitIdsReleases)
                                        println("   searching revcom.name = " + revcom.name)
-                                       if(!const.commitIdsReleases.find(_.equals(revcom.name)).isEmpty) Text("R") else Text("~R")
+                                       if(isRelease) Text("R") else Text("~R")
                                     },
             "author"             -> Text
                                     (  Player.find(playerId) match
@@ -52,8 +57,7 @@ class History
                                           case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, please report it)" }
                                        }
                                     ),
-            "APC"                -> WIW see whether there is code in another branch (or this branch) already doing this and copy it.
-
+            "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, revcom.name, GlobalConstant.AverageFluency.fluencyConstantK)) else "-" }
             )
       }
       )         

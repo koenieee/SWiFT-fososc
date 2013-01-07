@@ -219,7 +219,7 @@ case class CoreContent( var textNL: String,
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.println(ccSer)
-      out.close()
+      out.close
 
       val testDeSer:CoreContent = Serialization.read[CoreContent](ccSer)
    }
@@ -276,7 +276,9 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
       var inStr:String        = in.readLine()
       val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
       cc.copyJsonSerializedFieldsFrom(ccLoc)
-      
+
+      in.close 
+
       cc
    }
 }
