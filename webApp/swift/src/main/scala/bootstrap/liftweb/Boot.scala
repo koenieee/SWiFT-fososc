@@ -320,7 +320,7 @@ class Boot {
 """, "publication 1", adminId.toString
       )
 
-      PlayingSimulator.start(1000)
+      PlayingSimulator.start(10000)
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
    }

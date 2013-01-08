@@ -46,7 +46,7 @@ object SimGod
    }
 
    def run(iterations:Int) =
-   {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.simEntities
+   {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities; SimEntity.newSimEntities = Nil
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
       var unoccupiedEntitiesWithProposedActivities:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by start time
       //val uEWPA = unoccupiedEntitiesWithProposedActivities
@@ -64,6 +64,10 @@ object SimGod
       {  environmentChange = false
          // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
          println(" \n################ Iteration " + i + "\n")
+         if( SimEntity.newSimEntities != Nil )
+         {  unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ SimEntity.newSimEntities
+            SimEntity.newSimEntities = Nil
+         }
          //println("  (current time, time since last clock-change) = " + SystemWithTesting.currentTimeMillis)
          println("  unoccupiedEntitiesWithoutProposedActivities = " + unoccupiedEntitiesWithoutProposedActivities)
          println("  unoccupiedEntitiesWithProposedActivities = " + unoccupiedEntitiesWithProposedActivities)
@@ -170,11 +174,13 @@ object SimGod
   */
 object SimEntity
 {  var simEntities:List[SimEntity] = Nil
+   var newSimEntities:List[SimEntity] = Nil // simentities which have not been "seen" by  SimGod. SimGod empties this list after he has seen them. Use case: if new entities are created during the simulation.
 
    def register(se:SimEntity) =
    {  println("SimEntity.register called")
       if( simEntities.contains(se) ) throw new RuntimeException("You tried to register the same simulated entity again, I'm known to be hospitable, but not to that extend, my friend...")
       simEntities = se :: simEntities
+      newSimEntities = se :: newSimEntities
    }
 }
 

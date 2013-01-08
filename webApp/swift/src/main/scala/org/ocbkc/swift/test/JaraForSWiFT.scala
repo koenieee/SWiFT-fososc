@@ -16,9 +16,8 @@ import org.ocbkc.swift.test.SystemWithTesting
 object PlayingSimulator
 {  def start(iterations:Int) =
    {  println("PlayingSimulator.start called")
-      // Connect each lift player object to a simplayer.
-      val players = Player.findAll.filterNot( _ == GlobalConstant.admin.get )
-      players.foreach{ new SimPlayer(_) }
+      val startTimeSimulation = SystemWithTesting.currentTimeMillis
+      new SimSubscriptions(startTimeSimulation)
       SimGod.run(iterations)
    }
 }
@@ -180,7 +179,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
-   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConstiExp" )
+   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
    val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
@@ -274,4 +273,42 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    {
    }
 }
+
+/** @todo for SimSubscriptions I need another DelayFunctionGenerator type, one that can cope with processes which have a duration of 0. Now solved it in another way, but this is a quick fix.
+  */
+class SimSubscriptions(startTimeSimulation: DurationInMillis) extends SimEntity
+{  val ran = GlobalRandom.get
+   // <{ create additional states
+   val qNewSubscription = State("qNewSubscription")
+   // >}
+
+   initialiseTotalDurations
+   val durationNewSubscriptionExp = 5 * 60 * 1000 // &y2013.01.07.20:36:40& unrealisatic, but currently you have to set it about equal to other duration functions otherwise the associated delay will always win from others.
+   
+   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSimulation),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
+
+   val durationNewSubscription = DurationFunctionType1Generator.generate("durationNewSubscription", durationNewSubscriptionExp, 0.25, ran)
+
+   transitions = 
+   Map(
+      qStart -> List(qNewSubscription),
+      qNewSubscription -> List(qNewSubscription)
+   )
+
+   // attach delaygenerators to states, processes to states, and durationgenerators to processes.
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qNewSubscription, delayNewSubscription), Some(new Jn_SimProc_DurationGen(new SimProc("procNewSubscription", procNewSubscription(_)), durationNewSubscription)) )
+
+
+   var subscriptionId:Long = 0
+
+   def procNewSubscription(d:DurationInMillis) =
+   {  val liftPlayer:Player = Player.create.firstName("Aap" + subscriptionId).email("aap" + subscriptionId + "@test.org").password("asdfghjk").validated(true)
+      liftPlayer.save
+      new SimPlayer(liftPlayer)
+      subscriptionId += 1
+   }
+
+   def updateTransitionModel = {}
+}
+
 }
