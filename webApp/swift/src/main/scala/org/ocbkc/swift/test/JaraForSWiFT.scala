@@ -11,7 +11,7 @@ import scala.util.Random
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.test.SystemWithTesting
-
+import scala.math.Numeric
 
 object PlayingSimulator
 {  def start(iterations:Int) =
@@ -51,10 +51,10 @@ object SimpleDelayFunctionGenerator extends DelayFunctionGenerator
    }
 }  
 
-/* Later partly to be replaced with references to variables from outside the scope of this function.
+/*
          Notation: *: given a priori (from the perspective of this function
    
-         ta *           = actual time (now)
+         durStartSim2TerminLastExe * = duration from start simulation to time termination of the last execution of the process
          durTotAct *    = actual total simulated duration of game from start simulation
          durProcAct *   = actual total duration spent on the process associated with this state
          ratDes *       = desired ratio duration/dura
@@ -63,25 +63,20 @@ object SimpleDelayFunctionGenerator extends DelayFunctionGenerator
          durProcCatch   = duration to be spent on process in the catch up time to achieve the desired ratio
          durProcPerExe * = expected value of the duration of the process each time it is executed from beginning to end. 
          noCatchExes    = number of required executions of the process in the catch up time to achieve the desired ratio
-         delayCatchExp     = required expected value of duration of delay before each execution of the process in the catch-up time, in agreement with achieving the desired ratio (if the delay would each time be equal to its expected value)
-         delayCatchAct = the actual next delay after randomisation. This is the final result
+         delayCatchExp     = required expected value of duration of delay before each execution of the process in the catch-up time, in agreement with achieving the desired ratio (if the delay would each time be equal to its expected value), AFTER THE TERMINATION OF THE LAST PROCESS EXECUTION
+         delayCatchAct = the actual next delay after randomisation AFTER THE TERMINATION OF THE LAST PROCESS EXECUTION, so not the actual time. This is the final result
+
+         delayCatchActAfterNow = the same as the delayCatchAct, but now transformed to counting the delay from now.
          
-         ratDes = ( durProcAct + durProcCatch ) / ( durTotAct * (1 + catchRat) )
-         => durProcCatch = ratDes * ( durTotAct * (1 + catchRat) ) - durProcAct
+         ratDes =  ( durProcAct + durProcCatch ) / ( durStartSimu2TerminLastExe + catchUpTime )
+         => durProcCatch = ratDes * ( durStartSim2TerminLastExe + catchUpTime ) - durProcAct
 
          noCatchExes = durProcCatch / durProcPerExe
-         catchUpTime = catchRat * durTotAct
-         delayCatchExp = ( catchUpTime - durProcCatch ) / noCatchExes
+         delayCatchExp = ( catchUpTime - durProcCatch ) / noCatchExes 
          
-         delayCatch
-         ===================
-
-         val durProcCatch = ratDes * ( durTotAct * (1 + catchRat) ) - durTotAct
-         val noCatchExes = durProcCatch / durProcPerExe
-         val catchUpTime = catchRat * durTotAct
-         val delayCatch = ( catchUpTime - durProcCatch ) / noCatchExes
-
-         
+         delayCatchAct = 
+         durTerminLastExe2Now = durTotAct - durStartSim2TerminLastExe
+         delayCatchActAfterNow = max(0, delayCatchAct - durTerminLastExe2Now)
       */
 
 /** @todo give a better name
@@ -91,7 +86,7 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
 {  /** @param randomDelayRatio the allowed deviation around the expected value of the expected value of the delay. (Note that the delay is calculated by the generated function, it doesn't (and shouldn't) have to be provided.) It will use a random distribution between [delay - (delay * randomDelayRatio), delay + (delay * randomDelayRatio)]. E.g. if the expected delay is 18 minutes, and randomDelayRatio = 0.5, then the delay will be randomly drawn from [ 18-9 = 9, 18+9 = 27]
      * @param name name used for debugging purposes. Convention: proc + name of proces. E.g. procStartGame
      */
-   def generate( ratDes:Double, catchUpTime:DurationInMillis , durProcPerExe: DurationInMillis, randomDelayRatio: Double, durTotAct: () => DurationInMillis, durProcAct: () => DurationInMillis, ranseq: Random, name:String ) =
+   def generate( ratDes:Double, catchUpTime:DurationInMillis, durStartSim2TerminLastExe: () => DurationInMillis, durProcPerExe: DurationInMillis, randomDelayRatio: Double, durTotAct: () => DurationInMillis, durProcAct: () => DurationInMillis, ranseq: Random, name:String ) =
    {  //val ta = ( () => SystemWithTesting.currentTimeMillis )
       println("DelayFunctionType1Generator.generate called")
       if( durProcPerExe <= 0 ) throw new RuntimeException("   durProcPerExe should be > 0, while it is " + durProcPerExe)
@@ -101,15 +96,16 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
          println("   ratDes " + ratDes + ", catchUpTime = " + catchUpTime + ", durProcPerExe = " + durProcPerExe + ", durTotAct() = " + durTotAct() + ", durProcAct() = " + durProcAct() + ".")
          println("   current ratio = " + durProcAct().toDouble/durTotAct().toDouble)
 
-         val durProcCatch = ratDes * ( durTotAct() + catchUpTime ) - durProcAct()
-         /* if ^achterstand is too great, this number will be greater than catchUpTime */
+         val durProcCatch = ratDes * ( durStartSim2TerminLastExe() + catchUpTime ) - durProcAct()
+        
+         /* if the process is too far behind, this number will be greater than catchUpTime */
          println("    durProcCatch = " + durProcCatch )
 
          val delayCatchExp:Long =
-         if( durProcCatch < 0  ) // voorstand is so great that you can't get even after catchUpTime, even if you would do nothing during this catchUpTime.
+         if( durProcCatch < 0  ) // process is so much ahead that you can't get even after catchUpTime, even if you would do nothing during this catchUpTime.
          {  println("   this process is so far ahead that it can't get to ratDes if doing nothing during the catchUpTime...") 
             ( ( durProcAct() + durProcPerExe ).toDouble/ratDes - durTotAct().toDouble - durProcPerExe.toDouble ).toLong
-            /* Equation solved for this purpose: 
+            /* Calculate the minimal delay which will make it even, in spite of the fact it will be longer than the catch up time. . Equation solved for this purpose: 
                   ratDes = ( durProcAct + durProcPerExe) / ( durTotAct + delayCatchExp + durProcPerExe )
                   => delayCatchExp = ( durProcAct + durProcPerExe ) / ratDes - durTotAct - durProcPerExe
              */
@@ -130,7 +126,8 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
 
          println("   delayCatchAct = " + delayCatchAct )
          if( delayCatchAct < 0 ) throw new RuntimeException("value of delayCatchAct is below 0")
-         delayCatchAct
+         val delayCatchActAfterNow = Numeric.max(delayCatchAct - durTerminLastExe2Now(), 0)
+         delayCatchActAfterNow
       }
    }
 }  
