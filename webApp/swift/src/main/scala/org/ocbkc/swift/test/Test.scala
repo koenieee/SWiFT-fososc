@@ -7,9 +7,11 @@ package org.ocbkc.swift.test
 {  
    // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
-{  val startTimeMillis_simu:POSIXtime = System.currentTimeMillis
+{  println("constructor SystemWithTesting called")
+   val startTimeMillis_simu:POSIXtime = System.currentTimeMillis
    private var currentTimeMillisVar_simu:POSIXtime = startTimeMillis_simu // take the current time as the start time of the simulated clock
    //private var lastTimeMillis_simu:POSIXtime = currentTimeMillisVar_simu
+   println("   startTimeMillis_simu = " + startTimeMillis_simu)
    val msgSimulateClockOff = "The simulated clock is turned off, so it makes no sense to call this method."
 
    def currentTimeMillis:POSIXtime =

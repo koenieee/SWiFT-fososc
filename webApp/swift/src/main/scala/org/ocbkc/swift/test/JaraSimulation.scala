@@ -216,9 +216,9 @@ trait SimEntity
    var totalDurationsUpdated = false
    /** Instance of subclass of this trait should always call this method after all states have been created.
      */
-   def initialisionAfterStateDefs =
+   def initialisationAfterStateDefs =
    {  totalDurations = State.states.map( s => (s,0L) ).toMap
-      lastFinishTimeStateMap = State.states.map( s => (s, 0L) ).toMap
+      lastFinishTimeStateMap = State.states.map( s => (s, SystemWithTesting.currentTimeMillis) ).toMap
    }
 
    /** @returns delay before proposed state
@@ -263,10 +263,10 @@ trait SimEntity
    {  println(this + ".doProposedTransition called")
       proposedTransitionTo match
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
-         {  jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
-            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State], current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
+         {  current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = jn_Jn_State_Delay_OptJn_SimProc_Duration
+            jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
+            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State], jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
 
-            current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = jn_Jn_State_Delay_OptJn_SimProc_Duration
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
          case None               => doNothing
