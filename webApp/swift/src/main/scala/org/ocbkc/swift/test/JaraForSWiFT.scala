@@ -205,7 +205,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
-   val durationCreateNewConstiExp         = 5 * 60 * 1000
+   val durationCreateNewConstiExp         = 5 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
    // &y2013.01.10& Is not elegant and is confusing: startTimeSession and lastFinishTimeStateMap should come from the same source.
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qPlayTranslationSession)), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qEditExistingConsti)), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
@@ -315,7 +315,7 @@ class SimSubscriptions(startTimeSimulation: DurationInMillis) extends SimEntity
    initialisationAfterStateDefs
    val durationNewSubscriptionExp = 5 * 60 * 1000 // &y2013.01.07.20:36:40& unrealisatic, but currently you have to set it about equal to other duration functions otherwise the associated delay will always win from others.
    
-   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qNewSubscription)), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSimulation),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
+   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qNewSubscription)), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSimulation),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
 
    val durationNewSubscription = DurationFunctionType1Generator.generate("durationNewSubscription", durationNewSubscriptionExp, 0.25, ran)
 
