@@ -85,8 +85,18 @@ object SimpleDelayFunctionGenerator extends DelayFunctionGenerator
 object DelayFunctionType1Generator extends DelayFunctionGenerator
 {  /** @param randomDelayRatio the allowed deviation around the expected value of the expected value of the delay. (Note that the delay is calculated by the generated function, it doesn't (and shouldn't) have to be provided.) It will use a random distribution between [delay - (delay * randomDelayRatio), delay + (delay * randomDelayRatio)]. E.g. if the expected delay is 18 minutes, and randomDelayRatio = 0.5, then the delay will be randomly drawn from [ 18-9 = 9, 18+9 = 27]
      * @param name name used for debugging purposes. Convention: proc + name of proces. E.g. procStartGame
+       @param durStartSim2TerminLastExe function which produces the time from the start of the simulation of this entity (or another start moment from which you want to achive the ratDes) to the end of 
      */
-   def generate( ratDes:Double, catchUpTime:DurationInMillis, durStartSim2TerminLastExe: () => DurationInMillis, durProcPerExe: DurationInMillis, randomDelayRatio: Double, durTotAct: () => DurationInMillis, durProcAct: () => DurationInMillis, ranseq: Random, name:String ) =
+   def generate( 
+      ratDes:Double,
+      catchUpTime:DurationInMillis,
+      durStartSim2TerminLastExe: () => DurationInMillis,
+      durProcPerExe: DurationInMillis,
+      randomDelayRatio: Double,
+      durTotAct: () => DurationInMillis,
+      durProcAct: () => DurationInMillis,
+      ranseq: Random, name:String 
+      ) =
    {  //val ta = ( () => SystemWithTesting.currentTimeMillis )
       println("DelayFunctionType1Generator.generate called")
       if( durProcPerExe <= 0 ) throw new RuntimeException("   durProcPerExe should be > 0, while it is " + durProcPerExe)
@@ -166,18 +176,17 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val qEditExistingConsti = State("qEditExistingConsti")
    //val qUnsubscribe = State("qUnsubscribe")
    
-   // initialise totaldurations
-   initialiseTotalDurations
+   initialisionAfterStateDefs
 
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
    val durationCreateNewConstiExp         = 5 * 60 * 1000
 
-   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
-   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
-   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStates(qPlayTranslationSession)), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
+   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStates(qEditExistingConsti)), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
+   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStates(qChooseFirstConsti)), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStates(qPlayTranslationSession)), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class

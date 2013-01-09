@@ -208,12 +208,17 @@ trait SimEntity
    var transitions:Map[State, List[State]] = Map()
    var proposedTransitionTo:Option[Jn_Jn_State_Delay_OptJn_SimProc_Duration] = None
    SimEntity.register(this)
+
+   // historical info. about past processes/states (COULDDO &y2013.01.09.16:40:20& perhaps refactor, make a generic datastructure for this purpose? Currently only things needed so far can be found bac.
    var totalDurations:Map[State, DurationInMillis] = Map()
+   var lastFinishTimeStateMap:Map[State, POSIXtime] = Map() // convention (for now): this contains the finishtime from the moment the process starts. Thus the time mentioned may not have been reached yet.
+
    var totalDurationsUpdated = false
    /** Instance of subclass of this trait should always call this method after all states have been created.
      */
-   def initialiseTotalDurations =
+   def initialisionAfterStateDefs =
    {  totalDurations = State.states.map( s => (s,0L) ).toMap
+      lastFinishTimeState = State.states.map( s => (s, 0L) ).toMap
    }
 
    /** @returns delay before proposed state
@@ -260,7 +265,7 @@ trait SimEntity
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
          {  jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
             current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = proposedTransitionTo.get
-
+            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
          case None               => doNothing
