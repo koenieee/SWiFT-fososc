@@ -218,7 +218,7 @@ trait SimEntity
      */
    def initialisionAfterStateDefs =
    {  totalDurations = State.states.map( s => (s,0L) ).toMap
-      lastFinishTimeState = State.states.map( s => (s, 0L) ).toMap
+      lastFinishTimeStateMap = State.states.map( s => (s, 0L) ).toMap
    }
 
    /** @returns delay before proposed state
@@ -264,8 +264,9 @@ trait SimEntity
       proposedTransitionTo match
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
          {  jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
-            current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = proposedTransitionTo.get
-            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
+            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State], current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
+
+            current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = jn_Jn_State_Delay_OptJn_SimProc_Duration
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
          case None               => doNothing

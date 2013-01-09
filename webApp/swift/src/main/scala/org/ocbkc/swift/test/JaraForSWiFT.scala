@@ -136,7 +136,7 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
 
          println("   delayCatchAct = " + delayCatchAct )
          if( delayCatchAct < 0 ) throw new RuntimeException("value of delayCatchAct is below 0")
-         val delayCatchActAfterNow = Numeric.max(delayCatchAct - durTerminLastExe2Now(), 0)
+         val delayCatchActAfterNow = (delayCatchAct - durTerminLastExe2Now()).max(0L)
          delayCatchActAfterNow
       }
    }
