@@ -11,6 +11,7 @@ import scala.util.Random
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.test.SystemWithTesting
+import org.ocbkc.generic.random.RandomExtras._
 import scala.math.Numeric
 
 object Test
@@ -30,7 +31,7 @@ object PlayingSimulator
 
 /** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.
   */
-object GlobalRandom
+object SharedRandom
 {  val gb = new Random(837479112L)
 
    def get =
@@ -53,7 +54,7 @@ trait DurationFunctionGenerator
 
 object SimpleDelayFunctionGenerator extends DelayFunctionGenerator
 {  def generate =
-   {  () => (15*1000 + GlobalRandom.get.nextInt(30*1000)).toLong
+   {  () => (15*1000 + SharedRandom.get.nextInt(30*1000)).toLong
    }
 }  
 
@@ -184,7 +185,7 @@ object DurationFunctionType1Generator extends DurationFunctionGenerator
 
 class SimPlayer(val liftPlayer:Player) extends SimEntity
 {  println("SimPlayer constructor of " + this + "called")
-   val ran = GlobalRandom.get
+   val ran = SharedRandom.get
    
    // Some state information outside the jara simulation system
    var sesCoord:CoreSimu = null
@@ -210,7 +211,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qPlayTranslationSession)), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qEditExistingConsti)), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
    val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qChooseFirstConsti)), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qPlayTranslationSession)), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.001, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qPlayTranslationSession)), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
@@ -218,7 +219,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 */
 
    def delayFunction =
-   {  (90*1000 + GlobalRandom.get.nextInt(20*1000)).toLong
+   {  (90*1000 + SharedRandom.get.nextInt(20*1000)).toLong
    }
 
    val durationPlayTranslationSession = DurationFunctionType1Generator.generate("durationPlayTranslationSession", durationPlayTranslationSessionExp, 0.25, ran)
@@ -259,12 +260,12 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procEditExistingConsti(d: DurationInMillis) =
    {  val ccount = Constitution.count
       if(ccount < 1) throw new RuntimeException("No constitutions created yet")
-      val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
+      val randomConstiId = 1 + SharedRandom.get.nextInt(ccount)
       val consti = Constitution.getById(randomConstiId).get
       consti.publish(
 """<h2>Article 1</h2>
 
-<p>""" + GlobalRandom.get.nextString(20) + """</p>
+<p>""" + SharedRandom.get.nextString(20) + """</p>
 """, "publication COULDO", playerId.toString
       )
    }
@@ -274,7 +275,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       newConsti.publish(
 """<h2>Article 1</h2>
 
-<p>""" + GlobalRandom.get.nextString(20) + """</p>
+<p>""" + SharedRandom.get.nextString(20) + """</p>
 """, "publication COULDO", playerId.toString
       )
    }
@@ -282,12 +283,13 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procChooseFirstConsti(d: DurationInMillis) =
    {  println("procChooseFirstConsti called")
 
-      val ccount = Constitution.count
-      if( ccount > 0)
-      {  val randomConstiId = 1 + GlobalRandom.get.nextInt(ccount)
-         sesCoord.URchooseFirstConstitution(randomConstiId)
-      } else
-      {  throw new RuntimeException("No consti available to choose from!")
+      pickRandomElementFromList(Constitution.constisWithReleases, SharedRandom.get) match
+      {  case Some(randomConsti) =>
+         {  sesCoord.URchooseFirstConstitution(randomConsti.constiId)
+         }
+         case None               =>
+         {  throw new RuntimeException("No consti available to choose from! (There should be at least one with a released version).")
+         }
       }
    }
 
@@ -307,7 +309,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 /** @todo for SimSubscriptions I need another DelayFunctionGenerator type, one that can cope with processes which have a duration of 0. Now solved it in another way, but this is a quick fix.
   */
 class SimSubscriptions(startTimeSimulation: DurationInMillis) extends SimEntity
-{  val ran = GlobalRandom.get
+{  val ran = SharedRandom.get
    // <{ create additional states
    val qNewSubscription = State("qNewSubscription")
    // >}
@@ -315,7 +317,7 @@ class SimSubscriptions(startTimeSimulation: DurationInMillis) extends SimEntity
    initialisationAfterStateDefs
    val durationNewSubscriptionExp = 5 * 60 * 1000 // &y2013.01.07.20:36:40& unrealisatic, but currently you have to set it about equal to other duration functions otherwise the associated delay will always win from others.
    
-   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qNewSubscription)), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSimulation),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
+   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (SystemWithTesting.currentTimeMillis - lastFinishTimeStateMap(qNewSubscription)), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSimulation),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
 
    val durationNewSubscription = DurationFunctionType1Generator.generate("durationNewSubscription", durationNewSubscriptionExp, 0.25, ran)
 

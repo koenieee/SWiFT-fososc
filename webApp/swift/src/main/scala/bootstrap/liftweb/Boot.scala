@@ -275,18 +275,11 @@ class Boot {
       val numconstis = minconstis + randomSeq.nextInt(maxconstis - minconstis)
       def randomSizeHis = minhis + randomSeq.nextInt(maxhis - minhis)
       def randomPlayer:Player =
-      {  val p = pickRandomElementFromList(Player.findAll, randomSeq).get // assumed may be that there are players
+      {  val p = RandomExtras.pickRandomElementFromList(Player.findAll, randomSeq).get // assumed may be that there are players
          println("   random player = " + p)
          p
       }
       
-      // <&y2012.09.15.13:34:56& move to general lib>
-      def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
-      {  list match
-         {  case Nil => None
-            case _   => Some(list(rs.nextInt( list.length - 1 )))
-         }
-      }
 
       val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
       println("randomConstiCreationList =")

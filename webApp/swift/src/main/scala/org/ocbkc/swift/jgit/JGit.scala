@@ -10,6 +10,8 @@ import org.eclipse.jgit.revwalk.{RevCommit, RevWalk}
 import org.gitective.core.BlobUtils
 import org.ocbkc.swift.model.Player
 import org.ocbkc.swift.global._
+import java.util.Date
+
 
 object Translations
 {  def gitUserId(p:Player):PersonIdent =
@@ -19,6 +21,11 @@ object Translations
    def gitUserId(liftUserId:String):PersonIdent =
    {  new PersonIdent(liftUserId, "swiftgame")
    }
+
+   def gitUserId(liftUserId:String, date:Date):PersonIdent =
+   {  val pi = gitUserId(liftUserId)
+      new PersonIdent(pi, date)
+   }   
 }
 
 /** @todo move this to another general jgit utils package. The package swift.jgit is intended for interaction between swift and jgit that are specific to these two systems. Hmm, but this requires refactoring... Now it is really tied to SWiFT through GlobalConstant.jgitRepo

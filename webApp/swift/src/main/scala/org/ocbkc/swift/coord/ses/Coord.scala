@@ -46,6 +46,8 @@ trait CoreTrait
 
    def currentPlayer:Player
 
+   /** @param constiId Must be constiId of a constitution with at least one version released
+     */
    def URchooseFirstConstitution(constiId:ConstiId) =
    {  val player = currentPlayer
       val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.

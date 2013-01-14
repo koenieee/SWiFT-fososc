@@ -7,6 +7,13 @@ object RandomExtras
 {  def nextBetween(ranSeq: Random, min:Int, max:Int):Int = 
    {  min + ranSeq.nextInt( max - min + 1 )
    }
+
+   def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
+   {  list match
+      {  case Nil => None
+         case _   => Some(list(rs.nextInt( list.length )))
+      }
+   }
 }
 
 /*
