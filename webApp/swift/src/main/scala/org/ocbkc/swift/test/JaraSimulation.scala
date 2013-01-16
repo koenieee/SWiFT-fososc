@@ -6,6 +6,13 @@ Jn_Jn_A_B_C ==> Jn(Jn(A,b),C)
 Jn_A_Jn_B_C ==> Jn(A, Jn(B,C))
 
 OptJn: Option of a join A and B.
+
+Convention:
+
+SimGod never notifies entities that another entity has started a state, while this might seem useful in some cases. However, SimGod assumes you to break a state into smaller states if you want to "notify" other entities that a certain entity started to get involved in a certain process. The philosophy is that this approaches reality in which it also may take some time before another entity notices changes in the other entities states.
+
+
+
 */
 
 import org.ocbkc.swift.test._
@@ -36,6 +43,7 @@ Assumptions: as long as an entity is occupied it is not
 
 object SimGod
 {  val debug = true
+   var startTimeCurrentRun:Option[POSIXtime] = None
 
    def sortByStop(sjs:List[(SimEntity, Jn_Start_Stop)]) =
    {  sjs.sortWith{ case ((_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2))) => stop1 < stop2 }
@@ -46,7 +54,8 @@ object SimGod
    }
 
    def run(iterations:Int) =
-   {  var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities; SimEntity.newSimEntities = Nil
+   {  startTimeCurrentRun = Some(SystemWithTesting.currentTimeMillis)
+      var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities; SimEntity.newSimEntities = Nil
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
       var unoccupiedEntitiesWithProposedActivities:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by start time
       //val uEWPA = unoccupiedEntitiesWithProposedActivities
@@ -155,6 +164,7 @@ object SimGod
 
          def stopOccupiedEntitiesWithFirstStopTime(firstStopTimeOccupiedEntities:POSIXtime) =
          {  val occupiedEntitiesWithFirstStopTime = occupiedEntities_Jn_Start_Stop.takeWhile{ case (_, Jn_Start_Stop(_,stop)) => (stop == firstStopTimeOccupiedEntities) }
+            occupiedEntitiesWithFirstStopTime.foreach{ case (se, _) => se.finishProcess }
 
             unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ occupiedEntitiesWithFirstStopTime.map{ case (o,_) => o }
             occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop -- occupiedEntitiesWithFirstStopTime
@@ -167,6 +177,8 @@ object SimGod
             unoccupiedEntitiesWithProposedActivities = Nil
          }
       }
+
+      startTimeCurrentRun = None
    }
 }
 
@@ -211,9 +223,9 @@ trait SimEntity
 
    // historical info. about past processes/states (COULDDO &y2013.01.09.16:40:20& perhaps refactor, make a generic datastructure for this purpose? Currently only things needed so far can be found bac.
    var totalDurations:Map[State, DurationInMillis] = Map()
-   var lastFinishTimeStateMap:Map[State, POSIXtime] = Map() // convention (for now): this contains the finishtime from the moment the process starts. Thus the time mentioned may not have been reached yet.
+   var lastFinishTimeStateMap:Map[State, POSIXtime] = Map() // convention (for now): this contains the finishtime from the moment the process starts. Thus the time mentioned may not have been reached yet. TODO: rewrite this, this is error prone.
 
-   var totalDurationsUpdated = false
+   var finishProcessCalled = false
    /** Instance of subclass of this trait should always call this method after all states have been created.
      */
    def initialisationAfterStateDefs =
@@ -229,15 +241,6 @@ trait SimEntity
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimGod is not infallible..
       {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
 
-      // <{ update totalDurations
-      if( !totalDurationsUpdated ) // make sure only to update the duration for the latest process ONCE.
-      {  val state = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
-         totalDurations = totalDurations.updated(state, totalDurations(state) + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration)
-         // &y2013.01.05.12:50:49& this shows again that it would be better to refactor the join constructs, this doesn't feel so elegant.
-         println("   updated totalDuration for state " + state + " to " + totalDurations(state) + ".")
-         totalDurationsUpdated = true
-      }
-      // >}
       proposedTransitionTo = Some(TransitionUtils. getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(
                                                       applyTimingFunctions(
                                                          transitions.get( currentState ).getOrElse(throw new RuntimeException("Transition table seems to be incomplete, check if the state " + currentState + " occurs at the right hand side of a transition in the transition table."))
@@ -265,15 +268,32 @@ trait SimEntity
       {  case Some(jn_Jn_State_Delay_OptJn_SimProc_Duration) =>
          {  current_Jn_Jn_State_Delay_OptJn_SimProc_Duration = jn_Jn_State_Delay_OptJn_SimProc_Duration
             jn_Jn_State_Delay_OptJn_SimProc_Duration.runSimProc
-            lastFinishTimeStateMap = lastFinishTimeStateMap.updated(jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State], jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
 
             println("   current_Jn_Jn_State_Delay_OptJn_SimProc_Duration becomes: " + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration)
          }
          case None               => doNothing
       }
-      totalDurationsUpdated = false
+      finishProcessCalled = false
       updateTransitionModel
       Unit
+   }
+
+   def finishProcess =
+   {  println(this + ".finishProcess called")
+      if( finishProcessCalled )
+      {  throw new RuntimeException("finishProcess called twise for the same process")
+      }
+
+      val state = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
+      val duration = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
+
+      // TODO throw runtime exception if called more than once after process finished
+      lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
+
+      totalDurations = totalDurations.updated(state, totalDurations(state) + duration)
+      // &y2013.01.05.12:50:49& this shows again that it would be better to refactor the join constructs, this doesn't feel so elegant.
+      println("   updated totalDuration for state " + state + " to " + totalDurations(state) + ".")
+      finishProcessCalled = true
    }
 
    def updateTransitionModel
