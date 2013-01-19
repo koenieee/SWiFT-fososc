@@ -227,6 +227,7 @@ trait SimEntity
 
    var finishProcessCalled = false
    /** Instance of subclass of this trait should always call this method after all states have been created.
+     * @todo &y2013.01.19.15:24:11& BUG: I now use the currernt time to initialise the lastFinishTimeStateMap, however, the time SHOULD be the time from which the desired ratio came into effect. A possible solution is to make it an option, and put in None. If the latter is the case, other parts of the program can act accordingly, for example assuming the time from which the desired ratio came into effect, instead of the lastFinishTimeState. This is also a more true representation, since there was no last finish time yet.
      */
    def initialisationAfterStateDefs =
    {  totalDurations = State.states.map( s => (s,0L) ).toMap
@@ -281,14 +282,13 @@ trait SimEntity
    def finishProcess =
    {  println(this + ".finishProcess called")
       if( finishProcessCalled )
-      {  throw new RuntimeException("finishProcess called twise for the same process")
+      {  throw new RuntimeException("finishProcess called twice for the same process")
       }
-
       val state = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.state.asInstanceOf[this.State]
+      println("   finishing process of state = " + state)
       val duration = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
 
-      // TODO throw runtime exception if called more than once after process finished
-      lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration + SystemWithTesting.currentTimeMillis)
+      lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, SystemWithTesting.currentTimeMillis)
 
       totalDurations = totalDurations.updated(state, totalDurations(state) + duration)
       // &y2013.01.05.12:50:49& this shows again that it would be better to refactor the join constructs, this doesn't feel so elegant.

@@ -16,6 +16,7 @@ import org.ocbkc.swift.model._
 //import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.test._
 
 class Constitutions
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.

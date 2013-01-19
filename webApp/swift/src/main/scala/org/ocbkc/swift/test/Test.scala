@@ -1,3 +1,4 @@
+// TODO &y2013.01.19.14:00:42& cut loose from swift, make general
 import System._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Types._
@@ -79,6 +80,16 @@ object TestHelpers
 
    def randomPause(min:Long, max:Long, randomSeq:Random):Long =
    {  min + randomSeq.nextInt( (max - min).toInt).toLong
+   }
+
+   def durationFromMillisToHumanReadable(duration:TimeInMillis):String =
+   {  val milliseconds:Long = (duration % 1000L)
+      val seconds = ((duration / 1000L) % 60L)
+      val minutes = ((duration / (1000L*60L)) % 60L)
+      val hours   = ((duration / (1000L*60L*60L)) % 24L)
+      val days    = ( duration / (1000L*60L*60L*24L) )
+      
+      days + "d." + hours + "h." + minutes + "m." + seconds + "s." + milliseconds + "ms ( = " + duration + "ms)"
    }
 }
 
