@@ -106,6 +106,8 @@ object GlobalConstant
    }
 }
 
+/** @todo &y2013.01.20.18:12:52& move this one to a more general place
+  */
 object Types
 {  type POSIXtime = Long
    type DurationInMillis = Long

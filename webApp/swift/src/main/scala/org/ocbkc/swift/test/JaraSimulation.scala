@@ -22,6 +22,7 @@ import scala.collection.immutable.HashMap
 import scala.util.Random
 import System.out.println
 import org.ocbkc.swift.global.TestSettings
+import org.ocbkc.generic.DateTime._
 
 /** The jara simulation system (C) Chide Groenouwe.
   * based on finite state machines with probabilisticly delayed transitions and processes attached to states.
@@ -44,6 +45,7 @@ Assumptions: as long as an entity is occupied it is not
 object SimGod
 {  val debug = true
    var startTimeCurrentRun:Option[POSIXtime] = None
+   var endTimeLastRun:Option[POSIXtime] = None
 
    def sortByStop(sjs:List[(SimEntity, Jn_Start_Stop)]) =
    {  sjs.sortWith{ case ((_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2))) => stop1 < stop2 }
@@ -52,8 +54,11 @@ object SimGod
    def sortByStart(sjs:List[(SimEntity, Jn_Start_Stop)]) =
    {  sjs.sortWith{ case ((_, Jn_Start_Stop(start1,_)), (_, Jn_Start_Stop(start2,_))) => start1 < start2 }
    }
+   /** Conditions: the start time of the simulation is equal to the moment the run method is called.
+       @param runConditionHolds iteration has value 0 before the execution of the first loop (and check of the condition). So if you want zero runs, produce false if iteration == 0.
+     */
 
-   def run(iterations:Int) =
+   def run( runConditionHolds:(Long, TimeInMillis) => Boolean ) =
    {  startTimeCurrentRun = Some(SystemWithTesting.currentTimeMillis)
       var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities; SimEntity.newSimEntities = Nil
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
@@ -64,15 +69,13 @@ object SimGod
       //val oEJSS = occupiedEntities_Jn_Start_Stop
       TestSettings.SIMULATECLOCK = true
 
-      /* Draft 
+      var iteration = 0
 
-      each iteration starts at the end of the last activity. You have: occupied entities, unoccupied entities without proposed future activity, and unoccupied entities with proposed future activities.
-      Iteration:
-      */
-      for( i <- 1 until (iterations + 1) )
+      while( runConditionHolds(iteration, SystemWithTesting.currentTimeMillis) )
       {  environmentChange = false
+         iteration += 1
          // Ask all non-busy entities when they want to go to their next state, and pick the one that wants to do so earliest.
-         println(" \n################ Iteration " + i + "\n")
+         println(" \n################ Iteration " + iteration + "\n")
          if( SimEntity.newSimEntities != Nil )
          {  unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ SimEntity.newSimEntities
             SimEntity.newSimEntities = Nil
@@ -177,6 +180,13 @@ object SimGod
             unoccupiedEntitiesWithProposedActivities = Nil
          }
       }
+
+      endTimeLastRun = Some(SystemWithTesting.currentTimeMillis)
+
+      println("   Simulation finished. Stats:")
+      println("      iterations = " + iteration)
+      println("      startTime simulation = " + timeInMillis2dateString( startTimeCurrentRun.get ) )
+      println("      endTime simulation = " + timeInMillis2dateString( endTimeLastRun.get ) )
 
       startTimeCurrentRun = None
    }
@@ -457,7 +467,7 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
 package org.ocbkc.generic.test.simulation.jara.test
 {
 import org.ocbkc.generic.test.simulation.jara._
-
+/*
 object TestSimulation
 {  def main(args: Array[String]) =
    {  println("TestSimulation.main called")
@@ -467,7 +477,7 @@ object TestSimulation
          TestRun.no6(3)
    }
 }
-
+*/
 class SimTestPlayer extends SimEntity
 {  // create additional states
    println("SimPlayer constructor of " + this)
@@ -618,41 +628,6 @@ object TestRun
       }
    }
 
-/* Unfinished{
-   class SimTestPlayer4 extends SimEntity
-   {  // create additional states
-      println("SimPlayer constructor of " + this)
-      val qPlayTranslationSession = State("qPlayTranslationSession")
-      val qPlayConstiGame = State("qPlayConstiGame")
-      val qUnsubscribe = State("qUnsubscribe")
-
-      def delayFunction =
-      {  (30*1000 + Random.nextInt(10)).toLong
-      }
-
-      def durationFunction =
-      {  (30*1000 + Random.nextInt(10)).toLong
-      }
-
-      transitions = 
-      Map(
-         qStart -> List(qPlayTranslationSession),
-         qPlayTranslationSession -> List(qPlayConstiGame, qPlayTranslationSession),
-         qPlayConstiGame -> List(qPlayConstiGame, qPlayTranslationSession)
-      )
-
-      // attach delaygenerators to states, processes to states, and durationgenerators to processes.
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
-      Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayConstiGame, () => delayFunction), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", () => println("process called")), () => durationFunction)) )
-
-      c
-
-      override def updateTransitionModel =
-      {  
-      }
-   }
-}Unfinised */
-
    def no1() =
    {  println("TestRun.no1 called")
       val p1 = new SimTestPlayer
@@ -666,20 +641,20 @@ object TestRun
    def no2() =
    {  println("TestRun.no2 called")
       val p1 = new SimTestPlayer
-      SimGod.run(2)
+      SimGod.run( { case (iteration, _) => iteration < 2 })
    }  
 
    def no3() =
    {  println("TestRun.no3 called")
       val p1 = new SimTestPlayer
       val p2 = new SimTestPlayer
-      SimGod.run(2)
+      SimGod.run( { case (iteration, _) => iteration < 2 })
    } 
 
    def no4(numberOfPlayers:Int) =
    {  println("TestRun.no4 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer
-      SimGod.run(100)
+      SimGod.run( { case (iteration, _) => iteration < 100 })
    } 
 
    /** Purposes: test what happens if there is more than one SimEntity with a shortest start time to the next state.
@@ -687,25 +662,25 @@ object TestRun
    def no5(numberOfPlayers:Int) =
    {  println("TestRun.no5 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer2
-      SimGod.run(100)
+      SimGod.run({ case (iteration, _) => iteration < 100 })
    } 
 
    def no6(numberOfPlayers:Int) =
    {  println("TestRun.no6 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
-      SimGod.run(100)
+      SimGod.run({ case (iteration, _) => iteration < 100 })
    }
 
    def no7(numberOfPlayers:Int) =
    {  println("TestRun.no7 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer4
-      SimGod.run(1000)
+      SimGod.run({ case (iteration, _) => iteration < 1000 })
    }
 
    def no8(numberOfPlayers:Int) =
    {  println("TestRun.no8 called")
       for( i <- ( 0 until numberOfPlayers ) ) new SimTestPlayer3
-      SimGod.run(1000)
+      SimGod.run({ case (iteration, _) => iteration < 1000 })
    }
 }
 }

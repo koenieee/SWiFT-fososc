@@ -27,7 +27,11 @@ object PlayingSimulator
 {  def start(iterations:Int) =
    {  println("PlayingSimulator.start called")
       new SimSubscriptions()
-      SimGod.run(iterations)
+      val durationSimulation = 7*24*60*60*1000 // 1 days in milliseconds
+      val startTimeSim = SystemWithTesting.currentTimeMillis
+      SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
+      
+      //SimGod.run{ case (iteration, _) => iteration < 100 }
    }
 }
 
@@ -244,8 +248,6 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qEditExistingConsti, startTimeSession.get), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
    val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseFirstConsti, startTimeSession.get), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
 
-
-
    //For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
    val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
@@ -353,7 +355,7 @@ class SimSubscriptions extends SimEntity
    initialisationAfterStateDefs
    val durationNewSubscriptionExp = 5 * 60 * 1000 // &y2013.01.07.20:36:40& unrealisatic, but currently you have to set it about equal to other duration functions otherwise the associated delay will always win from others.
    
-   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qNewSubscription, SimGod.startTimeCurrentRun.get), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
+   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.05, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qNewSubscription, SimGod.startTimeCurrentRun.get), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
 
    val durationNewSubscription = DurationFunctionType1Generator.generate("durationNewSubscription", durationNewSubscriptionExp, 0.25, ran)
 
