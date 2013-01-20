@@ -103,7 +103,7 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
    def generate( 
       ratDes:Double,
       catchUpTime:DurationInMillis,
-      durStartRatDesReq2TerminLastExe: () => DurationInMillis, // <&y2013.01.16.15:48:49& change TerminLastExe to momentStartComingDelay (or something similar) to make it more general, e.g. when you don't use terminlastexe but another moment.>
+      durStartRatDesReq2TerminLastExe_Opt: () => Option[DurationInMillis], // <&y2013.01.16.15:48:49& change TerminLastExe to momentStartComingDelay (or something similar) to make it more general, e.g. when you don't use terminlastexe but another moment.>
       durProcPerExe: DurationInMillis,
       randomDelayRatio: Double,
       durTotSinceStartRatDesReq: () => DurationInMillis,
@@ -117,19 +117,26 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
       
       () =>
       {  println(name + " called")
-         println("   ratDes " + ratDes + ", catchUpTime = " + durationFromMillisToHumanReadable(catchUpTime) + ", durStartRatDesReq2TerminLastExe = " + durationFromMillisToHumanReadable(durStartRatDesReq2TerminLastExe()) + ", durProcPerExe = " +  durationFromMillisToHumanReadable(durProcPerExe) + ", durTotSinceStartRatDesReq() = " + durationFromMillisToHumanReadable(durTotSinceStartRatDesReq()) + ", durProcSinceStartRatDesReq() = " + durationFromMillisToHumanReadable(durProcSinceStartRatDesReq()) + ".")
+         println("   ratDes " + ratDes + ", catchUpTime = " + durationFromMillisToHumanReadable(catchUpTime) + ", durStartRatDesReq2TerminLastExe = " + { durStartRatDesReq2TerminLastExe_Opt() match { case None => "n/a"; case Some(dS) => durationFromMillisToHumanReadable(dS) } } + ", durProcPerExe = " +  durationFromMillisToHumanReadable(durProcPerExe) + ", durTotSinceStartRatDesReq() = " + durationFromMillisToHumanReadable(durTotSinceStartRatDesReq()) + ", durProcSinceStartRatDesReq() = " + durationFromMillisToHumanReadable(durProcSinceStartRatDesReq()) + ".")
          println("   current ratio = " + durProcSinceStartRatDesReq().toDouble/durTotSinceStartRatDesReq().toDouble)
          
+         val dSRDR2TLE:DurationInMillis =
+         durStartRatDesReq2TerminLastExe_Opt() match
+         {  case Some(dS)  => dS
+            case None      => 0L
+         }
+
          if(debug)
          {  def isRatio(r:Double) = { r >= 0 && r <= 1 }
             if( !isRatio(ratDes) ) throw new RuntimeException("   ratDes should be in [0,1]")
             if(catchUpTime < 0) throw new  RuntimeException("   catchupTime should be positive")
-            if(durStartRatDesReq2TerminLastExe() < 0) throw new  RuntimeException("   durStartRatDesReq2TerminLastExe should be positive")
+            if(dSRDR2TLE < 0) throw new  RuntimeException("   durStartRatDesReq2TerminLastExe should be positive")
+            if(durTotSinceStartRatDesReq() < dSRDR2TLE) throw new RuntimeException("   durTotSinceStartRatDesReq < durStartRatDesReq2TerminLastExe")
             if(durProcPerExe < 0) throw new  RuntimeException("   durProcPerExe should be positive")
             if(durTotSinceStartRatDesReq() < 0) throw new  RuntimeException("   durTotSinceStartRatDesReq should be positive")
-            if(durTotSinceStartRatDesReq() < durStartRatDesReq2TerminLastExe()) throw new RuntimeException("   durTotSinceStartRatDesReq < durStartRatDesReq2TerminLastExe")
          }
-         val durProcCatch = ratDes * ( durStartRatDesReq2TerminLastExe() + catchUpTime ) - durProcSinceStartRatDesReq() // TODO what if durProcCatch >=0, but < durProcPerExe ??? Did I take that into account?
+
+         val durProcCatch = ratDes * ( dSRDR2TLE + catchUpTime ) - durProcSinceStartRatDesReq() // TODO what if durProcCatch >=0, but < durProcPerExe ??? Did I take that into account?
         
          /* if the process is too far behind, this number will be greater than catchUpTime */
          println("    durProcCatch = " + durationFromMillisToHumanReadable(durProcCatch.toLong) )
@@ -137,9 +144,9 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
          val delayCatchExp:Long =
          if( durProcCatch < 0  ) // process is so much ahead that you can't get even after catchUpTime, even if you would do nothing during this catchUpTime.
          {  println("   this process is so far ahead that it can't get to ratDes, even if doing nothing during the catchUpTime...") 
-            ( ( durProcSinceStartRatDesReq() + durProcPerExe ).toDouble/ratDes - durStartRatDesReq2TerminLastExe().toDouble - durProcPerExe.toDouble ).toLong
+            ( ( durProcSinceStartRatDesReq() + durProcPerExe ).toDouble/ratDes - dSRDR2TLE.toDouble - durProcPerExe.toDouble ).toLong
             /* Calculate the minimal delay which will make it even, in spite of the fact it will be longer than the catch up time. . Equation solved for this purpose: 
-                  ratDes = ( durProcSinceStartRatDesReq + durProcPerExe) / ( durStartRatDesReq2TerminLastExe() + delayCatchExp + durProcPerExe )
+                  ratDes = ( durProcSinceStartRatDesReq + durProcPerExe) / ( dSRDR2TLE + delayCatchExp + durProcPerExe )
                   => delayCatchExp = ( durProcSinceStartRatDesReq + durProcPerExe ) / ratDes - durTotSinceStartRatDesReq - durProcPerExe
              */
          } else if ( durProcCatch <= catchUpTime) // you can get even
@@ -160,7 +167,7 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
          println("   delayCatchAct = " + durationFromMillisToHumanReadable(delayCatchAct))
          if( delayCatchAct < 0 ) throw new RuntimeException("value of delayCatchAct is below 0")
 
-         val durTerminLastExe2Now = durTotSinceStartRatDesReq() - durStartRatDesReq2TerminLastExe()
+         val durTerminLastExe2Now = durTotSinceStartRatDesReq() - dSRDR2TLE
          val delayCatchActAfterNow = (delayCatchAct - durTerminLastExe2Now).max(0L)
          println("   delayCatchActAfterNow = " + durationFromMillisToHumanReadable(delayCatchActAfterNow))
          if(debug)
@@ -202,7 +209,15 @@ object SimPlayer
 class SimPlayer(val liftPlayer:Player) extends SimEntity
 {  println("SimPlayer constructor of " + this + "called")
    val ran = SharedRandom.get
-   
+
+   // @todo &y2013.01.19.19:19:08& move to more generic level (but not too!)
+   def durStartRatDesReq2OverallTerminLastExe(state:State, startRatDes:TimeInMillis):Option[DurationInMillis] =
+   {  SimPlayer.overallTerminTimeLastExe(state) match
+      {  case None         => None
+         case Some(oTTLE)  => Some(oTTLE - startRatDes)
+      }
+   }
+  
    // Some state information outside the jara simulation system
    var sesCoord:CoreSimu = null
    val playerId = liftPlayer.id.get
@@ -224,16 +239,15 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
    val durationCreateNewConstiExp         = 5 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
    // &y2013.01.10& Is not elegant and is confusing: startTimeSession and lastFinishTimeStateMap should come from the same source.
-   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (lastFinishTimeStateMap(qPlayTranslationSession) - startTimeSession.get), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
-   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (lastFinishTimeStateMap(qEditExistingConsti) - startTimeSession.get), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
-   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (lastFinishTimeStateMap(qChooseFirstConsti) - startTimeSession.get), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
 
-   // For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
-   def durStartRatDesReq2TerminLastExe() =
-   {  
-   }
+   val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qPlayTranslationSession, startTimeSession.get), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
+   val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qEditExistingConsti, startTimeSession.get), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
+   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseFirstConsti, startTimeSession.get), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
 
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => (SimPlayer.overallTerminTimeLastExe(qCreateNewConsti) - SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
+
+
+   //For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
@@ -339,7 +353,7 @@ class SimSubscriptions extends SimEntity
    initialisationAfterStateDefs
    val durationNewSubscriptionExp = 5 * 60 * 1000 // &y2013.01.07.20:36:40& unrealisatic, but currently you have to set it about equal to other duration functions otherwise the associated delay will always win from others.
    
-   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => (lastFinishTimeStateMap(qNewSubscription) - SimGod.startTimeCurrentRun.get), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
+   val delayNewSubscription = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qNewSubscription, SimGod.startTimeCurrentRun.get), durationNewSubscriptionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => totalDurations(qNewSubscription), ran, "delayNewSubscription" )
 
    val durationNewSubscription = DurationFunctionType1Generator.generate("durationNewSubscription", durationNewSubscriptionExp, 0.25, ran)
 
@@ -351,7 +365,6 @@ class SimSubscriptions extends SimEntity
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qNewSubscription, delayNewSubscription), Some(new Jn_SimProc_DurationGen(new SimProc("procNewSubscription", procNewSubscription(_)), durationNewSubscription)) )
-
 
    var subscriptionId:Long = 0
 

@@ -223,15 +223,15 @@ trait SimEntity
 
    // historical info. about past processes/states (COULDDO &y2013.01.09.16:40:20& perhaps refactor, make a generic datastructure for this purpose? Currently only things needed so far can be found bac.
    var totalDurations:Map[State, DurationInMillis] = Map()
-   var lastFinishTimeStateMap:Map[State, POSIXtime] = Map() // convention (for now): this contains the finishtime from the moment the process starts. Thus the time mentioned may not have been reached yet. TODO: rewrite this, this is error prone.
+   var lastFinishTimeStateMap:Map[State, Option[POSIXtime]] = Map() // convention (for now): this contains the finishtime from the moment the process starts. It is updated as soon as the currently running process is finished. So, keep into account that it contains the finish time of the PREVIOUS process, if the current process is still running.
 
    var finishProcessCalled = false
    /** Instance of subclass of this trait should always call this method after all states have been created.
-     * @todo &y2013.01.19.15:24:11& BUG: I now use the currernt time to initialise the lastFinishTimeStateMap, however, the time SHOULD be the time from which the desired ratio came into effect. A possible solution is to make it an option, and put in None. If the latter is the case, other parts of the program can act accordingly, for example assuming the time from which the desired ratio came into effect, instead of the lastFinishTimeState. This is also a more true representation, since there was no last finish time yet.
+     * @todo (done &y2013.01.19.18:12:52&) &y2013.01.19.15:24:11& BUG: I now use the currernt time to initialise the lastFinishTimeStateMap, however, the time SHOULD be the time from which the desired ratio came into effect. A possible solution is to make it an option, and put in None. If the latter is the case, other parts of the program can act accordingly, for example assuming the time from which the desired ratio came into effect, instead of the lastFinishTimeState. This is also a more true representation, since there was no last finish time yet.
      */
    def initialisationAfterStateDefs =
    {  totalDurations = State.states.map( s => (s,0L) ).toMap
-      lastFinishTimeStateMap = State.states.map( s => (s, SystemWithTesting.currentTimeMillis) ).toMap
+      lastFinishTimeStateMap = State.states.map( s => (s, None) ).toMap
    }
 
    /** @returns delay before proposed state
@@ -288,7 +288,7 @@ trait SimEntity
       println("   finishing process of state = " + state)
       val duration = current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
 
-      lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, SystemWithTesting.currentTimeMillis)
+      lastFinishTimeStateMap = lastFinishTimeStateMap.updated(state, Some(SystemWithTesting.currentTimeMillis))
 
       totalDurations = totalDurations.updated(state, totalDurations(state) + duration)
       // &y2013.01.05.12:50:49& this shows again that it would be better to refactor the join constructs, this doesn't feel so elegant.
@@ -298,10 +298,18 @@ trait SimEntity
 
    def updateTransitionModel
 
+   /** @todo Make less generic, but in a subclass of simentity which adds support for generic delayfunctions
+     */
+   def durStartRatDesReq2TerminLastExe(state:State, startRatDes:TimeInMillis):Option[DurationInMillis] =
+   {  lastFinishTimeStateMap(state) match
+      {  case None         => None
+         case Some(lFTS)   => Some(lFTS - startRatDes)
+      }
+   }
+
    class State(name:String) extends org.ocbkc.generic.test.simulation.jara.State(name) // <&y2012.12.20.13:53:52& better turn into case class?>[A &y2012.12.20.15:50:23& no because with case classes may create different instances with the same constructor values><&y2012.12.20.23:55:07& this is not a good idea I think (inner class of State : each instance of SimuEntity now gets its own qStart state! Find solution for this.>
    {  override def toString = "State( name = " + name + ", hashCode = " + hashCode + " )"
    }
-
 
    /** @todo exact purpose of this object? Isn't object Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen enough?
      */
