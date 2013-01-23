@@ -229,6 +229,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    {  // Determine whether sample size on this release is high enough
       if( ConstiScores.sampleSizeSufficient4FluencyScore(constiId) )
       {  releaseLatestVersion
+         // OFW: TODO &y2013.01.21.18:58:57& setPrevious release as last release with fluency etc. scores.
       }
    }
 
@@ -547,7 +548,7 @@ object PlayerScores
   * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
   */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
-   {  println("averageDurationTranslation called")
+   {  println("PlayerScores.averageDurationTranslation called")
       val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
       
       val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
@@ -572,7 +573,9 @@ object PlayerScores
 object ConstiScores
 /* <&y2012.10.06.19:40:31& add some confidence measure to this, for example average sample size>
 */
-{  // <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
+{
+
+// <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
 /**
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
@@ -633,9 +636,25 @@ object ConstiScores
          case None => None
       }
    }
+   /* marked for deletion
 
+   object lastReleaseWithFluencyScore
+   {  def apply
+      
+      def lastReleaseWithFluencyScore_Whisper_OFW(constiId:ConstiId, releaseId:Option[String]) =
+   {  // TODO &y2013.01.21.18:55:52& note: double Option in cache: if None => value is unknown (not cached), or Some(None) => value is known: there is NO release with score...
+   }
+
+   def lastReleaseWithFluencyScore_Pure_OFW(constiId: ConstiId):Option[VersionId] =
+   {     }
+
+   def lastReleaseWithFluencyScore(constiId:ConstiId) =
+   {  // TODO implement optimization
+      lastReleaseWithFluencyScore_Pure_OFW(constiId)
+   }
+   */
    def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
-   {  println("averageDurationTranslation called")
+   {  println("ConstiScores.averageDurationTranslation called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
@@ -673,17 +692,39 @@ object ConstiScores
          Some(g(a.get, b.get))
    }
 
-   def averageFluency(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
-   {  Constitution.getById(constiId) match
-      {  case Some(consti) => 
-            consti.lastReleaseCommitId match
-            {  case Some(lastReleaseCommitId) => averageFluency(minimalSampleSize, lastReleaseCommitId, k)
-               case None => None
-            }
-         case None => None
+   /**  Find first element 
+     *  @todo move to more generic lib.
+
+     * Note that List.collectFirst does something different:  val list = List.range(0,15); list.collectFirst{ x:Int => x match { case _ if x < 4 => None; case _ if x >= 4 => Some(x); } } will yield Some(None). This function, however, will interpret the result None as not found and will continue to search.
+     */
+   def findAndApply[A,B](list:List[A], f:A => Option[B]):Option[B] =
+   {  var result:Option[Option[B]] = None
+      list.find
+      {  a =>
+         {  result = Some(f(a))
+            result.get.isDefined
+         }
+      }
+      match
+      {  case None => None
+         case Some(a) => result.get
       }
    }
 
+   /** @param constiId an id of an existing constitution. If it doesn't exist, this is considered a bug, and, moreover, an exception is thrown!
+     * @return The fluency score of the last release with a fluency score.
+     */
+
+   def averageFluency(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
+   {  findAndApply( Constitution.getById(constiId).get.commitIdsReleases,
+                    {   versionId:VersionId =>
+                        {  averageFluency(minimalSampleSize, versionId, k)
+                        }
+                    }
+      )
+   }
+
+   // SHOULDDO &y2013.01.21.19:23:39&: directly retrieve the values minimalSampleSize and k from Global. For this purpose write a wrapper aroudn this function, so that it can still be called if you want to locally apply a deviating calculation.
    /** @todo  &y2013.01.07.13:20:00& is there a check whether releaseId is indeed a release (and not another version)?
      */
    def averageFluency(minimalSampleSize: Int, releaseId:String, k:Double):Option[Double] =

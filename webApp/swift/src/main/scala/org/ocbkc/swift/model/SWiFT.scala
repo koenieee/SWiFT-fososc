@@ -270,10 +270,12 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
    // possibly confusing: createInstance is used when READING info. that was made persistent... 
    override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,CoreContent) => Unit]]) : CoreContent =
    {  val cc = super.createInstance(dbId, rs, mapFuncs)
-      val ccFile  = new File(CORECONTENTOBJECTDIR + "/cc" + cc.id)
+      val ccFileName = CORECONTENTOBJECTDIR + "/cc" + cc.id
+      val ccFile  = new File( ccFileName )
       implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
       val in:BufferedReader   = new BufferedReader(new FileReader(ccFile))
-      var inStr:String        = in.readLine()
+      var inStr:String        = in.readLine
+      if( inStr == null) throw new RuntimeException("   Problems reading " + ccFileName )
       val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
       cc.copyJsonSerializedFieldsFrom(ccLoc)
 
