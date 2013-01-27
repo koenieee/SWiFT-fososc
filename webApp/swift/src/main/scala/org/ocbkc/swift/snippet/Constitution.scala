@@ -178,14 +178,15 @@ class ConstitutionSnippet
       def processFollowCheckbox(checked:Boolean) =
       {  if( const.isDefined ) // <&y2012.06.23.14:52:50& necessary? The checkbox shouldn't even show when there is no constitution defined>
          {  val constLoc = const.get
-            if( checked )
+            if( checked && !constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.addFollower(sesCoordLR.currentPlayer, constLoc)
                mailFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
-            }                  
-            else
+            } else if( !checked && constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.removeFollower(sesCoordLR.currentPlayer, constLoc )
                // <&y2012.06.27.14:00:21& send mail to unfollower to confirm.>
-            }  
+            } else
+            {  println("   update mail to " + currentUserId + " not necessary: follower status unchanged.")
+            }
          }
       }
       /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
@@ -245,9 +246,9 @@ class ConstitutionSnippet
                                                             "cancelBt" -> SHtml.button("Cancel", () => processCancelBtn(constLoc, firstEdit)),
                                                             //"saveBt" -> SHtml.button("Save", () => processSaveBtn),
                                                             "descriptionTextfield" -> SHtml.text(contentB4ReloadOpt match { case Some(cB4rl) => cB4rl.descriptionTFcontent; case None => constLoc.shortDescription }, processDescriptionTf, "style" -> "width: 99%;"),
-                                                            "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); Text("ERROR PLEASE PROVIDE THIS!") } else { println("   player provided publish description: good good boy."); emptyNode } },
+                                                            "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); <font color="red" ><b>ERROR: PROVIDE</b></font> } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "errorInHtml" -> { errHtml match 
-                                                                              {  case Some(ErrorInHtml(e))  => Text("Error on line " + e.getLineNumber() + ", at character " + e.getColumnNumber() + ": " + e.getMessage())
+                                                                              {  case Some(ErrorInHtml(e))  => <font color="red"><b>{ "COULD NOT PUBLISH:\nError on line " + e.getLineNumber + ", at character " + e.getColumnNumber + ": " + e.getMessage }</b></font>
                                                                                  case None                  => emptyNode
                                                                               }
                                                                              },        

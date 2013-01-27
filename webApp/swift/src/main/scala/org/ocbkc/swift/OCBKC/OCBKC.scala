@@ -115,8 +115,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    def plainContentLastRelease:String =
    {  "not implemented yet"
    }
-/* &y2012.06.23.14:39:56& just use followers.contains(...) directly.
-   def followedByUser(userId:Int):boolean = 
+/* &y2012.06.23.14:39:56& just use followers.contains(...) directly, instead of:
+   def followedByUser/isFollower(userId:Int):boolean = 
    {  followers.contains(userId) 
    }
 */
@@ -224,10 +224,12 @@ getHistory.length, commitIdsReleases.length, isRelease
       {  releaseLatestVersionIfSufficientSampleSize
       }
    }
-
+   /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
+     *
+     */
    def releaseLatestVersionIfSufficientSampleSize =
-   {  // Determine whether sample size on this release is high enough
-      if( ConstiScores.sampleSizeSufficient4FluencyScore(constiId) )
+   {  // Determine whether sample size on the latest release without a fluency score is high enough
+      if( ConstiScores.sampleSizeSufficient4FluencyScore(constiId).get ) 
       {  releaseLatestVersion
          // OFW: TODO &y2013.01.21.18:58:57& setPrevious release as last release with fluency etc. scores.
       }
@@ -310,6 +312,8 @@ getHistory.length, commitIdsReleases.length, isRelease
    def isFirstPublication:Boolean =
    {  getHistory.size == 1
    }
+   
+   
 
    def addFollower(p:Player) = 
    {  if(!followers.contains(p.id.is))
@@ -715,7 +719,7 @@ object ConstiScores
      * @return The fluency score of the last release with a fluency score.
      */
 
-   def averageFluency(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
+   def averageFluencyLatestReleaseWithScore(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
    {  findAndApply( Constitution.getById(constiId).get.commitIdsReleases,
                     {   versionId:VersionId =>
                         {  averageFluency(minimalSampleSize, versionId, k)
@@ -775,10 +779,20 @@ object ConstiScores
    {  //TODO
    }
 
-   def sampleSizeSufficient4FluencyScore(constiId:ConstiId):Boolean =
+   /** Determine whether sample size of latest release is sufficient for scoring
+      * @todo &y2013.01.23.13:59:27& investigate whether this is really optimal in this way. Isn't this function called too often? (I don't think so, but I'm not sure).
+        @return None, if there is no release yet of this constitution
+     */
+   def sampleSizeSufficient4FluencyScore(constiId:ConstiId):Option[Boolean] =
    {  // the sample size is sufficiently large, if the fluency score exists.
-      !( averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, constiId, GlobalConstant.AverageFluency.fluencyConstantK).isEmpty )
-      // <&y2012.12.05.21:04:38& refactor: create averageFluency etc. scoring function which already reads these global constants minimalSampleSize etc.
+      Constitution.getById(constiId) match
+      {  case Some(consti) => 
+            consti.lastReleaseCommitId match
+            {  case Some(lastReleaseCommitId) => Some(averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, lastReleaseCommitId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined)
+               case None => None
+            }
+         case None => None
+      }
    }
 
 /* &y2012.08.15.11:17:14& Elegant way, but perhaps too complicated (= inefficient in execution) for the problem
