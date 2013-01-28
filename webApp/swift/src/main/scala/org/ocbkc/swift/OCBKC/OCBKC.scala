@@ -158,11 +158,12 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       {  case e:SAXParseException => XMLandErr(None, e)
       }
    }
-   /* <? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
+   /** This method only saves the constitution text to a file (no git commit, no mapper framework, no jason)<? &y2012.05.28.16:36:27& what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?> 
    */
 
    def save(constitutionText:String) =
-   {  // <&y2012.06.11.19:53:08& first add lift:children tag to make it a well-formed xml file.>
+   {  // throw new RuntimeException("Constitution.save is not yet implemented: use publish instead")
+      // <&y2012.06.11.19:53:08& first add lift:children tag to make it a well-formed xml file.>
       val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
 
       err.println("  saving file: " + outFile.getAbsolutePath)
@@ -788,7 +789,13 @@ object ConstiScores
       Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
-            {  case Some(lastReleaseCommitId) => Some(averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, lastReleaseCommitId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined)
+            {  case Some(lastReleaseCommitId) => 
+               {  val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, lastReleaseCommitId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
+                  if(isSuf)
+                  {  //TODO sent followers of this consti an update of this fact + link
+                  }
+                  Some(isSuf)
+               }
                case None => None
             }
          case None => None

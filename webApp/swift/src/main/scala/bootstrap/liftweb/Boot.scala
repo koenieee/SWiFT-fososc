@@ -313,7 +313,7 @@ class Boot {
 """, "publication 1", adminId.toString
       )
 
-      PlayingSimulator.start(1000)
+      PlayingSimulator.start
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
    }
@@ -335,6 +335,8 @@ class Boot {
             - then calculate the union of the event-sequences of each player, sorted by event time.
       */
       println("TestSettings.SIMULATEPLAYING set, so test now carried out...")
+      TestSettings.SIMULATECLOCK = true
+
       // >>> Configuration of test
       // TODO: move to GlobalConstants
       val minSessionsPerPlayer = 0
@@ -444,6 +446,7 @@ class Boot {
       simulatedEventsAbsoluteTimes.map(runSimulatedEvent)
 
       // TODO: replace result type with more specific type if possible
+      TestSettings.SIMULATECLOCK = false
    }
 
    // initialise widgets

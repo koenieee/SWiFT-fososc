@@ -27,6 +27,11 @@ case class ErrorInHtml(val saxParseException:SAXParseException) extends Error
 
 case class ContentB4Reload(val constitutionTAcontent:String, val descriptionTFcontent:String, val publishDescriptionTAcontent:String)
 
+/** @todo &y2013.01.27.17:19:24& move to more general lib, and add the other fields (always optional), as soon as needed.
+  *  
+  */
+case class Mail(to: Option[String], subject:String, body:String)
+
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
    val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
@@ -57,8 +62,11 @@ class ConstitutionSnippet
       {  S.redirectTo("history?id=" + const.get.constiId)
       }
 
+/* &y2013.01.27.18:57:58& Still needed? 
+
       def updateConstitutionContent(const:Constitution) =
-      {  var changes:Boolean = false
+      {  println("updateConstitutionContent called")
+         var changes:Boolean = false
          if( const.plainContent.equals( constitutionTAcontent ) ) // <&y2012.06.27.12:59:21& refactor using javascript? So that you can see at the client whether someone has started typing, and thus has made a change. The current solution is computationally far more expensive.> 
          {  println("   No changes in constitution body.")
          }
@@ -76,8 +84,11 @@ class ConstitutionSnippet
          }
          
          if( changes )
-            mailFollowersUpdate(const, MailMessage.update2text(const)) // <&y2012.06.27.12:54:01& check whether something has really changed...>
+         {  mailOtherFollowersUpdate(const, MailMessage.update2text(const))
+         }
       }
+*/
+
 /*  <&y2012.07.29.14:31:05& perhaps for future version allow intermediate changes (not yet published)
       def processSaveBtn() =
       {  println("processSaveBtn called")
@@ -92,8 +103,12 @@ class ConstitutionSnippet
       }
 
 */
-   // call this when const has been updated, and you want to notify all followers.
-   def mailFollowersUpdate(const: Constitution, body:String ) =
+
+   /** Call this when const has been updated, and you want to notify all followers.
+     * All followers are mailed, except for the follower who did the update (that is the one this snippet is serving right now.)
+     */
+
+   def mailOtherFollowersUpdate(const: Constitution, mail:Mail ) =
    {  def sendupdatemail(followerId:Long) =
       {  println("sendupdatemail called")
          val follower = Player.find(followerId.toString) match
@@ -102,20 +117,22 @@ class ConstitutionSnippet
          }
          println("   follower id = " + followerId)
          println("   follower email = " + follower.email.get)
-         Mailer.sendMail(From("cg@xs4all.nl"), Subject("Constitution " + const.constiId + " has been updated..."), To(follower.email.get), new PlainMailBodyType(body))
+         Mailer.sendMail(From("cg@xs4all.nl"), Subject(mail.subject), To(follower.email.get), new PlainMailBodyType(mail.body))
          println("   mail sent!")
       }
 
-      const.followers.map( sendupdatemail )
+      const.followers.filterNot(_ == currentUserId).map( sendupdatemail )
    }
 
       def processGeneralSaveBtn() =
       {  println("processGeneralSaveBtn called")
          if( const.isDefined )
          {  val constLoc = const.get
+            /*
             if( editmode )
             {  updateConstitutionContent(constLoc)
             }
+            */
             S.redirectTo("constitution?id=" + constLoc.constiId + { if( editmode ) "&edit=true" else "" })
          } else // <&y2012.06.23.17:46:32& perhaps refactor, this cannot happen, because there is no save button when there is no constitution.>
          {  S.redirectTo("constitutions")
@@ -160,8 +177,11 @@ class ConstitutionSnippet
             else
             {  // first check for syntactic correctness of html file
                constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
-               {  case constLoc.XMLandErr(Some(xml), _)  => constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
-                  case constLoc.XMLandErr(None, saxParseExeception)  => {  println("   Error in html: " + saxParseExeception.getMessage()); errors = ErrorInHtml(saxParseExeception) :: errors }
+               {  case constLoc.XMLandErr(Some(xml), _)  =>
+                  {  constLoc.publish(constitutionTAcontent, publishDescriptionTAcontent, currentUserId.toString)
+                     mailOtherFollowersUpdate(constLoc, MailMessage.newPublication(constLoc))
+                  }
+                  case constLoc.XMLandErr(None, saxParseExeception)  => { println("   Error in html: " + saxParseExeception.getMessage); errors = ErrorInHtml(saxParseExeception) :: errors }
                }
             }
             S.redirectTo("constitution?id=" + constLoc.constiId + "&edit=true", () => (ErrorRequestVar( errors ), ContentB4ReloadRequestVar(Some(contB4Rel))))
@@ -180,7 +200,7 @@ class ConstitutionSnippet
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.addFollower(sesCoordLR.currentPlayer, constLoc)
-               mailFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
+               mailOtherFollowersUpdate(constLoc, MailMessage.newfollower(constLoc))
             } else if( !checked && constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.removeFollower(sesCoordLR.currentPlayer, constLoc )
                // <&y2012.06.27.14:00:21& send mail to unfollower to confirm.>
@@ -275,26 +295,42 @@ class ConstitutionSnippet
 }
 
 object MailMessage
-{  def update2text(const:Constitution):String =
-"""Constitution """ + const.constiId + """ has been updated. If you want to review the changes please visit this link:
+{  def sentenceOpening(const:Constitution) = "Constitution " + const.constiId
+
+   def newPublication(const:Constitution):Mail =
+Mail(
+None,
+sentenceOpening(const) + " has been edited by someone else...",
+"""Constitution """ + const.constiId + """ has been edited by someone else. If you want to review the changes please visit this link:
 
 """ + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
+)
 
    def newfollower(const:Constitution) =
-"""Constitution """ + const.constiId + """ has a new follower. Visit this link to see all followers:
+Mail(
+None,
+sentenceOpening(const) + " has a new follower!"
+,
+"""Great news... constitution """ + const.constiId + """, a constitution which you already follow, has a new follower. Visit this link to see all followers:
 
 """ + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
+)
 
    def lostfollower(const:Constitution) =
-"""Constitution """ + const.constiId + """ lost a follower. Visit this link to see all followers:
+Mail(
+None,
+sentenceOpening(const) + " lost a follower :-(..."
+,
+sentenceOpening(const) + """ lost a follower. Visit the following link to see all followers:
 
 """ + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
 
 """ + how2unfollow
+)
 
    val how2unfollow = 
 """You are receiving this email because you are a follower of the mentioned constitution of the SWiFT game. If you want to unfollow the constitution, visit the above link.
