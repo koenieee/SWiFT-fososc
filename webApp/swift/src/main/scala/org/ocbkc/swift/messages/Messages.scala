@@ -66,7 +66,7 @@ sentenceOpening(const) + " lost a follower :-(..."
          ,
 sentenceOpening(const) + """ lost a follower. Visit the following link to see all followers:
 
-""" + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
+""" + link2consti(const) + """
 
 """ + how2unfollow
       )
@@ -74,9 +74,8 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
    def newFluencyScore(const:Constitution) =
    {  Mail(
          None,
-         sentenceOpening(const) ++ " received a new fluency score!",
-         sentenceOpening(const) ++ 
-""" received a new fluency score! You are a follower of this constitution, quickly click the following link to compare the score of the constitution to which you may have contributed, with other scores:
+         sentenceOpening(const) + " received a fluency score!",
+         "A released version of " + sentenceOpening(const) + """, a constitution which you follow, received its first or an updated fluency score! You are a follower of this constitution, so quickly click the following link to compare the score of this release, with scores of other constitutions (is it better???), and the previous releases of this constitution (has it improved???):
 
 TODO
 
@@ -84,8 +83,9 @@ TODO
       )
    }
 
-   val how2unfollow =
-"""You are receiving this email because you are a follower of the mentioned constitution of the SWiFT game. If you want to unfollow the constitution, visit the above link.
+   private val how2unfollow =
+"""You are receiving this email because you are a follower of the mentioned constitution of the SWiFT game. If you want to unfollow the constitution, please visit the above link.
 """
+   private def link2consti(const:Constitution) = GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId
 }
 
