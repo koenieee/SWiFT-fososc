@@ -259,6 +259,12 @@ class ConstitutionSnippet
                            "followCheckbox"     -> SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
                            "saveGeneralControlBt"             -> SHtml.button("Save", () => processGeneralSaveBtn),
                            "numberOfFollowers"  -> Text(constLoc.followers.size.toString),
+                           "followerInstructions" ->
+                           {  if( !constLoc.followers.contains(currentUserId) ) 
+                                 emptyNode
+                              else
+                                 Text("TODO: you are a follower, so here some guidelines")
+                           },
                            "edit"          -> {   if( !editmode ) 
                                                          emptyNode
                                                       else
