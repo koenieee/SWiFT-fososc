@@ -17,6 +17,7 @@ import System.err.println
 import org.ocbkc.swift.model._
 import org.eclipse.jgit.revwalk.RevCommit 
 import org.eclipse.jgit.lib.ObjectId
+import org.ocbkc.swift.global.LiftHelpers._
 
 class History
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
@@ -34,6 +35,22 @@ class History
    {  println("historyTableRows called")
       implicit val displayIfNone = "-"
       if( const == null ) println("   bug: const == null")
+
+      // create headers
+      val header = bind(
+            "top", chooseTemplate("top", "row", ns),
+            "view"               -> emptyNode,
+            "restore"            -> emptyNode,
+            "checkbox"           -> emptyNode,
+            "publishDescription" -> <b>Description</b>,
+            "date"               -> <b>Creation date</b>,
+            "isRelease"          -> <b>Release</b>,
+            "author"             -> <b>Author</b>,
+            "fluency"            -> <b>Fluency</b>
+            )
+
+      // create data rows
+      header ++
       const.getHistory.flatMap(
       revcom => 
       {  val playerId = revcom.getAuthorIdent.getName

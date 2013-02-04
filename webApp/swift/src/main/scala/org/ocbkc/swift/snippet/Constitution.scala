@@ -13,7 +13,10 @@ import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.coord.ses._
+import org.ocbkc.swift.general.GUIdisplayHelpers._
+import org.ocbkc.swift.OCBKC.scoring._
 import org.xml.sax.SAXParseException 
 import org.ocbkc.swift.model.Player
 import net.liftweb.util.Mailer
@@ -210,7 +213,6 @@ class ConstitutionSnippet
          }
       }
       /* <? &y2012.06.02.14:38:52& what is an elegant way to progam the following? Problem is that if the pattern turns out to be None, you cannot return anything, or you have to use some ugly work around (tupling etc.) (go back with git to this date to get the right example...> */
-      val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
       var constLoc:Constitution = null // workaround for tuple error, note (object:ClassA, ..) = (null, ...) leads to match error in scala.
       var creator:Player = null
       val (errorRetrievingConstitution:Boolean, errorMsg:String, creatorId:Long, creationDate:Long, title:String) = S.param("id") match
@@ -253,6 +255,7 @@ class ConstitutionSnippet
       } // < &y2012.06.10.17:37:17& I think it is better to do this differently: do not create the constitution as yet, but do this after the first save. Danger of current approach is that if someone's session crashes, the constitution continues to exist.>
      
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+      implicit val displayIfNone = "-"
 
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
@@ -294,6 +297,7 @@ class ConstitutionSnippet
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
                            "title"              -> Text(title),
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
+                           "fluency"            -> { optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, constLoc.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
                      )
       answer

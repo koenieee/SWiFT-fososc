@@ -131,4 +131,8 @@ object TestSettings
 
 }
 
+object LiftHelpers
+{  val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
+
+}
 }
