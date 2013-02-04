@@ -75,6 +75,12 @@ class Boot {
 */
    // part of ...
 
+   /** Only call when you are 100% certain a user is logged in, otherwise this must be considered a bug
+     */
+   def currentPlayer =
+   {  Player.currentUser.get
+   }
+
    // returns also false when no player is logged in.
    // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
    def playerLoggedInAndChoseFirstConstitution:Boolean =
@@ -117,6 +123,8 @@ class Boot {
       r
     }
 
+   def playerIsLoggedInAndPlayed minSessionsPerPlayer
+
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "help" :: Nil, "Help")),
@@ -156,6 +164,8 @@ class Boot {
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+      Menu(Loc("constitution", "constitution" :: Nil, "If you see this, something is wrong: should be hidden", List(Hidden,
+         If( () => ( playerIsLoggedIn && playerHasAccessToAllConstis(currentPlayer) ), () => RedirectResponse("/index")),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
       )
 
@@ -199,7 +209,7 @@ class Boot {
     // Check whether there is already git tracking
     val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
     if( gitfile.exists)
-    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everyfthing is under (version) control, my dear organic friend...")
+    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everything is under (version) control, my dear organic friend...")
     }
     else
     { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")

@@ -502,6 +502,23 @@ class ConstitutionStudyHistory(val consti:Constitution)
 // TODO implement for next increment
 case class TimeInterval(val startTime:Long, val endTime:Long)
 
+object OCBKCinfoPlayer
+{
+   /** @todo coulddo: optimise by caching/memoization/incremental update of cached value?
+     @ @todo move to gamecore library, because this is not a OCBKC specific method.
+     */
+   def numberOfSessionsPlayedBy(p:Player) =
+   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
+      ccs.size
+   }
+   
+   /**
+     */
+   def playerHasAccessToAllConstis(p:Player) =
+   {  numberOfSessionsPlayedBy(p) >= OneToStartWith.minSessionsB4access2allConstis
+   }
+}
+
 package scoring
 {
 
@@ -570,8 +587,8 @@ object PlayerScores
    {  
    }
    */
-}
 
+}
 /* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
 */
 
@@ -601,7 +618,7 @@ object ConstiScores
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] =
    {  println("averagePercentageCorrect called")
-      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
       val playersWithThisRelease:List[Player] = players.filter(
@@ -613,7 +630,7 @@ object ConstiScores
       val percentages:List[Double] =
       playersWithThisRelease.map(
          player => 
-         {  val res = PlayerScores.percentageCorrect(player, OneToStartWith.minSesionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
+         {  val res = PlayerScores.percentageCorrect(player, OneToStartWith.minSessionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
             if( res.totalNumberOfSessions >= minimalNumberOfSessionsPerPlayer )
             {  res.percentageCorrect // note: will also be None when the player didn't play any sessions yet
             }
@@ -822,6 +839,6 @@ abstract class ScorePerSession // TODO extends ( TODOin => TODOout )
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
 case object OneToStartWith extends ConstiSelectionProcedure
-{  val minSesionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
+{  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
 }
 }
