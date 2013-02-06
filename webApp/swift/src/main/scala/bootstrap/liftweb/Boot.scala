@@ -192,7 +192,7 @@ class Boot {
             new Link("fluencyGameSes" :: Nil, true),
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
-               If( () => ( playerIsLoggedIn && !playerIsAdmin ), () => RedirectResponse("/index"))
+               If( () => ( playerIsLoggedIn && !playerIsAdmin(currentPlayer) ), () => RedirectResponse("/index"))
             )
          )
       )
