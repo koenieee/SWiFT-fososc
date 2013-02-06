@@ -172,7 +172,7 @@ class Boot {
             "constitution" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
-               If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || playerIsAdmin )) , () => RedirectResponse("/index"))
+               If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || playerIsAdmin(currentPlayer) )) , () => RedirectResponse("/index"))
             )
          )
       ),
