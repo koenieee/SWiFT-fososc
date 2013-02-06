@@ -13,6 +13,8 @@ import System._
 import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.OCBKCinfoPlayer._
+
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
@@ -123,7 +125,7 @@ class Boot {
       r
     }
 
-   def playerIsLoggedInAndPlayed minSessionsPerPlayer
+   //def playerIsLoggedInAndPlayed minSessionsPerPlayer
 
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
@@ -137,7 +139,7 @@ class Boot {
                playerIsAdmin(player) ||
                   {  player.constiSelectionProcedure match
                      {  case OneToStartWith =>
-                        {  playedSessions >= OneToStartWith.minSesionsB4access2allConstis
+                        {  playedSessions >= OneToStartWith.minSessionsB4access2allConstis
                         }
                         case NoProc => true
                         case proc   =>
@@ -155,7 +157,7 @@ class Boot {
          () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
          If(() => {  val r = ( playerLoggedInAndChoseFirstConstitution &&
-                        ( playedSessions < OneToStartWith.minSesionsB4access2allConstis ) )
+                        ( playedSessions < OneToStartWith.minSessionsB4access2allConstis ) )
                      println(" Loc(Study Constitution) access = " + r)
                      r 
                   },
@@ -164,10 +166,39 @@ class Boot {
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
-      Menu(Loc("constitution", "constitution" :: Nil, "If you see this, something is wrong: should be hidden", List(Hidden,
-         If( () => ( playerIsLoggedIn && playerHasAccessToAllConstis(currentPlayer) ), () => RedirectResponse("/index")),
-      Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
+      Menu(
+         Loc(
+            "constitution",
+            "constitution" :: Nil,
+            "If you see this, something is wrong: should be hidden",
+            List( Hidden,
+               If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || playerIsAdmin )) , () => RedirectResponse("/index"))
+            )
+         )
+      ),
+      Menu(
+         Loc(
+            "history",
+            "history" :: Nil,
+            "If you see this, something is wrong: should be hidden",
+            List( Hidden,
+               If( () => ( playerIsLoggedIn && playerHasAccessToAllConstis(currentPlayer) ), () => RedirectResponse("/index"))
+            )
+         )
+      ),
+      Menu(
+         Loc(
+            "fluencyGameSes",
+            new Link("fluencyGameSes" :: Nil, true),
+            "If you see this, something is wrong: should be hidden",
+            List( Hidden,
+               If( () => ( playerIsLoggedIn && !playerIsAdmin ), () => RedirectResponse("/index"))
+            )
+         )
       )
+   ,
+      Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
+    )
 
     LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
 
@@ -229,13 +260,13 @@ class Boot {
       {  case OneToStartWith  =>
             if( player.firstChosenConstitution.is == -1 )
             {  println("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
-               S.redirectTo("selectConstitution")
+               S.redirectTo("fluencyGameSes/selectConstitution")
             }
             else
             {  println("   player has already selected a constitution in the past, so redirect to play the session!")
-               S.redirectTo("startSession")
+               S.redirectTo("fluencyGameSes/startSession")
             }
-         case NoProc          => S.redirectTo("startSession")
+         case NoProc          => S.redirectTo("fluencyGameSes/startSession")
          case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; println("  " + msg); throw new RuntimeException(msg) }
       }
    }

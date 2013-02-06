@@ -87,7 +87,7 @@ trait CoreTrait
    }
 
    def numOfSessionsAfterConstiAccess =
-   {  sesHis.totalNumber - OneToStartWith.minSesionsB4access2allConstis
+   {  sesHis.totalNumber - OneToStartWith.minSessionsB4access2allConstis
    }
 
    def accessToConstiGame:Boolean =

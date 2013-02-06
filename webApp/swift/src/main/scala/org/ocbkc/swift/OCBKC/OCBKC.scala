@@ -677,7 +677,7 @@ object ConstiScores
    */
    def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
    {  println("ConstiScores.averageDurationTranslation called")
-      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+      if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
       val playersWithThisRelease:List[Player] = players.filter(
@@ -689,7 +689,7 @@ object ConstiScores
       val averageDurationTranslationPerPlayer:List[Double] =
       playersWithThisRelease.map(
          player => 
-         {  val res = PlayerScores.averageDurationTranslation(player, OneToStartWith.minSesionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
+         {  val res = PlayerScores.averageDurationTranslation(player, OneToStartWith.minSessionsB4access2allConstis) // TODO only count sessions < minSesionsB4access2allConstis
             if( res.sampleSize >= minimalNumberOfSessionsPerPlayer ) // COULDDO perhaps rename minimalNumberOfSessionsPerPlayer also to minimalSampleSize
             {  res.averageDurationTranslation // note: will also be None when the player didn't play any sessions yet
             }

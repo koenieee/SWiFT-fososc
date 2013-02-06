@@ -30,7 +30,7 @@ class SelectConstitution
                               { case Some(constLoc)   => {  println("   Found constitution with this id" )
                                                             sesCoordLR.URchooseFirstConstitution(constLoc.constiId)
                                                             println("   now redirecting player to studyConstitution")
-                                                            S.redirectTo("studyConstitution")
+                                                            S.redirectTo("/studyConstitution")
                                                          }
                                 case None             => { S.redirectTo("notfound") }
                               }
