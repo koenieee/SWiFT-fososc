@@ -83,6 +83,12 @@ trait CoreTrait
       sesHis.coreContents ::= cc      
       cc.serialize // serialize the JSON part
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+
+      // send update mail to followers that the score for a release of this constitution is updated
+      if(accessToConstiGame)
+      {  
+      }
+      
       res
    }
 
