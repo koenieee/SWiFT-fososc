@@ -300,11 +300,11 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       if(ccount < 1) throw new RuntimeException("No constitutions created yet")
       val randomConstiId = 1 + SharedRandom.get.nextInt(ccount)
       val consti = Constitution.getById(randomConstiId).get
-      consti.publish(
+      sesCoord.URpublishConsti(consti,
 """<h2>Article 1</h2>
 
 <p>""" + SharedRandom.get.nextString(20) + """</p>
-""", "publication COULDO", playerId.toString
+""", "publication COULDO"
       )
    }
 
