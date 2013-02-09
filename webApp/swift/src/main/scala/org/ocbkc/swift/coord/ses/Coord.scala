@@ -17,8 +17,12 @@ import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import net.liftweb.json._
 import java.io._
+
+import org.ocbkc.swift.messages._
+import org.ocbkc.swift.messages.MailMessage._
 import net.liftweb.util.Mailer
 import net.liftweb.util.Mailer._
+
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.model._
 import _root_.net.liftweb.mapper.By
@@ -31,6 +35,10 @@ import org.ocbkc.swift.parser._
 - Names of classes correspond with design $JN/...
 - CTL = Computationally Transparent Language
 - NL  = Natural Language
+
+Part of the model-view-controller pattern:
+- UR = User Request (so coming from the view)
+- MU = Model Update (so relevant update coming from the model)
 */
 package ses
 {
@@ -45,6 +53,7 @@ trait CoreTrait
    val gameCore: TraitGameCore = new NotUna(currentPlayer.id.get)
 
    def currentPlayer:Player
+   val currentPlayerId = currentPlayer.id.get
 
    /** @param constiId Must be constiId of a constitution with at least one version released
      */
@@ -70,7 +79,6 @@ trait CoreTrait
       Unit
    }
 
-
    def URalgorithmicDefenceStage1:FolnuminquaQuery =
    {  gameCore.algorithmicDefenceGenerator
    }
@@ -92,6 +100,19 @@ trait CoreTrait
 
    def accessToConstiGame:Boolean =
    {  numOfSessionsAfterConstiAccess >= 0
+   }
+
+   def MUnewFluencyScore(consti:Constitution) =
+   {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
+   }
+
+   def URpublishConsti(consti:Constitution, text:String, description:String) =
+   {  val sufficientForNextRelease = consti.publish(text, description, currentPlayerId.toString)
+      mailOtherFollowersUpdate(consti, MailMessage.newPublication(consti), currentPlayer)
+
+      if( sufficientForNextRelease )
+      {  MUnewFluencyScore(consti)
+      }
    }
 }
 
@@ -216,11 +237,14 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
       c.removeFollower(p)
    }
 
-
-
    object Test
    {  var initConstitutions:Boolean = true
    }
+/*
+   override def MUnewFluencyScore(consti:Constitution) =
+   {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
+   }
+*/
 }
 
 // simulation of Core for testing purposes
@@ -241,6 +265,11 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
       sesHis.coreContents ::= cc
    }
+/*
+   override def MUnewFluencyScore(consti:Constitution) =
+   { // do nothing
+   }
+*/
 }
 
 

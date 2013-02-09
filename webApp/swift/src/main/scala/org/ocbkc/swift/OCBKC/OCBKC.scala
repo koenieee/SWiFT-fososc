@@ -28,7 +28,6 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.test.SystemWithTesting
 
-
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
 
@@ -64,7 +63,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         var averageScore:Int, // redundant, for efficiency
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
-                        var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc.
+                        var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
                        )// extends LongKeyedMapper[Constitution] with IdPK
 {  import scoring._
 
@@ -114,6 +113,10 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
 
    def plainContentLastRelease:String =
    {  "not implemented yet"
+   }
+
+   def followersAsPlayerObjs =
+   {  followers.map{ Player.find(_).open_! }
    }
 /* &y2012.06.23.14:39:56& just use followers.contains(...) directly, instead of:
    def followedByUser/isFollower(userId:Int):boolean = 
@@ -179,7 +182,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    }
 
    // Adds and commits constitutionText using jgit
-   def publish(constitutionText:String, commitMsg:String, userId:String) =
+   def publish(constitutionText:String, commitMsg:String, userId:String):Boolean =
    {  println("Constitution.publish called")
       save(constitutionText)
 
@@ -219,11 +222,16 @@ getHistory.length, commitIdsReleases.length, isRelease
 */
       println("   getHistory.length = " + getHistory.length)
       println("   commitIdsReleases.length = " + commitIdsReleases.length)
+
+      var newScoreIsAvailable = false
+
       if( isFirstPublication )
-      { releaseLatestVersion
+      {  releaseLatestVersion
       } else
-      {  releaseLatestVersionIfSufficientSampleSize
+      {  releaseLatestVersionIfSufficientSampleSize; newScoreIsAvailable = true
       }
+
+      newScoreIsAvailable
    }
    /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
      *
@@ -595,10 +603,7 @@ object PlayerScores
 object ConstiScores
 /* <&y2012.10.06.19:40:31& add some confidence measure to this, for example average sample size>
 */
-{
-
-// <&y2012.10.07.02:25:10& TODO: add minPlayers:Int to parameters>
-/**
+{/**
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
@@ -808,9 +813,6 @@ object ConstiScores
             consti.lastReleaseCommitId match
             {  case Some(lastReleaseCommitId) => 
                {  val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, lastReleaseCommitId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
-                  if(isSuf)
-                  {  //TODO sent followers of this consti an update of this fact + link
-                  }
                   Some(isSuf)
                }
                case None => None
