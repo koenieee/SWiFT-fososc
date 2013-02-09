@@ -93,9 +93,12 @@ trait CoreTrait
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
 
       // send update mail to followers that the score for a release of this constitution is updated
-      if(accessToConstiGame)
-      {  
+      val releaseOfFirstChosenConstitution = currentPlayer.releaseOfFirstChosenConstitution.get
+      if(accessToConstiGame && ConstiScores.sampleSizeSufficient4FluencyScore(releaseOfFirstChosenConstitution)) // note: after accessToConstiGame, the players new sessions are disregarded for calculating the score of the consti release he learned playing the game with, and before it, are all sessions disregarged.
+      {  mailAllFollowersUpdate(consti, newFluencyScore(consti, releaseOfFirstChosenConstitution))
       }
+
+      // TODO releaseLatestVersion if available
       
       res
    }
@@ -108,7 +111,7 @@ trait CoreTrait
    {  numOfSessionsAfterConstiAccess >= 0
    }
 
-   def MUnewFluencyScore(consti:Constitution) =
+   def MUnewFluencyScore(consti:Constitutio n) =
    {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
    }
 

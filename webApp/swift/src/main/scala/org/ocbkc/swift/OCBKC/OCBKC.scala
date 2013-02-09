@@ -802,6 +802,12 @@ object ConstiScores
    {  //TODO
    }
 
+   def sampleSizeSufficient4FluencyScore(releaseId:String):Boolean =
+   {  // the sample size is sufficiently large, if the fluency score exists.
+      val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, releaseId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
+      isSuf
+   }
+
    /** Determine whether sample size of latest release is sufficient for scoring
       * @todo &y2013.01.23.13:59:27& investigate whether this is really optimal in this way. Isn't this function called too often? (I don't think so, but I'm not sure).
         @return None, if there is no release yet of this constitution
@@ -811,9 +817,8 @@ object ConstiScores
       Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
-            {  case Some(lastReleaseCommitId) => 
-               {  val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, lastReleaseCommitId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
-                  Some(isSuf)
+            {  case Some(lastReleaseCommitId) =>
+               {  Some(sampleSizeSufficient4FluencyScore(lastReleaseCommitId))
                }
                case None => None
             }
