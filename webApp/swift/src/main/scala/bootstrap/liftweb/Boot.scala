@@ -280,7 +280,7 @@ class Boot {
    println("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
    val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  println("   Admin account already exists, my beloved friend.")
-                              GlobalConstant.admin = Some(player)
+                              GlobalConstant.adminOpt = Some(player)
                               player 
                            } // do nothing, player exists.
       case _            => {  println("   Doesn't exist: creating it...")
@@ -291,7 +291,7 @@ class Boot {
 
    }
 
-   GlobalConstant.admin = Some(admin)
+   GlobalConstant.adminOpt = Some(admin)
 
 
    // TODO: before doing this, erase all persistency information, but not without a warning to the developer
@@ -345,7 +345,7 @@ class Boot {
      
    if(TestSettings.SIMULATEPLAYINGWITHJARA)
    {  TestSettings.SIMULATECLOCK = true
-      val adminId = GlobalConstant.admin.get.id.is
+      val adminId = GlobalConstant.adminOpt.get.id.is
       val constiAlpha = Constitution.create(adminId)
       constiAlpha.publish(
 """<h2>Article 1</h2>

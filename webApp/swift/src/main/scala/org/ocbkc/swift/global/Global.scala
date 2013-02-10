@@ -29,19 +29,10 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
-   var admin:Option[Player] = None
+   var adminOpt:Option[Player] = None
    def adminGitUserId = {  println("retrieving adminGitUserId...")
-                           admin match
-                           {  case Some(admin) =>
-                              {  println("successful")
-                                 Some(gitUserId(admin))
-                              }
-                              case _ =>
-                              {  println("  there is no lift-admin account")
-                                 None
-                              }
-                           } // MUSTDO: admin.flatMap{ gitUserId(_) } // perhaps also better put in org.ocbkc.swift.jgit.Translations._ ?
-                        }
+                           adminOpt.collect{ case admin => Some(gitUserId(admin)) }
+                        }.get // convention is that this method may only be called when an admin account exists, so .get is possible
 
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.

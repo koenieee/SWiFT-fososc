@@ -2,6 +2,7 @@ package org.ocbkc.swift.messages
 
 import org.ocbkc.swift.model.Player
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import net.liftweb.util.Mailer
 import net.liftweb.util.Mailer._
 import _root_.net.liftweb.util._
@@ -71,11 +72,11 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
 """ + how2unfollow
       )
 
-   def newFluencyScore(const:Constitution) =
+   def newFluencyScore(const:Constitution, releaseId:VersionId) =
    {  Mail(
          None,
          sentenceOpening(const) + " received a fluency score!",
-         "A released version of " + sentenceOpening(const) + """, a constitution which you follow, received its first or an updated fluency score! You are a follower of this constitution, so quickly click the following link to compare the score of this release, with scores of other constitutions (is it better???), and the previous releases of this constitution (has it improved???):
+         "Release " + releaseId + " of " + sentenceOpening(const) + """, a constitution which you follow, received its first or an updated fluency score! You are a follower of this constitution, so quickly click the following link to compare the score of this release, with scores of other constitutions (is it better???), and the previous releases of this constitution (has it improved???):
 
 TODO
 

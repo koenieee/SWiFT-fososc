@@ -180,7 +180,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  // TODO
       "not implemented yet"
    }
-
+   
    // Adds and commits constitutionText using jgit
    def publish(constitutionText:String, commitMsg:String, userId:String):Boolean =
    {  println("Constitution.publish called")
@@ -529,6 +529,7 @@ object OCBKCinfoPlayer
 
 package scoring
 {
+import GlobalConstant.AverageFluency
 
 object PlayerScores
 {  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
@@ -738,14 +739,22 @@ object ConstiScores
       }
    }
 
+   /* <&y2013.02.10.17:22:46& mustdo OPTIMISE by memoizatoin/caching>
+   */
+   def latestReleaseWithFluencyScore(constiId:ConstiId):Option[VersionId] = 
+   {  averageFluencyLatestReleaseWithScore(AverageFluency.minimalSampleSizePerPlayer, constiId, AverageFluency.fluencyConstantK).collect{ case v_f:(VersionId,Double) => v_f._1 }
+   }
+
    /** @param constiId an id of an existing constitution. If it doesn't exist, this is considered a bug, and, moreover, an exception is thrown!
-     * @return The fluency score of the last release with a fluency score.
+     * @return The fluency score of the latest release with a fluency score.
+     * @todo &y2013.02.10.17:24:46& optimise (also see latestReleaseWithScore), suggestion: merge these two methods: the core being this method, the other calling this method, and retrieving a cached value.
+     * @todo &y2013.02.10.18:51:54& get minimalSampleSize and k from global
      */
 
-   def averageFluencyLatestReleaseWithScore(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[Double] =
+   def averageFluencyLatestReleaseWithScore(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[(VersionId,Double)] =
    {  findAndApply( Constitution.getById(constiId).get.commitIdsReleases,
                     {   versionId:VersionId =>
-                        {  averageFluency(minimalSampleSize, versionId, k)
+                        {  averageFluency(minimalSampleSize, versionId, k).collect{ case f => (versionId, f) }
                         }
                     }
       )

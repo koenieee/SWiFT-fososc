@@ -94,9 +94,9 @@ trait CoreTrait
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
 
       // send update mail to followers that the score for a release of this constitution is updated
-      val fCC = currentPlayer.firstChosenConstitution
+      val fCC = Constitution.getById(currentPlayer.firstChosenConstitution.get).get
       val rOFCC = currentPlayer.releaseOfFirstChosenConstitution.get
-      if(accessToConstiGame && ConstiScores.sampleSizeSufficient4FluencyScore(releaseOfFirstChosenConstitution)) // note: after accessToConstiGame, the players new sessions are disregarded for calculating the score of the consti release he learned playing the game with, and before it, are all sessions disregarged.
+      if(accessToConstiGame && ConstiScores.sampleSizeSufficient4FluencyScore(rOFCC)) // note: after accessToConstiGame, the players new sessions are disregarded for calculating the score of the consti release he learned playing the game with, and before it, are all sessions disregarged.
       {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
       }
 
@@ -118,12 +118,17 @@ trait CoreTrait
    }
 
    def URpublishConsti(consti:Constitution, text:String, description:String) =
-   {  val sufficientForNextRelease = consti.publish(text, description, currentPlayerId.toString)
-      mailOtherFollowersUpdate(consti, MailMessage.newPublication(consti), currentPlayer)
+   {  mailOtherFollowersUpdate(consti, MailMessage.newPublication(consti), currentPlayer)
 
+      // in case no new versions occurred after the latest release, this publication may immediately become the next release.
+      // {
+      // <&y2013.02.10.17:13:40& COULDO optimisation here: the check is only necessary if the previous version (version prior to this publication) is a release.>
+      val sufficientForNextRelease = consti.publish(text, description, currentPlayerId.toString)
+     
       if( sufficientForNextRelease )
-      {  MUnewFluencyScore(consti, consti.commitIdsReleases(1)) // must be the one before last release which now has a score
+      {  MUnewFluencyScore(consti, ConstiScores.latestReleaseWithFluencyScore(consti.constiId).get) // must be the one before last release which now has a score
       }
+      // }
    }
 }
 
