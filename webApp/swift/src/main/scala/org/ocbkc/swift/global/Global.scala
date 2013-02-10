@@ -122,7 +122,7 @@ object TestSettings
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val SIMULATEPLAYINGWITHJARA         = true // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
-   var SIMULATEPLAYINGWITHJARARUNNING = true // simulation process is currently running
+   var SIMULATEPLAYINGWITHJARARUNNING = false // simulation process is currently running
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
