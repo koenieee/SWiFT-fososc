@@ -44,7 +44,7 @@ class History
             "checkbox"           -> emptyNode,
             "publishDescription" -> <b>Description</b>,
             "date"               -> <b>Creation date</b>,
-            "isRelease"          -> <b>Release</b>,
+            "release"          -> <b>Release</b>,
             "author"             -> <b>Author</b>,
             "fluency"            -> <b>Fluency</b>
             )
@@ -63,10 +63,10 @@ class History
             "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
             "publishDescription" -> Text(revcom.getFullMessage),
             "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
-            "isRelease"          -> {  println("   isRelease?")
+            "release"          -> {    println("   release?")
                                        println("   const.commitIdsReleases: " + const.commitIdsReleases)
                                        println("   searching revcom.name = " + revcom.name)
-                                       if(isRelease) Text("R") else Text("~R")
+                                       if(isRelease) Text("R" + const.releaseIndex(revcom.name)) else Text("-")
                                     },
             "author"             -> Text
                                     (  Player.find(playerId) match
