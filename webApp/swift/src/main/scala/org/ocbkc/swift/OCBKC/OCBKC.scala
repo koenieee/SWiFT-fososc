@@ -71,6 +71,12 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
+   /** first release has number 1
+     */
+   def releaseIndex(releaseId:VersionId) = 
+   {  commitIdsReleases.size - commitIdsReleases.indexOf(releaseId)
+   }
+
    // <&y2012.12.07.20:25:56& MUSTDO optimization necessary (function memoization)? In this way it is probably very costly...>
    def latestCommitId:Option[RevCommit] =
    {  val h = getHistory
@@ -228,20 +234,22 @@ getHistory.length, commitIdsReleases.length, isRelease
       if( isFirstPublication )
       {  releaseLatestVersion
       } else
-      {  releaseLatestVersionIfSufficientSampleSize; newScoreIsAvailable = true
+      {  if( latestReleaseHasSufficientSampleSize )
+         {  releaseLatestVersion
+            newScoreIsAvailable = true
+         }
       }
 
       newScoreIsAvailable
    }
+
+
    /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
      *
      */
-   def releaseLatestVersionIfSufficientSampleSize =
+   def latestReleaseHasSufficientSampleSize:Boolean =
    {  // Determine whether sample size on the latest release without a fluency score is high enough
-      if( ConstiScores.sampleSizeSufficient4FluencyScore(constiId).get ) 
-      {  releaseLatestVersion
-         // OFW: TODO &y2013.01.21.18:58:57& setPrevious release as last release with fluency etc. scores.
-      }
+      ConstiScores.sampleSizeSufficient4FluencyScore(constiId).get
    }
 
    /** @todo perhaps rename to: releaseLatestVersion

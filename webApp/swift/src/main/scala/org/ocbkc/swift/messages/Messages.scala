@@ -76,9 +76,9 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
    {  Mail(
          None,
          sentenceOpening(const) + " received a fluency score!",
-         "Release " + releaseId + " of " + sentenceOpening(const) + """, a constitution which you follow, received its first or an updated fluency score! You are a follower of this constitution, so quickly click the following link to compare the score of this release, with scores of other constitutions (is it better???), and the previous releases of this constitution (has it improved???):
+         "Release " + const.releaseIndex(releaseId) + " of " + sentenceOpening(const) + """, a constitution which you follow, received its first or an updated fluency score! You are a follower of this constitution, so quickly click the following link to compare the score of this release, with scores of other constitutions (is it better?), and the previous releases of this constitution (has it improved?):
 
-TODO
+""" + link2consti(const) + """
 
 """ + how2unfollow // TODO &y2013.01.28.18:56:53& also include score numbers here.
       )

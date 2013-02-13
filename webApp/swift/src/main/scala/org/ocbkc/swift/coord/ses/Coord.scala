@@ -126,7 +126,7 @@ trait CoreTrait
       val sufficientForNextRelease = consti.publish(text, description, currentPlayerId.toString)
      
       if( sufficientForNextRelease )
-      {  MUnewFluencyScore(consti, ConstiScores.latestReleaseWithFluencyScore(consti.constiId).get) // must be the one before last release which now has a score
+      {  MUnewFluencyScore(consti, ConstiScores.latestReleaseWithFluencyScore(consti.constiId).get)
       }
       // }
    }

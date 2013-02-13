@@ -8,11 +8,12 @@ package org.ocbkc.swift.test
 {  
    // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
-{  println("constructor SystemWithTesting called")
+{  import TestHelpers._
+   println("constructor SystemWithTesting called")
    val startTimeMillis_simu:POSIXtime = System.currentTimeMillis
    private var currentTimeMillisVar_simu:POSIXtime = startTimeMillis_simu // take the current time as the start time of the simulated clock
    //private var lastTimeMillis_simu:POSIXtime = currentTimeMillisVar_simu
-   println("   startTimeMillis_simu = " + startTimeMillis_simu)
+   println("   startTimeMillis_simu = " + startTimeMillis_simu + "( = " + durationFromMillisToHumanReadable(startTimeMillis_simu) + ")")
    val msgSimulateClockOff = "The simulated clock is turned off, so it makes no sense to call this method."
 
    def currentTimeMillis:POSIXtime =
@@ -36,7 +37,8 @@ object SystemWithTesting
    def currentTimeMillis_= (newTime:POSIXtime):Unit =
    {  println("SystemWithTesting.currentTimeMillis_= called")
       println("   param newTime = " + newTime)
-      println("   so clock jumps " + ( newTime - currentTimeMillisVar_simu ) + " to the future" )
+      val jump = newTime - currentTimeMillisVar_simu
+      println("   so clock jumps " + durationFromMillisToHumanReadable(jump) + " ( = " + jump + " ms) to the future" )
       if(newTime < currentTimeMillisVar_simu )
       {  throw new RuntimeException("   proposed newTime (" + newTime + ") is smaller than of last position of clock (" + currentTimeMillisVar_simu + "), however, clock may only move forward, or stay in the same place.")
       }
