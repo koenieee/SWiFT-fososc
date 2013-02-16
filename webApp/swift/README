@@ -6,14 +6,16 @@
 
 It simulates actual usage of the SWiFT by virtual users, who are performing actions at randomized intervals. The simulation runs during the startup of SWiFT in "simulated" time. For example: a week may be simulated in a few seconds. After the startup, you find yourself with SWiFT in a state of having been run for week in the example just given.
 
+Instruction to use it:
+
 - first clean all persistency data, by going to the root directory (see 1), and then run
 ./cleanAllPersistencyInfo
 (bash script, so unix based)
-- then switch on the Jara simulation, by opening Global.scala by checking whether the following line exists
+- then switch on the Jara simulation, by opening Global.scala and checking whether the following line exists
 
-val SIMULATEPLAYINGWITHJARA = true
+   val SIMULATEPLAYINGWITHJARA = true
 
-if not, make the necessary changes.
+  if not, make the necessary changes.
 
 - Run swift
 - If you want to use the data produced during this simulation after a restart, change the SIMULATEPLAYINGWITHJARA back to false. This is recommended, if you are in the cyclic process of testing/coding SWiFT, because simulating over and over again is very time consuming.
