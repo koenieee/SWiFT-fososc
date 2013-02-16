@@ -17,6 +17,8 @@ import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.scoring._
+import org.ocbkc.swift.OCBKC.ConstitutionTypes._
+
 import org.xml.sax.SAXParseException 
 import org.ocbkc.swift.model.Player
 
@@ -240,6 +242,12 @@ class ConstitutionSnippet
      
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       implicit val displayIfNone = "-"
+      val fluencyScoreOpt = ConstiScores.averageFluencyLatestReleaseWithScore(
+                              GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, 
+                              constLoc.constiId,
+                              GlobalConstant.AverageFluency.fluencyConstantK
+                           )
+      val latestReleaseIdOpt = fluencyScoreOpt.collect{ case (id,_) => id }
 
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
@@ -281,7 +289,10 @@ class ConstitutionSnippet
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
                            "title"              -> Text(title),
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
-                           "fluency"            -> { optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, constLoc.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) },
+                           "latestRelease"      -> { Text(optionToUI( latestReleaseIdOpt.collect{ case lr:VersionId => "R" + constLoc.releaseIndex(lr) } ) )
+                                                   },
+                           "fluency"            -> { Text(optionToUI(fluencyScoreOpt.collect{ case (_, fs) => fs } ))
+                                                   },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
                      )
       answer
