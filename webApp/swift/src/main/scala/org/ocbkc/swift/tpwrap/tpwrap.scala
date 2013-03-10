@@ -4,6 +4,7 @@ This is intended to be used by hvpl.compile only, thus use the latter package if
 */
 package org.ocbkc.swift.tpwrap
 {
+import org.ocbkc.swift.global.GlobalConstant._
 import System._
 import scala.sys.process._
 import java.io._
@@ -50,7 +51,7 @@ Conventions:
 */
 
 object Eprover
-{  val eproverpath = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/reas/e-1.4-full/x86_64-linux"
+{  val eproverpath = EPROVER_PATH
 
    def apply(params:String):EproverCliOutput =
    {  val cmd  = eproverpath + "/eprover " + params
@@ -101,7 +102,7 @@ object Eprover
 }
 
 object Paradox
-{  val paradoxpath = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/reas/Paradox---4.0"
+{  val paradoxpath = PARADOX_PATH
 
    def apply(params:String):ParadoxCliOutput =
    {  val cmd  = paradoxpath + "/paradox " + params

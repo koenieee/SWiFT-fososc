@@ -39,6 +39,7 @@
       <id>jgit-repository</id>
       <url>http://download.eclipse.org/jgit/maven</url>
     </repository>
+
   </repositories>
 
   <pluginRepositories>
@@ -227,6 +228,39 @@
           </classpathContainers>
         </configuration>
       </plugin>
+      <plugin>
+	   <groupId>org.apache.maven.plugins</groupId>
+	   <artifactId>maven-dependency-plugin</artifactId>
+	 <version>2.5.1</version>
+				<configuration>
+				  <artifactItems>
+					  <artifactItem>
+						  <groupId>org.eprover</groupId>
+						  <artifactId>eprover</artifactId>
+						  <version>1.6</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/eprover</outputDirectory>
+					  </artifactItem>
+					   <artifactItem>
+						  <groupId>org.paradox</groupId>
+						  <artifactId>paradox</artifactId>
+						  <version>4.0</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
+					  </artifactItem>
+					  <artifactItem>
+						  <groupId>org.ocbkc.swift</groupId>
+						  <artifactId>binaries_swift</artifactId>
+						  <version>0.0.1</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/swift</outputDirectory>
+					  </artifactItem>
+				  </artifactItems>
+		  </configuration>
+		 </plugin>
     </plugins>
   </build>
   <reporting>
