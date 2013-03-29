@@ -1,0 +1,24 @@
+<lift:surround with="default" at="content">
+
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+
+<lift:AdminPage.settings form="POST">
+
+<h1>Admin Page</h1>
+
+<hr />
+<h2>Run Jara simulation</h2>
+Current Jara simulation setting: <entry:JaraSetting /> 
+<br /><br />
+<hr />
+<entry:changeDur />
+
+<hr />
+
+
+</lift:AdminPage.settings>
+
+</lift:surround>
