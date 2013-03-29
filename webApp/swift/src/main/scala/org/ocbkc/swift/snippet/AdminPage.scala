@@ -57,7 +57,7 @@ class AdminPage
 		//TODO: input validation
 
 		val lines = scala.io.Source.fromFile(path + "/src/main/scala/org/ocbkc/swift/test/JaraForSWiFT.scala").getLines()
-		val lol = lines.map(in => if (in startsWith("      val durationSimulation = 3*24*60*60*1000")) "      val durationSimulation = " + n_blaat else in)
+		val lol = lines.map(in => if (in startsWith("      val durationSimulation = " + blaat)) "      val durationSimulation = " + n_blaat else in)
 		//TODO: Write to same file, while lift is running. 
 		printToFile(new File(path + "/src/main/scala/org/ocbkc/swift/test/JaraForSWiFT2.scala"))(p => {
 		  lol.foreach(p.println)
