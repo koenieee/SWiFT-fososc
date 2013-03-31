@@ -122,7 +122,7 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       val ran:Int = currentTimeMillis().toInt
       // <&y2011.11.23.21:08:25& check whether scala Ints indeed fit in Clean ints>
       err.println("generateNewSessionBundle: use as random number = " + ran)
-      sbClean = ( ( "../../textgenerator " + ran ) !!)
+      sbClean = ( ( WEBAPROOT + "/textgenerator " + ran ) !!)
       
       cc.textNL = extractNl(sbClean)
       cc.textCTLbyComputer = extractCTL(sbClean)

@@ -18,6 +18,7 @@ import org.ocbkc.swift.model._
 import org.eclipse.jgit.revwalk.RevCommit 
 import org.eclipse.jgit.lib.ObjectId
 import org.ocbkc.swift.global.LiftHelpers._
+import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
 class History
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
@@ -32,7 +33,10 @@ class History
    }
 
    def historyTableRows(ns:NodeSeq):NodeSeq =
-   {  println("historyTableRows called")
+      { 
+		   println("historyTableRows called")
+		TableSorter("#myTable");
+      
       implicit val displayIfNone = "-"
       if( const == null ) println("   bug: const == null")
 
@@ -111,6 +115,7 @@ class History
             "diffBt"       -> SHtml.button("Show difference", processDiffButton),
             "history"      -> historyTableRows(ns) 
           )
+          
    }
 }
 
