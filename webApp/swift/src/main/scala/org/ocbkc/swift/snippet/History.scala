@@ -22,7 +22,7 @@ import org.ocbkc.swift.global.LiftHelpers._
 class History
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
    var checkedCommits:List[RevCommit] = Nil
-
+   var first_time = 0;
    val const:Constitution = S.param("id") match
    {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
                            { case Some(constLoc)   => { println("   Constitution id:" + idLoc); constLoc }
@@ -60,7 +60,9 @@ class History
          bind( "top", chooseTemplate("top", "row", ns),            
             "view"               -> SHtml.link("constitutionhistoric?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("view")),
             "restore"            -> SHtml.link("restore?constid=" + const.constiId + "&commitid=" + revcom.name, () => Unit, Text("restore")),
-            "checkbox"           -> SHtml.checkbox(false, processCheckbox(_, revcom)),
+            "checkbox"           -> SHtml.ajaxCheckbox(false, processCheckbox(_, revcom)),
+           
+            
             "publishDescription" -> Text(revcom.getFullMessage),
             "date"               -> Text(df.format(revcom.getCommitTime.toLong*1000).toString),
             "release"          -> {    println("   release?")
@@ -88,20 +90,36 @@ class History
       }
 
       checkedCommits match
-      {  case List(commitIdNewer,commitIdOlder) => S.redirectTo("diff?newerId=" + commitIdNewer.name + "&olderId=" + commitIdOlder.name ) 
+      {  case List(commitIdNewer,commitIdOlder) => S.redirectTo("diff?newerId=" + commitIdNewer.name + "&olderId=" + commitIdOlder.name + "&constid=" + const.constiId  ) 
          case _ => throw new RuntimeException("  my dear friend, checkedCommits has size other than 2, but that cannot happen in this part of the program, you should be deeply ashamed of yourself... But I'm forgiving, very forgiving... Piece of chocolate donated to me can buy you some time...")
       }
    }
 
 
    def processCheckbox(checked:Boolean, commitId:RevCommit) =
-   {  println("processCheckbox called")
-      println("   commit id = " + commitId.name )
-      println("   commit time = " + commitId.getCommitTime().toString)
-      if( checked )
-      {  println("   checkbox of commit is checked by user.")
-         checkedCommits = commitId::checkedCommits
-      }
+   {  
+	  
+		   if( checkedCommits.size == 1)
+		   {//not an nice way, two of the same code.
+			   println("processCheckbox called")
+			   println("   commit id = " + commitId.name )
+			   println("   commit time = " + commitId.getCommitTime().toString)
+			   if( checked )
+			   {  println("   checkbox of commit is checked by user.")
+				  checkedCommits = commitId::checkedCommits
+			   }
+			   processDiffButton()
+		   }
+		   else{
+		   println("processCheckbox called")
+		   println("   commit id = " + commitId.name )
+		   println("   commit time = " + commitId.getCommitTime().toString)
+		   if( checked )
+		   {  println("   checkbox of commit is checked by user.")
+			  checkedCommits = commitId::checkedCommits
+		   }
+		}
+
    }
 
    def render(ns: NodeSeq): NodeSeq =

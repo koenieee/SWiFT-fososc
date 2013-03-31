@@ -1,0 +1,48 @@
+<lift:surround with="default" at="content">
+
+
+<!--
+
+TODO, Javascript DIFF VIEWER. Compare two TD's against each other.
+
+https://github.com/swiftgame/SWiFT-fososc/issues/72
+
+-->
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+<lift:Difference form="POST">
+
+<h1><top:title /> (Version Difference)</h1>
+<h3>Version: <top:revisionDatetime1 /> vs <top:revisionDatetime2 /></h3>
+Info
+
+<table>
+   <tr><td>Creationdate Constitution:</td>             <td> <top:creationDate /></td>      </tr>
+   <tr><td>Constitution Created by:</td>               <td><top:creator /></td>            </tr>
+
+<!--
+   <tr><td>Description:</td>              <td><top:description /></td>        </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
+   <tr><td>Number of followers:</td>      <td><top:numberOfFollowers /></td>  </tr>
+-->
+</table>
+
+<hr />
+
+<table>
+   <tr><td colspan="2"><center><b>Before:</b></center> <hr />                             </td><td colspan="2"><center><b>After:</b></center> <hr />                             </td></tr>
+   <tr> 
+   <td colspan="2" id="const1"><top:constitutionText1 /></td>    
+         
+   <td colspan="2" id="const2"><top:constitutionText2 /></td>           </tr>
+   <tr><td colspan="2" ><hr />    </td>   <td colspan="2"><hr />    </td>                         </tr>
+</table>
+
+<div id="compare">
+</div>
+</lift:Difference>
+
+</lift:surround>
