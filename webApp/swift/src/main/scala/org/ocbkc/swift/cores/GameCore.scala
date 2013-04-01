@@ -203,11 +203,14 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
      
     //  var s: Int = (function !(pl))
 	//TODO by CHIDE: get number from process
-     val s: Int  = 0; //any help with this one?
+		
+	
      
-     sys.process.Process(function, new java.io.File( WEBAPROOT )) !!
      
-     println (WEBAPROOT)
+     val run_proc = sys.process.Process(function, new java.io.File( WEBAPROOT ))
+     val temp_p = run_proc.run
+     val s: Int  = temp_p.exitValue
+    
       // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
       err.println("  trying to run " + function + " on commandline...")
       err.println("  exit value (0 is good) = " + s)
