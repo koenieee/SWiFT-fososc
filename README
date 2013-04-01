@@ -3,3 +3,6 @@ How to run this:
 cd' to webApp/swift
 => run mvn dependency:unpack
 => run mvn jetty:run
+
+Paradox external dependency: sudo apt-get install libgmp-dev
+locate libgmp and create a external link to: /usr/lib/libgmp.so.3
