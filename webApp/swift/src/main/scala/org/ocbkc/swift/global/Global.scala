@@ -39,11 +39,10 @@ object GlobalConstant
    //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
    val PARADOX_PATH = WORKING_DIR + "/swift/binaries/paradox";
    
-   val ABSOLUTEPATHS = false // set true when you want all paths in this dir to be absolute, sometimes handy when you want to execute parts of the application from another directory. Default should be false.
    
-   private val PREFIX = if( ABSOLUTEPATHS ) WEBAPROOT + "/" else ""
-   val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
-   val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
+  
+   val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
+   val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
@@ -127,7 +126,7 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
-   val AUTOTRANSLATION                 = false // true
+   val AUTOTRANSLATION                 = true // true
    val CREATETESTUSERBASE              = true // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.

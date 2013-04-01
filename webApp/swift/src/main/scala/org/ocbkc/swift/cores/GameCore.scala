@@ -12,7 +12,7 @@ import scala.sys.process._
 import scala.util.matching._
 import scala.util.matching.Regex._
 import java.io._
-import java.lang._
+//import java.lang._
 import org.ocbkc.swift.parser._
 import net.liftweb.json._
 import net.liftweb.json.ext._
@@ -200,7 +200,14 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       var outStr:String = ""
 
       val pl = ProcessLogger( o => (outStr += o), e => (errStr += e) )
-      var s: Int = (function !(pl))
+     
+    //  var s: Int = (function !(pl))
+	//TODO by CHIDE: get number from process
+     val s: Int  = 0; //any help with this one?
+     
+     sys.process.Process(function, new java.io.File( WEBAPROOT )) !!
+     
+     println (WEBAPROOT)
       // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
       err.println("  trying to run " + function + " on commandline...")
       err.println("  exit value (0 is good) = " + s)
