@@ -227,7 +227,7 @@ class ConstitutionSnippet
                                                       {  case List() => constLoc.plainContent
                                                          case _      => { println("   error in html, so prefill constitution editor with text before reload"); contentB4ReloadOpt.get.constitutionTAcontent } // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
                                                       }
-                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" 
+                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;", "id" -> "edit" 
                                                   )
       editmode = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }

@@ -34,6 +34,7 @@ import ocbkc.swift.test.simulation.jara._
 class Boot {
   def boot {
    println("Boot.boot called")
+   LiftRules.useXhtmlMimeType = false; 
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",

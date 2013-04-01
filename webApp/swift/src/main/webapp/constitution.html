@@ -3,7 +3,13 @@
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
-
+	<script src="javascript/loki/loki.js" type="text/javascript"></script>
+	   
+    <script type="text/javascript">
+        // Change all textareas that have the "loki" class to Loki rich-text
+        // editors with power-user features:
+        Loki.convert_textarea('edit', {options: 'power', use_xhtml: true});
+    </script>
 
 <lift:ConstitutionSnippet form="POST">
 

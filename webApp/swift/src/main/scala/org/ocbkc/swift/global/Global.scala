@@ -20,7 +20,7 @@ object GlobalConstant
 {  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPROOT = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift" // CHANGE TO YOUR MACHINE
-   val ABSOLUTEPATHS = true // set true when you want all paths in this dir to be absolute, sometimes handy when you want to execute parts of the application from another directory. Default should be false.
+   val ABSOLUTEPATHS = false // set true when you want all paths in this dir to be absolute, sometimes handy when you want to execute parts of the application from another directory. Default should be false.
    
    private val PREFIX = if( ABSOLUTEPATHS ) WEBAPROOT + "/" else ""
    val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
@@ -109,9 +109,9 @@ object Types
 object TestSettings
 {  val AUTOLOGIN                       = false
    val AUTOTRANSLATION                 = false // true
-   val CREATETESTUSERBASE              = false // true
+   val CREATETESTUSERBASE              = true // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
+   val CREATEDUMMYCONSTITUTIONS        = true// true // creates a number of constitutions with several updates and releases, but also some users.
    val SIMULATEPLAYINGWITHJARA         = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
    var SIMULATEPLAYINGWITHJARARUNNING = false // simulation process is currently running
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
