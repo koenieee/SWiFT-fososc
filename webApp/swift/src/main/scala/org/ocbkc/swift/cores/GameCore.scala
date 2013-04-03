@@ -12,7 +12,7 @@ import scala.sys.process._
 import scala.util.matching._
 import scala.util.matching.Regex._
 import java.io._
-import java.lang._
+//import java.lang._
 import org.ocbkc.swift.parser._
 import net.liftweb.json._
 import net.liftweb.json.ext._
@@ -122,7 +122,7 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       val ran:Int = currentTimeMillis().toInt
       // <&y2011.11.23.21:08:25& check whether scala Ints indeed fit in Clean ints>
       err.println("generateNewSessionBundle: use as random number = " + ran)
-      sbClean = ( ( "../../textgenerator " + ran ) !!)
+      sbClean = ( ( WEBAPROOT + "/textgenerator " + ran ) !!)
       
       cc.textNL = extractNl(sbClean)
       cc.textCTLbyComputer = extractCTL(sbClean)
@@ -200,7 +200,17 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       var outStr:String = ""
 
       val pl = ProcessLogger( o => (outStr += o), e => (errStr += e) )
-      var s: Int = (function !(pl))
+     
+    //  var s: Int = (function !(pl))
+	//TODO by CHIDE: get number from process
+		
+	
+     
+     
+     val run_proc = sys.process.Process(function, new java.io.File( WEBAPROOT ))
+     val temp_p = run_proc.run
+     val s: Int  = temp_p.exitValue
+    
       // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
       err.println("  trying to run " + function + " on commandline...")
       err.println("  exit value (0 is good) = " + s)

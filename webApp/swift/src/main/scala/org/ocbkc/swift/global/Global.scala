@@ -19,12 +19,30 @@ import org.ocbkc.swift.model._
 object GlobalConstant
 {  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
-   val WEBAPROOT = "/home/waimondrio/jowneeGitProjects/SWiFTfososc/source/webApp/swift" // CHANGE TO YOUR MACHINE
-   val ABSOLUTEPATHS = true // set true when you want all paths in this dir to be absolute, sometimes handy when you want to execute parts of the application from another directory. Default should be false.
+   val WORKING_DIR = System.getProperty("user.dir") 
+   val OS = System.getProperty("os.name").toLowerCase();
    
-   private val PREFIX = if( ABSOLUTEPATHS ) WEBAPROOT + "/" else ""
-   val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
-   val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
+   /* 
+    * Dependency usage: first run mvn dependency:unpack
+    * global.scala will check if you're running windows, mac or linux
+    * WEBAPROOT is only used in GameCore.Scala
+    * Eprover_Path is only used in tpwrap.scala
+    * Paradox_Path is only used in tpwrap.scala
+    */
+    
+	//only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
+	val WEBAPROOT = WORKING_DIR + "/binaries/swift" // CHANGE TO YOUR MACHINE
+	
+	//EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
+	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  WORKING_DIR + "/binaries/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	WORKING_DIR + "/binaries/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  WORKING_DIR + "/binaries/eprover/Windows";} else { WORKING_DIR + "/binaries/eprover/Linux"; }
+	
+   //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
+   val PARADOX_PATH = WORKING_DIR + "/swift/binaries/paradox";
+   
+   
+  
+   val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
+   val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
@@ -108,11 +126,11 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
-   val AUTOTRANSLATION                 = false // true
-   val CREATETESTUSERBASE              = false // true
+   val AUTOTRANSLATION                 = true // true
+   val CREATETESTUSERBASE              = true // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
-   val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYINGWITHJARA         = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
+   val CREATEDUMMYCONSTITUTIONS        = true // true // creates a number of constitutions with several updates and releases, but also some users.
+   val SIMULATEPLAYINGWITHJARA         = true // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
    var SIMULATEPLAYINGWITHJARARUNNING = false // simulation process is currently running
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
