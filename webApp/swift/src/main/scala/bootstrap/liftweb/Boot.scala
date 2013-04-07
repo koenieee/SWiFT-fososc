@@ -356,7 +356,7 @@ class Boot {
 """, "publication 1", adminId.toString
       )
 
-      PlayingSimulator.start
+      PlayingSimulator.start(3*24*60*60*1000)
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
    }
