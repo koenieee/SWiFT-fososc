@@ -68,8 +68,8 @@ class Difference
                            "title"              -> Text("Constitution " + const.constiId.toString),
                            "revisionDatetime1"   -> Text(df.format(historicConst1.creationDatetimePOSIX*1000)),
                            "revisionDatetime2"   -> Text(df.format(historicConst2.creationDatetimePOSIX*1000)),
-                           "constitutionText1"   -> historicConst1.content, "id" -> "const1",
-                           "constitutionText2"   -> historicConst2.content, "id" -> "const2",
+                           "constitutionText1"   -> historicConst1.content, 
+                           "constitutionText2"   -> historicConst2.content,
                            "creationDate"       -> Text(df.format(const.creationTime).toString),
                            "creator"            -> Text(
                                        Player.find(const.creatorUserID) match

@@ -1,13 +1,7 @@
 <lift:surround with="default" at="content">
 
+  <SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript" SRC="javascript/diff/diff_match_patch.js"></SCRIPT>
 
-<!--
-
-TODO, Javascript DIFF VIEWER. Compare two TD's against each other.
-
-https://github.com/swiftgame/SWiFT-fososc/issues/72
-
--->
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
@@ -40,9 +34,31 @@ Info
    <td colspan="2" id="const2"><top:constitutionText2 /></td>           </tr>
    <tr><td colspan="2" ><hr />    </td>   <td colspan="2"><hr />    </td>                         </tr>
 </table>
+<table>
+	<tr><td colspan="2"><center><b>Difference:</b></center></td></tr>
+	<tr><td id="diff"></td></tr>
+	</table>
 
-<div id="compare">
-</div>
+
+
+<SCRIPT TYPE="text/javascript" LANGUAGE="JavaScript">
+
+var dmp = new diff_match_patch();
+
+function launch() {
+  var text1 = document.getElementById('const2').innerHTML;
+  var text2 = document.getElementById('const1').innerHTML;
+ // alert(text1);
+
+
+  var d = dmp.diff_main(text1, text2);
+	dmp.diff_cleanupSemantic(d);
+  var ds = dmp.diff_prettyHtml(d);
+ // document.write(ds);
+ document.getElementById('diff').innerHTML = ds;
+}
+launch();
+</SCRIPT>
 </lift:Difference>
 
 </lift:surround>
