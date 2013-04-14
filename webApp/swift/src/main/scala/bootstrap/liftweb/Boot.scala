@@ -344,21 +344,8 @@ class Boot {
       }
    }
      
-   if(TestSettings.SIMULATEPLAYINGWITHJARA)
-   {  TestSettings.SIMULATECLOCK = true
-      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>
-      val adminId = GlobalConstant.adminOpt.get.id.is
-      val constiAlpha = Constitution.create(adminId)
-      constiAlpha.publish(
-"""<h2>Article 1</h2>
-
-<p>publication 1</p>
-""", "publication 1", adminId.toString
-      )
-
-      PlayingSimulator.start(3*24*60*60*1000)
-      TestSettings.SIMULATECLOCK = false
-      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
+   if(TestSettings.STARTJARASIMULATIONDURINGBOOT)
+   {  PlayingSimulator.start(3*24*60*60*1000)
    }
 
    if(TestSettings.SIMULATEPLAYINGWITHFIRSTSIMSYSTEM)

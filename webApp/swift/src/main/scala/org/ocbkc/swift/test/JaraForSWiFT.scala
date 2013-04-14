@@ -18,20 +18,33 @@ import scala.math.Numeric
 object Test
 {  val debug = true
    val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
-
 }
 
 import Test._
 
 object PlayingSimulator
-{  def start(Time:Long) =
+{  def start(durationInMillis:Long) =
    {  println("PlayingSimulator.start called")
+      TestSettings.SIMULATECLOCK = true
+      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true
+
+      val adminId = GlobalConstant.adminOpt.get.id.is
+      val constiAlpha = Constitution.create(adminId)
+      constiAlpha.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 1</p>
+""", "publication 1", adminId.toString
+      )
+
       new SimSubscriptions()
       val durationSimulation = 3*24*60*60*1000 //durationInMillis
-      println(durationSimulation);
+      println(durationSimulation)
       val startTimeSim = SystemWithTesting.currentTimeMillis
       SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
-      
+      TestSettings.SIMULATECLOCK = false
+      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
+
       //SimGod.run{ case (iteration, _) => iteration < 100 }
    }
 }
