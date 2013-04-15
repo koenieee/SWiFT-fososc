@@ -27,6 +27,7 @@ object PlayingSimulator
 {  def start =
    {  println("PlayingSimulator.start called")
       new SimSubscriptions()
+
       val durationSimulation = 0.1*24*60*60*1000
       val startTimeSim = SystemWithTesting.currentTimeMillis
       SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
