@@ -129,7 +129,7 @@ class Boot {
 
     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
-      Menu(Loc("Help", "help" :: Nil, "Help")),
+      Menu(Loc("Help", "generalHelp" :: Nil, "Help")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", 
          If(() =>
          {  println("Loc(Constitutions) called")
