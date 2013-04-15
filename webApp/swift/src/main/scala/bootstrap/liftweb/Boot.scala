@@ -183,7 +183,7 @@ class Boot {
             "history" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
-               If( () => ( playerIsLoggedIn && playerHasAccessToAllConstis(currentPlayer) ), () => RedirectResponse("/index"))
+               If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || loggedInPlayerIsAdmin ) ), () => RedirectResponse("/index"))
             )
          )
       ),

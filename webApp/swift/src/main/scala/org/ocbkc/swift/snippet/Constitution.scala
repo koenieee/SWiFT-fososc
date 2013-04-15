@@ -184,7 +184,7 @@ class ConstitutionSnippet
       {  constitutionTAcontent = taContent
       }
 
-      def processFollowCheckbox(checked:Boolean) =
+	def processFollowCheckbox(checked:Boolean) =
       {  if( const.isDefined ) // <&y2012.06.23.14:52:50& necessary? The checkbox shouldn't even show when there is no constitution defined>
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
@@ -248,10 +248,11 @@ class ConstitutionSnippet
                               GlobalConstant.AverageFluency.fluencyConstantK
                            )
       val latestReleaseIdOpt = fluencyScoreOpt.collect{ case (id,_) => id }
-
+      println("CURRENTUSERID::");
+	println(constLoc.followers.contains(currentUserId));
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
-                           "followCheckbox"     -> SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
+                           "followCheckbox"     -> SHtml.ajaxCheckbox(constLoc.followers.contains(currentUserId), selected => processFollowCheckbox(selected)),//SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
                            "saveGeneralControlBt"             -> SHtml.button("Save", () => processGeneralSaveBtn),
                            "numberOfFollowers"  -> Text(constLoc.followers.size.toString),
                            "followerInstructions" ->
