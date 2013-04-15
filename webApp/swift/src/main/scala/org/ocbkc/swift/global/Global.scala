@@ -37,9 +37,7 @@ object GlobalConstant
 	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  WORKING_DIR + "/binaries/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	WORKING_DIR + "/binaries/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  WORKING_DIR + "/binaries/eprover/Windows";} else { WORKING_DIR + "/binaries/eprover/Linux"; }
 	
    //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
-   val PARADOX_PATH = WORKING_DIR + "/swift/binaries/paradox";
-   
-   
+   val PARADOX_PATH = WORKING_DIR + "/swift/binaries/paradox"
   
    val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
@@ -54,6 +52,8 @@ object GlobalConstant
 
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
+   val INITIALISATIOnDATaDIR = WORKING_DIR + "/initialisationData" 
+   val CONSTiALPHaINIT = INITIALISATIOnDATaDIR + "/constitutionAlpha_core"
 
    // Scoring
 
@@ -95,7 +95,8 @@ object GlobalConstant
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)
    createDirIfNotExists(CONSTITUTIONHTMLDIR)
    createDirIfNotExists(CORECONTENTOBJECTDIR)
-   
+   createDirIfNotExists(INITIALISATIOnDATaDIR)
+
 /** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>
   * @returns: false dir doesn't exist and could not be created; true: dir exists (if it didn't before, it was created succesfully)
   */

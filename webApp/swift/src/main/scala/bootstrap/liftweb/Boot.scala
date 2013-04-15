@@ -342,18 +342,18 @@ class Boot {
          Unit
       }
    }
-     
-   if(TestSettings.SIMULATEPLAYINGWITHJARA)
-   {  TestSettings.SIMULATECLOCK = true
-      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>
+   
+   // create constitution alpha from the initialisationData dir, only if there exist no constitutions yet (otherwise, assume that it has been created (and not deleted) since the last time the application was up)
+   if(Constitution.constis == Nil)
+   {  val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
       val adminId = GlobalConstant.adminOpt.get.id.is
       val constiAlpha = Constitution.create(adminId)
-      constiAlpha.publish(
-"""<h2>Article 1</h2>
+      constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
+   }
 
-<p>publication 1</p>
-""", "publication 1", adminId.toString
-      )
+   if(TestSettings.SIMULATEPLAYINGWITHJARA)
+   {  TestSettings.SIMULATECLOCK = true
+      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <_&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>[A &y2013.04.15.19:57:38& this has been done in another branch, merge it]
 
       PlayingSimulator.start
       TestSettings.SIMULATECLOCK = false
