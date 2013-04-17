@@ -9,6 +9,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
+import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.OCBKC.scoring._
 import Helpers._
 import System.err.println
@@ -37,7 +38,7 @@ class ConstiGameTable
             bind("constiColumn", tableRowsTemplate,
                "id" -> <a href={ "constitution?id=" + constiId}>{ constiId }</a>,
                "description" -> c.shortDescription,
-               "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)),
+               "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect{ case afs:(VersionId,Double) => afs._2 }),
                "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
                "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
                "creationDate" -> df.format(c.creationTime).toString
