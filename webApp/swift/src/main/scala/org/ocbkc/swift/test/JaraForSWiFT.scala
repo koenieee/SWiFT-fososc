@@ -311,6 +311,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    def procCreateNewConsti(d: DurationInMillis) =
    {  val newConsti = Constitution.create(playerId)
+      newConsti.initialiseNew // needed? // needed?  
       newConsti.publish(
 """<h2>Article 1</h2>
 

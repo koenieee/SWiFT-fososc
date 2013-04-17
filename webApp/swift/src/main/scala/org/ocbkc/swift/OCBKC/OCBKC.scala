@@ -108,9 +108,12 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       }
    }
 
-   // create html file which holds the constitution
-   save(Constitution.templateNewConstitution(constiId))
-
+   /** This constitution is a completely new one - initialise it from scratch.
+     */
+   def initialiseNew =
+   {  // create html file which holds the constitution
+      save(Constitution.templateNewConstitution(constiId))
+   }
    /* <&y2012.06.02.20:19:54& optimisations needed, and if so, how would be best? Now it loads the html at each call> */
    def plainContent:String =
    {  val content:String = scala.io.Source.fromFile(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName).mkString
@@ -410,9 +413,9 @@ object Constitution
          taglist.map( ref => println(ref.getName) )
  
          def readConst(file:File):Unit =
-         {  println("   converting to Constitution-object: " + file.getPath() )
+         {  println("   converting to Constitution-object: " + file.getPath )
             val in:BufferedReader   = new BufferedReader(new FileReader(file))
-            var inStr:String        = in.readLine()
+            var inStr:String        = in.readLine
             println("   serialized form: " + inStr)
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const

@@ -330,8 +330,9 @@ class Boot {
 
       def generateConstiHis(creator: Player, sizeHis:Int) =
       {  val consti = Constitution.create(creator.id.is)
+         consti.initialiseNew
          val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
-         randomHisCreationList.map( 
+         randomHisCreationList.map(
             { case (idx, publisher) =>            
                consti.publish(
 """<h2>Article 1</h2>
