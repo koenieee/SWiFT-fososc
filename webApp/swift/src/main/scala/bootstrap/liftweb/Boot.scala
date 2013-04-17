@@ -346,7 +346,8 @@ class Boot {
    
    // create constitution alpha from the initialisationData dir, only if there exist no constitutions yet (otherwise, assume that it has been created (and not deleted) since the last time the application was up)
    if(Constitution.constis == Nil)
-   {  val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
+   {  println("There are no constitutions yet, so adding constitution alpha to constitution-population.")
+      val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
       val adminId = GlobalConstant.adminOpt.get.id.is
       val constiAlpha = Constitution.create(adminId)
       constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
