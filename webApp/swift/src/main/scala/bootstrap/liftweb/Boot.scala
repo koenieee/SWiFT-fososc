@@ -245,9 +245,9 @@ class Boot {
     }
     else
     { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
-      val jgitInitCommand:InitCommand = Git.init()
+      val jgitInitCommand:InitCommand = Git.init
       jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-      jgitInitCommand.call()
+      jgitInitCommand.call
     }
 
  // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
