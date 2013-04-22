@@ -112,7 +112,6 @@ object Paradox
       val cli  = new ParadoxCliOutput
       val pl   = ProcessLogger( o => (cli.out += o + "\n"), e => (cli.err += e + "\n") )
 
-
       val run_proc =  sys.process.Process(cmd, new java.io.File( PARADOX_PATH )) 
 	  val temp_p = run_proc.run
       val s: Int  = temp_p.exitValue

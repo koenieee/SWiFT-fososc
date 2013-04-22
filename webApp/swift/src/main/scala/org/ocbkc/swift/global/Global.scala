@@ -19,25 +19,25 @@ import org.ocbkc.swift.model._
 object GlobalConstant
 {  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
-   val WORKING_DIR = System.getProperty("user.dir") 
+   val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
    val OS = System.getProperty("os.name").toLowerCase();
    
    /* 
     * Dependency usage: first run mvn dependency:unpack
     * global.scala will check if you're running windows, mac or linux
-    * WEBAPROOT is only used in GameCore.Scala
+    * SWIFTBINARIES is only used in GameCore.Scala
     * Eprover_Path is only used in tpwrap.scala
     * Paradox_Path is only used in tpwrap.scala
     */
     
 	//only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
-	val WEBAPROOT = WORKING_DIR + "/binaries/swift" // CHANGE TO YOUR MACHINE
+	val SWIFTBINARIES = WEBAPP_BASE_DIR + "/binaries/swift" // CHANGE TO YOUR MACHINE
 	
 	//EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
-	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  WORKING_DIR + "/binaries/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	WORKING_DIR + "/binaries/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  WORKING_DIR + "/binaries/eprover/Windows";} else { WORKING_DIR + "/binaries/eprover/Linux"; }
+	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  WEBAPP_BASE_DIR + "/binaries/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	WEBAPP_BASE_DIR + "/binaries/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  WEBAPP_BASE_DIR + "/binaries/eprover/Windows";} else { WEBAPP_BASE_DIR + "/binaries/eprover/Linux"; }
 	
    //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
-   val PARADOX_PATH = WORKING_DIR + "/swift/binaries/paradox"
+   val PARADOX_PATH = WEBAPP_BASE_DIR + "/binaries/paradox"
   
    val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
@@ -52,7 +52,7 @@ object GlobalConstant
 
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
-   val INITIALISATIOnDATaDIR = WORKING_DIR + "/initialisationData" 
+   val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
    val CONSTiALPHaINIT = INITIALISATIOnDATaDIR + "/constitutionAlpha_core"
 
    // Scoring
