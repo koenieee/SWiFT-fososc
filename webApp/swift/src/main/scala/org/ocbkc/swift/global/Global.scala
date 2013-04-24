@@ -25,19 +25,20 @@ object GlobalConstant
    /* 
     * Dependency usage: first run mvn dependency:unpack
     * global.scala will check if you're running windows, mac or linux
-    * SWIFTBINARIES is only used in GameCore.Scala
+    * BINARIES is only used in GameCore.Scala
     * Eprover_Path is only used in tpwrap.scala
     * Paradox_Path is only used in tpwrap.scala
     */
     
 	//only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
-	val SWIFTBINARIES = WEBAPP_BASE_DIR + "/binaries/swift" // CHANGE TO YOUR MACHINE
+	val BINARIES = WEBAPP_BASE_DIR + "/binaries" // CHANGE TO YOUR MACHINE
+	val SWIFTBINARIES = BINARIES + "/swift" // CHANGE TO YOUR MACHINE
 	
 	//EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
-	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  WEBAPP_BASE_DIR + "/binaries/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	WEBAPP_BASE_DIR + "/binaries/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  WEBAPP_BASE_DIR + "/binaries/eprover/Windows";} else { WEBAPP_BASE_DIR + "/binaries/eprover/Linux"; }
+	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  BINARIES + "/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	BINARIES + "/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  BINARIES + "/eprover/Windows";} else { BINARIES + "/eprover/Linux"; }
 	
    //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
-   val PARADOX_PATH = WEBAPP_BASE_DIR + "/binaries/paradox"
+   val PARADOX_PATH = BINARIES + "/paradox"
   
    val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)

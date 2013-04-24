@@ -57,12 +57,11 @@ object Eprover
    {  val cmd  = eproverpath + "/eprover " + params
       val cli  = new EproverCliOutput
       val pl   = ProcessLogger( o => (cli.out += o + "\n"), e => (cli.err += e + "\n") )
-      val run_proc = sys.process.Process(cmd, new java.io.File( EPROVER_PATH ))
-	  val temp_p = run_proc.run
-      val s: Int  = temp_p.exitValue
+      val procBuilder = sys.process.Process(cmd, new java.io.File( EPROVER_PATH ))
+      val s: Int = procBuilder!(pl)
       
-      // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
-      err.println("trying to run '" + cmd + "' on commandline...")
+      // Now delete input file, to prevent rereading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
+      err.println("just tried to run '" + cmd + "' on commandline...")
       err.println("exit value (0 is good) = " + s + "\n")
       err.println("### begin errorstream:\n" + (if(cli.err == "") "None" else cli.err))
       err.println("### end errorstream\n\n")
@@ -112,9 +111,8 @@ object Paradox
       val cli  = new ParadoxCliOutput
       val pl   = ProcessLogger( o => (cli.out += o + "\n"), e => (cli.err += e + "\n") )
 
-      val run_proc =  sys.process.Process(cmd, new java.io.File( PARADOX_PATH )) 
-	  val temp_p = run_proc.run
-      val s: Int  = temp_p.exitValue
+      val procBuilder =  sys.process.Process(cmd, new java.io.File( PARADOX_PATH )) 
+      val s:Int = procBuilder!(pl)
       
       // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
       err.println("trying to run '" + cmd + "' on commandline...")

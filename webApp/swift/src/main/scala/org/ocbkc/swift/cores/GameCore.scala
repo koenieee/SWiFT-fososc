@@ -200,17 +200,8 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       var outStr:String = ""
 
       val pl = ProcessLogger( o => (outStr += o), e => (errStr += e) )
-     
-    //  var s: Int = (function !(pl))
-	//TODO by CHIDE: get number from process
-		
-	
-     
-     
-     val run_proc = sys.process.Process(function, new java.io.File( SWIFTBINARIES ))
-     val temp_p = run_proc.run
-     val s: Int  = temp_p.exitValue
-    
+      val procBuilder = sys.process.Process(function, new java.io.File( SWIFTBINARIES ))
+      val s:Int = procBuilder!(pl)
       // Now delete input file, to prevent reareading it in the future... This can be switched of temporarily for debugging purposes: you can then still read the file.
       err.println("  trying to run " + function + " on commandline...")
       err.println("  exit value (0 is good) = " + s)

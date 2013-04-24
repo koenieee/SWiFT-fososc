@@ -124,7 +124,7 @@ Running example:
          out.flush
          out.close
 
-         val paradoxResult = Paradox("--model --verbose 0 ft_onlyInEqIntroConsStats.fof")
+         val paradoxResult = Paradox("--model --verbose 0 " + fullpath)
          println("   result of paradox:\n" + paradoxResult)
          // println("   model size = " + paradoxResult.getModelSize)
          /* Example output paradox:
