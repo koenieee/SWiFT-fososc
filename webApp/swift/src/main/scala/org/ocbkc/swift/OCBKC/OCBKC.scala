@@ -35,7 +35,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List())
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List(),List(2))
       const1.serialize
    }
 }
@@ -57,13 +57,16 @@ case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
 // <&y2012.09.18.10:39:31& IMPORTANT: currently the following class doesn't make use of its integration in the Mapper framework (the LongKeyedMetaMapper extension).
+/** @param leadersUserIDs the user ids of the leaders of this constitution. By default the person who has create this constitution.
+ */
 case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
                         val creationTime:Long, // creationTime in unix time in seconds
                         val creatorUserID:Long,
                         var averageScore:Int, // redundant, for efficiency
                         var shortDescription:String,
                         val predecessorId:Option[ConstiId],
-                        var followers:List[Long] // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
+                        var followers:List[Long], // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
+                        var leadersUserIDs:List[Long]
                        )// extends LongKeyedMapper[Constitution] with IdPK
 {  import scoring._
 
@@ -467,6 +470,8 @@ object Constitution
 
 <p>...</p>
 """
+   /** This method is not used for deserialisation purposes, solely for creating really new consti
+     */
    def create(creatorUserID:Long):Constitution = 
    {  println("Constitution(Singleton Object).create called")
       println("   creatorUserID = " + creatorUserID)
@@ -476,7 +481,7 @@ object Constitution
                 else
                   SystemWithTesting.currentTimeMillis
 
-      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID) )
+      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID), List(creatorUserID) )
       constis = c::constis
       c
    }

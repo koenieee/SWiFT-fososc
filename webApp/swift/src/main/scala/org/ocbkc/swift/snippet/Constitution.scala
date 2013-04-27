@@ -14,6 +14,7 @@ import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.LiftHelpers._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.scoring._
@@ -53,7 +54,7 @@ class ConstitutionSnippet
    println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
    val currentUserId:Long = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toLong }
-         case _         => { throw new RuntimeException("  No user id found.") }
+         case _         => { logAndThrow("  No user id found.") }
       }
    var editmode = false
 
@@ -288,6 +289,19 @@ class ConstitutionSnippet
 
                                         },
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
+                           "leaders"            -> { if( !errorRetrievingConstitution ) 
+                                                     {   val leaderNamesStringList = constLoc.leadersUserIDs.map
+                                                               {  userId => Player.find(userId) match
+                                                                  {  case Full(player) => player.swiftDisplayName
+                                                                     case _            => throw new RuntimeException("Player with id " + userId + " not found.")
+                                                                  }
+                                                               }
+                                                         log("   leaderNamesStringList = " + leaderNamesStringList)
+                                                         Text(leaderNamesStringList.mkString(", "))
+                                                     } 
+                                                     else
+                                                      emptyNode
+                                                   },
                            "title"              -> Text(title),
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "latestRelease"      -> { Text(optionToUI( latestReleaseIdOpt.collect{ case lr:VersionId => "R" + constLoc.releaseIndex(lr) } ) )

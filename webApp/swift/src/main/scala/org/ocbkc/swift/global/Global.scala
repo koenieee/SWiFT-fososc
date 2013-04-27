@@ -132,7 +132,7 @@ object TestSettings
    val CREATETESTUSERBASE              = false // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYINGWITHJARA         = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
+   val SIMULATEPLAYINGWITHJARA         = true // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
    var SIMULATEPLAYINGWITHJARARUNNING = false // simulation process is currently running
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
@@ -140,6 +140,17 @@ object TestSettings
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
 
+}
+
+object Logging
+{  def logAndThrow(msg:String) =
+   {  println(msg)
+      throw new RuntimeException(msg)
+   }
+
+   def log(msg:String) =
+   {  println(msg)
+   }
 }
 
 object LiftHelpers
