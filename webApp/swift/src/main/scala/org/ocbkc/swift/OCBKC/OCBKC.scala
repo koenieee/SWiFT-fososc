@@ -73,7 +73,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
-
+   var commitIdsReleaseCandidates:List[String] = Nil
+   var commitIdNewestVersion:Option[String] = None
    /** first release has number 1
      */
    def releaseIndex(releaseId:VersionId) = 
@@ -223,6 +224,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       // Determine whether this version will become the new release
          
       val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
+      commitIdNewestVersion = Some(revcom.name)
 /*
 Try out:
 getHistory.length, commitIdsReleases.length, isRelease
@@ -359,6 +361,15 @@ getHistory.length, commitIdsReleases.length, isRelease
       {  case List(fcj)    => Some(fcj)
          case x::(y::xs)   => throw new RuntimeException("duplicate FollowerConsti_join in database.")
          case _            => None
+      }
+   }
+
+   /** turns current version into a release candidate
+     */
+   def makeReleaseCandidate =
+   {  commitIdNewestVersion match
+      {  case Some(ci) => commitIdsReleaseCandidates =  ci :: commitIdsReleaseCandidates 
+         case None     => log("   Possible bug: trying to makeReleaseCandidate of consti without commitIdNewestVersion")
       }
    }
 }
