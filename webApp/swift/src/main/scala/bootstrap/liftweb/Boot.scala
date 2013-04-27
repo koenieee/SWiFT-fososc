@@ -47,6 +47,14 @@ class Boot {
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
 
+    /* todo, not yet used, build this in at a later stage
+    val roles =
+      AuthRole("ForbiddenRole", // no one should ever have this role, because both admin and player have possibilities which the other role hasn't
+        AuthRole("Admin"),
+        AuthRole("Player")
+        )
+    */
+
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
     Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
