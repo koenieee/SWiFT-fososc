@@ -5,6 +5,7 @@ import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.global.Logging._
 import net.liftweb.json._
 import java.io._
 import java.util.Date
@@ -74,7 +75,6 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    val htmlFileName = "constitution" + constiId + ".html"
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
    var commitIdsReleaseCandidates:List[String] = Nil
-   var commitIdNewestVersion:Option[String] = None
    /** first release has number 1
      */
    def releaseIndex(releaseId:VersionId) = 
@@ -82,7 +82,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    }
 
    // <&y2012.12.07.20:25:56& MUSTDO optimization necessary (function memoization)? In this way it is probably very costly...>
-   def latestCommitId:Option[RevCommit] =
+   def latestRevCommit:Option[RevCommit] =
    {  val h = getHistory
 
       if( h.size > 0)
@@ -224,7 +224,6 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       // Determine whether this version will become the new release
          
       val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
-      commitIdNewestVersion = Some(revcom.name)
 /*
 Try out:
 getHistory.length, commitIdsReleases.length, isRelease
@@ -265,7 +264,7 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def releaseLatestVersion =
    {  println("releaseLatestVersion")
-      val revcom = latestCommitId.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet."))
+      val revcom = latestRevCommit.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet."))
       //val revcom = JgitUtils.revComFromCommitId(commitId)
 
       // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
@@ -364,12 +363,30 @@ getHistory.length, commitIdsReleases.length, isRelease
       }
    }
 
-   /** turns current version into a release candidate
+   /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
      */
    def makeReleaseCandidate =
-   {  commitIdNewestVersion match
-      {  case Some(ci) => commitIdsReleaseCandidates =  ci :: commitIdsReleaseCandidates 
+   {  latestRevCommit match
+      {  case Some(lrc) =>
+         {  jgit.tag.setName("consti" + constiId + ".releaseCandidate" + (commitIdsReleaseCandidates.length + 1)).setObjectId(revcom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Release candidate").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+            commitIdsReleaseCandidates = lrc.name :: commitIdsReleaseCandidates
+         }
          case None     => log("   Possible bug: trying to makeReleaseCandidate of consti without commitIdNewestVersion")
+      }
+   }
+
+   def unmakeReleaseCandidate
+   {  latestRevCommit match
+      {  case Some(lrc) => commitIdsReleaseCandidates = commitIdsReleaseCandidates.filterNot( _ == lrc.name )
+         case None      => log("   wasn't a release candidate anyway")
+      }
+   }
+
+   def isReleaseCandidate =
+   {  log("isReleaseCandidate called")
+      latestRevCommit match
+      {  case Some(lrc) => commitIdsReleaseCandidates.contains(lrc.name)
+         case None      => { log("   this constitution doesn't have any committed versions."); false }
       }
    }
 }

@@ -110,7 +110,8 @@ class ConstitutionSnippet
 
 */
 
-   /** Call this when const has been updated, and you want to notify all followers.
+   /** Deprecated
+     * Call this when const has been updated, and you want to notify all followers.
      * All followers are mailed, except for the follower who did the update (that is the one this snippet is serving right now.)
      */
 
@@ -185,7 +186,17 @@ class ConstitutionSnippet
       {  constitutionTAcontent = taContent
       }
 
-	def processFollowCheckbox(checked:Boolean) =
+      def processReleaseCandidateCb(checked:Boolean) =
+      {  log("processReleaseCandidateCb called")
+         val constLoc = const.get
+         if( checked )
+         {  constLoc.makeReleaseCandidate
+         } else
+         {  constLoc.unmakeReleaseCandidate
+         }
+      }
+
+      def processFollowCheckbox(checked:Boolean) =
       {  if( const.isDefined ) // <&y2012.06.23.14:52:50& necessary? The checkbox shouldn't even show when there is no constitution defined>
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
@@ -285,7 +296,9 @@ class ConstitutionSnippet
                                              else
                                                 bind( "top", chooseTemplate("top","view", ns), 
                                                    "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
-                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)))
+                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)),
+                                                   "releaseCandidateCb"     -> SHtml.ajaxCheckbox(constLoc.isReleaseCandidate, selected => processReleaseCandidateCb(selected))
+                                                )
 
                                         },
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
