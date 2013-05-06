@@ -117,6 +117,10 @@ object GlobalConstant
    }
 }
 
+object ScalaHelpers
+{  val doNothing = Unit
+}  
+
 /** @todo &y2013.01.20.18:12:52& move this one to a more general place
   */
 object Types

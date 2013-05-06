@@ -190,9 +190,9 @@ class ConstitutionSnippet
       {  log("processReleaseCandidateCb called")
          val constLoc = const.get
          if( checked )
-         {  constLoc.makeReleaseCandidate
+         {  constLoc.makeLatestVersionReleaseCandidate
          } else
-         {  constLoc.unmakeReleaseCandidate
+         {  constLoc.unmakeCurrentPotentialRelease
          }
       }
 
@@ -291,13 +291,14 @@ class ConstitutionSnippet
                                                             "constitutionEditor" -> constitutionEditor
                                                              )
                                                },
-                           "view"    -> {    if( editmode )
+                           "view"    -> {    log("[MUSTDO] display button if latest release is a ReleaseVirgin. Pressing the button while remove the releasevirgin status. When the player clicks it, reload page to show the checkbox for Release Candidate again.")
+                                             if( editmode )
                                                 emptyNode
                                              else
                                                 bind( "top", chooseTemplate("top","view", ns), 
                                                    "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
                                                    "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)),
-                                                   "releaseCandidateCb"     -> SHtml.ajaxCheckbox(constLoc.isReleaseCandidate, selected => processReleaseCandidateCb(selected))
+                                                   "releaseCandidateCb"     -> SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), selected => processReleaseCandidateCb(selected), ( if( constLoc.releaseStatusLastVersion == Some(Release) ) { log("   latestVersionIsRelease, so disabling checkbox"); List("disabled" -> "disabled") } else Nil ):_*)
                                                 )
 
                                         },

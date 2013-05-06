@@ -9,6 +9,7 @@ import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.OCBKC._
 import scala.util.Random
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.test.SystemWithTesting
 import org.ocbkc.generic.random.RandomExtras._
@@ -24,8 +25,10 @@ object Test
 import Test._
 
 object PlayingSimulator
-{  def start =
-   {  println("PlayingSimulator.start called")
+{     def start =
+   {  log("PlayingSimulator.start called")
+      log("[MUSTDO] build in simulation for checking/unchecking releaseCandidate checkbox.")
+
       new SimSubscriptions()
 
       val durationSimulation = 1*24*60*60*1000
@@ -323,7 +326,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procChooseFirstConsti(d: DurationInMillis) =
    {  println("procChooseFirstConsti called")
 
-      pickRandomElementFromList(Constitution.constisWithReleases, SharedRandom.get) match
+      pickRandomElementFromList(Constitution.constisWithAReleaseOrVirginRelease, SharedRandom.get) match
       {  case Some(randomConsti) =>
          {  sesCoord.URchooseFirstConstitution(randomConsti.constiId)
          }

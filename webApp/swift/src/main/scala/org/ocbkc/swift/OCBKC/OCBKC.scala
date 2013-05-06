@@ -1,11 +1,12 @@
 package org.ocbkc.swift.OCBKC
-{  
+{
 import _root_.scala.xml._
 import System._
 import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.ScalaHelpers._
 import net.liftweb.json._
 import java.io._
 import java.util.Date
@@ -36,7 +37,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 object TestSerialization
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command without arguments")
-      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List(),List(2))
+      val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List(),List(2),None,None,None)
       const1.serialize
    }
 }
@@ -57,9 +58,17 @@ import ConstitutionTypes._
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
+case class ReleaseStatus
+
+case class PotentialRelease extends ReleaseStatus
+case object ReleaseCandidate extends PotentialRelease // this will become a release virgin if there are no prior releases yet, or the previous release has received its score.
+case object ReleaseVirgin extends PotentialRelease // this is almost a release: as soon as the first player chooses it, it becomes a release.
+case object Release extends ReleaseStatus
+
 // <&y2012.09.18.10:39:31& IMPORTANT: currently the following class doesn't make use of its integration in the Mapper framework (the LongKeyedMetaMapper extension).
 /** @param leadersUserIDs the user ids of the leaders of this constitution. By default the person who has create this constitution.
- */
+  * @todo &y2013.05.06.11:09:01& COULDDO make intelligent setter for releaseStatusLastVersion, which will also change releaseStatusPotentialRelease, and vice versa.
+  */
 case class Constitution(val constiId:ConstiId, // unique identifier for this constitution <&y2012.08.28.21:16:10& TODO refactor: use id of Mapper framework>
                         val creationTime:Long, // creationTime in unix time in seconds
                         val creatorUserID:Long,
@@ -68,21 +77,26 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long], // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
                         var leadersUserIDs:List[Long],
-                        var latestVersionIsRelease:Boolean,
-                        var latestVersionIsReleaseCandidate:Boolean,
-                        var commitIdReleaseCandidate: Option[VersionId] = None
+                        var releaseStatusLastVersion:Option[ReleaseStatus],
+                        var commitIdPotentialRelease: Option[VersionId],
+                        var releaseStatusPotentialRelease:Option[PotentialRelease] 
                        )// extends LongKeyedMapper[Constitution] with IdPK
 {  import scoring._
-   RELEASE_CANDIDATE_TAG_STRING = "consti" + constiId + ".releaseCandidate" 
+   val RELEASE_CANDIDATE_TAG_STRING = "consti" + constiId + ".releaseCandidate" 
+   val RELEASE_VIRGIN_TAG_STRING = "consti" + constiId + ".releaseVirgin"
+   val RELEASE_TAG_STRING = "consti" + constiId + ".release"
    //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
 
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
+
    /** first release has number 1
      */
    def releaseIndex(releaseId:VersionId) = 
    {  commitIdsReleases.size - commitIdsReleases.indexOf(releaseId)
    }
+   
+   def releasesExist = (commitIdsReleases != Nil)
 
    // <&y2012.12.07.20:25:56& MUSTDO optimization necessary (function memoization)? In this way it is probably very costly...>
    def latestRevCommit:Option[RevCommit] =
@@ -139,7 +153,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  followers.contains(userId) 
    }
 */
-   def latestVersionIsRelease(commitId:String) =
+   def isRelease(commitId:String) =
    {  !commitIdsReleases.find(_.equals(commitId)).isEmpty
    }
   
@@ -238,19 +252,9 @@ getHistory.length, commitIdsReleases.length, isRelease
 */
       println("   getHistory.length = " + getHistory.length)
       println("   commitIdsReleases.length = " + commitIdsReleases.length)
-
-      var newScoreIsAvailable = false
-
-      if( isFirstPublication )
-      {  releaseLatestReleaseCandidate
-      } else
-      {  if( latestReleaseHasSufficientSampleSize )
-         {  releaseLatestReleaseCandidate
-            newScoreIsAvailable = true
-         }
-      }
-
-      newScoreIsAvailable
+      releaseStatusLastVersion = None
+      log("[POTENTIAL_BUG] this method returned a boolean in the previous version, is this still needed?")
+      false
    }
 
 
@@ -259,29 +263,8 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def latestReleaseHasSufficientSampleSize:Boolean =
    {  // Determine whether sample size on the latest release without a fluency score is high enough
-      ConstiScores.sampleSizeSufficient4FluencyScore(constiId).get
-   }
 
-   /**
-     *
-     */
-   def releaseLatestReleaseCandidate =
-   {  println("releaseLatestReleaseCandidate")
-      releaseCandidate match
-      {  case Some(rcId) =>
-         {  // note that git tags can only refer to ONE commit, e.g. tag "taggerydag" can only refer to one commit.
-            val rcRevCom = JgitUtils.revComFromCommitId(rcId) 
-            println("  new commit (with id " + rcRevCom.name + ") is the new release." )
-            jgit.tag.setName("consti" + constiId + ".release" + (commitIdsReleases.length + 1)).setObjectId(rcRevCom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Version released to users").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
-            commitIdsReleases ::= revcom.name
-            latestVersionIsRelease = true
-            unmakeCurrentReleaseCandidate // could be optimised by adding additional version which gets the just retrieved rcRevCom
-         }
-         case None      => { log("   Cannot release any version: there are no release candidates yet.") }
-      }
-      latestRevCommit.getOrElse(throw new RuntimeException("   no commit id found, never call this function when there are no versions of the constitution yet."))
-      //val revcom = JgitUtils.revComFromCommitId(commitId)
-
+      ConstiScores.sampleSizeSufficient4FluencyScore(constiId).getOrElse(logAndThrow("[POTENTIAL_BUG]: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future."))
    }
 
    def restore(commitId:String, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
@@ -374,52 +357,117 @@ getHistory.length, commitIdsReleases.length, isRelease
       }
    }
 
+   /** refactor move to general jgit lib
+     */
+   private def tagRevCommit(commitId:VersionId, name:String, message:String):Ref =
+   {  tagRevCommit(JgitUtils.revComFromCommitId(commitId).get, name, message)
+   }
+
+   private def tagRevCommit(revCom:RevCommit , name:String, message:String):Ref =
+   {  jgit.tag.setName(name).setObjectId(revCom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Make this version the release candidate (there may only be one!").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+   }
+
+   private def tagReleaseCandidate(commitId:VersionId):Ref =
+   {  tagRevCommit(commitId, RELEASE_CANDIDATE_TAG_STRING, "")
+   }
+
+   private def tagReleaseVirgin(commitId:VersionId):Ref =
+   {  tagRevCommit(commitId, RELEASE_VIRGIN_TAG_STRING, "")
+   }
+
+   private def tagRelease(commitId:VersionId):Ref =
+   {  tagRevCommit(commitId, RELEASE_TAG_STRING + (commitIdsReleases.length + 1), "")
+   }
+
+   private def delTagReleaseCandidate =
+   {  jgit.tagDelete.setTags(RELEASE_CANDIDATE_TAG_STRING).call
+   }
+
+   private def delTagReleaseVirgin =
+   {  jgit.tagDelete.setTags(RELEASE_VIRGIN_TAG_STRING).call
+   }
    /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
      */
-   def makeReleaseCandidate =
-   {  // make this version release candidate
-      if(!latestVersionIsRelease && !latestVersionIsReleaseCandidate)
-      {  latestVersionIsReleaseCandidate = true         
-         unmakeCurrentReleaseCandidate
+   def makeLatestVersionReleaseCandidate
+   {  // make latest version the new release candidate
+      latestRevCommit match
+      {  case Some(lrc) =>
+         {  val lcommitid = lrc.name
+            if(releaseStatusLastVersion == None)
+            {  unmakeCurrentPotentialRelease
+               releaseStatusLastVersion = Some(ReleaseCandidate)
+               releaseStatusPotentialRelease = Some(ReleaseCandidate)
+               commitIdPotentialRelease = Some(lcommitid)
 
-         latestRevCommit match
-         {  case Some(lrc) =>
-            {  jgit.tag.setName(RELEASE_CANDIDATE_TAG_STRING).setObjectId(revcom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Make this version the release candidate (there may only be one!").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
-               commitIdReleaseCandidate = Some(lrc.name)
+               tagReleaseCandidate(lcommitid)
             }
-
-            case None     => log("[POTENTIAL_BUG]: trying to makeReleaseCandidate of consti without commitIdNewestVersion")
+            else
+            {  log("[POTENTIAL_BUG]: you tried to makeReleaseCandidate of a version which is already a release, release virgin or release candidate.")
+            }
          }
-      } else
-      {  log("[POTENTIAL_BUG]: you tried to makeReleaseCandidate of a version which is already a release.")
+         case None => logAndThrow("[POTENTIAL_BUG] you tried to makeLatestVersionReleaseCandidate, while there is no version yet of this constitution?")
+      }
+
+      turnReleaseCandidateIntoVirginIfPossible
+   }
+
+   /**
+     */
+   def turnReleaseCandidateIntoVirginIfPossible
+   {  log("turnReleaseCandidateIntoVirginIfPossible called")
+      releaseStatusPotentialRelease match
+      {  case Some(ReleaseCandidate) => 
+         {  if( !releasesExist || latestReleaseHasSufficientSampleSize )
+            {  log("   Yes, my dear organic friend! Possible! Doing it...")
+               releaseStatusLastVersion = Some(ReleaseVirgin)
+               releaseStatusPotentialRelease = Some(ReleaseVirgin)
+               tagReleaseVirgin(latestRevCommit.get.name)
+            }
+         }
+         case _                     => { log("   No, not possible"); doNothing }
       }
    }
 
    /** Eliminates the role release candidate from the version which is the release candidate (there can only be one) of this constitution.
      */
-   def unmakeCurrentReleaseCandidate
-   {  // search version which is now release candite
-      log("unmakeCurrentReleaseCandidate")
-      commitIdReleaseCandidate match
-      {  case Some(rcId) =>
-         {  val rcRevCom = JgitUtils.revComFromCommitId(rcId)
-            log("Trying to delete " + RELEASE_CANDIDATE_TAG_STRING + " tag on consti version  " + rcId + ".")
-            rcRevCom.tagDelete.setTag(RELEASE_CANDIDATE_TAG_STRING).call
-            commitIdReleaseCandidate = None
+   def unmakeCurrentPotentialRelease
+   {  // search version which is now the potential release
+      log("unmakeCurrentPotentialRelease")
+
+      releaseStatusPotentialRelease match
+      {  case Some(ReleaseCandidate) =>
+         {  delTagReleaseCandidate
+            commitIdPotentialRelease = None
          }
-         case None      => log("   wasn't a release candidate anyway")
+         case Some(ReleaseVirgin) =>
+         {  delTagReleaseVirgin
+            commitIdPotentialRelease = None
+         }
+         case None      => log("   wasn't a potential release anyway")
       }
       log(" TODO set wasReleaseCandidate tag as described in logs.")
    }
-/*
-   def isReleaseCandidate =
-   {  log("isReleaseCandidate called")
-      latestRevCommit match
-      {  case Some(lrc) => commitIdsReleaseCandidates.contains(lrc.name)
-         case None      => { log("   this constitution doesn't have any committed versions."); false }
+
+   /** Method should be called as soon as a player chooses this consti as his..her first constitution. Turns a release virgin into a release.
+     */
+   def chosenAsFirstConsti =
+   {  log("chosenAsFirstConsti")
+      if( releaseStatusLastVersion == Some(ReleaseVirgin) )
+      {  log("   last version is ReleaseVirgin, so turning into Release.")
+
+         val ci = commitIdPotentialRelease.get
+
+         // remove virgin state
+         delTagReleaseVirgin
+         commitIdPotentialRelease = None
+         releaseStatusPotentialRelease = None
+
+         // add release state
+         releaseStatusLastVersion = Some(Release)
+         commitIdsReleases ::= ci
+         tagRelease(ci)
       }
    }
-*/
 }
 
 class FollowerConsti_join extends LongKeyedMapper[FollowerConsti_join] with IdPK
@@ -459,11 +507,8 @@ object Constitution
    }
 
    def deserialize =
-   /*
-   TODO <&y2012.08.22.15:46:35& also read in release tags into commitIdsReleases>
-   */
-
    {  println("Constitution.deserialize called")
+      log("[MUSTDO] restore releasecandidate and releasevirgin tags in the right way from the git database.")
       val constObjDir = new File(GlobalConstant.CONSTITUTIONOBJECTDIR)
       val fileFilter:FileFilter = new WildcardFileFilter("Constitution*")
       val constitutionFiles = constObjDir.listFiles(fileFilter)
@@ -483,14 +528,12 @@ object Constitution
             constis ::= const
             // reconstruct releases from git repo
             def tagPointsToReleaseOf(tag:Ref, consti:Constitution):Boolean =
-            {  val regex = new Regex("consti" + consti.constiId)
-               val m     = regex.findFirstMatchIn(tag.getName)
-               
+            {  val regex = new Regex("consti" + consti.constiId + ".release[0-9]+")
+               val m     = regex.findFirstMatchIn(tag.getName)               
                m.isDefined
             }
             
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
-            // <&y2012.09.14.09:50:04& I don't get this working: consult jgit group/Web, and when no answer found: post message on jgit mailinglist. Problem is that I do not get the commit id's of the>: 
             const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.peel(tag).getPeeledObjectId.name ).reverse.toList
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             println("   commitIdsReleases just read from git repo:")
@@ -540,7 +583,7 @@ object Constitution
                 else
                   SystemWithTesting.currentTimeMillis
 
-      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID), List(creatorUserID) )
+      val c = Constitution( highestId, now, creatorUserID, 0, "No description provided.", None, List(creatorUserID), List(creatorUserID), None, None, None)
       constis = c::constis
       c
    }
@@ -555,8 +598,12 @@ object Constitution
 
    /** @todo Optimize
      */
-   def constisWithReleases:List[Constitution] =
-   {  constis.filter{ _.firstReleaseExists }
+   def constisWithAReleaseOrVirginRelease:List[Constitution] =
+   {  constis.filter
+      {  c => 
+         { c.firstReleaseExists || c.releaseStatusPotentialRelease == Some(ReleaseVirgin)
+         }
+      }
    }
 }
 

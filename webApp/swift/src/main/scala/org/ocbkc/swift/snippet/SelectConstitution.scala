@@ -80,18 +80,7 @@ class SelectConstitution
             doc
          }
       }
-      /*
-      def processCreateNewBt() =
-      {  val const:Constitution = Player.currentUserId match
-         {  case Full(id)  => {  val c = Constitution.create(id.asInstanceOf[String].toInt)  
-                                 c.initialiseNew
-                                 c
-                              }
-            case _         => { throw new RuntimeException("  No user id found.") }
-         }
-         S.redirectTo("constitution.html?id=" + const.constiId + "&edit=true&firstedit=true") // <&y2012.06.05.10:05:58& redirectTo, does this also terminate the execution of the method, or does the method remain indefinitely on the stack?>
-      }
-      */
+
 
       val answer   = bind( "top", ns, 
                            "constisInTable"  -> displayConstis
