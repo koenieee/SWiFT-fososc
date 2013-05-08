@@ -157,6 +157,22 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    {  !commitIdsReleases.find(_.equals(commitId)).isEmpty
    }
   
+
+   def releaseStatus(commitId:String):Option[ReleaseStatus] =
+   {  log("releaseStatus called")
+      val tags = JgitUtils.tagsOf(commitId)
+      val ret = if(tags.exists{ tag => tag.getName.startsWith(RELEASE_TAG_STRING)  })
+         Some(Release)
+      else if(tags.exists{ tag => tag.getName.startsWith(RELEASE_VIRGIN_TAG_STRING)  })
+         Some(ReleaseVirgin)
+      else if(tags.exists{ tag => tag.getName.startsWith(RELEASE_CANDIDATE_TAG_STRING)  })
+         Some(ReleaseCandidate)
+      else
+         None
+      log("   returning: " + ret)
+      ret
+   }
+
    // <&y2012.06.12.21:35:34& optimise: only reload when something changed>
    def contentInScalaXML:Elem =
    {  plainTextXMLfragment2ScalaXMLinLiftChildren(plainContent)
@@ -419,6 +435,9 @@ getHistory.length, commitIdsReleases.length, isRelease
       {  case Some(ReleaseCandidate) => 
          {  if( !releasesExist || latestReleaseHasSufficientSampleSize )
             {  log("   Yes, my dear organic friend! Possible! Doing it...")
+               // remove release candidate status
+               delTagReleaseCandidate
+
                releaseStatusLastVersion = Some(ReleaseVirgin)
                releaseStatusPotentialRelease = Some(ReleaseVirgin)
                tagReleaseVirgin(latestRevCommit.get.name)
@@ -448,11 +467,12 @@ getHistory.length, commitIdsReleases.length, isRelease
       log(" TODO set wasReleaseCandidate tag as described in logs.")
    }
 
-   /** Method should be called as soon as a player chooses this consti as his..her first constitution. Turns a release virgin into a release.
+   /** Method should be called as soon as a player chooses this consti as his..her first constitution. If there is a release virgin, it is turned into a release.
      */
    def chosenAsFirstConsti =
    {  log("chosenAsFirstConsti")
-      if( releaseStatusLastVersion == Some(ReleaseVirgin) )
+      log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
+      if( releaseStatusPotentialRelease == Some(ReleaseVirgin) )
       {  log("   last version is ReleaseVirgin, so turning into Release.")
 
          val ci = commitIdPotentialRelease.get
@@ -463,9 +483,8 @@ getHistory.length, commitIdsReleases.length, isRelease
          releaseStatusPotentialRelease = None
 
          // add release state
-         releaseStatusLastVersion = Some(Release)
+         tagRelease(ci) // this one before adding it to commitIdsReleases, otherwise index naming will go wrong.
          commitIdsReleases ::= ci
-         tagRelease(ci)
       }
    }
 }
@@ -602,6 +621,14 @@ object Constitution
    {  constis.filter
       {  c => 
          { c.firstReleaseExists || c.releaseStatusPotentialRelease == Some(ReleaseVirgin)
+         }
+      }
+   }   
+
+   def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
+   {  constis.filter
+      {  c => 
+         { c.releaseStatusLastVersion == None
          }
       }
    }

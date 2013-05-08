@@ -67,6 +67,17 @@ trait CoreTrait
       player.timeFirstChosenConstitution(System.currentTimeMillis).save
    }
 
+   /** Set last version of consti with id constiId.
+     * @param on, if true it switches on the ReleaseCandidate state for the latest version, otherwise it is switched off.
+     */
+   def URsetReleaseCandidate(consti:Constitution, on:Boolean) =
+   {  if(on)
+      {  consti.makeLatestVersionReleaseCandidate
+      } else
+      {  consti.unmakeCurrentPotentialRelease
+      }
+   }
+
    def URtranslation:String =  
    {  //round = Trans
       cc = gameCore.initialiseCoreContent

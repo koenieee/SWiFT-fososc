@@ -189,11 +189,7 @@ class ConstitutionSnippet
       def processReleaseCandidateCb(checked:Boolean) =
       {  log("processReleaseCandidateCb called")
          val constLoc = const.get
-         if( checked )
-         {  constLoc.makeLatestVersionReleaseCandidate
-         } else
-         {  constLoc.unmakeCurrentPotentialRelease
-         }
+         sesCoordLR.URsetReleaseCandidate(constLoc, checked)
       }
 
       def processFollowCheckbox(checked:Boolean) =
