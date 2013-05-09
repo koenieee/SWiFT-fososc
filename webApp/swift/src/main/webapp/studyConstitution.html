@@ -1,5 +1,15 @@
+
 <lift:surround with="default" at="content">
+	<style type="text/css">
+table#text
+{
+    visibility:hidden;
+    width: 600px;
+}
+</style>
 <lift:StudyConstitution form="POST">
+
+
 <h1>Study Constitution <top:constitutionId /></h1>
 
 Info
@@ -16,12 +26,64 @@ Info
 </table>
 
 <hr />
+<p id="blank">
+If you want to read on, please hold the left Alt and O key.
+</p>
 
-<table>
+<table  id="text">
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
+<script type="text/javascript">
+$(document).ready(function(){
+    
+   // scroll(0,0);
+    var keyisdown = false;
+    var scroll_last_position = 0;
+       	 var keycode = 18; //alt key
+   	 var keycode2 = 79; //o key
+   	 //alert(e.which);
+   	 var scrolled = false;
+   	
+    $('body').bind('keydown',function(e)
+    {
 
+   	 if (e.altKey ==true) {
+   	 if( e.which === keycode2)
+   	 {
+		
+		if(scrolled == false)
+		{
+   		 $(window).scrollTop(scroll_last_position);
+		scrolled = true;
+   		} 
+   		 $('#text').css('visibility', 'visible');
+   		 $('#blank').css('visibility', 'hidden');
+
+   		 scroll_last_position = $(window).scrollTop();
+   	 }
+    }
+}
+
+    ).bind('keyup',function()
+    {
+   	 
+   	  console.log (scroll_last_position);
+   	 scrolled = false;
+   	 $('#blank').css('visibility', 'visible');
+   	 $('#text').css('visibility', 'hidden');
+
+   	 
+   	 scroll(0,0);
+   	 
+    });
+
+});
+
+</script>
 </lift:StudyConstitution>
+
+
+	
 </lift:surround>
