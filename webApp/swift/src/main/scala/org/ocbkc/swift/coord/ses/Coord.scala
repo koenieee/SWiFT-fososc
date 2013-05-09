@@ -92,12 +92,8 @@ trait CoreTrait
    }
 
    def URstopTranslation =
-   {  cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
-      currentPlayer.firstChosenConstitution.is match
-      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
-         case id => Constitution.getById(id).turnReleaseCandidateIntoVirginIfPossible
-      }
-
+   {  log("URstopTranslation called")
+      cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
       Unit
    }
 
@@ -124,9 +120,12 @@ trait CoreTrait
       }
 
       /* DONE releaseLatestVersion if available. 
-         &y2013.05.09.17:32:57& See in URstopTranslation)
        */
-      
+      currentPlayer.firstChosenConstitution.is match
+      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
+         case id => Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible
+      }
+     
       res
    }
 
@@ -300,6 +299,12 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
       cc.answerPlayerCorrect(winSession).save
       cc.serialize
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+
+      currentPlayer.firstChosenConstitution.is match
+      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
+         case id => { log("   firstChosenConstitution = "  + id); Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible }
+      }
+
       sesHis.coreContents ::= cc
    }
 /*

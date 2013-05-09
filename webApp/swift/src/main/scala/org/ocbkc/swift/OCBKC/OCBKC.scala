@@ -438,6 +438,7 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def turnReleaseCandidateIntoVirginIfPossible
    {  log("turnReleaseCandidateIntoVirginIfPossible called")
+      log("   consti = " + constiId)
       releaseStatusPotentialRelease match
       {  case Some(ReleaseCandidate) => 
          {  if( !releasesExist || latestReleaseHasSufficientSampleSize )
@@ -449,8 +450,11 @@ getHistory.length, commitIdsReleases.length, isRelease
                releaseStatusPotentialRelease = Some(ReleaseVirgin)
                tagReleaseVirgin(latestRevCommit.get.name)
             }
+            else
+            {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
+            }
          }
-         case _                     => { log("   No, not possible"); doNothing }
+         case _                     => { log("   There is no ReleaseCandidate, so not possible."); doNothing }
       }
    }
 

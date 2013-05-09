@@ -329,7 +329,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
          {  sesCoord.URsetReleaseCandidate(cwtv_l, true)
          }
          case None =>
-         {  log("   No constisWithTrailingVersionsWithoutReleaseStatus for which player " + + playerId + " is leader.")
+         {  log("   No constisWithTrailingVersionsWithoutReleaseStatus for which player " + + playerId + " is leader. (I would have bowed for you your Higness the Player, but you ain't leader for any Consti with this property.)")
          }
       }
    }
