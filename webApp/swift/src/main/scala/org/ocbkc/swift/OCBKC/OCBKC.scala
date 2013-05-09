@@ -10,6 +10,7 @@ import org.ocbkc.swift.global.ScalaHelpers._
 import net.liftweb.json._
 import java.io._
 import java.util.Date
+import org.ocbkc.generic.DateTime._
 import org.apache.commons.io.filefilter._
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.parser._
@@ -29,6 +30,7 @@ import scala.util.matching.Regex._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.test.SystemWithTesting
+import org.ocbkc.swift.test.TestHelpers._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -406,11 +408,16 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def makeLatestVersionReleaseCandidate
    {  // make latest version the new release candidate
+      log("makeLatestVersionReleaseCandidate called")
+      log("   consti = " + constiId)
+
+      log("   checking if possible...")
       latestRevCommit match
       {  case Some(lrc) =>
          {  val lcommitid = lrc.name
             if(releaseStatusLastVersion == None)
-            {  unmakeCurrentPotentialRelease
+            {  log("    yes, possible, doing it!")
+               unmakeCurrentPotentialRelease
                releaseStatusLastVersion = Some(ReleaseCandidate)
                releaseStatusPotentialRelease = Some(ReleaseCandidate)
                commitIdPotentialRelease = Some(lcommitid)
@@ -438,7 +445,7 @@ getHistory.length, commitIdsReleases.length, isRelease
                // remove release candidate status
                delTagReleaseCandidate
 
-               releaseStatusLastVersion = Some(ReleaseVirgin)
+               //releaseStatusLastVersion = Some(ReleaseVirgin)
                releaseStatusPotentialRelease = Some(ReleaseVirgin)
                tagReleaseVirgin(latestRevCommit.get.name)
             }
@@ -471,6 +478,8 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def chosenAsFirstConsti =
    {  log("chosenAsFirstConsti")
+      log("   currentTime = " + timeInMillis2dateString(SystemWithTesting.currentTimeMillis))
+      log("   consti = " + this.constiId)
       log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
       if( releaseStatusPotentialRelease == Some(ReleaseVirgin) )
       {  log("   last version is ReleaseVirgin, so turning into Release.")

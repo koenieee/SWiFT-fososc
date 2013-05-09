@@ -247,8 +247,8 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
-   val durationChooseReleaseCandidateExp  = 15 * 60 * 1000
-   val durationCreateNewConstiExp         = 5 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
+   val durationChooseReleaseCandidateExp  = 1 * 60 * 1000
+   val durationCreateNewConstiExp         = 1 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
    // &y2013.01.10& Is not elegant and is confusing: startTimeSession and lastFinishTimeStateMap should come from the same source.
 
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qPlayTranslationSession, startTimeSession.get), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
@@ -329,7 +329,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
          {  sesCoord.URsetReleaseCandidate(cwtv_l, true)
          }
          case None =>
-         {  log("   No constisWithTrailingVersionsWithoutReleaseStatus")
+         {  log("   No constisWithTrailingVersionsWithoutReleaseStatus for which player " + + playerId + " is leader.")
          }
       }
    }

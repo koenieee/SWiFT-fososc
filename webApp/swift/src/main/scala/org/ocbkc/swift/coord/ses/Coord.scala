@@ -9,6 +9,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
@@ -58,12 +59,16 @@ trait CoreTrait
 
    /** @param constiId Must be constiId of a constitution with at least one version released
      */
-   def URchooseFirstConstitution(constiId:ConstiId) =
+   def URchooseFirstConstitution(constiId:ConstiId):Unit =
    {  val player = currentPlayer
+      URchooseFirstConstitution(currentPlayer, constiId)
+   }
+
+   def URchooseFirstConstitution(player:Player, constiId:ConstiId):Unit =
+   {  //val player = currentPlayer
       val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.
       consti.chosenAsFirstConsti
       player.firstChosenConstitution(constiId).save
-      player.releaseOfFirstChosenConstitution(consti.lastReleaseCommitId.get).save // get is possible because the player is only presented constitutions which HAVE a last release.
       player.timeFirstChosenConstitution(System.currentTimeMillis).save
    }
 
@@ -88,6 +93,11 @@ trait CoreTrait
 
    def URstopTranslation =
    {  cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+      currentPlayer.firstChosenConstitution.is match
+      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
+         case id => Constitution.getById(id).turnReleaseCandidateIntoVirginIfPossible
+      }
+
       Unit
    }
 
@@ -95,6 +105,8 @@ trait CoreTrait
    {  gameCore.algorithmicDefenceGenerator
    }
 
+   /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
+     */
    def URalgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
@@ -111,7 +123,9 @@ trait CoreTrait
       {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
       }
 
-      // TODO releaseLatestVersion if available
+      /* DONE releaseLatestVersion if available. 
+         &y2013.05.09.17:32:57& See in URstopTranslation)
+       */
       
       res
    }
@@ -190,23 +204,17 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    // Communication with User Interface
    // UR = User Request
    // user requests to prepare session
-   def URprepare = 
+   def URprepare =
    {  
    }
 
+   /*
    override def URchooseFirstConstitution(constiId:ConstiId) =
    {  val player = currentPlayer
-      val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.
-      consti.chosenAsFirstConsti
-      player.firstChosenConstitution(constiId).save
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+      URchooseFirstConstitution(currentPlayer, constiId)
    }
+   */
 
-   def URchooseFirstConstitution(player:Player, constiId:ConstiId) =
-   {  //val player = currentPlayer
-      player.firstChosenConstitution(constiId).save
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
-   }
 
 /*
    def URtranslation:String =  
