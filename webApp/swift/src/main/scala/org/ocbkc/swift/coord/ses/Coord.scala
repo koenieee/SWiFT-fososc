@@ -119,14 +119,18 @@ trait CoreTrait
       {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
       }
 
-      /* DONE releaseLatestVersion if available. 
-       */
-      currentPlayer.firstChosenConstitution.is match
-      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
-         case id => Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible
-      }
+      turnReleaseCandidateIntoVirginIfPossible
      
       res
+   }
+
+   protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
+   {  currentPlayer.firstChosenConstitution.is match
+      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
+         case id => { log("   firstChosenConstitution = "  + id); log("   playerHasAccessToAllConstis after this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer)); Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible }
+      }
+
+      Unit
    }
 
    def numOfSessionsAfterConstiAccess =
@@ -290,7 +294,7 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
    // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
    {  val cTM = SystemWithTesting.currentTimeMillis
-
+      log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
       cc.startTime(cTM).save
       cc.startTimeTranslation(cTM).save
       cc.stopTime(cTM + duration).save
@@ -299,13 +303,9 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
       cc.answerPlayerCorrect(winSession).save
       cc.serialize
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+      sesHis.coreContents ::= cc  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
 
-      currentPlayer.firstChosenConstitution.is match
-      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
-         case id => { log("   firstChosenConstitution = "  + id); Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible }
-      }
-
-      sesHis.coreContents ::= cc
+      turnReleaseCandidateIntoVirginIfPossible
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =

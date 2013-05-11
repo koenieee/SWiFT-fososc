@@ -481,7 +481,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    /** Method should be called as soon as a player chooses this consti as his..her first constitution. If there is a release virgin, it is turned into a release.
      */
    def chosenAsFirstConsti =
-   {  log("chosenAsFirstConsti")
+   {  log("chosenAsFirstConsti called")
       log("   currentTime = " + timeInMillis2dateString(SystemWithTesting.currentTimeMillis))
       log("   consti = " + this.constiId)
       log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
