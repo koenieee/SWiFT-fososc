@@ -65,11 +65,7 @@ trait CoreTrait
    }
 
    def URchooseFirstConstitution(player:Player, constiId:ConstiId):Unit =
-   {  //val player = currentPlayer
-      val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.
-      consti.chosenAsFirstConsti
-      player.firstChosenConstitution(constiId).save
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+   {  player.firstChosenConstitution(constiId).save // note: apply of firstChosenConstitution has been overridden with an apply which does everything needed.
    }
 
    /** Set last version of consti with id constiId.
