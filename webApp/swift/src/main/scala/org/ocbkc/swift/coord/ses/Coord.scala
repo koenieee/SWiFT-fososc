@@ -73,7 +73,7 @@ trait CoreTrait
      */
    def URsetReleaseCandidate(consti:Constitution, on:Boolean) =
    {  if(on)
-      {  consti.makeLatestVersionReleaseCandidate
+      {  consti.makeLatestVersionReleaseCandidateIfPossible
       } else
       {  consti.unmakeCurrentPotentialRelease
       }

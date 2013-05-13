@@ -294,7 +294,18 @@ class ConstitutionSnippet
                                                 bind( "top", chooseTemplate("top","view", ns), 
                                                    "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
                                                    "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)),
-                                                   "releaseCandidateCb"     -> SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), selected => processReleaseCandidateCb(selected), ( if( constLoc.releaseStatusLastVersion == Some(Release) ) { log("   latestVersionIsRelease, so disabling checkbox"); List("disabled" -> "disabled") } else Nil ):_*)
+                                                   "releaseCandidateCb"     ->
+                                                   {  val accessToReleaseCandidateCb =
+                                                      {  if( ( constLoc.releaseStatusLastVersion == Some(Release) ) || !( constLoc.leadersUserIDs.contains(currentUserId) ) )
+                                                         {  log("   latestVersionIsRelease or current player isn't leader of this consti")
+                                                            List("disabled" -> "disabled")
+                                                         }  else
+                                                         {  Nil
+                                                         }
+                                                      }
+
+                                                      SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), selected => processReleaseCandidateCb(selected), accessToReleaseCandidateCb:_*)
+                                                   }
                                                 )
 
                                         },

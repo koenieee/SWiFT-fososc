@@ -62,7 +62,7 @@ case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 
 case class ReleaseStatus
 
-case class PotentialRelease extends ReleaseStatus
+abstract class PotentialRelease extends ReleaseStatus
 case object ReleaseCandidate extends PotentialRelease // this will become a release virgin if there are no prior releases yet, or the previous release has received its score.
 case object ReleaseVirgin extends PotentialRelease // this is almost a release: as soon as the first player chooses it, it becomes a release.
 case object Release extends ReleaseStatus
@@ -406,7 +406,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
    /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
      */
-   def makeLatestVersionReleaseCandidate
+   def makeLatestVersionReleaseCandidateIfPossible
    {  // make latest version the new release candidate
       log("makeLatestVersionReleaseCandidate called")
       log("   consti = " + constiId)
@@ -415,17 +415,24 @@ getHistory.length, commitIdsReleases.length, isRelease
       latestRevCommit match
       {  case Some(lrc) =>
          {  val lcommitid = lrc.name
-            if(releaseStatusLastVersion == None)
-            {  log("    yes, possible, doing it!")
-               unmakeCurrentPotentialRelease
+
+            def makeLatestVersionReleaseCandidate =
+            {  unmakeCurrentPotentialRelease
                releaseStatusLastVersion = Some(ReleaseCandidate)
                releaseStatusPotentialRelease = Some(ReleaseCandidate)
                commitIdPotentialRelease = Some(lcommitid)
 
                tagReleaseCandidate(lcommitid)
             }
+
+            if(releaseStatusLastVersion == None)
+            {  log("    yes, possible, doing it!")
+               makeLatestVersionReleaseCandidate
+            }
             else
-            {  log("[POTENTIAL_BUG]: you tried to makeReleaseCandidate of a version which is already a release, release virgin or release candidate.")
+            {  log("   [POTENTIAL_BUG]: you tried to makeReleaseCandidate of a version which is already a release, release virgin or release candidate.")
+               log("   but, hey, dudicon, still try to make a release candidate for it for you for it, good old chap...")
+               makeLatestVersionReleaseCandidate
             }
          }
          case None => logAndThrow("[POTENTIAL_BUG] you tried to makeLatestVersionReleaseCandidate, while there is no version yet of this constitution?")
@@ -448,7 +455,11 @@ getHistory.length, commitIdsReleases.length, isRelease
 
                //releaseStatusLastVersion = Some(ReleaseVirgin)
                releaseStatusPotentialRelease = Some(ReleaseVirgin)
-               tagReleaseVirgin(latestRevCommit.get.name)
+               tagReleaseVirgin(commitIdPotentialRelease.get)
+               if( commitIdPotentialRelease.get == lastReleaseCommitId.get )
+               {  log("   It is the latest version which has become ReleaseVirgin...")
+                  releaseStatusLastVersion = Some(ReleaseVirgin)
+               }
             }
             else
             {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
@@ -468,12 +479,27 @@ getHistory.length, commitIdsReleases.length, isRelease
       {  case Some(ReleaseCandidate) =>
          {  delTagReleaseCandidate
             commitIdPotentialRelease = None
+            releaseStatusPotentialRelease = None
+            if(releaseStatusLastVersion != Release) releaseStatusLastVersion = None // [COULDDO] &y2013.05.13.14:41:19& more elegant to automatically change this one as soon as releaseStatusPotentialRelease is changed with an "intelligent" setter.
          }
          case Some(ReleaseVirgin) =>
          {  delTagReleaseVirgin
             commitIdPotentialRelease = None
+            releaseStatusPotentialRelease = None
+            releaseStatusLastVersion = None
+            if(releaseStatusLastVersion != Release) releaseStatusLastVersion = None // [COULDDO] see &y2013.05.13.14:41:19&
          }
-         case None      => log("   wasn't a potential release anyway")
+         case None =>
+         {  log("   [POTENTIAL_BUG] Wasn't a potential release anyway, dudicon!")
+            log("   still attempting to erase all release info on this version...")
+            delTagReleaseCandidate
+            delTagReleaseVirgin
+            commitIdPotentialRelease = None
+            releaseStatusLastVersion = None
+            releaseStatusPotentialRelease = None
+            if(releaseStatusLastVersion != Release) releaseStatusLastVersion = None // [COULDDO] see &y2013.05.13.14:41:19&
+         }
+         case other     => logAndThrow("The following status shouldn't occur: " + other)
       }
       log(" TODO set wasReleaseCandidate tag as described in logs.")
    }

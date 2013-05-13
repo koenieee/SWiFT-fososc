@@ -360,7 +360,7 @@ class Boot {
       val adminId = GlobalConstant.adminOpt.get.id.is
       val constiAlpha = Constitution.create(adminId)
       constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
-      constiAlpha.makeLatestVersionReleaseCandidate
+      constiAlpha.makeLatestVersionReleaseCandidateIfPossible
    }
 
    if(TestSettings.SIMULATEPLAYINGWITHJARA)
