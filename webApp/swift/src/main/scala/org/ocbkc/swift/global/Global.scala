@@ -117,6 +117,10 @@ object GlobalConstant
    }
 }
 
+object ScalaHelpers
+{  val doNothing = Unit
+}  
+
 /** @todo &y2013.01.20.18:12:52& move this one to a more general place
   */
 object Types
@@ -140,6 +144,17 @@ object TestSettings
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
 
+}
+
+object Logging
+{  def logAndThrow(msg:String) =
+   {  println(msg)
+      throw new RuntimeException(msg)
+   }
+
+   def log(msg:String) =
+   {  println(msg)
+   }
 }
 
 object LiftHelpers

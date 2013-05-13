@@ -9,6 +9,7 @@ import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.OCBKC._
 import scala.util.Random
 import org.ocbkc.swift.global._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.test.SystemWithTesting
 import org.ocbkc.generic.random.RandomExtras._
@@ -24,11 +25,14 @@ object Test
 import Test._
 
 object PlayingSimulator
-{  def start =
-   {  println("PlayingSimulator.start called")
+{     def start =
+   {  log("PlayingSimulator.start called")
+      log("[MUSTDO] build in simulation for checking/unchecking releaseCandidate checkbox.")
+      log("[SHOULDDO] still to-do to get complete simulation concerning release candidates: simulate activities: undo release candidate, choose an earlier version to be release candidate, and more?")
+
       new SimSubscriptions()
 
-      val durationSimulation = 1*24*60*60*1000
+      val durationSimulation = 2*24*60*60*1000
       val startTimeSim = SystemWithTesting.currentTimeMillis
       SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
       
@@ -223,6 +227,9 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       }
    }
   
+   // Some settings outside jara simulation system
+   val MAX_NO_CONSTI:Option[Int] = Some(3) // Set to None for unlimited. Default = None.
+
    // Some state information outside the jara simulation system
    var sesCoord:CoreSimu = null
    val playerId = liftPlayer.id.get
@@ -235,6 +242,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val qChooseFirstConsti = State("qChooseFirstConsti")
    val qCreateNewConsti = State("qCreateNewConsti")
    val qEditExistingConsti = State("qEditExistingConsti")
+   val qChooseReleaseCandidate = State("qChooseReleaseCandidate")
    //val qUnsubscribe = State("qUnsubscribe")
    
    initialisationAfterStateDefs
@@ -242,15 +250,17 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseFirstConstiExp       = 1 * 60 * 1000
-   val durationCreateNewConstiExp         = 5 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
+   val durationChooseReleaseCandidateExp  = 1 * 60 * 1000
+   val durationCreateNewConstiExp         = 1 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
    // &y2013.01.10& Is not elegant and is confusing: startTimeSession and lastFinishTimeStateMap should come from the same source.
 
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qPlayTranslationSession, startTimeSession.get), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qEditExistingConsti, startTimeSession.get), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
    val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseFirstConsti, startTimeSession.get), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
+   val delayChooseReleaseCandidate = DelayFunctionType1Generator.generate( 0.3, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseReleaseCandidate, startTimeSession.get), durationChooseReleaseCandidateExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseReleaseCandidate), ran, "delayChooseReleaseCandidate" )
 
    //For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.003, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
@@ -264,6 +274,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val durationPlayTranslationSession = DurationFunctionType1Generator.generate("durationPlayTranslationSession", durationPlayTranslationSessionExp, 0.25, ran)
    val durationEditExistingConsti = DurationFunctionType1Generator.generate("durationEditExistingConsti", durationEditExistingConstiExp, 0.25, ran)
    val durationChooseFirstConsti = DurationFunctionType1Generator.generate("durationChooseFirstConsti", durationChooseFirstConstiExp, 0.25, ran)
+   val durationChooseReleaseCandidate = DurationFunctionType1Generator.generate("durationChooseReleaseCandidate", durationChooseReleaseCandidateExp, 0.25, ran)
    val durationCreateNewConsti = DurationFunctionType1Generator.generate("durationCreateNewConsti", durationCreateNewConstiExp, 0.25, ran)
 
    transitions =
@@ -271,9 +282,10 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       qStart -> List(qCreateSession),
       qCreateSession -> List(qChooseFirstConsti),
       qChooseFirstConsti -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
-      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti),
-      qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
+      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
+      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
+      qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
+      qChooseReleaseCandidate -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.
@@ -287,6 +299,8 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, delayPlayTranslationSession), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", procPlayTranslationSession(_)), durationPlayTranslationSession)))
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qEditExistingConsti, delayEditExistingConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procEditExistingConsti", procEditExistingConsti(_)), durationEditExistingConsti)))
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseReleaseCandidate, delayChooseReleaseCandidate), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseReleaseCandidate", procChooseReleaseCandidate(_)), durationChooseReleaseCandidate)))
 
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
@@ -309,21 +323,45 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       )
    }
 
+   def procChooseReleaseCandidate(d: DurationInMillis) =
+   {  // choose random constitution of which this person is leader, and which has versions after the last version with a release status.
+      val cwtv_ls = Constitution.constisWithTrailingVersionsWithoutReleaseStatus.filter{ _.leadersUserIDs.contains(playerId) }
+
+      pickRandomElementFromList(cwtv_ls, SharedRandom.get) match
+      {  case Some(cwtv_l) =>
+         {  sesCoord.URsetReleaseCandidate(cwtv_l, true)
+         }
+         case None =>
+         {  log("   No constisWithTrailingVersionsWithoutReleaseStatus for which player " + + playerId + " is leader. (I would have bowed for you your Highness the Player, but you ain't leader for any Consti with this property.)")
+         }
+      }
+   }
+
    def procCreateNewConsti(d: DurationInMillis) =
-   {  val newConsti = Constitution.create(playerId)
-      newConsti.initialiseNew // needed? // needed?  
-      newConsti.publish(
+   {  MAX_NO_CONSTI match
+      {  case None      => createNewConsti
+         case Some(mnc) =>
+         {  if( Constitution.count <= mnc ) createNewConsti
+         }
+      }
+
+      def createNewConsti =
+      {  val newConsti = Constitution.create(playerId)
+         newConsti.initialiseNew // needed?
+         newConsti.publish(
 """<h2>Article 1</h2>
 
 <p>""" + SharedRandom.get.nextString(20) + """</p>
 """, "publication COULDO", playerId.toString
       )
+      }
    }
+
 
    def procChooseFirstConsti(d: DurationInMillis) =
    {  println("procChooseFirstConsti called")
 
-      pickRandomElementFromList(Constitution.constisWithReleases, SharedRandom.get) match
+      pickRandomElementFromList(Constitution.constisWithAReleaseOrVirginRelease, SharedRandom.get) match
       {  case Some(randomConsti) =>
          {  sesCoord.URchooseFirstConstitution(randomConsti.constiId)
          }

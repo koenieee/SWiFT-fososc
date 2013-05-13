@@ -36,11 +36,11 @@ If you are a follower of, and contributor to, this constitution, read these tips
 
 <!-- </top:followerInstructions> -->
 
-
 <h2>Properties</h2>
 
 <table>
    <tr><td>Creationdate:</td>             <td><top:creationDate /></td>       </tr>
+   <tr><td>Leader(s):</td>                <td><top:leaders /></td>            </tr>
    <tr><td>Created by:</td>               <td><top:creator /></td>            </tr>
    <tr><td>Description:</td>              <td><top:description /></td>        </tr>
    <tr><td>Latest release with fluency score:</td>              <td><top:latestRelease /></td>        </tr>
@@ -54,7 +54,6 @@ If you are a follower of, and contributor to, this constitution, read these tips
 <table>
    <tr><td colspan="2"><top:revisionHistory /></td></tr>
    <tr><td>Follow this constitution:</td><td><top:followCheckbox /></td></tr>
-   <tr><td>Don't forget to save the above changes</td><td><top:saveGeneralControlBt /></td></tr> <!-- <&y2012.06.23.17:41:31& COULDDO: update automatically when someone clicked checkboxes etc. But don't know how to do that elegantly now with scala lift> -->
 </table>
 <hr />
 <!-- edit subsnippet -->
@@ -240,6 +239,7 @@ If you are a follower of, and contributor to, this constitution, read these tips
 <h2>Mode = view</h2>
 <table>
    <tr><td><top:editBt /></td><td></td> </tr>
+   <tr><td>Release candidate</td><td><top:releaseCandidateCb /></td></tr>
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>

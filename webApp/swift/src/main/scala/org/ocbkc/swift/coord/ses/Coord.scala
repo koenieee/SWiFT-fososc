@@ -9,6 +9,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
@@ -58,13 +59,24 @@ trait CoreTrait
 
    /** @param constiId Must be constiId of a constitution with at least one version released
      */
-   def URchooseFirstConstitution(constiId:ConstiId) =
+   def URchooseFirstConstitution(constiId:ConstiId):Unit =
    {  val player = currentPlayer
-      val consti = Constitution.getById(constiId).get // get is possible because the player is only presented constitutions which HAVE a last release.
+      URchooseFirstConstitution(currentPlayer, constiId)
+   }
 
-      player.firstChosenConstitution(constiId).save
-      player.releaseOfFirstChosenConstitution(consti.lastReleaseCommitId.get).save // get is possible because the player is only presented constitutions which HAVE a last release.
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+   def URchooseFirstConstitution(player:Player, constiId:ConstiId):Unit =
+   {  player.firstChosenConstitution(constiId).save // note: apply of firstChosenConstitution has been overridden with an apply which does everything needed.
+   }
+
+   /** Set last version of consti with id constiId.
+     * @param on, if true it switches on the ReleaseCandidate state for the latest version, otherwise it is switched off.
+     */
+   def URsetReleaseCandidate(consti:Constitution, on:Boolean) =
+   {  if(on)
+      {  consti.makeLatestVersionReleaseCandidateIfPossible
+      } else
+      {  consti.unmakeCurrentPotentialRelease
+      }
    }
 
    def URtranslation:String =  
@@ -76,7 +88,8 @@ trait CoreTrait
    }
 
    def URstopTranslation =
-   {  cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+   {  log("URstopTranslation called")
+      cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
       Unit
    }
 
@@ -84,6 +97,8 @@ trait CoreTrait
    {  gameCore.algorithmicDefenceGenerator
    }
 
+   /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
+     */
    def URalgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
@@ -100,9 +115,18 @@ trait CoreTrait
       {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
       }
 
-      // TODO releaseLatestVersion if available
-      
+      turnReleaseCandidateIntoVirginIfPossible
+     
       res
+   }
+
+   protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
+   {  currentPlayer.firstChosenConstitution.is match
+      {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
+         case id => { log("   firstChosenConstitution = "  + id); log("   playerHasAccessToAllConstis after this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer)); Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible }
+      }
+
+      Unit
    }
 
    def numOfSessionsAfterConstiAccess =
@@ -179,21 +203,17 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    // Communication with User Interface
    // UR = User Request
    // user requests to prepare session
-   def URprepare = 
+   def URprepare =
    {  
    }
 
+   /*
    override def URchooseFirstConstitution(constiId:ConstiId) =
    {  val player = currentPlayer
-      player.firstChosenConstitution(constiId).save
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
+      URchooseFirstConstitution(currentPlayer, constiId)
    }
+   */
 
-   def URchooseFirstConstitution(player:Player, constiId:ConstiId) =
-   {  //val player = currentPlayer
-      player.firstChosenConstitution(constiId).save
-      player.timeFirstChosenConstitution(System.currentTimeMillis).save
-   }
 
 /*
    def URtranslation:String =  
@@ -270,7 +290,7 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
    // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
    {  val cTM = SystemWithTesting.currentTimeMillis
-
+      log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
       cc.startTime(cTM).save
       cc.startTimeTranslation(cTM).save
       cc.stopTime(cTM + duration).save
@@ -279,7 +299,9 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
       cc.answerPlayerCorrect(winSession).save
       cc.serialize
       PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
-      sesHis.coreContents ::= cc
+      sesHis.coreContents ::= cc  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+
+      turnReleaseCandidateIntoVirginIfPossible
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =
