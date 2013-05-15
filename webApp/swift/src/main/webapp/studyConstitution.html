@@ -41,17 +41,17 @@ $(document).ready(function(){
    // scroll(0,0);
     var keyisdown = false;
     var scroll_last_position = 0;
-       	 var keycode = 18; //alt key
-   	 var keycode2 = 79; //o key
+       	 var keycode = 86; //alt key
+   	 var keycode2 = 81; //o key
    	 //alert(e.which);
    	 var scrolled = false;
-   	
+   	pressedKeys = [];
+    
     $('body').bind('keydown',function(e)
     {
-
-   	 if (e.altKey ==true) {
-   	 if( e.which === keycode2)
-   	 {
+   	 if (e.altKey == true ) {
+   	 if( e.keyCode == keycode2)
+   	{
 		
 		if(scrolled == false)
 		{
@@ -63,7 +63,7 @@ $(document).ready(function(){
 
    		 scroll_last_position = $(window).scrollTop();
    	 }
-    }
+   }
 }
 
     ).bind('keyup',function()
