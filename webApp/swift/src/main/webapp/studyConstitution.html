@@ -27,7 +27,7 @@ Info
 
 <hr />
 <p id="blank">
-If you want to read on, please hold the left Alt and O key.
+If you want to read on, please <b>hold the 'g' key.</b>
 </p>
 
 <table  id="text">
@@ -42,14 +42,14 @@ $(document).ready(function(){
     var keyisdown = false;
     var scroll_last_position = 0;
        	 var keycode = 86; //alt key
-   	 var keycode2 = 81; //o key
+   	 var keycode2 = 71; //o key
    	 //alert(e.which);
    	 var scrolled = false;
    	pressedKeys = [];
     
     $('body').bind('keydown',function(e)
     {
-   	 if (e.altKey == true ) {
+   	// if (e.altKey == true ) {
    	 if( e.keyCode == keycode2)
    	{
 		
@@ -62,7 +62,7 @@ $(document).ready(function(){
    		 $('#blank').css('visibility', 'hidden');
 
    		 scroll_last_position = $(window).scrollTop();
-   	 }
+   //	 }
    }
 }
 
