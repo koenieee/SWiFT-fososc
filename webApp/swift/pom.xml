@@ -127,11 +127,40 @@
       <version>2.4</version>
     </dependency>
   </dependencies>
-
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
+    
     <plugins>
+		
+  <plugin>
+	   <groupId>org.apache.maven.plugins</groupId>
+		<artifactId>maven-clean-plugin</artifactId>
+		<version>2.5</version>
+		<configuration>
+		  <filesets>
+			<fileset>
+			<directory>${basedir}/persist/</directory>
+			</fileset>
+			<fileset>
+			  <directory>${basedir}/src/main/webapp/constitutions/</directory>
+			  </fileset>
+			  <fileset>
+			  <directory>${basedir}/users/</directory>
+			  </fileset>
+			  <fileset>
+			  <directory>${basedir}/binaries/</directory>			
+			 </fileset>
+			  <fileset>
+			  <directory>${basedir}/</directory>		
+			  <includes>
+       	  <include>lift_proto.*</include>	
+          </includes>
+		
+			 </fileset>
+		  </filesets>
+		</configuration>
+	  </plugin>
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
@@ -229,6 +258,7 @@
           </classpathContainers>
         </configuration>
       </plugin>
+	 
       <plugin>
 	   <groupId>org.apache.maven.plugins</groupId>
 	   <artifactId>maven-dependency-plugin</artifactId>
