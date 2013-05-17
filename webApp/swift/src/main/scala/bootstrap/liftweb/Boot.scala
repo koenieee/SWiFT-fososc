@@ -34,7 +34,8 @@ import ocbkc.swift.test.simulation.jara._
 class Boot {
   def boot {
    println("Boot.boot called")
-   LiftRules.useXhtmlMimeType = false; 
+   upgradePersistentDatastructures
+   LiftRules.useXhtmlMimeType = false
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -57,6 +58,7 @@ class Boot {
 
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
+
     Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
 
     // Build SiteMap
@@ -517,7 +519,7 @@ class Boot {
    }
 
       println("Boot.boot finished")
-
+   
   }
 
 
@@ -526,5 +528,9 @@ class Boot {
    */
   private def makeUtf8(req: HTTPRequest) {
     req.setCharacterEncoding("UTF-8")
+  }
+
+  private def upgradePersistentDatastructures =
+  {   
   }
 }

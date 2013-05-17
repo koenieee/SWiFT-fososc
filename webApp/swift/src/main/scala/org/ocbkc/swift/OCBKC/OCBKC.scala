@@ -595,7 +595,7 @@ object Constitution
             const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.peel(tag).getPeeledObjectId.name ).reverse.toList
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             println("   commitIdsReleases just read from git repo:")
-            const.commitIdsReleases.map( println(_) )
+            const.commitIdsReleases.map( log(_) )
          }
          
          constitutionFiles map readConst

@@ -17,7 +17,8 @@ import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 
 object GlobalConstant
-{  val TEST = true
+{  val MAIN_VERSION = "0.3.0"
+   val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
    val OS = System.getProperty("os.name").toLowerCase();
