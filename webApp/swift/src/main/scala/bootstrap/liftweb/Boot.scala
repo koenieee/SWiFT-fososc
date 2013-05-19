@@ -530,7 +530,4 @@ class Boot {
     req.setCharacterEncoding("UTF-8")
   }
 
-  private def upgradePersistentDatastructures =
-  {   
-  }
 }
