@@ -14,7 +14,8 @@ import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.OCBKCinfoPlayer._
-
+import org.ocbkc.swift.global.Logging._
+import org.ocbkc.persist.PersDataUpgrader4SWiFT
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
@@ -33,8 +34,10 @@ import ocbkc.swift.test.simulation.jara._
  */
 class Boot {
   def boot {
-   println("Boot.boot called")
-   upgradePersistentDatastructures
+   log("Boot.boot called")
+
+   log("[MUSTDO] determine fromVersion, so replace the first argument of PersDataUpgrader4SWiFT in the next command.")
+   PersDataUpgrader4SWiFT("1.2.1", "2.4.1") //GlobalConstant.MAIN_VERSION)
    LiftRules.useXhtmlMimeType = false
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
