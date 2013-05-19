@@ -80,8 +80,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         var followers:List[Long], // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
                         var leadersUserIDs:List[Long],
                         var releaseStatusLastVersion:Option[ReleaseStatus],
-                        var commitIdPotentialRelease: Option[VersionId],
-                        var releaseStatusPotentialRelease:Option[PotentialRelease] 
+                        var _commitIdPotentialRelease: Option[VersionId], // use commitIdPotentialRelease instead of this one
+                        var releaseStatusPotentialRelease:Option[PotentialRelease]
                        )// extends LongKeyedMapper[Constitution] with IdPK
 {  import scoring._
    val RELEASE_CANDIDATE_TAG_STRING = "consti" + constiId + ".releaseCandidate" 
@@ -89,9 +89,18 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    val RELEASE_TAG_STRING = "consti" + constiId + ".release"
    //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
-
+   
    var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
 
+   def commitIdPotentialRelease_=(commitId:Option[VersionId])
+   {  log("commitIdPotentialRelease_= called")
+      log("   commitId = " + commitId)
+      _commitIdPotentialRelease = commitId
+   }
+
+   def commitIdPotentialRelease:Option[VersionId] =
+   {  _commitIdPotentialRelease
+   }
    /** first release has number 1
      */
    def releaseIndex(releaseId:VersionId) = 
@@ -417,7 +426,8 @@ getHistory.length, commitIdsReleases.length, isRelease
          {  val lcommitid = lrc.name
 
             def makeLatestVersionReleaseCandidate =
-            {  unmakeCurrentPotentialRelease
+            {  log("makeLatestVersionReleaseCandidate called")
+               unmakeCurrentPotentialRelease
                releaseStatusLastVersion = Some(ReleaseCandidate)
                releaseStatusPotentialRelease = Some(ReleaseCandidate)
                commitIdPotentialRelease = Some(lcommitid)
@@ -456,7 +466,7 @@ getHistory.length, commitIdsReleases.length, isRelease
                //releaseStatusLastVersion = Some(ReleaseVirgin)
                releaseStatusPotentialRelease = Some(ReleaseVirgin)
                tagReleaseVirgin(commitIdPotentialRelease.get)
-               if( commitIdPotentialRelease.get == lastReleaseCommitId.get )
+               if( commitIdPotentialRelease.get == latestRevCommit.get.name )
                {  log("   It is the latest version which has become ReleaseVirgin...")
                   releaseStatusLastVersion = Some(ReleaseVirgin)
                }
