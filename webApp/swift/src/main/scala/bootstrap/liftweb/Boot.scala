@@ -35,9 +35,10 @@ import ocbkc.swift.test.simulation.jara._
 class Boot {
   def boot {
    log("Boot.boot called")
+   
+   PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
+   PersDataUpgrader4SWiFT.apply
 
-   log("[MUSTDO] determine fromVersion, so replace the first argument of PersDataUpgrader4SWiFT in the next command.")
-   PersDataUpgrader4SWiFT("1.2.1", "2.4.1") //GlobalConstant.MAIN_VERSION)
    LiftRules.useXhtmlMimeType = false
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 

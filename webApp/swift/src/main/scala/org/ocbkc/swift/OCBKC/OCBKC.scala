@@ -38,7 +38,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 */
 object TestSerialization
 {  def main(args: Array[String]) =
-   {  if( args.length != 0 ) println("Usage: command without arguments")
+   {  if( args.length != 0 ) log("Usage: command without arguments")
       val const1 = Constitution(1,15,2,0,"Lets go organic!",None,List(),List(2),None,None,None)
       const1.serialize
    }
@@ -120,9 +120,9 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    }
 
    def firstReleaseExists = 
-   {  println("firstReleaseExists")
+   {  log("firstReleaseExists")
       val r = ( commitIdsReleases != Nil )
-      println("   returns: " + r)
+      log("   returns: " + r)
       r
    }
 
@@ -199,7 +199,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
 
    def plainTextXMLfragment2ScalaXMLinLiftChildren(plain:String):Elem =
    {  val contentWrapped = "<lift:children>" + plain + "</lift:children>"
-      println("   contentWrapped:String = " + contentWrapped)
+      log("   contentWrapped:String = " + contentWrapped)
       val xml = XML.loadString( contentWrapped )
       xml
    }
@@ -210,7 +210,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
 
    def checkCorrectnessXMLfragment(xmlStr:String):XMLandErr =
    {  val contentWrapped = "<lift:children>" + xmlStr + "</lift:children>"
-      println("   contentWrapped:String = " + contentWrapped)
+      log("   contentWrapped:String = " + contentWrapped)
       try
       {  XMLandErr( Some(XML.loadString( contentWrapped )), null)
       }
@@ -226,7 +226,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       // <&y2012.06.11.19:53:08& first add lift:children tag to make it a well-formed xml file.>
       val outFile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + htmlFileName)
 
-      err.println("  saving file: " + outFile.getAbsolutePath)
+      log("  saving file: " + outFile.getAbsolutePath)
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.print(constitutionText)
       out.flush
@@ -240,7 +240,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    
    // Adds and commits constitutionText using jgit
    def publish(constitutionText:String, commitMsg:String, userId:String):Boolean =
-   {  println("Constitution.publish called")
+   {  log("Constitution.publish called")
       save(constitutionText)
 
       val fullPath2Const = htmlFileName
@@ -254,17 +254,17 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                     {   gitUserId(userId, new Date(SystemWithTesting.currentTimeMillis))
                     }
 
-      println("   jgit author id = " + gUserId.toString)
-      println("   now adding and committing: " + fullPath2Const )
+      log("   jgit author id = " + gUserId.toString)
+      log("   now adding and committing: " + fullPath2Const )
       //jgit.status
       val addCommand = jgit.add
-      println("   isUpdate() (should be false) " + addCommand.isUpdate)
+      log("   isUpdate() (should be false) " + addCommand.isUpdate)
       addCommand.addFilepattern( fullPath2Const ).call
       val status = jgit.status.call
-      println("   added files " + status.getAdded )
-      println("   modified files " + status.getModified )
-      println("   changed files " + status.getChanged )
-      println("   untracked files " + status.getUntracked )
+      log("   added files " + status.getAdded )
+      log("   modified files " + status.getModified )
+      log("   changed files " + status.getChanged )
+      log("   untracked files " + status.getUntracked )
       // Determine whether this version will become the new release
          
       val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
@@ -277,8 +277,8 @@ getHistory.length, commitIdsReleases.length, isRelease
 4 3 true
 5 5 false
 */
-      println("   getHistory.length = " + getHistory.length)
-      println("   commitIdsReleases.length = " + commitIdsReleases.length)
+      log("   getHistory.length = " + getHistory.length)
+      log("   commitIdsReleases.length = " + commitIdsReleases.length)
       releaseStatusLastVersion = None
       log("[POTENTIAL_BUG] this method returned a boolean in the previous version, is this still needed?")
       false
@@ -309,11 +309,11 @@ getHistory.length, commitIdsReleases.length, isRelease
    def serialize =
    {  implicit val formats = Serialization.formats(NoTypeHints)
       var constSer:String = Serialization.write(this)
-      err.println("  Constitution-object serialised to: " + constSer)
+      log("  Constitution-object serialised to: " + constSer)
       // write constitution-object to file with unique name
 
       var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/Constitution" + constiId)
-      err.println("   creating file: " + outFile.getAbsolutePath)
+      log("   creating file: " + outFile.getAbsolutePath)
       // outFile.getParentFile().mkdirs() these should already exist
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
@@ -329,7 +329,7 @@ getHistory.length, commitIdsReleases.length, isRelease
          {  val playerId = revcom.getAuthorIdent.getName
             val publisher:Player = Player.find(playerId) match
             {  case Full(player)  => player
-               case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found. No, I'm not angry, just very very disappointed..."; println("   " + errmsg); throw new RuntimeException(errmsg) }
+               case _             => { val errmsg = "BUG: Player with this id " + playerId + " not found. No, I'm not angry, just very very disappointed..."; log("   " + errmsg); throw new RuntimeException(errmsg) }
             }
             Some(ConstiVersionInfo(commitId, revcom.getCommitTime.toLong, publisher, revcom.getFullMessage))
          }
@@ -370,7 +370,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    def removeFollower(p:Player):Unit = 
    {  getFollowerConsti_join(p) match
       {  case Some(fcj) => { if(!fcj.delete_!) throw new RuntimeException("Couldn't remove player " + p + " as follower from consti " + this + " from the database.") }
-         case _         => println("   player wasn't a follower anyway, nothing to remove. Why did you disturb me from my Devine nap...")
+         case _         => log("   player wasn't a follower anyway, nothing to remove. Why did you disturb me from my Devine nap...")
       }
       followers = followers.filter(_ != p.id.is)
       Unit
@@ -575,7 +575,7 @@ object Constitution
    }
 
    def deserialize =
-   {  println("Constitution.deserialize called")
+   {  log("Constitution.deserialize called")
       log("[MUSTDO] restore releasecandidate and releasevirgin tags in the right way from the git database.")
       val constObjDir = new File(GlobalConstant.CONSTITUTIONOBJECTDIR)
       val fileFilter:FileFilter = new WildcardFileFilter("Constitution*")
@@ -584,14 +584,14 @@ object Constitution
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
          // retrieve all tags needed for reconstructing releases.
          val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asBuffer(jgit.tagList.call)
-         println("   names of tags found:")
-         taglist.map( ref => println(ref.getName) )
+         log("   names of tags found:")
+         taglist.map( ref => log(ref.getName) )
  
          def readConst(file:File):Unit =
-         {  println("   converting to Constitution-object: " + file.getPath )
+         {  log("   converting to Constitution-object: " + file.getPath )
             val in:BufferedReader   = new BufferedReader(new FileReader(file))
             var inStr:String        = in.readLine
-            println("   serialized form: " + inStr)
+            log("   serialized form: " + inStr)
             val const:Constitution  = Serialization.read[Constitution](inStr)
             constis ::= const
             // reconstruct releases from git repo
@@ -604,7 +604,7 @@ object Constitution
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
             const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.peel(tag).getPeeledObjectId.name ).reverse.toList
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
-            println("   commitIdsReleases just read from git repo:")
+            log("   commitIdsReleases just read from git repo:")
             const.commitIdsReleases.map( log(_) )
          }
          
@@ -614,25 +614,25 @@ object Constitution
          val in:BufferedReader   = new BufferedReader(new FileReader(highestIdFile))
          var inStr:String        = in.readLine()
          highestId               = inStr.toInt
-         println("   read from file: highestId = " + highestId)
+         log("   read from file: highestId = " + highestId)
          in.close
       }
       else
-      {  println("   No serialised Constitution objects found in permanent storage! Lets start the day completely empty... Like a Zen buddhist.")
+      {  log("   No serialised Constitution objects found in permanent storage! Lets start the day completely empty... Like a Zen buddhist.")
       }
    }
 
    def serialize = 
-   {  println("object Constitution.serialize called")
+   {  log("object Constitution.serialize called")
       constis.map(_.serialize)
 
       var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
-      err.println("   creating file: " + outFile.getAbsolutePath)
+      log("   creating file: " + outFile.getAbsolutePath)
       // outFile.getParentFile().mkdirs() these should already exist
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.println(highestId.toString)
-      out.close()
+      out.close
    }
 
    def templateNewConstitution(constitutionId:Int):String =
@@ -643,8 +643,8 @@ object Constitution
    /** This method is not used for deserialisation purposes, solely for creating really new consti
      */
    def create(creatorUserID:Long):Constitution = 
-   {  println("Constitution(Singleton Object).create called")
-      println("   creatorUserID = " + creatorUserID)
+   {  log("Constitution(Singleton Object).create called")
+      log("   creatorUserID = " + creatorUserID)
       highestId += 1
       val now = if( !TestSettings.SIMULATEPLAYINGWITHJARARUNNING )
                   currentTimeMillis.toLong
@@ -749,7 +749,7 @@ object PlayerScores
      * 
      */
    def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
-   {  println("percentageCorrect called")
+   {  log("percentageCorrect called")
 
       val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
 
@@ -758,8 +758,8 @@ object PlayerScores
       val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
       val totalNumber = ccs.length
 
-      println("   Number of sessions taken into consideration: " + totalNumber)
-      println("   Datetimes of sessions taken into consideration: " + ccs.map(cc => cc.startTime.get))
+      log("   Number of sessions taken into consideration: " + totalNumber)
+      log("   Datetimes of sessions taken into consideration: " + ccs.map(cc => cc.startTime.get))
 
       val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
       Result_percentageCorrect(percCorrect, totalNumber)
@@ -777,13 +777,13 @@ object PlayerScores
   * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
   */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
-   {  println("PlayerScores.averageDurationTranslation called")
+   {  log("PlayerScores.averageDurationTranslation called")
       val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
       
       val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
       val durationsCorrectTranslations = correctCcs.map(cc => cc.durationTranslation.get)
       val numberCorrect = correctCcs.length
-      println("   numberCorrect = " + numberCorrect )
+      log("   numberCorrect = " + numberCorrect )
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
@@ -806,7 +806,7 @@ object ConstiScores
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
-   {  println("averagePercentageCorrect called")
+   {  log("averagePercentageCorrect called")
       Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
@@ -821,7 +821,7 @@ object ConstiScores
   * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] =
-   {  println("averagePercentageCorrect called")
+   {  log("averagePercentageCorrect called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
@@ -829,7 +829,7 @@ object ConstiScores
          p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
       )
 
-      println("   playersWithThisRelease:" + playersWithThisRelease)
+      log("   playersWithThisRelease:" + playersWithThisRelease)
       
       val percentages:List[Double] =
       playersWithThisRelease.map(
@@ -844,7 +844,7 @@ object ConstiScores
          } 
       ).collect{ case Some(p) => p }
 
-      println("   percentages: " + percentages)
+      log("   percentages: " + percentages)
 
       def add(p1:Double, p2:Double) = p1 + p2
       val avPercCor = if(percentages.isEmpty) None else Some((percentages.fold(0d)(add))/percentages.size)
@@ -880,7 +880,7 @@ object ConstiScores
    }
    */
    def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
-   {  println("ConstiScores.averageDurationTranslation called")
+   {  log("ConstiScores.averageDurationTranslation called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
@@ -888,7 +888,7 @@ object ConstiScores
          p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
       )
 
-      println("   playersWithThisRelease:" + playersWithThisRelease)
+      log("   playersWithThisRelease:" + playersWithThisRelease)
       
       val averageDurationTranslationPerPlayer:List[Double] =
       playersWithThisRelease.map(
@@ -903,7 +903,7 @@ object ConstiScores
          } 
       ).collect{ case Some(p) => p }
 
-      println("   averageDurationTranslations: " + averageDurationTranslationPerPlayer)
+      log("   averageDurationTranslations: " + averageDurationTranslationPerPlayer)
 
       def add(p1:Double, p2:Double) = p1 + p2
       val averageDurationTranslations = if(averageDurationTranslationPerPlayer.isEmpty) None else Some((averageDurationTranslationPerPlayer.fold(0d)(add))/averageDurationTranslationPerPlayer.size)
