@@ -17,7 +17,7 @@ import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 
 object GlobalConstant
-{  val MAIN_VERSION = "5.3.0"
+{  val MAIN_VERSION = "0.3.0" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers.
    val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 

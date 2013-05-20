@@ -39,7 +39,7 @@ object Test
   * @todo &y2013.05.20.12:54:50& refactor: move swift specific parts to other packages, for easier reuse of this package in other web applications.
   * @todo &y2013.05.20.13:50:00& integrate all non-swift specific parts into PersDataUpgrader.
   */
-object PersDataUpgrader4SWiFT extends PersDataUpgrader(Test.persDataUpgraders)
+object PersDataUpgrader4SWiFT extends PersDataUpgrader(Nil) //Test.persDataUpgraders)
 {  var persistentDataMainVersion:Option[String] = None
    var persistentDataMainVersion_PathName:Option[String] = None
    var currentMainVersion:Option[String] = None
