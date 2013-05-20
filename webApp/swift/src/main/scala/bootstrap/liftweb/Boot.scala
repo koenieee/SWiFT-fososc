@@ -14,7 +14,8 @@ import _root_.org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.OCBKCinfoPlayer._
-
+import org.ocbkc.swift.global.Logging._
+import org.ocbkc.persist.PersDataUpgrader4SWiFT
 import org.eclipse.jgit.api._
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
@@ -33,8 +34,12 @@ import ocbkc.swift.test.simulation.jara._
  */
 class Boot {
   def boot {
-   println("Boot.boot called")
-   LiftRules.useXhtmlMimeType = false; 
+   log("Boot.boot called")
+   
+   PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
+   PersDataUpgrader4SWiFT.apply
+
+   LiftRules.useXhtmlMimeType = false
     if (!DB.jndiJdbcConnAvailable_?) {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
@@ -57,6 +62,7 @@ class Boot {
 
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
+
     Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
 
     // Build SiteMap
@@ -517,7 +523,7 @@ class Boot {
    }
 
       println("Boot.boot finished")
-
+   
   }
 
 
@@ -527,4 +533,5 @@ class Boot {
   private def makeUtf8(req: HTTPRequest) {
     req.setCharacterEncoding("UTF-8")
   }
+
 }
