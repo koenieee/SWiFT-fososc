@@ -2,8 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
-  
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ocbkc.swift</groupId>
   <artifactId>swift</artifactId>
@@ -11,7 +9,7 @@
   <packaging>war</packaging>
   <name>SWiFT Project</name>
   <inceptionYear>2010</inceptionYear>
-<!--  <author>Chide Groenouwe</author> -->
+  <!--  <author>Chide Groenouwe</author> -->
   <properties>
     <scala.version>2.9.1</scala.version>
     <!-- Common plugin settings -->
@@ -22,7 +20,6 @@
     <vscaladoc.links.liftweb.pathsufix>scaladocs/</vscaladoc.links.liftweb.pathsufix>
     <vscaladoc.links.liftweb.baseurl>http://scala-tools.org/mvnsites/liftweb</vscaladoc.links.liftweb.baseurl>
   </properties>
-
   <repositories>
     <repository>
       <id>scala-tools.releases</id>
@@ -39,9 +36,7 @@
       <id>jgit-repository</id>
       <url>http://download.eclipse.org/jgit/maven</url>
     </repository>
-
   </repositories>
-
   <pluginRepositories>
     <pluginRepository>
       <id>scala-tools.releases</id>
@@ -50,14 +45,12 @@
       <!-- OLD <url>http://scala-tools.org/repo-releases</url> -->
     </pluginRepository>
   </pluginRepositories>
-
   <dependencies>
-   <dependency>
+    <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-json-ext_2.9.1</artifactId>
       <version>2.4</version>
-   </dependency>
-
+    </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_2.9.1</artifactId>
@@ -103,12 +96,13 @@
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-compiler</artifactId>
       <version>${scala.version}</version>
-      <scope>compile</scope> <!-- changed to test something, switch back to "test" if needed -->
+      <scope>compile</scope>
+      <!-- changed to test something, switch back to "test" if needed -->
     </dependency>
     <dependency>
-        <groupId>commons-io</groupId>
-        <artifactId>commons-io</artifactId>
-            <version>2.4</version>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+      <version>2.4</version>
     </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
@@ -116,11 +110,11 @@
       <version>2.3.1.201302201838-r</version>
       <!-- <version>2.0.0.201206130900-r</version> -->
     </dependency>
-   <dependency>
-     <groupId>org.gitective</groupId>
-     <artifactId>gitective-core</artifactId>
-     <version>0.9.9</version>
-   </dependency>
+    <dependency>
+      <groupId>org.gitective</groupId>
+      <artifactId>gitective-core</artifactId>
+      <version>0.9.9</version>
+    </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-widgets_2.9.1</artifactId>
@@ -130,37 +124,70 @@
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
-    
     <plugins>
-		
-  <plugin>
-	   <groupId>org.apache.maven.plugins</groupId>
-		<artifactId>maven-clean-plugin</artifactId>
-		<version>2.5</version>
-		<configuration>
-		  <filesets>
-			<fileset>
-			<directory>${basedir}/persist/</directory>
-			</fileset>
-			<fileset>
-			  <directory>${basedir}/src/main/webapp/constitutions/</directory>
-			  </fileset>
-			  <fileset>
-			  <directory>${basedir}/users/</directory>
-			  </fileset>
-			  <fileset>
-			  <directory>${basedir}/binaries/</directory>			
-			 </fileset>
-			  <fileset>
-			  <directory>${basedir}/</directory>		
-			  <includes>
-       	  <include>lift_proto.*</include>	
-          </includes>
-		
-			 </fileset>
-		  </filesets>
-		</configuration>
-	  </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>2.5</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <phase>initialize</phase>
+            <goals>
+              <goal>clean</goal>
+            </goals>
+            <configuration>
+              <excludeDefaultDirectories>true</excludeDefaultDirectories>
+              <filesets>
+                <fileset>
+                  <directory>${basedir}/persist/</directory>
+                </fileset>
+                <fileset>
+                  <directory>${basedir}/src/main/webapp/constitutions/</directory>
+                </fileset>
+                <fileset>
+                  <directory>${basedir}/users/</directory>
+                </fileset>
+                <fileset>
+                  <directory>${basedir}/binaries/</directory>
+                </fileset>
+                <fileset>
+                  <directory>${basedir}/</directory>
+                  <includes>
+                    <include>lift_proto.*</include>
+                  </includes>
+                  <directory>${basedir}/target</directory>
+                  <excludes>
+                    <exclude>**/*</exclude>
+                  </excludes>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+        <configuration>
+          <filesets>
+            <fileset>
+              <directory>${basedir}/persist/</directory>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/src/main/webapp/constitutions/</directory>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/users/</directory>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/binaries/</directory>
+            </fileset>
+            <fileset>
+              <directory>${basedir}/</directory>
+              <includes>
+                <include>lift_proto.*</include>
+              </includes>
+            </fileset>
+          </filesets>
+        </configuration>
+      </plugin>
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
@@ -258,40 +285,39 @@
           </classpathContainers>
         </configuration>
       </plugin>
-	 
       <plugin>
-	   <groupId>org.apache.maven.plugins</groupId>
-	   <artifactId>maven-dependency-plugin</artifactId>
-	 <version>2.5.1</version>
-				<configuration>
-				  <artifactItems>
-					  <artifactItem>
-						  <groupId>org.eprover</groupId>
-						  <artifactId>eprover</artifactId>
-						  <version>1.6</version>
-						  <type>jar</type>
-						  <overWrite>true</overWrite>
-						  <outputDirectory>${basedir}/binaries/eprover</outputDirectory>
-					  </artifactItem>
-					   <artifactItem>
-						  <groupId>org.paradox</groupId>
-						  <artifactId>paradox</artifactId>
-						  <version>4.0</version>
-						  <type>jar</type>
-						  <overWrite>true</overWrite>
-						  <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
-					  </artifactItem>
-					  <artifactItem>
-						  <groupId>org.ocbkc.swift</groupId>
-						  <artifactId>binaries_swift</artifactId>
-						  <version>0.0.1</version>
-						  <type>jar</type>
-						  <overWrite>true</overWrite>
-						  <outputDirectory>${basedir}/binaries/swift</outputDirectory>
-					  </artifactItem>
-				  </artifactItems>
-		  </configuration>
-		 </plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.5.1</version>
+        <configuration>
+          <artifactItems>
+            <artifactItem>
+              <groupId>org.eprover</groupId>
+              <artifactId>eprover</artifactId>
+              <version>1.6</version>
+              <type>jar</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>${basedir}/binaries/eprover</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.paradox</groupId>
+              <artifactId>paradox</artifactId>
+              <version>4.0</version>
+              <type>jar</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
+            </artifactItem>
+            <artifactItem>
+              <groupId>org.ocbkc.swift</groupId>
+              <artifactId>binaries_swift</artifactId>
+              <version>0.0.1</version>
+              <type>jar</type>
+              <overWrite>true</overWrite>
+              <outputDirectory>${basedir}/binaries/swift</outputDirectory>
+            </artifactItem>
+          </artifactItems>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
   <reporting>
@@ -311,3 +337,4 @@
     </plugins>
   </reporting>
 </project>
+
