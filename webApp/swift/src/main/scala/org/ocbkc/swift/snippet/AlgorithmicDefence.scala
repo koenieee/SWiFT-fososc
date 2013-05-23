@@ -23,9 +23,9 @@ class AlgorithmicDefenceRound
          S.redirectTo("algorithmicDefenceRoundStage2.html") 
       }  
 
-      val algoDefPlayer = sesCoordLR.URalgorithmicDefenceStage1
+      val algoDefPlayer = sesCoordLR.URstartAlgorithmicDefenceStage1
 
-      // recaputilate
+      // recapitulate
       val answer   = bind(  
                "top", ns, 
                "startderivation"    -> SHtml.submit("Start Derivation!", processSubmission),

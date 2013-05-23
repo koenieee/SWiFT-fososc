@@ -180,6 +180,7 @@ class Boot {
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Play Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("continueSession", "continueSession" :: Nil, "Play Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; err.println("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
@@ -461,7 +462,7 @@ class Boot {
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
       {  val winSession = randomSeq.nextBoolean
          List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtranslation ),
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URstartTranslation ),
             (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
             (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )

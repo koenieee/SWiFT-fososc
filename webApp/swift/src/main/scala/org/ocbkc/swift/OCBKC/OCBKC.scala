@@ -62,7 +62,9 @@ case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 
 case class ReleaseStatus
 
-abstract class PotentialRelease extends ReleaseStatus
+abstract case class PotentialRelease extends ReleaseStatus 
+{  log("[MUSTDO] &y2013.05.23.00:54:41& problem with serialization of PotentialRelease, I think lift-json can't deal with abstract case classes. Perhaps try to remove the \"abstract\" keyword. Not elegant, because it should be abstract.")
+}
 case object ReleaseCandidate extends PotentialRelease // this will become a release virgin if there are no prior releases yet, or the previous release has received its score.
 case object ReleaseVirgin extends PotentialRelease // this is almost a release: as soon as the first player chooses it, it becomes a release.
 case object Release extends ReleaseStatus
@@ -318,7 +320,7 @@ getHistory.length, commitIdsReleases.length, isRelease
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
       out.println(constSer)
-      out.close()
+      out.close
    }
    
    case class ConstiVersionInfo(val commitId:String, val creationDatetimePOSIX:Long, val publisher:Player, val publishDescription:String)   

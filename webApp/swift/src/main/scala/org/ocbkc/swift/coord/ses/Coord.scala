@@ -47,6 +47,14 @@ package ses
 
 //import Round._
 
+case class RoundFluencySession
+case object RoundTranslation extends RoundFluencySession
+case object RoundBridgeConstruction extends RoundFluencySession
+case object RoundQuestionAttack extends RoundFluencySession
+case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
+case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
+
+case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait
@@ -56,6 +64,8 @@ trait CoreTrait
 
    def currentPlayer:Player
    val currentPlayerId = currentPlayer.id.get
+
+   var latestRoundFluencySession:RoundFluencySession = NotInFluencySession
 
    /** @param constiId Must be constiId of a constitution with at least one version released
      */
@@ -79,12 +89,14 @@ trait CoreTrait
       }
    }
 
-   def URtranslation:String =  
+   def URstartTranslation:String =  
    {  //round = Trans
       cc = gameCore.initialiseCoreContent
       cc.startTime(SystemWithTesting.currentTimeMillis).save
       cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
+
+      latestRoundFluencySession = RoundTranslation
    }
 
    def URstopTranslation =
@@ -93,13 +105,14 @@ trait CoreTrait
       Unit
    }
 
-   def URalgorithmicDefenceStage1:FolnuminquaQuery =
+   def URstartAlgorithmicDefenceStage1:FolnuminquaQuery =
    {  gameCore.algorithmicDefenceGenerator
+      latestRoundFluencySession = RoundAlgorithmicDefenceStage1
    }
 
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
      */
-   def URalgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
+   def URstartAlgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
@@ -116,7 +129,9 @@ trait CoreTrait
       }
 
       turnReleaseCandidateIntoVirginIfPossible
-     
+      
+      latestRoundFluencySession = NotInFluencySession
+
       res
    }
 
@@ -216,7 +231,7 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
 
 
 /*
-   def URtranslation:String =  
+   def URstartTranslation:String =  
    {  round = Trans
       cc = gameCore.initialiseCoreContent
       cc.startTime(System.currentTimeMillis).save
@@ -225,19 +240,24 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    }
 */
 
+   def URstartBridgeConstruction =
+   {  latestRoundFluencySession = RoundBridgeConstruction
+   }
+
    def URstopBridgeConstruction =
    {
    }
 
-   def URquestionAttack:QuestionAndCorrectAnswer = 
-   {  gameCore.generateQuestionAndCorrectAnswer
+   def URstartQuestionAttack:QuestionAndCorrectAnswer = 
+   {  latestRoundFluencySession = RoundQuestionAttack
+      gameCore.generateQuestionAndCorrectAnswer
    }
 /*
-   def URalgorithmicDefenceStage1:FolnuminquaQuery =
+   def URstartAlgorithmicDefenceStage1:FolnuminquaQuery =
    {  gameCore.algorithmicDefenceGenerator
    }
 
-   def URalgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
+   def URstartAlgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
