@@ -52,8 +52,7 @@ case object RoundTranslation extends RoundFluencySession
 case object RoundBridgeConstruction extends RoundFluencySession
 case object RoundQuestionAttack extends RoundFluencySession
 case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
-case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
-
+// case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
@@ -90,13 +89,11 @@ trait CoreTrait
    }
 
    def URstartTranslation:String =  
-   {  //round = Trans
+   {  latestRoundFluencySession = RoundTranslation
       cc = gameCore.initialiseCoreContent
       cc.startTime(SystemWithTesting.currentTimeMillis).save
       cc.startTimeTranslation(cc.startTime.is).save
       cc.textNL
-
-      latestRoundFluencySession = RoundTranslation
    }
 
    def URstopTranslation =
@@ -106,8 +103,8 @@ trait CoreTrait
    }
 
    def URstartAlgorithmicDefenceStage1:FolnuminquaQuery =
-   {  gameCore.algorithmicDefenceGenerator
-      latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+      gameCore.algorithmicDefenceGenerator
    }
 
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
