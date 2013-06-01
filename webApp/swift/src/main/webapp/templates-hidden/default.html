@@ -63,6 +63,25 @@
 
   /* ]]> */
   </style>
+  <script>
+  $(document).ready(function(){
+	  $('li.menuitem').click(function()
+	  {
+		if($(this).text().indexOf('Aanmelden'))
+		{
+			alert('blaat');
+			window.open('/studyConstitution','_blank'); //todo hide menu
+			
+			$('div.column.span-6.colborder.sidebar').css('display', 'none');
+		}
+		
+	  }
+	 
+	  );
+	   
+	  });
+  
+  </script>
   </head>
   <body>
     <div class="container">
@@ -74,7 +93,10 @@
 
       <div class="column span-6 colborder sidebar">
         <hr class="space" />
-        <span class="lift:Menu.builder" />	
+        
+        <lift:Menu.builder
+  li:class="menuitem"
+     />
         <div>
           <span class="lift:Msgs?showAll=true"/>
           <hr class="space" />
