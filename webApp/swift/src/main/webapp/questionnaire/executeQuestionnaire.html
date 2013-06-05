@@ -1,0 +1,26 @@
+<lift:surround with="default" at="content">
+<lift:ExecuteQuestionnaire form="POST">
+
+<h1>Questionnaire <top:qnName></h1>
+
+<top:questions>
+   <question:orderNumber />
+   <question:body />
+
+<!-- the following are "subtemplates" which will be used to render the question-body of the question in the questionnaire. For each question, the snippet attached to this template will select the right subtemplate and use it to render the question. -->
+   <subtemplate:multipleChoiceQuestion>
+      <question:text />
+      <question:option>
+         <option:listnumber /> <option:text />
+      </question:option>
+   </subtemplate:multipleChoiceQuestion>
+
+   <subtemplate:freeTextClosedQuestion>
+      <question:text />
+      <question:answerTf />
+   </subtemplate:freeTextClosedQuestion>
+
+<top:submitBt />
+</lift:ExecuteQuestionnaire>
+
+</lift:surround>

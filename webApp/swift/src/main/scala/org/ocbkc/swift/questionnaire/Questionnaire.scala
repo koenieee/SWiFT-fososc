@@ -8,7 +8,9 @@ package org.ocbkc.questionnaire
    }
 
    trait Question
-   {  var respondentsAnswer:Option[Answer] = None
+   {  var questionText:Option[String] = None
+      var respondentsAnswer:Option[Answer] = None
+   
    }
 
    trait Answer
@@ -29,7 +31,7 @@ package org.ocbkc.questionnaire
    {  var minimalNumberOfAnswers:Int = 1
       var maximumNumberOfAnswers:Int = 1
 
-      case class MC_Option // an innner class MC_Option forces all code in this class which uses MC_Option to only contain options of THIS MultipleChoiceQuestion instance...
+      case class MC_Option(id:String, text:String) // an inner class MC_Option forces all code in this class which uses MC_Option to only contain options of THIS MultipleChoiceQuestion instance...
       class MC_Answer extends Answer
       {  var options:List[MC_Option] = Nil
       }

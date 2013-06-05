@@ -48,7 +48,7 @@ class History
             "checkbox"           -> emptyNode,
             "publishDescription" -> <b>Description</b>,
             "date"               -> <b>Creation date</b>,
-            "release"          -> <b>Release</b>,
+            "release"            -> <b>Release</b>,
             "author"             -> <b>Author</b>,
             "fluency"            -> <b>Fluency</b>
             )
