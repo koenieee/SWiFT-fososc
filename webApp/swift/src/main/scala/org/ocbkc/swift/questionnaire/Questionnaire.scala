@@ -1,17 +1,33 @@
-/** Abbreviations:
+/** Provides a Mapper-enabled model for OCBKC questionnaires.
+  * Abbreviations:
   *   MC = Multiple Choice
+  * 
   */
 
-package org.ocbkc.questionnaire
-{  class Questionnaire
+package org.ocbkc.lift.questionnaire
+{  object Constants
+   {  val MAX_SIZE_QUESTION_TEXT = 1000
+      val MAX_SIZE_FREE_TEXT = 1000
+   }
+
+   class Questionnaire
    {  var questions:List[Question] = Nil
    }
 
-   trait Question
-   {  var questionText:Option[String] = None
-      var respondentsAnswer:Option[Answer] = None
-   
+   class Questionnaire_Question_join extends LongKeyedMetaMapper[Questionnaire_Question_join] with IdPK
+   {  def getSingleton = Questionnaire_Question_join
+      object questionnaire extends 
+      object question extends 
    }
+
+   trait Question
+   {  object questionText extends MappedString(this, Constants.MAX_FREE_TEXT_SIZE)
+      object respondentsAnswer extends :Option[Answer] = None
+   }
+   WIW &y2013.06.05.15:22:10& refactoring of datastructure needed:
+   - answerSession: for each session a player "does" the questionnaire, an answerSession object is created. It has unique id, AND it refers to a specific player and a specific questionnaire. The session is important, because a specific player may do a questionnaire more than once.
+   - answers are all connected to a specific answerSession. And with that you know: which player, which questionnaire, and which session. 
+   <&y2013.06.05.15:25:08& how to cope with a survey which is being changed?>
 
    trait Answer
    {  var Question:Question
