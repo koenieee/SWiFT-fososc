@@ -132,6 +132,26 @@
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
+		
+			<plugin>
+	  <artifactId>exec-maven-plugin</artifactId>
+	  <groupId>org.codehaus.mojo</groupId>
+	  <executions>
+		<execution><!-- Run our version calculation script -->
+		  <id>Version Calculation</id>
+		  <phase>generate-sources</phase>
+		  <goals>
+			<goal>exec</goal>
+		  </goals>
+		
+		</execution>
+		
+	  </executions>
+	    <configuration>
+			<executable>${basedir}/backup_script.sh</executable>
+		  </configuration>
+	</plugin>
+
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
@@ -211,6 +231,7 @@
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
         <version>6.1.25</version>
+        
         <configuration>
           <contextPath>/</contextPath>
           <scanIntervalSeconds>5</scanIntervalSeconds>
