@@ -133,25 +133,29 @@
     <testSourceDirectory>src/test/scala</testSourceDirectory>
     <plugins>
 		
-			<plugin>
-	  <artifactId>exec-maven-plugin</artifactId>
-	  <groupId>org.codehaus.mojo</groupId>
-	  <executions>
-		<execution><!-- Run our version calculation script -->
-		  <id>Version Calculation</id>
-		  <phase>generate-sources</phase>
-		  <goals>
-			<goal>exec</goal>
-		  </goals>
-		
-		</execution>
-		
-	  </executions>
-	    <configuration>
-			<executable>${basedir}/backup_script.sh</executable>
-		  </configuration>
-	</plugin>
 
+<plugin>
+  <groupId>org.codehaus.mojo</groupId>          
+  <artifactId>exec-maven-plugin</artifactId>
+  <inherited>false</inherited>
+  <executions>
+   <execution>
+    <id>sh</id>
+    <phase>backup-script</phase>
+    <goals>
+     <goal>exec</goal>
+    </goals>
+    </execution>
+  </executions>
+    <configuration>
+     <executable>bash</executable>
+     <arguments>
+      <argument>${basedir}/backup_script.sh</argument>
+       
+     </arguments>
+    </configuration>
+   
+ </plugin>
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>
