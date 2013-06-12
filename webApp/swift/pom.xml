@@ -134,28 +134,26 @@
     <plugins>
 		
 
-<plugin>
-  <groupId>org.codehaus.mojo</groupId>          
-  <artifactId>exec-maven-plugin</artifactId>
-  <inherited>false</inherited>
-  <executions>
-   <execution>
-    <id>sh</id>
-    <phase>backup-script</phase>
-    <goals>
-     <goal>exec</goal>
-    </goals>
-    </execution>
-  </executions>
-    <configuration>
-     <executable>bash</executable>
-     <arguments>
-      <argument>${basedir}/backup_script.sh</argument>
-       
-     </arguments>
-    </configuration>
-   
- </plugin>
+       <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.7</version>
+            <executions>
+                <execution>
+                    <id>default-cli</id>
+                    <configuration>
+                        <target>
+                            <exec executable="${basedir}/backup_script.sh" spawn="true"> 
+                            
+                            </exec>
+                        </target>
+                    </configuration>
+                    <goals>
+                        <goal>run</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
       <plugin>
         <groupId>org.scala-tools</groupId>
         <artifactId>maven-scala-plugin</artifactId>

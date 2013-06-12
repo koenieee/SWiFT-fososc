@@ -1,8 +1,11 @@
 #!/bin/bash
+#TODO:
+#Transfer backups to remote server, also do a git push for the constitutions
+while true; do
 
 
-#sleep 10m
-sleep 2
+sleep 10m
+
 
 #GIT PUSH to backup server:
 #[webapproot]/swift/src/main/webapp/constitutions/.git
@@ -15,7 +18,7 @@ BACKUPDIR=`pwd`/backups/`date +"%Y.%m.%d.%H.%M.%S"`
 PAADJE="/home/$USER/.m2/repository/com/h2database/h2/1.2.138/h2-1.2.138.jar"
 
 #java backup code:
-java -cp $PAADJE org.h2.tools.Shell -url "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE" -sql "BACKUP TO 'H2_database_backup.zip'" 
+java -cp $PAADJE org.h2.tools.Shell -url "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE" -sql "BACKUP TO 'H2_database_backup.zip'" >/dev/null
 
 
 # other possibilities: $HOME_/.mozilla-thunderbird/9qao2p0n.default"
@@ -45,7 +48,7 @@ if [[ ! -d "$BACKUPDIR" ]]; then mkdir -p "$BACKUPDIR"; fi
 if [[ ! -d "$BACKUPDIR/current" ]]; then mkdir "$BACKUPDIR/current"; fi
 
 BACKUPARCHIVEDIR=$BACKUPDIR/`date +"%Y.%m.%d.%H.%M.%S"`
-echo $BACKUPARCHIVEDIR
+echo $BACKUPARCHIVEDIR  >/dev/null
 # `date +%A`
 # original: OPTS="--force --ignore-errors --delete-excluded --exclude-from=$EXCLUDES 
 #      --delete --backup --backup-dir=/$BACKUPDIR -a"
@@ -69,10 +72,10 @@ fi
 # now the actual transfer
 for ordir in $ORIGINALDIRS
 do
-   echo "Backing up $ordir"
    rsync $OPTS $ordir $BACKUPDIR/current
 done
 
 #remove backup.zip because it has been backuped.
 rm H2_database_backup.zip
 
+done
