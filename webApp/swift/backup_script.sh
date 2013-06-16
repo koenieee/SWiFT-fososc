@@ -4,14 +4,12 @@
 while true; do
 
 
-sleep 10m
-
 
 #GIT PUSH to backup server:
 #[webapproot]/swift/src/main/webapp/constitutions/.git
 
 # directories to backup
-ORIGINALDIRS="persist src/main/webapp/constitutions/ H2_database_backup.zip"
+ORIGINALDIRS="persist src/main/webapp/constitutions H2_database_backup.zip"
 BACKUPDIR=`pwd`/backups/`date +"%Y.%m.%d.%H.%M.%S"`
 
 #H2 database backup:
@@ -19,7 +17,6 @@ PAADJE="/home/$USER/.m2/repository/com/h2database/h2/1.2.138/h2-1.2.138.jar"
 
 #java backup code:
 java -cp $PAADJE org.h2.tools.Shell -url "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE" -sql "BACKUP TO 'H2_database_backup.zip'" >/dev/null
-
 
 # other possibilities: $HOME_/.mozilla-thunderbird/9qao2p0n.default"
 
@@ -77,5 +74,7 @@ done
 
 #remove backup.zip because it has been backuped.
 rm H2_database_backup.zip
+
+sleep 10m
 
 done

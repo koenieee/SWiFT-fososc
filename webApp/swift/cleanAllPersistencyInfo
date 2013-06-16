@@ -7,6 +7,7 @@ if [ "$k" == "Y" ]; then
    rm -r src/main/webapp/constitutions/*
    rm -fr src/main/webapp/constitutions/.*
    rm -r users/*
+   rm -r backups/* # remove this line as soon as a backup server becomes available
 #  rm -r binaries/*
 else
    echo "Erasing skipped, you didn't press [Y]... Sorry my friend."
