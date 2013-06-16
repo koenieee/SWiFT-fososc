@@ -107,7 +107,7 @@ class PersDataUpgrader(persDataUpgraders:List[PersDataUpgraderSingleVersion])
       } else if(fromVersion == toVersion)
       {  log("   versions are equal: no upgrade required.")
       } else
-      {  logAndThrow("   toVersion < fromVersion, not allowed... Are you trying to DOWNGRADE? Fool...")
+      {  logAndThrow("   toVersion < fromVersion, not allowed... Are you trying to DOWNGRADE? I can't believe my webcams (I have no eyes, you know)... If you *really* try to run a previous version - first delete all persistent data, and then reboot the SWiFT application. The latter may occur regularly if you are a developer, and working on different branches.")
       }
    }
 }

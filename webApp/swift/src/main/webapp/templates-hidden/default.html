@@ -63,6 +63,8 @@
 
   /* ]]> */
   </style>
+  <script type="text/javascript" src="/javascript/blaat.js">  
+  </script>
   </head>
   <body>
     <div class="container">
@@ -74,7 +76,10 @@
 
       <div class="column span-6 colborder sidebar">
         <hr class="space" />
-        <span class="lift:Menu.builder" />	
+        
+        <lift:Menu.builder
+  li:class="menuitem"
+     />
         <div>
           <span class="lift:Msgs?showAll=true"/>
           <hr class="space" />
