@@ -34,6 +34,19 @@ object Player extends Player with MetaMegaProtoUser[Player] {
 
    val int2CSP = Map(0->NoProc, 1->OneToStartWith)
    val CSP2int = int2CSP.map(_.swap)
+   
+   //information about logged in users:
+   
+var LoggedInUsers: String = "";
+var LoggedOutUsers: String = "";
+//def isLoggedIn(who: Player) = currentUserIds.contains(who.id.is) // not using this
+
+def loggedInUsers(): String  = {"Ingelogd: " + LoggedInUsers + " Uitgelogd: " + LoggedOutUsers}
+
+override def logUserIn(who: Player) {super.logUserIn(who); this.synchronized(LoggedInUsers += who.id.is + " "+who.firstName.is)}
+
+override def logUserOut() {this.synchronized(LoggedOutUsers += Player.currentUserId); super.logUserOut()} //==> Private Object, so not working ATM
+
 }
 
 /**

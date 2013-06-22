@@ -47,17 +47,10 @@ class AdminStats
       //user.children.flatMap(child.name)
 	
 	//val players_current_loggedin = test
-	//var n_blaat = "test";
+	var n_blaat = "test";
 	//Player.bulkDelete_!!(By(Player.superUser,false))
 	 
-	val players_current_loggedin = Player.findAll(By(Player.firstName, Player.firstName)) match
-   {  case If(() => Player.loggedIn_? => {  println("logged iu")
-                              
-                           } // do nothing, player exists.
-      case _            => {  "niet ingelogd"
-                           }
-
-   }
+	val players_current_loggedin = Player.loggedInUsers();
    
 
 	def settings (xhtml : NodeSeq) : NodeSeq =
