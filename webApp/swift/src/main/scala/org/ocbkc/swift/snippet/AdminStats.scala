@@ -50,7 +50,7 @@ class AdminStats
 	var n_blaat = "test";
 	//Player.bulkDelete_!!(By(Player.superUser,false))
 	 
-	val players_current_loggedin = Player.loggedInUsers();
+	val players_current_loggedin = Player.loggedInUsers().toString();
    
 
 	def settings (xhtml : NodeSeq) : NodeSeq =

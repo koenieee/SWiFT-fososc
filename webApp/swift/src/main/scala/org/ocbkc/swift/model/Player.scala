@@ -37,15 +37,15 @@ object Player extends Player with MetaMegaProtoUser[Player] {
    
    //information about logged in users:
    
-var LoggedInUsers: String = "";
-var LoggedOutUsers: String = "";
+var LoggedInUsers1 = List[String]();
+
 //def isLoggedIn(who: Player) = currentUserIds.contains(who.id.is) // not using this
 
-def loggedInUsers(): String  = {"Ingelogd: " + LoggedInUsers + " Uitgelogd: " + LoggedOutUsers}
+def loggedInUsers(): List[String] = LoggedInUsers1.toList
 
-override def logUserIn(who: Player) {super.logUserIn(who); this.synchronized(LoggedInUsers += who.id.is + " "+who.firstName.is)}
+override def logUserIn(who: Player) {super.logUserIn(who); this.synchronized( LoggedInUsers1  ::= who.id.is.toString())}
 
-override def logUserOut() {this.synchronized(LoggedOutUsers += Player.currentUserId); super.logUserOut()} //==> Private Object, so not working ATM
+override def logUserOut() {this.synchronized( LoggedInUsers1  ::= Player.currentUserId.toString()); super.logUserOut()} //==> Private Object, so not working ATM
 
 }
 
