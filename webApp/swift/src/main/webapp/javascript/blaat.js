@@ -3,10 +3,19 @@ $(document).ready(function(){
 	  {
 		if($(this).text().indexOf('Study Chosen Constitution') > -1)
 		{
-		//	alert('blaat');
-			window.open('/studyConstitution?false=true','_blank'); //todo hide menu
-			
-			//$('div.column.span-6.colborder.sidebar').css('display', 'none');
+
+			var new_window = window.open('/studyConstitution?false=true',"Reading"); //todo hide menu
+		//	alert(new_window.location);
+			if (new_window.opener.closed)
+			{
+			//	new_window.location = "/studyConstitution?false=true";
+				new_window.focus();
+			}
+			else
+			{
+				new_window.focus();
+			}
+
 		}
 		
 	  }
