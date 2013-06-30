@@ -15,10 +15,11 @@ $(document).ready(function(){
 			{
 				new_window.focus();
 			}
-
+            return false;
 		}
 		
 	  }
+	  
 	 
 	  );
 	   
