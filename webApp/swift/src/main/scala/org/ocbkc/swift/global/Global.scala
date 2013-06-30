@@ -17,7 +17,8 @@ import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 
 object GlobalConstant
-{  val MAIN_VERSION = "0.3.0.1" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+{  
+  val MAIN_VERSION = "0.3.0.1" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
    val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
@@ -163,4 +164,8 @@ object LiftHelpers
 {  val emptyNode = <div></div> // <!-- empty node --> <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>
 
 }
+
+
+
+
 }
