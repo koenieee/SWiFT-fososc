@@ -20,35 +20,46 @@ package org.ocbkc.lift.questionnaire
       object question extends 
    }
 
-   trait Question
-   {  object questionText extends MappedString(this, Constants.MAX_FREE_TEXT_SIZE)
-      object respondentsAnswer extends :Option[Answer] = None
+   trait Question extends [Owner<:LongKeyedMapper[Owner], T<:LongKeyedMapper[T]](_foreignMeta: => LongKeyedMetaMapper[T] 
+   {  object questionText extends MappedString(this.asInstanceOf[Owner], Constants.MAX_FREE_TEXT_SIZE)
    }
+/*
    WIW &y2013.06.05.15:22:10& refactoring of datastructure needed:
    - answerSession: for each session a player "does" the questionnaire, an answerSession object is created. It has unique id, AND it refers to a specific player and a specific questionnaire. The session is important, because a specific player may do a questionnaire more than once.
    - answers are all connected to a specific answerSession. And with that you know: which player, which questionnaire, and which session. 
    <&y2013.06.05.15:25:08& how to cope with a survey which is being changed?>
-
-   trait Answer
-   {  var Question:Question
+*/
+   trait Answer [Owner<:LongKeyedMapper[Owner], T<:LongKeyedMapper[T]](_foreignMeta: => LongKeyedMetaMapper[T]
+   {  object question extends MappedLong(this.asInstanceOf[Owner], Question)
+      object questionnaireSession extends MappedLong(this.asInstanceOf[Owner], QuestionnaireSession)
    }
 
+   class QuestionnaireSession extends LongKeyedMapper[QuestionnaireSession] with IdPK
+   {  def getSingleton = QuestionnaireSession
+      object questionnaire extends MappedLongForeignKey(this, questionnaire
+      object respondent extends MappedLongForeignKey(this, Player)
+   }
+
+   object QuestionnaireSession extends QuestionnaireSession with LongKeyedMetaMapper[QuestionnaireSession]
+   {  
+   }
+
+   trait Question_
    abstract case class MC_Option(val code:String, val text:String)
    {
    }
 
-   trait ClosedQuestion extends Question
-   {  def correctAnswer:Option[Answer]
+   trait ClosedQuestion[Owner<:LongKeyedMapper[Owner], T<:LongKeyedMapper[T]](_foreignMeta: => LongKeyedMetaMapper[T] extends Question 
+   {  object correctAnswer extends MappedLongForeignKey(this.asInstanceOf[Owner], )
    }
 
    /**
      */
-   class MultipleChoiceQuestion extends ClosedQuestion
-   {  var minimalNumberOfAnswers:Int = 1
-      var maximumNumberOfAnswers:Int = 1
+   class MultipleChoiceQuestion extends ClosedQuestion with LongKeyedMapper[QuestionnaireSession] with IdPK 
+   {  object minimalNumberOfAnswers extends MappedInt[this]
+      object maximumNumberOfAnswers extends MappedInt[this]
 
-      case class MC_Option(id:String, text:String) // an inner class MC_Option forces all code in this class which uses MC_Option to only contain options of THIS MultipleChoiceQuestion instance...
-      class MC_Answer extends Answer
+      case class MC_Option(id:String, text:String)      class MC_Answer extends Answer
       {  var options:List[MC_Option] = Nil
       }
 
@@ -89,7 +100,6 @@ package org.ocbkc.lift.questionnaire
       def correctAnswer_=(mca:MC_Answer) =
       {  _correctAnswer = mca
       }
-
    }
 
    class FreeTextClosedQuestion extends FreeTextQuestion with ClosedQuestion

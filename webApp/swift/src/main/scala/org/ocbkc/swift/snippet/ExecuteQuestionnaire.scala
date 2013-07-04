@@ -7,7 +7,13 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 
 class ExecuteQuestionnaire
-{  
+{  {  // begin test
+      val qn = new Questionnaire
+      qn.questions =
+      List(
+         
+      )
+   }
 
    def render =
    {  
