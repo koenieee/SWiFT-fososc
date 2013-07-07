@@ -13,6 +13,7 @@ import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConn
 import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
+
 import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
@@ -46,22 +47,38 @@ class AdminPage
 	}
 	def changeDur()
 	{
-			
-		DB.use(DefaultConnectionIdentifier) {
+	//MetaMapper.bulkDelete_!!
+	
+	Player.bulkDelete_!!(By(Player.superUser,false))
+	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+   {  case Full(player) => {  println("is admin")
+                              
+                           } // do nothing, player exists.
+      case _            => {  println("not admin => deleted")
+                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              p.save
+                              p
+                           }
+
+   }*/
+	/*	DB.use(DefaultConnectionIdentifier) {
 		conn => DB.prepareStatement("TRUNCATE TABLE USERS;TRUNCATE TABLE CORECONTENT;TRUNCATE TABLE FOLLOWERCONSTI_JOIN;TRUNCATE TABLE PLAYERCORECONTENT_JOIN;", conn) 
 				{
 				  st => st.executeUpdate()
 		}
 
-		}
-		FileUtils.deleteDirectory(new File("src/main/webapp/constitutions"));
-		FileUtils.deleteDirectory(new File("persist/"));
+		}*/
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR));
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR));
+		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR));
+		
+		   GlobalConstant.createDirIfNotExists(GlobalConstant.CONSTITUTIONOBJECTDIR)
+			GlobalConstant.createDirIfNotExists(GlobalConstant.CONSTITUTIONHTMLDIR)
+			GlobalConstant.createDirIfNotExists(GlobalConstant.CORECONTENTOBJECTDIR)
 
-		//CREATE NEW ADMIN USER
-		val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
-                              p.save
-                              p
+
 		println("Jara called");
+		   
 		PlayingSimulator.start(JLong.parseLong(n_blaat));
 
 	}
