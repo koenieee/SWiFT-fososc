@@ -1,4 +1,28 @@
 <lift:surround with="default" at="content">
+	
+<script type="text/javascript">
+	//USING EPOCH TIME -- tested in CHROME and FIREFOX//
+
+    var prevTime = +new Date();
+	function countSecs() {
+		 //prevTime = curTime;
+		curTime = +new Date();
+		
+ 
+
+var deltaTime = curTime - prevTime;
+var seconds = deltaTime.toString().substring(0, deltaTime.toString().length-3);
+var millis = deltaTime.toString().substring(deltaTime.toString().length-3, deltaTime.toString().length-2);
+console.log(prevTime);
+		document.getElementById("timeBox").innerHTML = "<center>" + seconds+ "."+millis+"</center>";
+ 		}
+
+
+     window.setInterval(countSecs,100);
+ 
+
+</script>
+
 <h1>Translation Round</h1>
 <lift:TranslationRound form="POST">
 
@@ -6,6 +30,9 @@
 <transround:sourceText /><br /><br />
 <hr /><br />
 <h3>Translation</h3>
+<br />
+<div id="timeBox"></div>
+<br />
 <form:translation /><br />
 <form:testTransBt />
 <pre>
