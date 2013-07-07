@@ -1,4 +1,14 @@
 <lift:surround with="default" at="content">
+		<script src="../javascript/jquery-1.9.1.js"></script>
+	<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+	<script src="../javascript/jquery-ui.js"></script>
+		<script>
+  $(function() {
+    $( '#progressbar' ).progressbar({
+      value: 32
+    });
+  });
+  </script>
 <h1>Bridge Construction Round</h1>
 <lift:BridgeConstruction form="POST">
 
@@ -24,4 +34,7 @@ I constructed the following bridge:<br />
 <hr />
 <form:submitBt />
 </lift:BridgeConstruction>
+<br /><br />
+<div id="progressbar"></div>
+<center>Start <b>-></b> Translation <b>-></b>Bridge Construction <b>-></b></center>
 </lift:surround>

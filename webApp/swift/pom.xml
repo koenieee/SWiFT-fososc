@@ -57,7 +57,11 @@
       <artifactId>lift-json-ext_2.9.1</artifactId>
       <version>2.4</version>
    </dependency>
-
+<dependency>
+  <groupId>net.liftmodules</groupId>
+  <artifactId>lift-jquery-module_2.5_2.9.2</artifactId>
+  <version>2.3</version>
+</dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_2.9.1</artifactId>

@@ -1,4 +1,14 @@
 <lift:surround with="default" at="content">
+	<script src="../javascript/jquery-1.9.1.js"></script>
+<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+<script src="../javascript/jquery-ui.js"></script>
+	<script>
+$(function() {
+$( '#progressbar' ).progressbar({
+  value: 80
+});
+});
+</script>
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
@@ -25,4 +35,8 @@
 <top:continue />
 
 </lift:AlgorithmicDefenceRoundStage2>
+
+<br /><br />
+<div id="progressbar"></div>
+<center>Start <b>-></b> Translation <b>-></b> Bridge Construction <b>-></b> Question Attack <b>-></b> Algorithmic Defence <b>-></b> Algorithmic 2</center>
 </lift:surround>

@@ -1,4 +1,14 @@
 <lift:surround with="default" at="content">
+		<script src="../javascript/jquery-1.9.1.js"></script>
+	<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+	<script src="../javascript/jquery-ui.js"></script>
+		<script>
+  $(function() {
+    $( '#progressbar' ).progressbar({
+      value: 100
+    });
+  });
+  </script>
 <h1></h1>
 <lift:InviteToConstitutionDesign>
    <top:invitationtext>
@@ -10,4 +20,9 @@ Thanks for playing this session, you played wonderfully!
 <form:playAgainBtn />
 
 </lift:FinaliseSession>
+
+<br /><br />
+<div id="progressbar"></div>
+<center>Start <b>-></b> Translation <b>-></b> Bridge Construction <b>-></b> Question Attack <b>-></b> Algorithmic Defence <b>-></b> Algorithmic 2 <b>-></b> End session</center>
+
 </lift:surround>

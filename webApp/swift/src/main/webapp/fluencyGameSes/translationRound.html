@@ -1,4 +1,15 @@
 <lift:surround with="default" at="content">
+<script src="../javascript/jquery-1.9.1.js"></script>
+<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+<script src="../javascript/jquery-ui.js"></script>
+<script>
+$(function() {
+$( '#progressbar' ).progressbar({
+value: 16
+});
+});
+</script>
+	
 <h1>Translation Round</h1>
 <lift:TranslationRound form="POST">
 <p>No idea what to do? Study your <a href='../studyConstitution'>chosen constitution</a>!</p>
@@ -18,4 +29,7 @@
 <hr />
 <form:submitBt />
 </lift:TranslationRound>
+<br /><br />
+<div id="progressbar"></div>
+<center>Start <b>-></b> Translation <b>-></b> </center>
 </lift:surround>
