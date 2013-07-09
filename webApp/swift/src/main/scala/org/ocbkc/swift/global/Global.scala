@@ -17,11 +17,13 @@ import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 
 object GlobalConstant
-{  val TEST = true
+{  val MAIN_VERSION = "0.3.2" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+   val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
-   val OS = System.getProperty("os.name").toLowerCase();
+   val OS = System.getProperty("os.name").toLowerCase
    
+   val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
    /* 
     * Dependency usage: first run mvn dependency:unpack
     * global.scala will check if you're running windows, mac or linux
@@ -30,12 +32,12 @@ object GlobalConstant
     * Paradox_Path is only used in tpwrap.scala
     */
     
-	//only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
-	val BINARIES = WEBAPP_BASE_DIR + "/binaries" // CHANGE TO YOUR MACHINE
-	val SWIFTBINARIES = BINARIES + "/swift" // CHANGE TO YOUR MACHINE
-	
-	//EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
-	val EPROVER_PATH = 	if(OS.startsWith("linux")) {  BINARIES + "/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	BINARIES + "/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  BINARIES + "/eprover/Windows";} else { BINARIES + "/eprover/Linux"; }
+   //only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
+   val BINARIES = WEBAPP_BASE_DIR + "/binaries" // CHANGE TO YOUR MACHINE
+   val SWIFTBINARIES = BINARIES + "/swift" // CHANGE TO YOUR MACHINE
+  
+   //EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
+   val EPROVER_PATH = 	if(OS.startsWith("linux")) {  BINARIES + "/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	BINARIES + "/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  BINARIES + "/eprover/Windows";} else { BINARIES + "/eprover/Linux"; }
 	
    //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
    val PARADOX_PATH = BINARIES + "/paradox"
@@ -133,7 +135,7 @@ object Types
 object TestSettings
 {  val AUTOLOGIN                       = false
    val AUTOTRANSLATION                 = false // true
-   val CREATETESTUSERBASE              = false // true
+   val CREATETESTUSERBASE              = true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val SIMULATEPLAYINGWITHJARA         = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.

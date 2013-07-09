@@ -1,6 +1,7 @@
 read -p "Sure you want to erase all persistency info? [capital Y] " k
 
 if [ "$k" == "Y" ]; then
+   rm persistentDatastructureMainVersion.txt
    rm -r persist/*
    rm lift_proto.db.*
    rm -r src/main/webapp/constitutions/*

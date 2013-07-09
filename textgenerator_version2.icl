@@ -129,11 +129,11 @@ ProperNamesForPersons_nli |
                length names < 2 = abort("\nProperNamesForPersons_nli: error, please define more than one proper names in my definition\n")
                                 = names
 where // don't use hyphens or symbols with accents, if you want to use this tool in combination with the scala part of swift (for now).
-     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "JohnJules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "HenkJan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi", "Selinde", "Jesse", "Laura", "Geoff", "Szymon", "Sjaak", "Bo", "Michilio", "Michiel", "Gaston", "Jasm", "Joko", "Mikel", "Marion", "Karin", "Luc"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
+     names = ["Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "JohnJules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "HenkJan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi", "Selinde", "Jesse", "Laura", "Geoff", "Szymon", "Sjaak", "Bo", "Michilio", "Michiel", "Gaston", "Jasm", "Joko", "Mikel", "Marion", "Karin", "Luc", "Hannah", "Alexandra", "Ramon", "Laurens", "David", "Cindy", "Louk"] // _nli added because this represents the information that the words in the list can be used as proper names for persons in natural language.
 PNFP_length =: length ProperNamesForPersons_nli
 
 Hurelans_nli :: [(String,String)]
-Hurelans_nli = [("teacher", "student"), ("child", "parent"), ("doctor", "patient"), ("leader", "follower"), ("sibling", "sibling"), ("dentist", "patient"), ("grandparent", "grandchild"), ("husband", "wife"), ("trainer", "trainee"),("friend","friend"),("enemy","enemy"),("employer","employee")]
+Hurelans_nli = [("teacher", "student"), ("child", "parent"), ("doctor", "patient"), ("leader", "follower"), ("sibling", "sibling"), ("dentist", "patient"), ("grandparent", "grandchild"), ("husband", "wife"), ("trainer", "trainee"),("friend", "friend"),("enemy", "enemy"),("employer", "employee")]
 
 // if not mentioned in this list, assume the regular conjugation with -s
 IrregularPluralNouns::[(String, String)]

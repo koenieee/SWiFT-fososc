@@ -22,7 +22,7 @@ class AlgorithmicDefenceRoundStage2
          S.redirectTo("finaliseSession.html") 
       }  
 
-      sesCoordLR.URalgorithmicDefenceStage2
+      sesCoordLR.URstartAlgorithmicDefenceStage2
 
       bind(  
          "top", ns,

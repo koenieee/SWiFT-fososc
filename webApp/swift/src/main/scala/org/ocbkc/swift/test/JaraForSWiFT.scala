@@ -374,7 +374,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
       
-      sesCoord.URtranslation
+      sesCoord.URstartTranslation
       sesCoord.URstopTranslation
       sesCoord.URalgorithmicDefenceSimplified(winSession, duration)
    }
