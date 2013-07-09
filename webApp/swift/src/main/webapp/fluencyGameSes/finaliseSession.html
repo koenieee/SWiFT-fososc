@@ -11,18 +11,22 @@
   </script>
 <h1></h1>
 <lift:InviteToConstitutionDesign>
-   <top:invitationtext>
+	<top:invitationtext>
+
+
+   
 Dear player, a special moment has arrived. You have now played a certain number of sessions. This allows you to participate in yet another game: the constitutional evolution game. Please read on <a href="constitutionalEvolutionGame">here</a>.
    </top:invitationtext>
 </lift:InviteToConstitutionDesign>
 <lift:FinaliseSession form="POST">
+		<div id="progressbar"></div>
+<center><a href="startSession.html">Start</a> <b>-></b><a href="translationRound.html"> Translation </a><b>-></b> <a href="bridgeconstruction.html">Bridge Construction</a> <b>-></b> <a href="questionAttackRound.html">Question Attack</a> <b>-></b> <a href="algorithmicDefenceRound.html">Algorithmic Defence</a> <b>-></b> <a href="algorithmicDefenceRoundStage2.html">Algorithmic 2</a> <b>-></b> <a href="finaliseSession.html" style="color: #f8b500">End session</a></center>
+<Br/>
 Thanks for playing this session, you played wonderfully!
 <form:playAgainBtn />
 
 </lift:FinaliseSession>
 
 <br /><br />
-<div id="progressbar"></div>
-<center>Start <b>-></b> Translation <b>-></b> Bridge Construction <b>-></b> Question Attack <b>-></b> Algorithmic Defence <b>-></b> Algorithmic 2 <b>-></b> End session</center>
 
 </lift:surround>

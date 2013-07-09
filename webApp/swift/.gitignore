@@ -1,0 +1,13 @@
+ft_noEqStats.fof
+ft_onlyInEqIntroConsStats.fof
+lift_proto.db.h2.db
+lift_proto.db.lock.db
+binaries/
+target/
+users/
+src/main/webapp/constitutions/
+persist/
+persistentDatastructureMainVersion.txt
+lift_proto.db.trace.db
+
+

@@ -6,11 +6,16 @@
 $(function() {
 $( '#progressbar' ).progressbar({
 value: 16
+
 });
+
 });
 </script>
 	
 <h1>Translation Round</h1>
+	<div id="progressbar"></div>
+<center><a href="startSession.html">Start</a> <b>-></b><a href="translationRound.html" style="color: #f8b500"> Translation </a><b>-></b> Bridge Construction <b>-></b> Question Attack <b>-></b> Algorithmic Defence <b>-></b> Algorithmic 2 <b>-></b> End session</center>
+<Br/>
 <lift:TranslationRound form="POST">
 <p>No idea what to do? Study your <a href='../studyConstitution'>chosen constitution</a>!</p>
 <hr />
@@ -30,6 +35,5 @@ value: 16
 <form:submitBt />
 </lift:TranslationRound>
 <br /><br />
-<div id="progressbar"></div>
-<center>Start <b>-></b> Translation <b>-></b> </center>
+
 </lift:surround>
