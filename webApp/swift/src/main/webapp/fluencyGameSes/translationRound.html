@@ -14,7 +14,7 @@ var deltaTime = curTime - prevTime;
 var seconds = deltaTime.toString().substring(0, deltaTime.toString().length-3);
 var millis = deltaTime.toString().substring(deltaTime.toString().length-3, deltaTime.toString().length-2);
 console.log(prevTime);
-		document.getElementById("timeBox").innerHTML = "<center>" + seconds+ "."+millis+"</center>";
+		document.getElementById('timeBox').innerHTML = '<center> <h3> ' + seconds+ '.'+millis+'</h3></center>';
  		}
 
 
@@ -32,6 +32,8 @@ console.log(prevTime);
 <hr /><br />
 <h3>Translation</h3>
 <br />
+<center>
+<i>Translation time </i><Br/></center>
 <div id="timeBox"></div>
 <br />
 <form:translation /><br />
