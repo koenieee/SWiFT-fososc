@@ -547,7 +547,10 @@ class FollowerConsti_join extends LongKeyedMapper[FollowerConsti_join] with IdPK
 }
 
 object FollowerConsti_join extends FollowerConsti_join with LongKeyedMetaMapper[FollowerConsti_join]
-{  def join(player:Player, constiId:ConstiId)
+{  
+   /** @todo &y2013.07.09.14:52:35& Isn't used! Refactor rest of code to use this, moreover, shouldn't a .save be added?
+     */
+   def join(player:Player, constiId:ConstiId)
    {  this.create.player(player).constiId(constiId)
    }
 }

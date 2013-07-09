@@ -4,12 +4,15 @@
   * 
   */
 import _root_.net.liftweb.mapper._
+import org.ocbkc.swift.model._
 
 package org.ocbkc.lift.questionnaire
 {  object Constants
    {  val MAX_SIZE_QUESTION_TEXT = 1000
-      val MAX_SIZE_FREE_TEXT = 1000
+      val MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion = 1000
    }
+
+   import Constants._
 
    class Questionnaire extends LongKeyedMapper[Questionnaire] with IdPK
    {  // object questions extends MappedLongForeignKey[this, Question] done using join
@@ -27,11 +30,19 @@ package org.ocbkc.lift.questionnaire
    }
 
    object Questionnaire_Question_join extends Questionnaire_Question_join with LongKeyedMetaMapper[Questionnaire_Question_join]
-   {
+   {  def join(questionnaire:Questionnaire, question:Question):Questionnaire_Question_join =
+      {  this.create.questionnaire(questionnaire).question(question)
+      }
    }
 
-   trait Question [T <: ...] extends LongKeyedMetaMapper[T]
-   {  object questionText extends MappedString(this.asInstanceOf[Owner], Constants.MAX_FREE_TEXT_SIZE)
+   }
+
+   class Question extends LongKeyedMapper[Question] with IdPK
+   {  object questionType extends MappedLong(this)
+      /* 1 = multiple choice
+         2 = free text question with fixed answer
+      */
+      object questionFormulation extends MappedString(this, MAX_SIZE_QUESTION_TEXT)
    }
 /*
    WIW &y2013.06.05.15:22:10& refactoring of datastructure needed:
@@ -39,6 +50,10 @@ package org.ocbkc.lift.questionnaire
    - answers are all connected to a specific answerSession. And with that you know: which player, which questionnaire, and which session. 
    <&y2013.06.05.15:25:08& how to cope with a survey which is being changed?>
 */
+   object Question extends Question with LongKeyedMetaMapper[Question]
+   {
+   }
+
 
    class QuestionnaireSession extends LongKeyedMapper[QuestionnaireSession] with IdPK
    {  def getSingleton = QuestionnaireSession
@@ -49,21 +64,29 @@ package org.ocbkc.lift.questionnaire
    object QuestionnaireSession extends QuestionnaireSession with LongKeyedMetaMapper[QuestionnaireSession]
    {  
    }
-
-/*
-   abstract class ClosedQuestion[Owner<:LongKeyedMapper[Owner], T<:LongKeyedMapper[T]](_foreignMeta: => LongKeyedMetaMapper[T] extends Question 
-   {  //object correctAnswer extends MappedLongForeignKey(this.asInstanceOf[Owner], )
-   }
-*/
-
-
    /**
      */
-   class MultipleChoiceQuestion extends Question[MultipleChoiceQuestion]
-   {  def getSingleton = Questionnaire_Question_join
+   class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with IdPK
+   {  def getSingleton = MultipleChoiceQuestion
+      object correctAnswer extends MappedInt(this) // 1 = option 1
       object minimalNumberOfAnswers extends MappedInt(this)
       object maximumNumberOfAnswers extends MappedInt(this)
 
       // in this branch temporarily deleted Answers and more stuff
    }
+
+   object MultipleChoiceQuestion extends MultipleChoiceQuestion with LongKeyedMetaMapper[MultipleChoiceQuestion]
+   {  
+   }
+
+   class FreeTextFixedCorrectAnswerQuestion extends LongKeyedMapper[FreeTextFixedCorrectAnswerQuestion] with IdPK
+   {  def getSingleton = FreeTextFixedCorrectAnswerQuestion
+      object correctAnswer extends MappedString(this, MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion)
+      object maximumNumberOfAnswers extends MappedInt(this)
+   }
+
+   object FreeTextFixedCorrectAnswerQuestion extends FreeTextFixedCorrectAnswerQuestion with LongKeyedMetaMapper[FreeTextFixedCorrectAnswerQuestion]
+   {  
+   }
+
 }
