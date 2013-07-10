@@ -6,7 +6,7 @@
 import _root_.net.liftweb.mapper._
 import org.ocbkc.swift.model._
 
-package org.ocbkc.lift.questionnaire
+package org.ocbkc.questionnaire
 {  object Constants
    {  val MAX_SIZE_QUESTION_TEXT = 1000
       val MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion = 1000
@@ -30,19 +30,25 @@ package org.ocbkc.lift.questionnaire
    }
 
    object Questionnaire_Question_join extends Questionnaire_Question_join with LongKeyedMetaMapper[Questionnaire_Question_join]
-   {  def join(questionnaire:Questionnaire, question:Question):Questionnaire_Question_join =
-      {  this.create.questionnaire(questionnaire).question(question)
+   {  def createJoin(questionnaire:Questionnaire, question:Question):Questionnaire_Question_join =
+      {  val j = this.create.questionnaire(questionnaire).question(question)
+         j.save
+         j
       }
    }
 
-   }
-
    class Question extends LongKeyedMapper[Question] with IdPK
-   {  object questionType extends MappedLong(this)
+   {  def getSingleton = Question
+      object questionType extends MappedLong(this)
       /* 1 = multiple choice
          2 = free text question with fixed answer
       */
       object questionFormulation extends MappedString(this, MAX_SIZE_QUESTION_TEXT)
+
+      //{ todo &y2013.07.09.20:57:12& in future replace the following by one reference to any question table. Depending on the questionType, retrieve the correct table. Currenlty, it is not clear to me how to realise that. If I can store the foreignkeys etc. "manually" it should be possible.
+      object multipleChoiceQuestion extends MappedLongForeignKey(this, MultipleChoiceQuestion)
+      object freeTextFixedCorrectAnswerQuestion extends MappedLongForeignKey(this, FreeTextFixedCorrectAnswerQuestion)
+      //}
    }
 /*
    WIW &y2013.06.05.15:22:10& refactoring of datastructure needed:

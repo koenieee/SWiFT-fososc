@@ -26,10 +26,10 @@ import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.test.TestHelpers._
 import org.ocbkc.swift.coord._
 import org.ocbkc.swift.coord.ses._
+import org.ocbkc.questionnaire._
 
 import org.ocbkc.generic.random._
-import ocbkc.swift.test.simulation.jara._
-
+import org.ocbkc.swift.test.simulation.jara._
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -66,7 +66,7 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, FreeTextFixedCorrectAnswerQuestion)
 
     // Build SiteMap
     /* originally generated code:
@@ -541,9 +541,37 @@ class Boot {
      ) => false})
    }
 
-      log("Boot.boot finished")
-   
-  }
+   {  // begin test Questionnaire
+      val qn = Questionnaire.create
+      val questions =
+      List(
+         Question.
+            create.
+            questionType(1).
+            questionFormulation("What is the highest mountain in the world?").
+            freeTextFixedCorrectAnswerQuestion
+            {  val fq = FreeTextFixedCorrectAnswerQuestion.create
+               fq.save
+               fq
+            },
+         Question.
+            create.
+            questionType(2).
+            questionFormulation("What is the highest mountain in the world?").
+            multipleChoiceQuestion
+            {  val mq = MultipleChoiceQuestion.create
+               mq.save
+               mq
+            }
+      )
+
+      questions.foreach{ _.save }
+      questions.foreach{ Questionnaire_Question_join.createJoin(qn, _) }
+      log("[MUSTDO] create scheme for Questionnaire in Boot.scala?")
+   }
+
+   log("Boot.boot finished")
+}
 
 
   /**

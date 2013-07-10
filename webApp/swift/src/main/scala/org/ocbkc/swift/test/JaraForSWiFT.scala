@@ -1,7 +1,7 @@
 /** Simulates players playing the SWiFT game. Intended for testing purposes.
   *
   */
-package ocbkc.swift.test.simulation.jara
+package org.ocbkc.swift.test.simulation.jara
 {
 import org.ocbkc.generic.test.simulation.jara._
 import org.ocbkc.swift.coord.ses.CoreSimu
