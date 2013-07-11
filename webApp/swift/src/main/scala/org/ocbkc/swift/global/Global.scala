@@ -18,13 +18,16 @@ import org.ocbkc.swift.model._
 
 object GlobalConstant
 {  
-  val MAIN_VERSION = "0.3.0.1" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+ 
+
    val TEST = true
    val NEWLINE = System.getProperty("line.separator")
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
    val OS = System.getProperty("os.name").toLowerCase
    
    val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
+    val MAIN_VERSION = scala.io.Source.fromFile(WEBAPP_BASE_DIR + "/current_version.txt").mkString // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+
    /* 
     * Dependency usage: first run mvn dependency:unpack
     * global.scala will check if you're running windows, mac or linux
