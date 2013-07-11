@@ -9,12 +9,14 @@ value: 16
 
 });
 
-});
+$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
+  });
 </script>
 	
 <h1>Translation Round</h1>
 	<div id="progressbar"></div>
-<center><a href="startSession.html">Start</a> <b>-></b><a href="translationRound.html" style="color: #f8b500"> Translation </a><b>-></b> Bridge Construction <b>-></b> Question Attack <b>-></b> Algorithmic Defence <b>-></b> Algorithmic 2 <b>-></b> End session</center>
+
+<lift:createProgress.text w_page="2"/>
 <Br/>
 <lift:TranslationRound form="POST">
 <p>No idea what to do? Study your <a href='../studyConstitution'>chosen constitution</a>!</p>

@@ -7,14 +7,15 @@ $(function() {
 $( '#progressbar' ).progressbar({
   value: 80
 });
-});
+$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
+  });
 </script>
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
 <h1>Algorithmic Defence Round Stage 2</h1>
 	<div id="progressbar"></div>
-<center><a href="startSession.html">Start</a> <b>-></b><a href="translationRound.html"> Translation </a><b>-></b> <a href="bridgeconstruction.html">Bridge Construction</a> <b>-></b> <a href="questionAttackRound.html">Question Attack</a> <b>-></b> <a href="algorithmicDefenceRound.html">Algorithmic Defence</a> <b>-></b> <a href="algorithmicDefenceRoundStage2.html" style="color: #f8b500">Algorithmic 2</a> <b>-></b> End session</center>
+<lift:createProgress.text w_page="6"/>
 <Br/>
 <lift:AlgorithmicDefenceRoundStage2 form="POST">
 
