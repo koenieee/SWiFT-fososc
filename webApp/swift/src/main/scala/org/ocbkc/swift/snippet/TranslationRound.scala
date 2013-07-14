@@ -86,7 +86,8 @@ class TranslationRound
             "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.cc.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.cc.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "style" -> "width: 100%;"), // todo: how to make text area page width?
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt),
             "errorTrans"      -> errorTransWebText,
-            "submitBt"        -> SHtml.submit("Submit", processSubmission)
+            "submitBt"        -> SHtml.submit("Submit", processSubmission),
+            "startTime"			-> Text(sesCoordLR.cc.startTimeTranslation.is.toString())
             //"test"            -> Text(test)
           )
       bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.cc.textNL))
