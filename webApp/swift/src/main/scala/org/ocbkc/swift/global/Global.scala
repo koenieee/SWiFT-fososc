@@ -26,7 +26,7 @@ object GlobalConstant
    val OS = System.getProperty("os.name").toLowerCase
    
    val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
-    val MAIN_VERSION = scala.io.Source.fromFile(WEBAPP_BASE_DIR + "/current_version.txt").mkString // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+    val MAIN_VERSION = scala.io.Source.fromFile(WEBAPP_BASE_DIR + "/mainVersion.txt").mkString // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
 
    /* 
     * Dependency usage: first run mvn dependency:unpack

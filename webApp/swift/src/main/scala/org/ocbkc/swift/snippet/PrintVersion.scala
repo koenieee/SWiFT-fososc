@@ -16,13 +16,13 @@ import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.global._
 
 
-  class Version_swift
+class Version_swift
 {
   /*<-- Koen: I think :), one day you are using a file to set the version number, so I keep this piece of code:
   val source = scala.io.Source.fromFile(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME)
 	  val lines = source.mkString
 source.close()*/
-val lines = GlobalConstant.MAIN_VERSION;
+val lines = GlobalConstant.MAIN_VERSION
   def printing(xhtml: NodeSeq): NodeSeq = {
   {
 		<h4 class="alt">
