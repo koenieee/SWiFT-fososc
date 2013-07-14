@@ -25,7 +25,7 @@ class QuestionAttackRound
          // <&y2011.11.08.18:54:41& check errors on submission here>
          S.redirectTo("algorithmicDefenceRound.html") 
       }  
-      sesCoord.URquestionAttack
+      sesCoord.URstartQuestionAttack
       var boundForm = 
             bind( "form", ns, 
                   "playerAnswerFromSource" -> SHtml.text("Enter your answer here", playerAnswerTF = _),

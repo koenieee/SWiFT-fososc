@@ -77,7 +77,7 @@ class StartSession
       {  println("processSubmission called")
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
-         sesCoordLR.URtranslation
+         sesCoordLR.URstartTranslation
 
          // test json serialization
          case class TestPersistency(var val1:String)

@@ -2,7 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-
   
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ocbkc.swift</groupId>
@@ -39,6 +38,7 @@
       <id>jgit-repository</id>
       <url>http://download.eclipse.org/jgit/maven</url>
     </repository>
+
   </repositories>
 
   <pluginRepositories>
@@ -112,7 +112,8 @@
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>2.0.0.201206130900-r</version>
+      <version>2.3.1.201302201838-r</version>
+      <!-- <version>2.0.0.201206130900-r</version> -->
     </dependency>
    <dependency>
      <groupId>org.gitective</groupId>
@@ -177,6 +178,35 @@
           </execution>
         </executions>
       </plugin>
+	<plugin>
+	    <groupId>org.codehaus.mojo</groupId>
+	    <artifactId>keytool-maven-plugin</artifactId>
+            <version>1.2</version>
+	    <executions>
+		<execution>
+		    <phase>generate-resources</phase>
+		    <id>clean</id>
+		    <goals>
+		        <goal>clean</goal>
+		    </goals>
+		</execution>
+		<execution>
+		    <phase>generate-resources</phase>
+		    <id>genkey</id>
+		    <goals>
+		        <goal>genkey</goal>
+		    </goals>
+		</execution>
+	    </executions>
+	    <configuration>
+		<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+		<dname>cn=localhost</dname>
+		<keypass>jetty6</keypass>
+		<storepass>jetty6</storepass>
+		<alias>jetty6</alias>
+		<keyalg>RSA</keyalg>
+	    </configuration>
+	</plugin>
       <plugin>
         <groupId>org.mortbay.jetty</groupId>
         <artifactId>maven-jetty-plugin</artifactId>
@@ -184,7 +214,16 @@
         <configuration>
           <contextPath>/</contextPath>
           <scanIntervalSeconds>5</scanIntervalSeconds>
-        </configuration>
+	<connectors>
+	<connector implementation="org.mortbay.jetty.security.SslSocketConnector">
+	<port>8080</port>
+	<maxIdleTime>60000</maxIdleTime>
+	<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+	<password>jetty6</password>
+	<keyPassword>jetty6</keyPassword>
+	</connector>
+	</connectors>
+       </configuration>
       </plugin>
       <plugin>
         <groupId>net.sf.alchim</groupId>
@@ -227,6 +266,43 @@
           </classpathContainers>
         </configuration>
       </plugin>
+      <plugin>
+	   <groupId>org.apache.maven.plugins</groupId>
+	   <artifactId>maven-dependency-plugin</artifactId>
+	 <version>2.5.1</version>
+				<configuration>
+				  <artifactItems>
+					  <artifactItem>
+						  <groupId>org.eprover</groupId>
+						  <artifactId>eprover</artifactId>
+						  <version>1.6</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/eprover</outputDirectory>
+					  </artifactItem>
+					   <artifactItem>
+						  <groupId>org.paradox</groupId>
+						  <artifactId>paradox</artifactId>
+						  <version>4.0</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
+					  </artifactItem>
+<!--
+&y2013.06.09.17:46:33& textgenerator etc. need to be updated in the Maven central repo. As long as that has not been done: install them manually. If you want to have the exactly matching version: git checkout [version number] and then rebuild textgenerator etc. and upload them to the right location.
+
+					  <artifactItem>
+						  <groupId>org.ocbkc.swift</groupId>
+						  <artifactId>binaries_swift</artifactId>
+						  <version>0.0.1</version>
+						  <type>jar</type>
+						  <overWrite>true</overWrite>
+						  <outputDirectory>${basedir}/binaries/swift</outputDirectory>
+					  </artifactItem>
+-->                                       
+				  </artifactItems>
+		  </configuration>
+		 </plugin>
     </plugins>
   </build>
   <reporting>
@@ -246,3 +322,6 @@
     </plugins>
   </reporting>
 </project>
+
+
+

@@ -14,6 +14,7 @@ import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.LiftHelpers._
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.scoring._
@@ -53,7 +54,7 @@ class ConstitutionSnippet
    println("   find noPublishDescriptionError command gives: " + errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ) )
    val currentUserId:Long = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
       {  case Full(id)  => { id.toLong }
-         case _         => { throw new RuntimeException("  No user id found.") }
+         case _         => { logAndThrow("  No user id found.") }
       }
    var editmode = false
 
@@ -109,7 +110,8 @@ class ConstitutionSnippet
 
 */
 
-   /** Call this when const has been updated, and you want to notify all followers.
+   /** Deprecated
+     * Call this when const has been updated, and you want to notify all followers.
      * All followers are mailed, except for the follower who did the update (that is the one this snippet is serving right now.)
      */
 
@@ -184,7 +186,13 @@ class ConstitutionSnippet
       {  constitutionTAcontent = taContent
       }
 
-	def processFollowCheckbox(checked:Boolean) =
+      def processReleaseCandidateCb(checked:Boolean) =
+      {  log("processReleaseCandidateCb called")
+         val constLoc = const.get
+         sesCoordLR.URsetReleaseCandidate(constLoc, checked)
+      }
+
+      def processFollowCheckbox(checked:Boolean) =
       {  if( const.isDefined ) // <&y2012.06.23.14:52:50& necessary? The checkbox shouldn't even show when there is no constitution defined>
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
@@ -227,7 +235,7 @@ class ConstitutionSnippet
                                                       {  case List() => constLoc.plainContent
                                                          case _      => { println("   error in html, so prefill constitution editor with text before reload"); contentB4ReloadOpt.get.constitutionTAcontent } // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
                                                       }
-                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;" 
+                                                    }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;", "id" -> "edit" 
                                                   )
       editmode = S.param("edit") match // <&y2012.06.05.10:33:56& how html parameters simply look if parameter exists, I want to do: if edit param is in then edit>
       {  case Full(pval) => { println("edit url param = " + pval); pval.equals("true") }
@@ -279,15 +287,42 @@ class ConstitutionSnippet
                                                             "constitutionEditor" -> constitutionEditor
                                                              )
                                                },
-                           "view"    -> {    if( editmode )
+                           "view"    -> {    log("[MUSTDO] display button if latest release is a ReleaseVirgin. Pressing the button while remove the releasevirgin status. When the player clicks it, reload page to show the checkbox for Release Candidate again.")
+                                             if( editmode )
                                                 emptyNode
                                              else
                                                 bind( "top", chooseTemplate("top","view", ns), 
                                                    "constitutionText" -> { if(!errorRetrievingConstitution) constLoc.contentInScalaXML else Text(errorMsg) }, 
-                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)))
+                                                   "editBt" -> SHtml.button("Edit", () => processEditBtn(constLoc.constiId)),
+                                                   "releaseCandidateCb"     ->
+                                                   {  val accessToReleaseCandidateCb =
+                                                      {  if( ( constLoc.releaseStatusLastVersion == Some(Release) ) || !( constLoc.leadersUserIDs.contains(currentUserId) ) )
+                                                         {  log("   latestVersionIsRelease or current player isn't leader of this consti")
+                                                            List("disabled" -> "disabled")
+                                                         }  else
+                                                         {  Nil
+                                                         }
+                                                      }
+
+                                                      SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), selected => processReleaseCandidateCb(selected), accessToReleaseCandidateCb:_*)
+                                                   }
+                                                )
 
                                         },
                            "creator"            -> { if( !errorRetrievingConstitution ) Text(creator.swiftDisplayName) else emptyNode },
+                           "leaders"            -> { if( !errorRetrievingConstitution ) 
+                                                     {   val leaderNamesStringList = constLoc.leadersUserIDs.map
+                                                               {  userId => Player.find(userId) match
+                                                                  {  case Full(player) => player.swiftDisplayName
+                                                                     case _            => throw new RuntimeException("Player with id " + userId + " not found.")
+                                                                  }
+                                                               }
+                                                         log("   leaderNamesStringList = " + leaderNamesStringList)
+                                                         Text(leaderNamesStringList.mkString(", "))
+                                                     } 
+                                                     else
+                                                      emptyNode
+                                                   },
                            "title"              -> Text(title),
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "latestRelease"      -> { Text(optionToUI( latestReleaseIdOpt.collect{ case lr:VersionId => "R" + constLoc.releaseIndex(lr) } ) )

@@ -17,14 +17,35 @@ import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 
 object GlobalConstant
-{  val TEST = true
+{  val MAIN_VERSION = "0.3.2" // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
+   val TEST = true
    val NEWLINE = System.getProperty("line.separator")
-   val WEBAPROOT = "/home/koen/SWIFT/SWiFT-fososc/webApp/swift" // CHANGE TO YOUR MACHINE
-   val ABSOLUTEPATHS = false // set true when you want all paths in this dir to be absolute, sometimes handy when you want to execute parts of the application from another directory. Default should be false.
+
+   val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
+   val OS = System.getProperty("os.name").toLowerCase
+
    
-   private val PREFIX = if( ABSOLUTEPATHS ) WEBAPROOT + "/" else ""
-   val CONSTITUTIONHTMLDIR = PREFIX + "src/main/webapp/constitutions/"
-   val PERSISTDIR = PREFIX + "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
+   val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
+   /* 
+    * Dependency usage: first run mvn dependency:unpack
+    * global.scala will check if you're running windows, mac or linux
+    * BINARIES is only used in GameCore.Scala
+    * Eprover_Path is only used in tpwrap.scala
+    * Paradox_Path is only used in tpwrap.scala
+    */
+    
+   //only used for AdGen & textgenerator (did a recursive grep search!) //ONLY FOR LINUX
+   val BINARIES = WEBAPP_BASE_DIR + "/binaries" // CHANGE TO YOUR MACHINE
+   val SWIFTBINARIES = BINARIES + "/swift" // CHANGE TO YOUR MACHINE
+  
+   //EPROVER: determine OS, no need to check if running 32 or 64 bits ==> created by Koen, used in tpwrap.scala
+   val EPROVER_PATH = 	if(OS.startsWith("linux")) {  BINARIES + "/eprover/Linux";	}	else if(OS.startsWith("mac os x")) { 	BINARIES + "/eprover/Mac OSX";	}	else if(OS.startsWith("windows")) {  BINARIES + "/eprover/Windows";} else { BINARIES + "/eprover/Linux"; }
+	
+   //PARADOX: ONLY LINUX!!! ==> created by Koen, used in tpwrap.scala
+   val PARADOX_PATH = BINARIES + "/paradox"
+  
+   val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
+   val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
@@ -36,6 +57,8 @@ object GlobalConstant
 
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
+   val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
+   val CONSTiALPHaINIT = INITIALISATIOnDATaDIR + "/constitutionAlpha_core"
 
    // Scoring
 
@@ -77,7 +100,8 @@ object GlobalConstant
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)
    createDirIfNotExists(CONSTITUTIONHTMLDIR)
    createDirIfNotExists(CORECONTENTOBJECTDIR)
-   
+   createDirIfNotExists(INITIALISATIOnDATaDIR)
+
 /** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>
   * @returns: false dir doesn't exist and could not be created; true: dir exists (if it didn't before, it was created succesfully)
   */
@@ -97,6 +121,10 @@ object GlobalConstant
    }
 }
 
+object ScalaHelpers
+{  val doNothing = Unit
+}  
+
 /** @todo &y2013.01.20.18:12:52& move this one to a more general place
   */
 object Types
@@ -109,7 +137,7 @@ object Types
 object TestSettings
 {  val AUTOLOGIN                       = false
    val AUTOTRANSLATION                 = false // true
-   val CREATETESTUSERBASE              = false // true
+   val CREATETESTUSERBASE              = true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val STARTJARASIMULATIONDURINGBOOT   = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
@@ -118,11 +146,23 @@ object TestSettings
    // { never change the following manually, they are used by other parts of the program
    var SIMULATEPLAYINGWITHJARARUNNING  = false // simulation process is currently running
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
+   var SIMULATEPLAYINGWITHJARA = true
    // }
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
 
+}
+
+object Logging
+{  def logAndThrow(msg:String) =
+   {  println(msg)
+      throw new RuntimeException(msg)
+   }
+
+   def log(msg:String) =
+   {  println(msg)
+   }
 }
 
 object LiftHelpers

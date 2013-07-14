@@ -36,7 +36,7 @@ import org.eclipse.jgit.storage.file._
 class AdminPage
 {
 	println("Adminpage is called")
-	val path = GlobalConstant.WEBAPROOT;
+	//val path = GlobalConstant.WEBAPROOT;
 	var blaat = "nog niks";
 	var n_blaat = "nog niks";
 

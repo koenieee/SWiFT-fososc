@@ -1,0 +1,113 @@
+<title>Constitution Alpha</title>
+<h1 align="center">Constitution Alpha</h1>
+<h2 class="western">0. Guideline: game rules and constitution</h2>
+<p>Acquaint yourself with the rules of the game, and with the definitions in this constitution.</p>
+<h2 class="western">1. Definition: target language Folminqua</h2>
+<p>The SWiFT game makes use of a very simple computationally transparent language: Folminqua. One thing you have to understand about Folminqua is that you are free to (or better: must)
+introduce new words. Compared to a normal language (English) it
+could be seen as a language with a grammar, but with a minimum of
+predefined words. In a sense you extend the language (with new words)
+while you are using it!</p>
+<!--There is not one computationally transparent language. Just as with human languages, their many.--> 
+<p>The target language is defined as follows. A document in
+Folminqua consists of a set of sentences, and sentences of a
+sequence of words and auxiliary symbols. Lets first explain the
+words, then the sentences and after that the documents.</p>
+<h3 class="western">1.1 Words</h3>
+<p>The words in Folminqua come in two flavours: constants and
+predicates.</p>
+<h4 class="western">1.1.1 Constants</h4>
+<p>A constant is a word that stands for a certain entity (which could
+be a person, a table, an armadillo, you name it). Examples of
+constants in Folminqua are:</p>
+<pre>c1
+YanArthusBertrand 
+oeirUij
+pres_hujintao</pre>
+<b>[y2012.m05.d30.h15.m30.s41 WARNING: due to a bug, constants must start with a lower case letter. In the rest of the constant you are free to use both capitals and lower case letters.]</b>
+<p>You are free to choose any constant for a thing you want to refer
+to. You can choose the constant <code>YanArthusBertrand</code> to represent documentary maker Yan Arthus-Bertrand, but you could just as well have chosen <code>c1</code>. Although you
+are free to choose any constant to refer to the entity you have in
+mind, you must stick to your choice throughout the document. Each new
+occurrence of the same constant in the document, thus, refers to the
+same entity. On the other hand, you are free to connect different
+constants to the same entity, as long as not in conflict with the yet
+to explain equal or inequal sentences.</p>
+<h4 class="western">1.1.2 Predicates</h4>
+<p>A predicate stands for a certain relation between entities.
+Examples of predicates are:</p>
+<pre>p
+dlkfjiwjef
+is_father_of
+dk
+likes</pre>
+<p>Just as with constants, you are free to choose any predicate for a
+relation you want to refer to. Again, you must stick to your choice
+throughout the document. Each predicate has a fixed number of
+entities it expresses a relation between. In Folminqua, simple as
+it is, this number must always be exactly 2.</p>
+<p>On the other
+hand, you are free to connect different constants to the same entity,
+as long as not in conflict with the yet to explain equal or inequal
+sentences</p>
+<h3 class="western">1.2 Sentences</h3>
+<p>A sentence expresses some state of affairs. There are three types of sentences: predicate, equal and inequal sentences.</p> 
+
+<h4>1.2.1 Predicate sentence</h4>
+<p>An example of a predicate sentence is the following:</p>
+<pre>p(c1,c2)</pre>
+In the sentence above <code>p</code> is a predicate, and <code>c1</code> and <code>c2</code> are constants. It expresses that the relation associated with predicate <code>p</code> exists between <code>c1</code> and <code>c2</code> (and in that order, will be explained). Suppose that in your document, you have chosen <code>c1</code> to represent Yan Arthus-Bertrand, <code>c2</code> the movie Home, and <code>p(x,y)</code> to represent the relation ``<code>x</code> is documentary maker of <code>y</code>''. Then the above example-sentence expresses: ``Yan Arthus-Bertrand is documentary maker of Home''.
+The following is another example of a predicate sentence:
+<pre>p({a,b},{c,d})</pre>
+<p>This notation is intended to save you some writing work. It is an abbreviation for expressing all of the following sentences at once:
+<pre>p(a,c)
+p(a,d)
+p(b,c)
+p(b,d)</pre>
+Thus, all predicate sentences with any single constant of the first list of constants, combined with any single element of the second list of constants. Other examples are:
+<pre>p({a},{c,d})</pre>
+Equivalent to:
+<pre>p(a,c)
+p(a,d)
+</pre>
+and 
+<pre>p({a,b},{d})</pre>
+Equivalent to:<pre>p(a,d)
+p(b,d)</pre></p>
+Moreover, a list with only one constant, such as <code>{a}</code> is equivalent to writing down that constant itself, thus <code>a</code>. For example:
+<pre>p({a},{c,d})</pre>
+is equivalent to writing
+<pre>p(a,{c,d})</pre>
+
+<!-- Note a few things:
+<ul>
+   <li>The order of constants is in a predicate sentence is important. p(c2,c1) and p(c1,c2) do not necessarily express the same information, in the example abo</p>
+-->
+<h4>1.2.2 Equality sentence</h4>
+An equality sentence expresses that all constants mentioned in it, refer to the same entity. An example is:
+<pre>equal(c1,c2,c3)</pre>
+<p>This expresses that the constants <code>c1</code>, <code>c2</code> and <code>c3</code> refer to the same entity. The list of constants in the equal sentence must be at least 2.</p>
+<h4>1.2.3 Inequality sentence</h4>
+<pre>inequal(c1,c2,c3)</pre>
+<p>This expresses that the constants <code>c1</code>, <code>c2</code>, <code>c3</code> refer to mutually
+distinct entities. For the rest it has the same properties as equal.</p>
+<h3 class="western">1.3 Documents</h3>
+<p>A document is a sequence of sentences separated by newlines:</p>
+<pre>p({a,b},{b,c,Yan})
+p({b},{c})
+equal(b,c)</pre>
+<br/><br/>
+
+<!-- 
+<p>The meaning of constants and predicates do never change within a
+document. p stands for the same relation and c1 and c2 for the same
+entities throughout the document.</p>
+<p>Which stand for some entities, and p is a relation. This statement
+expresses</p>
+<p>Example:</p>
+<p>p stands for the relation “x is a father of y”</p>
+<p><br/><br/>
+</p>
+<p>equal(a,b,c) a, band</p>
+-->
+

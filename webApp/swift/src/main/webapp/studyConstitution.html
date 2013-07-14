@@ -1,8 +1,31 @@
+
 <lift:surround with="default" at="content">
+	<style type="text/css">
+table#text
+{
+    visibility:hidden;
+    width: 600px;
+}
+</style>
+<script type="text/javascript" src="/javascript/blaat.js"></script>
+<script>
+
+
+if( getURLParameter('false') == 'true')
+{
+$('div.column.span-6.colborder.sidebar').css('display', 'none');
+$('body').css('margin-left', 'auto').css('margin-right', 'auto');
+
+}
+</script>
 <lift:StudyConstitution form="POST">
+
+
 <h1>Study Constitution <top:constitutionId /></h1>
 
-Info
+Study the constitution below by pressing and holding 'g'. You need to do this to understand how to play the game. If you have studied enough and you want to play (or continue) a fluency game, click on the right item in the menu at the left!
+
+<h2>Info</h2>
 <table>
    <tr><td>Creationdate:</td>             <td><top:creationDate /></td>      </tr>
    <tr><td>Created by:</td>               <td><top:creator /></td>            </tr>
@@ -16,12 +39,64 @@ Info
 </table>
 
 <hr />
+<p id="blank">
+If you want to read on, please <b>hold the 'g' key.</b>
+</p>
 
-<table>
+<table  id="text">
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
+<script type="text/javascript">
+$(document).ready(function(){
+    
+   // scroll(0,0);
+    var keyisdown = false;
+    var scroll_last_position = 0;
+       	 var keycode = 86; //alt key
+   	 var keycode2 = 71; //o key
+   	 //alert(e.which);
+   	 var scrolled = false;
+   	pressedKeys = [];
+    
+    $('body').bind('keydown',function(e)
+    {
+   	// if (e.altKey == true ) {
+   	 if( e.keyCode == keycode2)
+   	{
+		
+		if(scrolled == false)
+		{
+   		 $(window).scrollTop(scroll_last_position);
+		scrolled = true;
+   		} 
+   		 $('#text').css('visibility', 'visible');
+   		 $('#blank').css('visibility', 'hidden');
 
+   		 scroll_last_position = $(window).scrollTop();
+   //	 }
+   }
+}
+
+    ).bind('keyup',function()
+    {
+   	 
+   	  console.log (scroll_last_position);
+   	 scrolled = false;
+   	 $('#blank').css('visibility', 'visible');
+   	 $('#text').css('visibility', 'hidden');
+
+   	 
+   	 scroll(0,0);
+   	 
+    });
+
+});
+
+</script>
 </lift:StudyConstitution>
+
+
+	
 </lift:surround>

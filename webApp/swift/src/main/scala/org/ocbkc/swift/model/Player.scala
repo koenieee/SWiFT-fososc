@@ -8,7 +8,8 @@ import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.snippet.sesCoord
 import org.ocbkc.swift.global._
-
+import org.ocbkc.swift.test._
+import org.ocbkc.swift.global.Logging._
 
 /**
  * The singleton that has methods for accessing the database
@@ -62,8 +63,27 @@ class Player extends MegaProtoUser[Player] {
    {   
    }
 */
-   object firstChosenConstitution extends MappedInt(this) // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
+   val thisPlayer = this
+   object firstChosenConstitution extends MappedInt(this)
+   {  /** Important: this is an intelligent apply, which also automatically sets the timeFirstChosenConstitution, releaseOfFirstChosenConstitution, and notifies Constitution that it was chosenAsFirstConsti.
+        */
+      override def apply(constiId:Int) =
+      {  if(constiId != -1) // -1 is passed when a Player-object is created by the Mapper-framework (true?), and doesn't mean there is actually a first consti being chosen.
+         {  val consti = Constitution.getById(constiId).getOrElse(throw new RuntimeException("Constitution with id = " + constiId + " doesn't exist, while it should..."))
+            thisPlayer.timeFirstChosenConstitution(SystemWithTesting.currentTimeMillis).save
+            consti.chosenAsFirstConsti // WARNING: must be called before setting releaseOfFirstChosenConstitution!
+            thisPlayer.releaseOfFirstChosenConstitution(consti.lastReleaseCommitId.getOrElse(logAndThrow("get should be possible because the player is only presented constitutions which HAVE a last release."))).save
+         }
+
+         super.apply(constiId)
+      }
+   }
+   
+   // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
    object releaseOfFirstChosenConstitution extends MappedString(this, GlobalConstant.GIThASHsIZE)
+
+   /** @todo &y2013.05.12.11:46:29& perhaps automatically set this when firstChosenConstitution is set. However that can be a problem is data that is restored somehow, then current system time and moment of chosing may be different.
+     */
    object timeFirstChosenConstitution extends MappedLong(this)
    def followedConstis:List[ConstiId] =
    {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.is}

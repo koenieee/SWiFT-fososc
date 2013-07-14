@@ -1,0 +1,12 @@
+How to run this:
+
+cd' to webApp/swift
+=> mvn dependency:unpack
+=> Secure SWiFT: mvn keytool:genkey
+=> run mvn jetty:run
+
+=> Https Access on port 8080
+Url: https://<HOST_NAME>:8080
+
+Paradox external dependency: sudo apt-get install libgmp-dev
+locate libgmp and create a external link to: /usr/lib/libgmp.so.3

@@ -13,6 +13,7 @@ import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
+import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.global._
 
@@ -67,8 +68,8 @@ class SelectConstitution
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
                <thead><tr><th>id</th><th>description</th><th>fluency</th><th>APC</th><th>ADT</th><th>Creation date</th></tr></thead>,
-               <tbody>{ Constitution.constis.filter( c => c.firstReleaseExists ).sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "selectConstitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK)) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+               <tbody>{ Constitution.constisWithAReleaseOrVirginRelease.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
+                           c => <tr><td><a href={ "selectConstitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect{ case afs:(VersionId,Double) => afs._2 } ) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
                }
                </tbody>
             )
@@ -79,15 +80,7 @@ class SelectConstitution
             doc
          }
       }
-      /*
-      def processCreateNewBt() =
-      {  val const:Constitution = Player.currentUserId match
-         {  case Full(id)  => { Constitution.create(id.asInstanceOf[String].toInt)  }
-            case _         => { throw new RuntimeException("  No user id found.") }
-         }
-         S.redirectTo("constitution.html?id=" + const.constiId + "&edit=true&firstedit=true") // <&y2012.06.05.10:05:58& redirectTo, does this also terminate the execution of the method, or does the method remain indefinitely on the stack?>
-      }
-      */
+
 
       val answer   = bind( "top", ns, 
                            "constisInTable"  -> displayConstis
