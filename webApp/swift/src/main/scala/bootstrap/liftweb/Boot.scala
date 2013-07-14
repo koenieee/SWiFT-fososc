@@ -66,7 +66,7 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, FreeTextFixedCorrectAnswerQuestion)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, FreeTextFixedCorrectAnswerQuestion, Questionnaire_Question_join)
 
     // Build SiteMap
     /* originally generated code:
@@ -542,8 +542,10 @@ class Boot {
    }
 
    {  // begin test Questionnaire
-      val qn = Questionnaire.create
-      val questions =
+      val qn = Questionnaire.create.name("Fondrowaki Questionnaire")
+      qn.save
+
+      val questions:List[Question] =
       List(
          Question.
             create.

@@ -12,16 +12,8 @@ import net.liftweb.mapper._
 import Helpers._
 
 class ExecuteQuestionnaire
-{  def renderQuestions(ns: NodeSeq) = 
-   {  // { TEST: simply pick the first questionnaire
-      val qns = Questionnaire.findAll
-      val firstQn = qns match
-         {  case qn::restQ => qn
-            case Nil       => logAndThrow("No test questionnaire found")
-         }
-      // }
-
-      val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, firstQn)).map( join => join.Question.obj.open_! )
+{  def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
+   {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
       questions.flatMap
       {  question =>
          {  // retrieve additional info based on the type of question
@@ -35,24 +27,42 @@ class ExecuteQuestionnaire
                }
             }
             
-
             // generate html
             log("[MUSTDO] select template based on question type, now it just assumes FreeTextFixedCorrectAnswerQuestion")
-            bind(
+            val questionTemplate = chooseTemplate("top", "question", ns)
+            log("   questionTemplate = " + questionTemplate)
+            val bindResultQuestionTemplate = bind( "question", questionTemplate,
                "orderNumber"  -> Text("TODO orderNumber"),
                "body"         ->
-                  bind( "top", chooseTemplate("subtemplate", "freeTextClosedQuestion", chooseTemplate("top", "questions", ns), ns),
-                     "text"      -> Text("TODO Question text here"),
+               {  val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplate
+                  log("   ftcqTemplate = " + ftcqTemplate )
+                  val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
+                     "text"      -> Text(question.questionFormulation.is),
                      "answerTf"  -> Text("TODO answerTf here")
                   )
+                  log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
+                  bindResultFtcqTemplate
+               }
             )
+            log("   questionTemplate after bind: " + bindResultQuestionTemplate)
+            bindResultQuestionTemplate
          }
       }
    }
 
    def render(ns: NodeSeq) =
-   {  bind("top", ns,
-         "questions" -> renderQuestions(ns)
+   {//{ TEST: simply pick the first questionnaire
+      val qns = Questionnaire.findAll
+      val firstQn = qns match
+         {  case qn::restQ => qn
+            case Nil       => logAndThrow("No test questionnaire found")
+         }
+   // }
+
+   bind("top", ns,
+         "qnName"    -> Text(firstQn.name.is),
+         "questions" -> renderQuestions(ns, firstQn),
+         "submitBt"  -> Text("TODO submitBt here")
       )
    }
 }

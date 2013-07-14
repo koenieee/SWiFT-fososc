@@ -10,6 +10,7 @@ package org.ocbkc.questionnaire
 {  object Constants
    {  val MAX_SIZE_QUESTION_TEXT = 1000
       val MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion = 1000
+      val MAX_SIZE_NAME_QUESTIONNAIRE = 250
    }
 
    import Constants._
@@ -17,6 +18,7 @@ package org.ocbkc.questionnaire
    class Questionnaire extends LongKeyedMapper[Questionnaire] with IdPK
    {  // object questions extends MappedLongForeignKey[this, Question] done using join
       def getSingleton = Questionnaire
+      object name extends MappedString(this, MAX_SIZE_NAME_QUESTIONNAIRE)
    }
    
    object Questionnaire extends Questionnaire with LongKeyedMetaMapper[Questionnaire]
