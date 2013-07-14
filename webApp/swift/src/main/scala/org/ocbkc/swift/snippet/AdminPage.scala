@@ -23,6 +23,9 @@ import org.ocbkc.swift.model.Player
 import java.io._
 import java.lang.{ Long => JLong }
 import org.apache.commons.io.FileUtils;
+import org.eclipse.jgit.api._
+import org.eclipse.jgit.lib._
+import org.eclipse.jgit.storage.file._
 /*
  * Cleanup non-used imports.
  * */
@@ -68,13 +71,24 @@ class AdminPage
 		}
 
 		}*/
+		
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR));
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR));
 		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR));
-		
-		   GlobalConstant.createDirIfNotExists(GlobalConstant.CONSTITUTIONOBJECTDIR)
-			GlobalConstant.createDirIfNotExists(GlobalConstant.CONSTITUTIONHTMLDIR)
-			GlobalConstant.createDirIfNotExists(GlobalConstant.CORECONTENTOBJECTDIR)
+
+
+    // Initialise git repository for constitutions if there isn't one created yet.
+    // Check whether there is already git tracking
+    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
+    if( gitfile.exists)
+    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everything is under (version) control, my dear organic friend...")
+    }
+    else
+    { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
+      val jgitInitCommand:InitCommand = Git.init()
+      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+      jgitInitCommand.call()
+    }
 
 
 		println("Jara called");
