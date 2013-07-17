@@ -7,21 +7,10 @@
 <top:question>
    <question:orderNumber />
    <question:body />
-
-<!-- the following are "subtemplates" which will be used to render the question-body of the question in the questionnaire. For each question, the snippet attached to this template will select the right subtemplate and use it to render the question. -->
-   <question:multipleChoiceQuestion>
-      <mcq:text />
-      <mcq:option>
-         <option:listnumber /> <option:text />
-      </mcq:option>
-   </question:multipleChoiceQuestion>
-   <hr />
-
-   <question:freeTextClosedQuestion>
-      <ftcq:text />
-      <ftcq:answerTf />
-   </question:freeTextClosedQuestion>
+   <!-- the rest of the question will be rendered using the "subtemplates" in question.html, depending on the question type -->
 </top:question>
+
+
 <top:submitBt />
 </lift:ExecuteQuestionnaire>
 

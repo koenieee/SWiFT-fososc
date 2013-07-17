@@ -14,7 +14,7 @@ import Helpers._
 class ExecuteQuestionnaire
 {  def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
    {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
-      questions.flatMap
+      val ret = questions.flatMap
       {  question =>
          {  // retrieve additional info based on the type of question
             question.questionType.is match
@@ -34,7 +34,10 @@ class ExecuteQuestionnaire
             val bindResultQuestionTemplate = bind( "question", questionTemplate,
                "orderNumber"  -> Text("TODO orderNumber"),
                "body"         ->
-               {  val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplate
+               {  val questionTemplates = chooseTemplate("top", "questionTemplates", TemplateFinder.findAnyTemplate(List("questionnaire", "question")).open_!)
+                  log("   questionTemplates = " + questionTemplates)
+                  val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplates)
+
                   log("   ftcqTemplate = " + ftcqTemplate )
                   val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
                      "text"      -> Text(question.questionFormulation.is),
@@ -48,6 +51,8 @@ class ExecuteQuestionnaire
             bindResultQuestionTemplate
          }
       }
+      log("   renderQuestions return value = " + ret)
+      ret
    }
 
    def render(ns: NodeSeq) =
@@ -61,7 +66,7 @@ class ExecuteQuestionnaire
 
    bind("top", ns,
          "qnName"    -> Text(firstQn.name.is),
-         "questions" -> renderQuestions(ns, firstQn),
+         "question" -> renderQuestions(ns, firstQn),
          "submitBt"  -> Text("TODO submitBt here")
       )
    }
