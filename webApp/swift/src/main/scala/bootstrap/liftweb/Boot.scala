@@ -542,7 +542,7 @@ class Boot {
    }
 
    {  // begin test Questionnaire
-      val qn = Questionnaire.create.name("Fondrowaki Questionnaire")
+      val qn = Questionnaire.create.name("Deep Interrogation")
       qn.save
 
       val questions:List[Question] =
@@ -550,7 +550,7 @@ class Boot {
          Question.
             create.
             questionType(1).
-            questionFormulation("What is the highest mountain in the world?").
+            questionFormulation("What is the name of your new computer, and has it already been baptised?").
             freeTextFixedCorrectAnswerQuestion
             {  val fq = FreeTextFixedCorrectAnswerQuestion.create
                fq.save
@@ -559,9 +559,16 @@ class Boot {
          Question.
             create.
             questionType(2).
-            questionFormulation("What is the highest mountain in the world?").
+            questionFormulation("What is the punishment for pushing redundant files to repos?").
             multipleChoiceQuestion
             {  val mq = MultipleChoiceQuestion.create
+               /* Options, to come:
+               a) 50 strokes with a stick
+               b) months imprisonment
+               c) months labour camp
+               d) 2500 euro fine
+               */
+
                mq.save
                mq
             }

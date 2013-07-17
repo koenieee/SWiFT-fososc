@@ -16,35 +16,34 @@ class ExecuteQuestionnaire
    {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
       val ret = questions.flatMap
       {  question =>
-         {  // retrieve additional info based on the type of question
-            question.questionType.is match
-            {  case 1 =>
-               {  log("[MUSTDO] retrieve MultipleChoiceQuestion from DB")
-               }
-
-               case 2 =>
-               {  log("[MUSTDO] retrieve FreeTextFixedCorrectAnswerQuestion from DB") 
-               }
-            }
-            
-            // generate html
-            log("[MUSTDO] select template based on question type, now it just assumes FreeTextFixedCorrectAnswerQuestion")
+         {  // generate html
             val questionTemplate = chooseTemplate("top", "question", ns)
             log("   questionTemplate = " + questionTemplate)
             val bindResultQuestionTemplate = bind( "question", questionTemplate,
                "orderNumber"  -> Text("TODO orderNumber"),
                "body"         ->
-               {  val questionTemplates = chooseTemplate("top", "questionTemplates", TemplateFinder.findAnyTemplate(List("questionnaire", "question")).open_!)
-                  log("   questionTemplates = " + questionTemplates)
-                  val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplates)
+               {  // retrieve additional info based on the type of question
+                                   
+                  question.questionType.is match
+                  {  case 1 =>
+                     {  Text("[MUSTDO] retrieve MultipleChoiceQuestion from DB, and render (see 'case 2' for the structure of the code.)")
+                     }
 
-                  log("   ftcqTemplate = " + ftcqTemplate )
-                  val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
-                     "text"      -> Text(question.questionFormulation.is),
-                     "answerTf"  -> Text("TODO answerTf here")
-                  )
-                  log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
-                  bindResultFtcqTemplate
+                     case 2 =>
+                     {  val questionTemplates = chooseTemplate("top", "questionTemplates", TemplateFinder.findAnyTemplate(List("questionnaire", "question")).open_!)
+                        log("   questionTemplates = " + questionTemplates)
+                        val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplates)
+
+                        log("   ftcqTemplate = " + ftcqTemplate )
+                        val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
+                           "text"      -> Text(question.questionFormulation.is),
+                           "answerTf"  -> Text("TODO answerTf here")
+                        )
+                        log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
+                        bindResultFtcqTemplate
+                     }
+                  }
+
                }
             )
             log("   questionTemplate after bind: " + bindResultQuestionTemplate)
@@ -62,11 +61,11 @@ class ExecuteQuestionnaire
          {  case qn::restQ => qn
             case Nil       => logAndThrow("No test questionnaire found")
          }
-   // }
+    //}
 
    bind("top", ns,
          "qnName"    -> Text(firstQn.name.is),
-         "question" -> renderQuestions(ns, firstQn),
+         "question"  -> renderQuestions(ns, firstQn),
          "submitBt"  -> Text("TODO submitBt here")
       )
    }

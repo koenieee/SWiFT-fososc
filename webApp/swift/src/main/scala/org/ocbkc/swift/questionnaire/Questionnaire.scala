@@ -76,7 +76,7 @@ package org.ocbkc.questionnaire
      */
    class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with IdPK
    {  def getSingleton = MultipleChoiceQuestion
-      object correctAnswer extends MappedInt(this) // 1 = option 1
+      object correctAnswer extends MappedInt(this) // 1 = option 1, 2 = option 2
       object minimalNumberOfAnswers extends MappedInt(this)
       object maximumNumberOfAnswers extends MappedInt(this)
 
