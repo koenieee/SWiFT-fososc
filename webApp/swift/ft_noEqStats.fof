@@ -1,2 +1,0 @@
-fof(form0, axiom, p(b,f)).
-fof(form1, question, ? [PVx] : p(b,PVx)).
