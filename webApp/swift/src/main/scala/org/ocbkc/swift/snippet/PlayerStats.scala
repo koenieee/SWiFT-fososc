@@ -15,6 +15,7 @@ import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
+import org.ocbkc.swift.OCBKC._
 
 
 class PlayerStats
@@ -24,10 +25,12 @@ class PlayerStats
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
-      bind( "top", ns, 
+      val test = averageDurationTranslation(player, -1)
+            bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
             "numberCorrect"     -> Text("" + sesCoord.sesHis.numberCorrect),
+            "playerShortest"     -> Text("" + test),
             "percentageCorrect" -> Text("" + optionToUI(sesCoord.sesHis.percentageCorrect))
           )
    }
