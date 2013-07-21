@@ -17,6 +17,7 @@ import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
+import org.ocbkc.swift.OCBKC.Constitution
 import org.ocbkc.swift.test._
 import ocbkc.swift.test.simulation.jara._
 import org.ocbkc.swift.model.Player
@@ -53,6 +54,7 @@ class AdminPage
 	//MetaMapper.bulkDelete_!!
 	
 	Player.bulkDelete_!!(By(Player.superUser,false))
+        Constitution.removeAll
 	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  println("is admin")
                               

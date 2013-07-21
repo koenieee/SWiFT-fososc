@@ -666,6 +666,11 @@ object Constitution
    {  constis = constis.filterNot( _ == c )
    }
 
+   def removeAll =
+   {  constis = Nil
+      highestId = 0
+   }
+
    /** @todo Optimize
      */
    def constisWithAReleaseOrVirginRelease:List[Constitution] =
