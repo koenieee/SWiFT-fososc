@@ -286,6 +286,8 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
 }
 
 // <&y2012.01.08.18:25:04& or should this object belong to Coord?>
+/** Purpose: contains historic fluency-game information about a single player. So, for example, information about the 4th fluency session played by the player can be retrieved. If a Player is in a Lift-web-session, this object can be accessed through ses.Coord.sesHis. If you want to access all Session
+  */
 class SessionHistory
 {  var coreContents:List[CoreContent] = Nil
    def correctCcs = coreContents.filter( cc => cc.answerPlayerCorrect )

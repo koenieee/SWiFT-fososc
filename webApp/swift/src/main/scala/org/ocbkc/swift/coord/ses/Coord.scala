@@ -56,6 +56,10 @@ case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
+
+/** 
+  * 
+  */
 trait CoreTrait
 {  var cc: CoreContent = null
    val sesHis = new SessionHistory()

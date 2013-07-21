@@ -734,6 +734,8 @@ package scoring
 {
 import GlobalConstant.AverageFluency
 
+/** Contains methods to derive information about the scoring and further performance of Players.
+  */
 object PlayerScores
 {  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
    case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
