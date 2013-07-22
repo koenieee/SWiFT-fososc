@@ -52,7 +52,8 @@ case object RoundTranslation extends RoundFluencySession
 case object RoundBridgeConstruction extends RoundFluencySession
 case object RoundQuestionAttack extends RoundFluencySession
 case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
-// case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
+// <&y2013.07.22.17:03:31& rename RoundAlgorithmicDefenceStage2 to ShowFinalResults. It is not a round.>
+case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
@@ -110,7 +111,8 @@ trait CoreTrait
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
      */
    def URstartAlgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
-   {  val res = gameCore.doAlgorithmicDefence
+   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+      val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
       cc.stopTime(System.currentTimeMillis).save
@@ -126,10 +128,12 @@ trait CoreTrait
       }
 
       turnReleaseCandidateIntoVirginIfPossible
-      
-      latestRoundFluencySession = NotInFluencySession
 
       res
+   }
+
+   def URfinaliseSession =
+   {  latestRoundFluencySession = NotInFluencySession 
    }
 
    protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
