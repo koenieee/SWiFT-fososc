@@ -37,42 +37,26 @@ class AdminPage
 {
 	println("Adminpage is called")
 	//val path = GlobalConstant.WEBAPROOT;
-	var blaat = "nog niks";
-	var n_blaat = "nog niks";
+	val lines = TestSettings.readJaraDur;
+	var blaat = lines;
+	var n_blaat = lines;
+	 // println(lines)
 
 	def settings (xhtml : NodeSeq) : NodeSeq =
 	{
 		
 		  bind("entry", xhtml,
 			"JaraSetting" -> SHtml.text(blaat, n_blaat = _),
-			"changeDur" -> SHtml.submit("Change Duration", changeDur))
+			"changeDur" -> SHtml.submit("Change Duration", changeDur),
+			"StartSimu" -> SHtml.submit("Start Simulation", startsimu))
 	
 	}
-	def changeDur()
+	def startsimu()
 	{
-	//MetaMapper.bulkDelete_!!
-	
-	Player.bulkDelete_!!(By(Player.superUser,false))
-	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
-   {  case Full(player) => {  println("is admin")
-                              
-                           } // do nothing, player exists.
-      case _            => {  println("not admin => deleted")
-                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
-                              p.save
-                              p
-                           }
-
-   }*/
-	/*	DB.use(DefaultConnectionIdentifier) {
-		conn => DB.prepareStatement("TRUNCATE TABLE USERS;TRUNCATE TABLE CORECONTENT;TRUNCATE TABLE FOLLOWERCONSTI_JOIN;TRUNCATE TABLE PLAYERCORECONTENT_JOIN;", conn) 
-				{
-				  st => st.executeUpdate()
-		}
-
-		}*/
 		
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR));
+		Player.bulkDelete_!!(By(Player.superUser,false))
+		
+			FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR));
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR));
 		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR));
 
@@ -93,17 +77,48 @@ class AdminPage
 
 		println("Jara called");
 		   
-		PlayingSimulator.start(JLong.parseLong(n_blaat));
-
+		   PlayingSimulator.start(JLong.parseLong(n_blaat));
+		
 	}
 	
-	def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {
-	  val p = new java.io.PrintWriter(f)
-	  try { op(p) } finally { p.close() }
-	}
+		
+		
+
+	def changeDur()
+	{
+	//MetaMapper.bulkDelete_!!
+	
+	
+	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+   {  case Full(player) => {  println("is admin")
+                              
+                           } // do nothing, player exists.
+      case _            => {  println("not admin => deleted")
+                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              p.save
+                              p
+                           }
+
+   }*/
+	/*	DB.use(DefaultConnectionIdentifier) {
+		conn => DB.prepareStatement("TRUNCATE TABLE USERS;TRUNCATE TABLE CORECONTENT;TRUNCATE TABLE FOLLOWERCONSTI_JOIN;TRUNCATE TABLE PLAYERCORECONTENT_JOIN;", conn) 
+				{
+				  st => st.executeUpdate()
+		}
+
+		}*/
+		
+
+val fw = new FileWriter(GlobalConstant.WEBAPP_BASE_DIR+"/jaraDur"); 
+fw.write(n_blaat); 
+fw.close()
+
+
 	
 
 }
+		
+	}
 }
 
 

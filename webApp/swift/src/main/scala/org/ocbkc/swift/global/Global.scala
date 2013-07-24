@@ -50,6 +50,7 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
+   
    var adminOpt:Option[Player] = None
    def adminGitUserId = {  println("retrieving adminGitUserId...")
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
@@ -142,7 +143,8 @@ object TestSettings
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val STARTJARASIMULATIONDURINGBOOT   = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
-
+  
+ 
    // { never change the following manually, they are used by other parts of the program
    var SIMULATEPLAYINGWITHJARARUNNING  = false // simulation process is currently running
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
@@ -151,6 +153,17 @@ object TestSettings
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
+   
+   def readJaraDur():String =
+   {
+	   
+	     val source = scala.io.Source.fromFile(GlobalConstant.WEBAPP_BASE_DIR+"/jaraDur")
+     val lines = source.mkString
+source.close()
+  //println(lines)
+
+  return lines;
+   }
 
 }
 
