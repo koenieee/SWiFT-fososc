@@ -10,11 +10,13 @@
 $('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
   });
   </script>
+
+  <lift:BridgeConstruction form="POST">
 <h1>Bridge Construction Round</h1>
 	<div id="progressbar"></div>
-<lift:createProgress.text w_page="3"/>
+  <lift:createProgress.text w_page="3"/>
 <Br/>
-<lift:BridgeConstruction form="POST">
+
 
 <h3>Source</h3>
 <transround:sourceText /><br /><br />

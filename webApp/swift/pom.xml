@@ -292,8 +292,6 @@
 						  <overWrite>true</overWrite>
 						  <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
 					  </artifactItem>
-<!--
-&y2013.06.09.17:46:33& textgenerator etc. need to be updated in the Maven central repo. As long as that has not been done: install them manually. If you want to have the exactly matching version: git checkout [version number] and then rebuild textgenerator etc. and upload them to the right location.
 
 					  <artifactItem>
 						  <groupId>org.ocbkc.swift</groupId>
@@ -303,7 +301,7 @@
 						  <overWrite>true</overWrite>
 						  <outputDirectory>${basedir}/binaries/swift</outputDirectory>
 					  </artifactItem>
--->                                       
+                                       
 				  </artifactItems>
 		  </configuration>
 		 </plugin>
