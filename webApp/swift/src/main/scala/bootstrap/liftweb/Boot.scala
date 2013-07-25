@@ -560,6 +560,7 @@ class Boot {
             create.
             questionType(2).
             questionFormulation("What is the punishment for pushing redundant files to repos?").
+           /*
             multipleChoiceQuestion
             {  val mq = MultipleChoiceQuestion.create
                /* Options, to come:
@@ -567,11 +568,19 @@ class Boot {
                b) months imprisonment
                c) months labour camp
                d) 2500 euro fine
-               */
+              
 
                mq.save
                mq
-            }
+            }.
+            */
+            multipleChoiceOptions
+            {
+				val test = MultipleChoiceOption.options("test1;test2;test4")
+				test.save
+				test
+				}
+            
       )
 
       questions.foreach{ _.save }

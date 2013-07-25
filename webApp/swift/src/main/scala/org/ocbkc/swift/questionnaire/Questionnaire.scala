@@ -11,6 +11,7 @@ package org.ocbkc.questionnaire
    {  val MAX_SIZE_QUESTION_TEXT = 1000
       val MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion = 1000
       val MAX_SIZE_NAME_QUESTIONNAIRE = 250
+      val MAX_SIZE_MULTIPLE_OPTION = 500
    }
 
    import Constants._
@@ -49,6 +50,7 @@ package org.ocbkc.questionnaire
 
       //{ todo &y2013.07.09.20:57:12& in future replace the following by one reference to any question table. Depending on the questionType, retrieve the correct table. Currenlty, it is not clear to me how to realise that. If I can store the foreignkeys etc. "manually" it should be possible.
       object multipleChoiceQuestion extends MappedLongForeignKey(this, MultipleChoiceQuestion)
+      object multipleChoiceOptions extends MappedLongForeignKey(this, MultipleChoiceOption)
       object freeTextFixedCorrectAnswerQuestion extends MappedLongForeignKey(this, FreeTextFixedCorrectAnswerQuestion)
       //}
    }
@@ -86,6 +88,32 @@ package org.ocbkc.questionnaire
    object MultipleChoiceQuestion extends MultipleChoiceQuestion with LongKeyedMetaMapper[MultipleChoiceQuestion]
    {  
    }
+   
+   class MultipleChoiceOption  extends LongKeyedMapper[MultipleChoiceOption] with IdPK
+   {  def getSingleton = MultipleChoiceOption
+      object options extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION) // answer 1;answer2;etc.
+
+
+   }
+
+   object MultipleChoiceOption extends MultipleChoiceOption with LongKeyedMetaMapper[MultipleChoiceOption]
+   {  
+   }
+   
+   class MultipleChoiceOption_join extends LongKeyedMapper[MultipleChoiceOption_join] with IdPK
+   {  override def getSingleton = MultipleChoiceOption_join
+      object options extends MappedLongForeignKey(this, MultipleChoiceOption)
+
+   }
+
+   object MultipleChoiceOption_join extends MultipleChoiceOption_join with LongKeyedMetaMapper[MultipleChoiceOption_join]
+   {  def createJoin(opi:MultipleChoiceOption):MultipleChoiceOption_join =
+      {  val j = this.create.options(opi)
+         j.save
+         j
+      }
+   }
+   
 
    class FreeTextFixedCorrectAnswerQuestion extends LongKeyedMapper[FreeTextFixedCorrectAnswerQuestion] with IdPK
    {  def getSingleton = FreeTextFixedCorrectAnswerQuestion

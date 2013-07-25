@@ -2,15 +2,16 @@
 <lift:ExecuteQuestionnaire form="POST">
 
 <h1>Questionnaire <top:qnName /></h1>
-
+<br/><br/>
 <!-- template to render all questions - so this template is applied for each question in the questionnare -->
 <top:question>
    <question:orderNumber />
    <question:body />
    <!-- the rest of the question will be rendered using the "subtemplates" in question.html, depending on the question type -->
+  
 </top:question>
 
-
+ <br/> <br/>
 <top:submitBt />
 </lift:ExecuteQuestionnaire>
 

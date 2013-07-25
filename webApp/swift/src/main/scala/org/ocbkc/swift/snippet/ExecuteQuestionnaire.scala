@@ -12,7 +12,9 @@ import net.liftweb.mapper._
 import Helpers._
 
 class ExecuteQuestionnaire
-{  def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
+{  
+	
+	def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
    {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
       val ret = questions.flatMap
       {  question =>
@@ -66,8 +68,14 @@ class ExecuteQuestionnaire
    bind("top", ns,
          "qnName"    -> Text(firstQn.name.is),
          "question"  -> renderQuestions(ns, firstQn),
-         "submitBt"  -> Text("TODO submitBt here")
+         "submitBt"  -> SHtml.submit("Send Answers", procQuestion)
       )
+   }
+   
+   def procQuestion()
+   {
+	   //todo what?
+	   
    }
 }
 
