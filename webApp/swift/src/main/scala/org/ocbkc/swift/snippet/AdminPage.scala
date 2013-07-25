@@ -9,6 +9,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import Helpers._
+import org.ocbkc.swift.global.Logging._
 import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor, By}
 import System.err.println
 import org.ocbkc.swift.model._
@@ -27,6 +28,8 @@ import org.apache.commons.io.FileUtils;
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.storage.file._
+import org.ocbkc.swift.jgit.InitialiseJgit
+ 
 /*
  * Cleanup non-used imports.
  * */
@@ -38,8 +41,8 @@ class AdminPage
 {
 	println("Adminpage is called")
 	//val path = GlobalConstant.WEBAPROOT;
-	var blaat = "nog niks";
-	var n_blaat = "nog niks";
+	var blaat = "nog niks"
+	var n_blaat = "nog niks"
 
 	def settings (xhtml : NodeSeq) : NodeSeq =
 	{
@@ -74,26 +77,13 @@ class AdminPage
 
 		}*/
 		
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR));
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR));
-		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR));
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR))
 
+                InitialiseJgit()
 
-    // Initialise git repository for constitutions if there isn't one created yet.
-    // Check whether there is already git tracking
-    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
-    if( gitfile.exists)
-    { println("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everything is under (version) control, my dear organic friend...")
-    }
-    else
-    { println("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
-      val jgitInitCommand:InitCommand = Git.init()
-      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-      jgitInitCommand.call()
-    }
-
-
-		println("Jara called");
+		log("Jara called")
 		   
 		PlayingSimulator.start(JLong.parseLong(n_blaat));
 
@@ -103,8 +93,6 @@ class AdminPage
 	  val p = new java.io.PrintWriter(f)
 	  try { op(p) } finally { p.close() }
 	}
-	
-
 }
 }
 

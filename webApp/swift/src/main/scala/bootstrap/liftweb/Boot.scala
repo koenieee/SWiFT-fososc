@@ -16,7 +16,7 @@ import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.OCBKCinfoPlayer._
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.persist.PersDataUpgrader4SWiFT
-import org.eclipse.jgit.api._
+import org.ocbkc.swift.jgit.InitialiseJgit
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
 import scala.util.Random
@@ -257,18 +257,7 @@ class Boot {
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
     LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
 
-    // Initialise git repository for constitutions if there isn't one created yet.
-    // Check whether there is already git tracking
-    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
-    if( gitfile.exists)
-    { log("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everything is under (version) control, my dear organic friend...")
-    }
-    else
-    { log("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
-      val jgitInitCommand:InitCommand = Git.init
-      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-      jgitInitCommand.call
-    }
+   InitialiseJgit()
 
  // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 

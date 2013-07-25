@@ -84,17 +84,9 @@ object GlobalConstant
    jgitRepo.getConfig().setBoolean("core", null, "bare", false)
    */
    
-   val jgitBuilder:FileRepositoryBuilder = new FileRepositoryBuilder()
-   val jgitRepo:Repository = jgitBuilder.setGitDir(new File(CONSTITUTIONHTMLDIR + "/.git"))
-      //.readEnvironment() // scan environment GIT_* variables
-      //.findGitDir() // scan up the file system tree <&y2012.06.30.19:51:12& perhaps leave this one out, it SHOULD be in this dir, not in a superdir>
-      .build()
-   println("   jgitRepo directory: " + jgitRepo.getDirectory() )
-   println("   jgitRepo is bare (false is correct): " + jgitRepo.isBare())
-   
-
-   val jgit = new Git(jgitRepo) // <? &y2012.06.30.18:53:23& or isn't this thread safe? I now share one jgit object accross user-sessions (I think... because I instantiate this thing in Boot.scala). Perhaps I should instantiate one per user-session...>
-   println(jgit.status().call().getUntracked)
+   var jgitBuilder:Option[FileRepositoryBuilder] = None
+   var jgitRepo:Option[Repository] = None   
+   var jgit:Option[Git] = None
 
    // create paths
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)

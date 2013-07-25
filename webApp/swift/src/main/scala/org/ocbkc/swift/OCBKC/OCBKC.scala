@@ -259,17 +259,17 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       log("   jgit author id = " + gUserId.toString)
       log("   now adding and committing: " + fullPath2Const )
       //jgit.status
-      val addCommand = jgit.add
+      val addCommand = jgit.get.add
       log("   isUpdate() (should be false) " + addCommand.isUpdate)
       addCommand.addFilepattern( fullPath2Const ).call
-      val status = jgit.status.call
+      val status = jgit.get.status.call
       log("   added files " + status.getAdded )
       log("   modified files " + status.getModified )
       log("   changed files " + status.getChanged )
       log("   untracked files " + status.getUntracked )
       // Determine whether this version will become the new release
          
-      val revcom:RevCommit = jgit.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
+      val revcom:RevCommit = jgit.get.commit.setAuthor(gUserId).setCommitter(gUserId).setMessage(commitMsg).call
 /*
 Try out:
 getHistory.length, commitIdsReleases.length, isRelease
@@ -303,8 +303,8 @@ getHistory.length, commitIdsReleases.length, isRelease
       val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
 
       val commitMsg = "Restored version of " + dateFormat.format(revcom.getCommitTime.toLong*1000)
-      jgit.checkout.addPath(htmlFileName).setStartPoint(revcom).call
-      jgit.commit.setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call
+      jgit.get.checkout.addPath(htmlFileName).setStartPoint(revcom).call
+      jgit.get.commit.setAuthor(gitUi).setCommitter(gitUi).setMessage(commitMsg).call
    }
 
    /* Only serializes the object - not the html text which is already stored... */
@@ -342,9 +342,9 @@ getHistory.length, commitIdsReleases.length, isRelease
    case class HisCon(val content:Elem, val creationDatetimePOSIX:Long)
 
    def historicContentInScalaXML(commitId:String):Option[HisCon] =
-   {  val rw = new RevWalk(jgitRepo)
+   {  val rw = new RevWalk(jgitRepo.get)
       val revcom:RevCommit = rw.parseCommit(ObjectId.fromString(commitId))
-      val hisCon = BlobUtils.getContent(jgitRepo, revcom, htmlFileName)
+      val hisCon = BlobUtils.getContent(jgitRepo.get, revcom, htmlFileName)
       val hisConXML = plainTextXMLfragment2ScalaXMLinLiftChildren(hisCon)
       Some(HisCon(hisConXML, revcom.getCommitTime().toLong ))
    }
@@ -353,7 +353,7 @@ getHistory.length, commitIdsReleases.length, isRelease
      */
    def getHistory:List[RevCommit] =
    {  import scala.collection.JavaConverters._
-      jgit.log.addPath( htmlFileName ).call.asScala.toList
+      jgit.get.log.addPath( htmlFileName ).call.asScala.toList
    }
 
    def isFirstPublication:Boolean =
@@ -393,7 +393,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
    private def tagRevCommit(revCom:RevCommit , name:String, message:String):Ref =
-   {  jgit.tag.setName(name).setObjectId(revCom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Make this version the release candidate (there may only be one!").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
+   {  jgit.get.tag.setName(name).setObjectId(revCom).setTagger(GlobalConstant.adminGitUserId.get).setMessage("Make this version the release candidate (there may only be one!").call // <&y2012.08.22.16:52:30& perhaps change setTagger to some default system git-user account id, which is not tied to a player?
    }
 
    private def tagReleaseCandidate(commitId:VersionId):Ref =
@@ -409,11 +409,11 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
    private def delTagReleaseCandidate =
-   {  jgit.tagDelete.setTags(RELEASE_CANDIDATE_TAG_STRING).call
+   {  jgit.get.tagDelete.setTags(RELEASE_CANDIDATE_TAG_STRING).call
    }
 
    private def delTagReleaseVirgin =
-   {  jgit.tagDelete.setTags(RELEASE_VIRGIN_TAG_STRING).call
+   {  jgit.get.tagDelete.setTags(RELEASE_VIRGIN_TAG_STRING).call
    }
    /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
      */
@@ -585,7 +585,7 @@ object Constitution
       if( constitutionFiles != null && constitutionFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
          // retrieve all tags needed for reconstructing releases.
-         val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asBuffer(jgit.tagList.call)
+         val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asBuffer(jgit.get.tagList.call)
          log("   names of tags found:")
          taglist.map( ref => log(ref.getName) )
  
@@ -604,7 +604,7 @@ object Constitution
             }
             
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
-            const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.peel(tag).getPeeledObjectId.name ).reverse.toList
+            const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.get.peel(tag).getPeeledObjectId.name ).reverse.toList
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             log("   commitIdsReleases just read from git repo:")
             const.commitIdsReleases.map( log(_) )
@@ -778,7 +778,6 @@ object PlayerScores
    def averageDurationTranslation(p:Player):Result_averageDurationTranslation =
    {  averageDurationTranslation(p, -1)
    }
-
 
 /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
   * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
