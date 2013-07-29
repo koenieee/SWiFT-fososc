@@ -789,6 +789,13 @@ object PlayerScores
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
+   
+   def overallShortestTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
+   {  log("overall shortest translation called")
+   
+      //val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+      //todo by koen
+   }
 
    /*
     // <&y2012.10.06.11:13:23& refactor PlayerStats using this instead?>
