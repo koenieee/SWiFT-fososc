@@ -13,7 +13,6 @@ import org.ocbkc.swift.model.Player
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
-import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC._
 
@@ -25,7 +24,7 @@ class PlayerStats
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
-      val test = averageDurationTranslation(player, -1)
+      val test = 0 //averageDurationTranslation(player, -1)
             bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),

@@ -82,6 +82,11 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
 */
 
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
+/** Each instance of this class stores information of a specific fluency game session. All CoreContent objects are made persistent, and can thus be retrieved for later analysis.
+From the set of CoreContent objects, one can for example calculate high scores, improvement of a given player over time, and whatever you dream of, etc. etc.
+To access this set: note that persistency is realised through PlayerCoreContent_join, a class within the lift-Mapper persistency framework.
+   @todo rename to "FluencyGameSessionInfo"
+  */
 case class CoreContent( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer: String,
@@ -286,6 +291,10 @@ object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[Cor
 }
 
 // <&y2012.01.08.18:25:04& or should this object belong to Coord?>
+/** @todo &y2013.07.29.17:55:14& refactor: make it independent of the session.
+  * 
+  */
+
 class SessionHistory
 {  var coreContents:List[CoreContent] = Nil
    def correctCcs = coreContents.filter( cc => cc.answerPlayerCorrect )
@@ -299,13 +308,13 @@ class SessionHistory
    }   
 
    // <&y2012.01.11.23:37:48& couldo refactor: calculate this directly using a map to duration first, and then selecting the min>
-   def shortestTranslationTime:Option[Double] = sessionWithShortestDurationAndCorrectTranslation match 
-      {  case None => None 
+   def shortestTranslationTime:Option[Double] = sessionWithShortestDurationAndCorrectTranslation match
+      {  case None => None
          case Some(cc) => Some(cc.durationTranslation.get.toDouble/1000)
       }
 
-   def sessionWithShortestDurationAndCorrectTranslation:Option[CoreContent] = correctCcs match 
-      {  case Nil => None 
+   def sessionWithShortestDurationAndCorrectTranslation:Option[CoreContent] = correctCcs match
+      {  case Nil => None
          case _   => Some(correctCcs.min( OrderingOnDurationTranslation  ))
       }
 

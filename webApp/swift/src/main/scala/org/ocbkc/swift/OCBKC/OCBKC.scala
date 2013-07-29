@@ -773,7 +773,7 @@ object PlayerScores
    def averageDurationTranslation(p:Player):Result_averageDurationTranslation =
    {  averageDurationTranslation(p, -1)
    }
-
+  
 
 /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
   * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
@@ -789,12 +789,43 @@ object PlayerScores
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
-   
-   def overallShortestTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
-   {  log("overall shortest translation called")
-   
+  
+   /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith).
+     */
+   def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
+   {  log("[MUSTDO]")
+      /* Hints
+       - (study lift Mapper framework)
+       - study the doc of CoreContent
+       - use the integer OneToStartWith.minSessionsB4access2allConstis as the threshold for sessions which count. Read the documentation in this object.
+       - Look at the class percentageCorrect to see an example of how to retrieve core content objects of a certain player.
+      */
+
+      Nil // <-- to be replaced
+   }
+
+   /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
+    */
+   def shortestTranslation(p:Player) =
+   {  log("[MUSTDO]")
+      /* Hints: 
+         - use coreContentObjectsWhichCount
+         - partly imitate what happens in class SessionHistory to calculate shortest durations.  */
+   }
+
+   /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
+     */
+   def overallShortestTranslation():CoreContent = 
+   {  log("overallShortestTranslation called")
+
+      /* Hints:
+         - iterate over all Players, and use shortestTranslation
+      */
+
+
       //val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
       //todo by koen
+      null // <-- to be replaced by the correct result
    }
 
    /*
@@ -1059,8 +1090,16 @@ abstract class ScorePerSession // TODO extends ( TODOin => TODOout )
 */
 }
 
+/** Instances of this class represent the constitution selection procedure (procedure in the broad sense - not in the sense of programming construct). In the current stage of SWiFT, there is only 1 procedure chosen (and currently, &y2013.07.29.22:13:15&, only one is implemented anyhow). The consti selection procedure, is the procedure followed to come to the selection of the constitution for a new fluency game Player.
+  */
 abstract class ConstiSelectionProcedure
+
+/** The NoProc object represents the absence of a constitution selection procedure.
+  */
 case object NoProc extends ConstiSelectionProcedure
+
+/** The OneToStartWith constitution selection procedure, allows a new Player (P) to freely select exactly one consti from the list of all constis, to guide P to play the game. As long as P has not played certain minimal (globally fixed) number of game sessions, P may and cannot see the other constitutions. After this minimal amount, however, all constis will become visible, and P can, from that moment on, participate in constigames.
+  */
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
 }
