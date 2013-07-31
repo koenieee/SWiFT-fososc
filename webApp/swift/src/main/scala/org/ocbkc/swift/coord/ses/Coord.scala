@@ -241,8 +241,15 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    }
 */
 
-   def URstartBridgeConstruction =
-   {  latestRoundFluencySession = RoundBridgeConstruction
+   /** @todo &y2013.07.31.17:42:55& rename to enter bridge construction, because a player can decide to return to the round to review it/correct it, so it is not always "start".
+       @returns true, if this round may be entered in this stage of the fluency session.
+     */
+   def URstartBridgeConstruction:Boolean =
+   {  latestRoundFluencySession match
+      {  case RoundTranslation      => { latestRoundFluencySession = RoundBridgeConstruction; true}
+         case NotInFluencySession   => false
+         case _                     => true
+      }
    }
 
    def URstopBridgeConstruction =
