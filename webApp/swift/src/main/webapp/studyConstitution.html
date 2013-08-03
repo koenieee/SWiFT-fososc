@@ -49,7 +49,43 @@ If you want to read on, please <b>hold the 'g' key.</b>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
 <script type="text/javascript">
+
+  
 $(document).ready(function(){
+    	    function setCookie(c_name,value,exdays)
+{
+var exdate=new Date();
+exdate.setDate(exdate.getDate() + exdays);
+var c_value=escape(value) + ((exdays==null) ? '' : '; expires='+exdate.toUTCString());
+document.cookie=c_name + '=' + c_value;
+}
+
+function getCookie(c_name)
+{
+var c_value = document.cookie;
+var c_start = c_value.indexOf(' ' + c_name + '=');
+if (c_start == -1)
+  {
+  c_start = c_value.indexOf(c_name + '=');
+  }
+if (c_start == -1)
+  {
+  c_value = null;
+  }
+else
+  {
+  c_start = c_value.indexOf('=', c_start) + 1;
+  var c_end = c_value.indexOf(';', c_start);
+  if (c_end == -1)
+  {
+c_end = c_value.length;
+}
+c_value = unescape(c_value.substring(c_start,c_end));
+}
+return c_value;
+}
+
+  
     
    // scroll(0,0);
     var keyisdown = false;
@@ -60,6 +96,9 @@ $(document).ready(function(){
    	 var scrolled = false;
    	pressedKeys = [];
     
+    
+    
+    
     $('body').bind('keydown',function(e)
     {
    	// if (e.altKey == true ) {
@@ -68,13 +107,14 @@ $(document).ready(function(){
 		
 		if(scrolled == false)
 		{
-   		 $(window).scrollTop(scroll_last_position);
+   		 $(window).scrollTop(getCookie('last_pos'));
 		scrolled = true;
    		} 
    		 $('#text').css('visibility', 'visible');
    		 $('#blank').css('visibility', 'hidden');
 
-   		 scroll_last_position = $(window).scrollTop();
+   		// scroll_last_position = $(window).scrollTop();
+   		 setCookie('last_pos', $(window).scrollTop(),365);
    //	 }
    }
 }
