@@ -15,7 +15,7 @@ import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC._
-
+import org.ocbkc.swift.OCBKC.scoring.PlayerScores
 
 class PlayerStats
 {  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
@@ -24,7 +24,7 @@ class PlayerStats
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
-      val test = 0 //averageDurationTranslation(player, -1)
+      val test = PlayerScores.shortestTranslation(player)//it looks like its working, for all players  //0 //averageDurationTranslation(player, -1)
             bind( "top", ns, 
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),

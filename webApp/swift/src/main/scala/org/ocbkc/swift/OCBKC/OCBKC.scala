@@ -794,6 +794,8 @@ object PlayerScores
      */
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
    {  log("[MUSTDO]")
+ // val playercorrect = CoreContent.findAll(By(CoreContent.answerPlayerCorrect, true))
+  
       /* Hints
        - (study lift Mapper framework)
        - study the doc of CoreContent
@@ -806,8 +808,32 @@ object PlayerScores
 
    /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
     */
-   def shortestTranslation(p:Player) =
+   def shortestTranslation(p: Player) =
    {  log("[MUSTDO]")
+      //val starttime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
+      
+      //val stoptime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.stopTime.is)
+      
+     // println((stoptime zip starttime).map (c => {c._1-c._2}).reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
+     
+     //todo recursive pattern matching::
+     //Koen: must be faster right? Maybe possible to do all this in one query to the database instead of 2
+     val all_players = PlayerCoreContent_join.findAllFields(Seq[SelectableField](PlayerCoreContent_join.player)).map(_.player.is).distinct
+     
+     //works for all players:
+      all_players.foreach{
+		  test => 
+		  val time = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, test) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == true )
+      val starttime = time.map(_.startTime.is)
+      val stoptime = time.map(_.stopTime.is)
+     
+		  println((stoptime zip starttime).map (c => {c._1-c._2}))//.reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
+		  
+     }
+     println(all_players)
+     
+   //  filter( cc => cc.answerPlayerCorrect == false ).map(_.startTime.is)
+    // println(all_players)
       /* Hints: 
          - use coreContentObjectsWhichCount
          - partly imitate what happens in class SessionHistory to calculate shortest durations.  */
