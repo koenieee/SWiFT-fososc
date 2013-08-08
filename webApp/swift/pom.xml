@@ -138,6 +138,7 @@
             <artifactId>maven-antrun-plugin</artifactId>
             <version>1.7</version>
             <executions>
+               <!-- enable this if a backup server is available.
                 <execution>
                     <id>default-cli</id>
                     <configuration>
@@ -151,6 +152,7 @@
                         <goal>run</goal>
                     </goals>
                 </execution>
+               -->
             </executions>
         </plugin>
       <plugin>

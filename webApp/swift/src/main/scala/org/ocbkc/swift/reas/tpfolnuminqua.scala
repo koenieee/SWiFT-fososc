@@ -147,7 +147,7 @@ Running example:
    +++ END MODEL
    +++ RESULT: Satisfiable
    */
-         paradoxResult.getModelSize // <&y2012.04.28.22:39:34&  dummy return value while developing this function>
+         paradoxResult.getModelSize
       }
       else 0
    }
