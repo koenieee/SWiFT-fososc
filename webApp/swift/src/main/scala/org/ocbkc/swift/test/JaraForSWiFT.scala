@@ -24,8 +24,7 @@ object Test
 import Test._
 
 object PlayingSimulator
-{  
-	def start(durationInMillis:Long) =
+{  def start(durationInMillis:Long) =
    {  println("PlayingSimulator.start called")
       TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true
