@@ -40,24 +40,46 @@ import org.ocbkc.swift.jgit.InitialiseJgit
 class AdminPage
 {
 	println("Adminpage is called")
-	//val path = GlobalConstant.WEBAPROOT;
-	var blaat = "nog niks"
-	var n_blaat = "nog niks"
+	//val path = GlobalConstant.WEBAPROOT
+	val lines = TestSettings.readJaraDur
+	var blaat = lines
+	var n_blaat = lines
+	 // println(lines)
 
 	def settings (xhtml : NodeSeq) : NodeSeq =
 	{
 		
 		  bind("entry", xhtml,
 			"JaraSetting" -> SHtml.text(blaat, n_blaat = _),
-			"changeDur" -> SHtml.submit("Change Duration", changeDur))
+			"changeDur" -> SHtml.submit("Change Duration", changeDur),
+			"StartSimu" -> SHtml.submit("Start Simulation", startsimu))
 	
 	}
+	def startsimu()
+	{
+		
+		Player.bulkDelete_!!(By(Player.superUser,false))
+		Constitution.removeAll
+
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
+		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR))
+
+                InitialiseJgit()
+
+ 		log("Calling Jara")
+		   
+                PlayingSimulator.start(JLong.parseLong(n_blaat))
+		
+	}
+	
+		
+		
+
 	def changeDur()
 	{
 	//MetaMapper.bulkDelete_!!
 	
-	Player.bulkDelete_!!(By(Player.superUser,false))
-        Constitution.removeAll
 	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  println("is admin")
                               
@@ -77,23 +99,12 @@ class AdminPage
 
 		}*/
 		
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR))
-
-                InitialiseJgit()
-
-		log("Jara called")
-		   
-		PlayingSimulator.start(JLong.parseLong(n_blaat));
-
-	}
-	
-	def printToFile(f: java.io.File)(op: java.io.PrintWriter => Unit) {
-	  val p = new java.io.PrintWriter(f)
-	  try { op(p) } finally { p.close() }
-	}
+         val fw = new FileWriter(GlobalConstant.WEBAPP_BASE_DIR+"/jaraDur")
+         fw.write(n_blaat)
+         fw.close()
 }
+		
+	}
 }
 
 
