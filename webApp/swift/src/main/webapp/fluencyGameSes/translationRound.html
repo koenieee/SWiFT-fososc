@@ -19,7 +19,9 @@ $('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.
 
 
 <lift:TranslationRound form="POST">
-	<lift:createProgress.text w_page="2"/>
+	<lift:createProgress.text w_page="2">
+		<div class="lift:content_id=progress_replace"></div>
+		</lift:createProgress.text>
 	<Br/>
 <p>No idea what to do? Study your <a href='../studyConstitution'>chosen constitution</a>!</p>
 <hr />
