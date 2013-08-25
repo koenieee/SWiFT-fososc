@@ -1,9 +1,26 @@
 <lift:surround with="default" at="content">
+	<script src="../javascript/jquery-1.9.1.js"></script>
+<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+<script src="../javascript/jquery-ui.js"></script>
+	<script>
+$(function() {
+$( '#progressbar' ).progressbar({
+  value: 80
+});
+
+</script>
+<lift:AlgorithmicDefenceRoundStage2 form="POST">
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
 <h1>Algorithmic Defence Round Stage 2</h1>
-<lift:AlgorithmicDefenceRoundStage2 form="POST">
+	<div id="progressbar"></div>
+
+	<center>
+	<lift:createProgress.text />
+</center>
+<Br/>
+
 
 <h2>Recap...</h2>
 
@@ -25,4 +42,7 @@
 <top:continue />
 
 </lift:AlgorithmicDefenceRoundStage2>
+
+<br /><br />
+
 </lift:surround>

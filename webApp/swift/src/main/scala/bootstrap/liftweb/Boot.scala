@@ -29,7 +29,7 @@ import org.ocbkc.swift.coord.ses._
 
 import org.ocbkc.generic.random._
 import ocbkc.swift.test.simulation.jara._
-
+import net.liftmodules.JQueryModule
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -37,6 +37,11 @@ import ocbkc.swift.test.simulation.jara._
  */
 class Boot {
   def boot {
+	  
+
+
+	JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
+	JQueryModule.init()
    log("Boot.boot called")
    
    PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
