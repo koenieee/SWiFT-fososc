@@ -7,8 +7,7 @@ $(function() {
 $( '#progressbar' ).progressbar({
   value: 80
 });
-$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
-  });
+
 </script>
 <lift:AlgorithmicDefenceRoundStage2 form="POST">
    <style type="text/css">
@@ -16,7 +15,10 @@ $('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.
    </style>
 <h1>Algorithmic Defence Round Stage 2</h1>
 	<div id="progressbar"></div>
-<lift:createProgress.text w_page="6"/>
+
+	<center>
+	<lift:createProgress.text />
+</center>
 <Br/>
 
 

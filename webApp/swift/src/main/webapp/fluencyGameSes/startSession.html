@@ -7,13 +7,14 @@
     $( '#progressbar' ).progressbar({
       value: 0
     });
-//alert(window.location.pathname.replace('/fluencyGameSes/','').replace('.html',''));
-$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
-  });
+
   </script>
 <h1>Start new Game Session</h1>
 <div id="progressbar"></div>
-<lift:createProgress.text w_page="1"/>
+	<center>
+	<lift:createProgress.text />
+</center>
+
 <Br/>
 
 <lift:StartSession form="POST">

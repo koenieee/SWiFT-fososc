@@ -7,14 +7,16 @@
     $( '#progressbar' ).progressbar({
       value: 64
     });
-$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
-  });
+
   </script>
 <h1>Algorithmic Defence Round</h1>
 	<div id="progressbar"></div>
 
 <lift:AlgorithmicDefenceRound form="POST">
-<lift:createProgress.text w_page="5"/>
+
+	<center>
+	<lift:createProgress.text />
+</center>
 <Br/>
 <h2>Recap...</h2>
 

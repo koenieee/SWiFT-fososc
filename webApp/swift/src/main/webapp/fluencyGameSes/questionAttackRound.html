@@ -7,14 +7,16 @@ $(function() {
 $( '#progressbar' ).progressbar({
 value: 48
 });
-$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
-  });
+
 </script>
 <h1>Question Attack Round</h1>
 	<div id="progressbar"></div>
 
 <lift:QuestionAttackRound form="POST">
-<lift:createProgress.text w_page="4"/>
+
+	<center>
+	<lift:createProgress.text />
+</center>
 <Br/>
 <!-- <&y2011.11.23.21:25:44&  only one question now, if more questions, you can make use of the already defined questinoNo pattern> -->
 <h2>Question in English</h2> <!-- qar = question attack round -->
