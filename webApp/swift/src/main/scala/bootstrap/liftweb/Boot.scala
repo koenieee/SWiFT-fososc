@@ -47,7 +47,7 @@ class Boot {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
 			     Props.get("db.url") openOr 
-			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
+			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE;MVCC=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
 
       LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
@@ -545,6 +545,14 @@ class Boot {
       val qn = Questionnaire.create.name("Deep Interrogation")
       qn.save
 
+			 val quest = MultipleChoiceQuestion.create.correctAnswer(1).question("who am i?")
+			 quest.save
+				val answer = MultipleChoiceAnswer.create.answer("koen").answer("test").answer("blaat")
+			answer.save
+	
+	
+	
+	
       val questions:List[Question] =
       List(
          Question.
@@ -559,32 +567,16 @@ class Boot {
          Question.
             create.
             questionType(2).
-            questionFormulation("What is the punishment for pushing redundant files to repos?").
-           /*
-            multipleChoiceQuestion
-            {  val mq = MultipleChoiceQuestion.create
-               /* Options, to come:
-               a) 50 strokes with a stick
-               b) months imprisonment
-               c) months labour camp
-               d) 2500 euro fine
-              
-
-               mq.save
-               mq
-            }.
-            */
-            multipleChoiceOptions
-            {
-				val test = MultipleChoiceOption.options("test1;test2;test4")
-				test.save
-				test
-				}
+            questionFormulation("What is the punishment for pushing redundant files to repos?")
             
+    
       )
 
       questions.foreach{ _.save }
       questions.foreach{ Questionnaire_Question_join.createJoin(qn, _) }
+      
+
+    
       log("[MUSTDO] create scheme for Questionnaire in Boot.scala?")
    }
 

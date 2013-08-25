@@ -50,7 +50,7 @@ package org.ocbkc.questionnaire
 
       //{ todo &y2013.07.09.20:57:12& in future replace the following by one reference to any question table. Depending on the questionType, retrieve the correct table. Currenlty, it is not clear to me how to realise that. If I can store the foreignkeys etc. "manually" it should be possible.
       object multipleChoiceQuestion extends MappedLongForeignKey(this, MultipleChoiceQuestion)
-      object multipleChoiceOptions extends MappedLongForeignKey(this, MultipleChoiceOption)
+      object multipleChoiceAnswer extends MappedLongForeignKey(this, MultipleChoiceAnswer)
       object freeTextFixedCorrectAnswerQuestion extends MappedLongForeignKey(this, FreeTextFixedCorrectAnswerQuestion)
       //}
    }
@@ -76,11 +76,13 @@ package org.ocbkc.questionnaire
    }
    /**
      */
-   class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with IdPK
+   class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with OneToMany[Long, MultipleChoiceQuestion] with IdPK
    {  def getSingleton = MultipleChoiceQuestion
+  
       object correctAnswer extends MappedInt(this) // 1 = option 1, 2 = option 2
-      object minimalNumberOfAnswers extends MappedInt(this)
-      object maximumNumberOfAnswers extends MappedInt(this)
+      object question extends MappedString(this, 200)
+      
+	//object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.answer)
 
       // in this branch temporarily deleted Answers and more stuff
    }
@@ -89,29 +91,16 @@ package org.ocbkc.questionnaire
    {  
    }
    
-   class MultipleChoiceOption  extends LongKeyedMapper[MultipleChoiceOption] with IdPK
-   {  def getSingleton = MultipleChoiceOption
-      object options extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION) // answer 1;answer2;etc.
-
+   class MultipleChoiceAnswer  extends LongKeyedMapper[MultipleChoiceAnswer] with OneToMany[Long, MultipleChoiceAnswer] with IdPK
+   {  def getSingleton = MultipleChoiceAnswer
+      object ans_id extends MappedLongForeignKey(this, MultipleChoiceQuestion)
+   object answer extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION) // answer 1;answer2;etc.
+      
 
    }
 
-   object MultipleChoiceOption extends MultipleChoiceOption with LongKeyedMetaMapper[MultipleChoiceOption]
+   object MultipleChoiceAnswer extends MultipleChoiceAnswer with LongKeyedMetaMapper[MultipleChoiceAnswer]
    {  
-   }
-   
-   class MultipleChoiceOption_join extends LongKeyedMapper[MultipleChoiceOption_join] with IdPK
-   {  override def getSingleton = MultipleChoiceOption_join
-      object options extends MappedLongForeignKey(this, MultipleChoiceOption)
-
-   }
-
-   object MultipleChoiceOption_join extends MultipleChoiceOption_join with LongKeyedMetaMapper[MultipleChoiceOption_join]
-   {  def createJoin(opi:MultipleChoiceOption):MultipleChoiceOption_join =
-      {  val j = this.create.options(opi)
-         j.save
-         j
-      }
    }
    
 
