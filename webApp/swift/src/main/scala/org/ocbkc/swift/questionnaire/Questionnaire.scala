@@ -50,7 +50,7 @@ package org.ocbkc.questionnaire
 
       //{ todo &y2013.07.09.20:57:12& in future replace the following by one reference to any question table. Depending on the questionType, retrieve the correct table. Currenlty, it is not clear to me how to realise that. If I can store the foreignkeys etc. "manually" it should be possible.
       object multipleChoiceQuestion extends MappedLongForeignKey(this, MultipleChoiceQuestion)
-      object multipleChoiceAnswer extends MappedLongForeignKey(this, MultipleChoiceAnswer)
+
       object freeTextFixedCorrectAnswerQuestion extends MappedLongForeignKey(this, FreeTextFixedCorrectAnswerQuestion)
       //}
    }
@@ -82,7 +82,7 @@ package org.ocbkc.questionnaire
       object correctAnswer extends MappedInt(this) // 1 = option 1, 2 = option 2
       object question extends MappedString(this, 200)
       
-	//object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.answer)
+	object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.ans_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
 
       // in this branch temporarily deleted Answers and more stuff
    }
@@ -93,7 +93,7 @@ package org.ocbkc.questionnaire
    
    class MultipleChoiceAnswer  extends LongKeyedMapper[MultipleChoiceAnswer] with OneToMany[Long, MultipleChoiceAnswer] with IdPK
    {  def getSingleton = MultipleChoiceAnswer
-      object ans_id extends MappedLongForeignKey(this, MultipleChoiceQuestion)
+      object question_id extends MappedLongForeignKey(this, MultipleChoiceQuestion)
    object answer extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION) // answer 1;answer2;etc.
       
 

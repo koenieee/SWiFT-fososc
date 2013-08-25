@@ -47,7 +47,7 @@ class Boot {
       val vendor = 
 	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
 			     Props.get("db.url") openOr 
-			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE;MVCC=TRUE",
+			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
 
       LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
@@ -66,7 +66,7 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, FreeTextFixedCorrectAnswerQuestion, Questionnaire_Question_join)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, MultipleChoiceAnswer,FreeTextFixedCorrectAnswerQuestion, Questionnaire_Question_join)
 
     // Build SiteMap
     /* originally generated code:
@@ -546,11 +546,15 @@ class Boot {
       qn.save
 
 			 val quest = MultipleChoiceQuestion.create.correctAnswer(1).question("who am i?")
-			 quest.save
-				val answer = MultipleChoiceAnswer.create.answer("koen").answer("test").answer("blaat")
-			answer.save
+			 
 	
-	
+quest.answers += MultipleChoiceAnswer.create.answer("koen")
+
+
+quest.answers += MultipleChoiceAnswer.create.answer("iemand")
+quest.answers += MultipleChoiceAnswer.create.answer("nog ieand")
+
+quest.save
 	
 	
       val questions:List[Question] =
@@ -567,9 +571,30 @@ class Boot {
          Question.
             create.
             questionType(2).
-            questionFormulation("What is the punishment for pushing redundant files to repos?")
+            questionFormulation("What is the punishment for pushing redundant files to repos?"),
             
-    
+            Question.
+            create.
+            questionType(2).
+            multipleChoiceQuestion
+            {
+				val quest = MultipleChoiceQuestion.create.correctAnswer(1).question("who am i?")
+			 
+			 //some quicker writing way then 3 times the same stuff?
+				quest.answers += MultipleChoiceAnswer.create.answer("koen")
+
+
+				quest.answers += MultipleChoiceAnswer.create.answer("iemand")
+				quest.answers += MultipleChoiceAnswer.create.answer("nog ieand")
+//---
+				quest.save
+				quest
+	
+	
+				
+			}
+            
+            
       )
 
       questions.foreach{ _.save }
