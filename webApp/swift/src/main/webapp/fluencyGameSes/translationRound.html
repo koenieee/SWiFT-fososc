@@ -9,8 +9,7 @@ value: 16
 
 });
 
-$('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.html','')+'.html\']').css({'color': '#f8b500'});
-  });
+
 </script>
 	
 <h1>Translation Round</h1>
@@ -19,9 +18,10 @@ $('a[href=\''+window.location.pathname.replace('/fluencyGameSes/','').replace('.
 
 
 <lift:TranslationRound form="POST">
-	<lift:createProgress.text w_page="2">
-		<div class="lift:content_id=progress_replace"></div>
-		</lift:createProgress.text>
+
+	<center>
+	<lift:createProgress.text />
+</center>
 	<Br/>
 <p>No idea what to do? Study your <a href='../studyConstitution'>chosen constitution</a>!</p>
 <hr />

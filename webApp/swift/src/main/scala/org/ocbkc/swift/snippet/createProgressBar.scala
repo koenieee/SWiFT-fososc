@@ -22,15 +22,7 @@ class createProgress
 {
 	//Please implemt RoundAlgorithmicDefenceStage2
 
-def blaat= {
-	
-             
-         val names = List((".start [href]" #> "startSession.html"),(".translation [href]" #> "translationRound.html"),(".bridge [href]" #>  "bridgeconstruction.html"),(".question [href]" #> "questionAttackRound.html"),(".defence1 [href]" #> "algorithmicDefenceRound.html"),(".defence2 [href]" #> "algorithmicDefenceRoundStage2.html"))
-       
-  
-  ".urls *" #> names
-              
-}
+
 
   def text:NodeSeq= {
 	  println("createprogressbar is called");
@@ -39,7 +31,76 @@ def blaat= {
    //println(sesCoord.is.latest);
    
               println("   latestRoundFluencySession = " + lrfs)
-              TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
+              //TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
+  
+               val indexKey:Int = lrfs match
+               {  
+				   case NotInFluencySession => 0
+                  case RoundTranslation    => 1
+
+                  case RoundBridgeConstruction => 2
+                  case RoundQuestionAttack => 3
+                  case RoundAlgorithmicDefenceStage1 => 4
+                 case RoundAlgorithmicDefenceStage2 =>  5
+                  case _                   => 6
+               } 
+  
+  
+              
+              val progressBarTempl =TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
+  
+
+val completedRoundTempl = chooseTemplate("progressbar", "completedRound", progressBarTempl )
+val latestRoundTempl = chooseTemplate("progressbar", "latestRoundReached", progressBarTempl )
+val roundToComeTempl = chooseTemplate("progressbar", "roundToCome", progressBarTempl )
+val seperator =  chooseTemplate("progressbar", "seperator", progressBarTempl )
+val mapRound2DisplayName = Map( 0 -> "Start", 1 -> "Translation", 2 -> "Bridge", 3->"Question Attack" ,4->"Defence 1",5->"Defence 2",6->"End Session").toList.sortBy{_._1}
+
+
+val mapRound2DisplayLinks = Map( 0 -> "startSession.html", 1 -> "translationRound.html", 2 -> "bridgeconstruction.html", 3->"questionAttackRound.html" ,4->"algorithmicDefenceRound.html",5->"algorithmicDefenceRoundStage2.html",6->"End Session").toList.sortBy{_._1}
+
+
+val indexLatestRound = indexKey
+
+mapRound2DisplayName.flatMap
+{  displayNameWithIndex =>
+   {  
+	   if( displayNameWithIndex._1 < indexLatestRound )
+      {  
+      bind( "completedRound", completedRoundTempl,
+      "linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2)),
+       "separ" -> seperator
+		  )
+      
+      } 
+      else if( displayNameWithIndex._1 == indexLatestRound )
+      {  
+      
+      bind( "latestReachedRound", latestRoundTempl,"linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2)),
+       "separ" -> seperator
+		  )
+     
+     }         
+
+      else
+      {
+		  bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2),
+			"separ" -> seperator
+		  )
+      	 
+	  }
+	  
+	 
+      	
+   }
+} 
+
+
+
+
+              
+              
+              
               //startSession.html: start
               //translationRound.html: translation
               //bridgeconstruction.html: bridge
@@ -62,17 +123,6 @@ def blaat= {
               AttrBindParam("defence2","algorithmicDefenceRoundStage2.html","href")
               )
   
-               lrfs match
-               {  
-				   case NotInFluencySession => translationRound.html
-                  case RoundTranslation    => chooseTemplate("round", "translation", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-
-                  case RoundBridgeConstruction => chooseTemplate("pross", "3", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-                  case RoundQuestionAttack => chooseTemplate("pross", "4", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-                  case RoundAlgorithmicDefenceStage1 => chooseTemplate("pross", "5", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-                 case RoundAlgorithmicDefenceStage2 =>  chooseTemplate("pross", "6", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-                  case _                   => chooseTemplate("pross", "7", TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!)
-               } 
                
                */
                
