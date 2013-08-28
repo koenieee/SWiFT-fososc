@@ -383,7 +383,7 @@ class Boot {
    {  TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <_&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>[A &y2013.04.15.19:57:38& this has been done in another branch, merge it]
 
-      PlayingSimulator.start(3*24*60*60*1000);
+      PlayingSimulator.start(45000);
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
 

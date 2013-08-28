@@ -45,6 +45,9 @@ class AdminPage
 	var blaat = lines
 	var n_blaat = lines
 	 // println(lines)
+	 
+	 // the SessionVar will contain a String with "Anonymous" as default value.
+	object JaraDur extends SessionVar[String]("JaraDuration")
 
 	def settings (xhtml : NodeSeq) : NodeSeq =
 	{
@@ -57,7 +60,7 @@ class AdminPage
 	}
 	def startsimu()
 	{
-		
+		println("startsimu called");
 		Player.bulkDelete_!!(By(Player.superUser,false))
 		Constitution.removeAll
 
@@ -69,7 +72,7 @@ class AdminPage
 
  		log("Calling Jara")
 		   
-                PlayingSimulator.start(JLong.parseLong(n_blaat))
+                PlayingSimulator.start(JaraDur.is.toLong)
 		
 	}
 	
@@ -78,6 +81,10 @@ class AdminPage
 
 	def changeDur()
 	{
+    JaraDur.set(n_blaat)
+    S.notice("Changed Jara Duration to: "+ n_blaat)
+    
+    
 	//MetaMapper.bulkDelete_!!
 	
 	/*	  val admin = Player.findAll(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
@@ -99,9 +106,6 @@ class AdminPage
 
 		}*/
 		
-         val fw = new FileWriter(GlobalConstant.WEBAPP_BASE_DIR+"/jaraDur")
-         fw.write(n_blaat)
-         fw.close()
 }
 		
 	}

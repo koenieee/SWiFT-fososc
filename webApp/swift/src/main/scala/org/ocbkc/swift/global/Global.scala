@@ -146,16 +146,8 @@ object TestSettings
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
    
-   def readJaraDur():String =
-   {
-	   
-	     val source = scala.io.Source.fromFile(GlobalConstant.WEBAPP_BASE_DIR+"/jaraDur")
-     val lines = source.mkString
-source.close()
-  //println(lines)
+  val readJaraDur = "56007"
 
-  return lines;
-   }
 
 }
 
