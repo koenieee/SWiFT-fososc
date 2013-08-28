@@ -16,22 +16,41 @@ class ExecuteQuestionnaire
 	
 	def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
    {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
+		
+		
+		var freetextanswer = ""
       val ret = questions.flatMap
       {  question =>
          {  // generate html
             val questionTemplate = chooseTemplate("top", "question", ns)
             log("   questionTemplate = " + questionTemplate)
             val bindResultQuestionTemplate = bind( "question", questionTemplate,
-               "orderNumber"  -> Text("TODO orderNumber"),
+               "orderNumber"  -> Text(question.id.is +")"),
                "body"         ->
                {  // retrieve additional info based on the type of question
                                    
                   question.questionType.is match
-                  {  case 1 =>
-                     {  Text("[MUSTDO] retrieve MultipleChoiceQuestion from DB, and render (see 'case 2' for the structure of the code.)")
+                  {  case 2 =>
+                     {  
+						 val questionTemplates = chooseTemplate("top", "questionTemplates", TemplateFinder.findAnyTemplate(List("questionnaire", "question")).open_!)
+                        
+                        val ftcqTemplate = chooseTemplate("question", "multipleChoiceQuestion", questionTemplates)
+
+val multiAnswers = MultipleChoiceAnswer.findAll( By(MultipleChoiceAnswer.question_id, question.multipleChoiceQuestion.is)).map(_.answer.is)
+		
+//val database_answers = multiAnswers(question.id.toInt).answers.answer.i
+log("Answer with question id: " +question.id.is +"   "+multiAnswers)
+                        val bindResultFtcqTemplate = bind( "mcq", ftcqTemplate,
+                           "text"      -> Text(question.questionFormulation.is),
+                           "option"  -> SHtml.select(multiAnswers.zipWithIndex.flatMap(x => Seq(x._2.toString -> x._1)).toSeq, Empty, () => _) //I just wrote my own Seq converter :) :P
+                        )
+                        log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
+                        bindResultFtcqTemplate
+						 
+						 
                      }
 
-                     case 2 =>
+                     case 1 =>
                      {  val questionTemplates = chooseTemplate("top", "questionTemplates", TemplateFinder.findAnyTemplate(List("questionnaire", "question")).open_!)
                         log("   questionTemplates = " + questionTemplates)
                         val ftcqTemplate = chooseTemplate("question", "freeTextClosedQuestion", questionTemplates)
@@ -39,7 +58,7 @@ class ExecuteQuestionnaire
                         log("   ftcqTemplate = " + ftcqTemplate )
                         val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
                            "text"      -> Text(question.questionFormulation.is),
-                           "answerTf"  -> Text("TODO answerTf here")
+                           "answerTf"  -> SHtml.text("", freetextanswer = _)
                         )
                         log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
                         bindResultFtcqTemplate

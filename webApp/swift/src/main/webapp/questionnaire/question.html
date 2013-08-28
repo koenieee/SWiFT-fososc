@@ -1,14 +1,15 @@
 <!-- this template contains "subtemplates" which are to be used to render the question-body of the question in questionnaires. It is not intended for direct viewing, but they can be loaded with TemplateFinder. -->
 <top:questionTemplates>
    <question:multipleChoiceQuestion>
-      <mcq:text />
-      <mcq:option>
-         <option:listnumber /> <option:text />
-      </mcq:option>
+     <b> <mcq:text /><Br/></b>
+      <mcq:option/>
+        <Br/>
    </question:multipleChoiceQuestion>
 
    <question:freeTextClosedQuestion>
-      <ftcq:text />
-      <ftcq:answerTf />
+     <b> <ftcq:text /><Br/></b>
+     <i>Answer: <ftcq:answerTf /><Br/><Br/></i>
    </question:freeTextClosedQuestion>
+   
+   
 </top:questionTemplates>

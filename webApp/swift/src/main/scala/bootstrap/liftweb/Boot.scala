@@ -544,17 +544,12 @@ class Boot {
    {  // begin test Questionnaire
       val qn = Questionnaire.create.name("Deep Interrogation")
       qn.save
-
-			 val quest = MultipleChoiceQuestion.create.correctAnswer(1).question("who am i?")
-			 
-	
-quest.answers += MultipleChoiceAnswer.create.answer("koen")
-
-
-quest.answers += MultipleChoiceAnswer.create.answer("iemand")
-quest.answers += MultipleChoiceAnswer.create.answer("nog ieand")
-
-quest.save
+      
+/* Question type 1 = free text answer
+ * Question type 2 = Multiple choice answer 
+ * 
+ * Please keep this in mind!
+ * */
 	
 	
       val questions:List[Question] =
@@ -571,21 +566,17 @@ quest.save
          Question.
             create.
             questionType(2).
-            questionFormulation("What is the punishment for pushing redundant files to repos?"),
-            
-            Question.
-            create.
-            questionType(2).
+            questionFormulation("What is the punishment for pushing redundant files to repos?").
             multipleChoiceQuestion
             {
-				val quest = MultipleChoiceQuestion.create.correctAnswer(1).question("who am i?")
+				val quest = MultipleChoiceQuestion.create.correctAnswer(2).question("What is the punishment for pushing redundant files to repos?")
 			 
 			 //some quicker writing way then 3 times the same stuff?
-				quest.answers += MultipleChoiceAnswer.create.answer("koen")
+				quest.answers += MultipleChoiceAnswer.create.answer("Write a lot of lines")
 
 
-				quest.answers += MultipleChoiceAnswer.create.answer("iemand")
-				quest.answers += MultipleChoiceAnswer.create.answer("nog ieand")
+				quest.answers += MultipleChoiceAnswer.create.answer("Remove the files")
+				quest.answers += MultipleChoiceAnswer.create.answer("I don't know")
 //---
 				quest.save
 				quest

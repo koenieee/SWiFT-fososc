@@ -43,8 +43,10 @@ package org.ocbkc.questionnaire
    class Question extends LongKeyedMapper[Question] with IdPK
    {  def getSingleton = Question
       object questionType extends MappedLong(this)
-      /* 1 = multiple choice
-         2 = free text question with fixed answer
+      /* 2 = multiple choice
+         1 = free text question with fixed answer
+         * 
+         * I changed it ~Koen
       */
       object questionFormulation extends MappedString(this, MAX_SIZE_QUESTION_TEXT)
 
@@ -82,7 +84,7 @@ package org.ocbkc.questionnaire
       object correctAnswer extends MappedInt(this) // 1 = option 1, 2 = option 2
       object question extends MappedString(this, 200)
       
-	object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.ans_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
+	object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.question_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
 
       // in this branch temporarily deleted Answers and more stuff
    }
