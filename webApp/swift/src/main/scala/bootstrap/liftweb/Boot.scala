@@ -541,9 +541,12 @@ class Boot {
      ) => false})
    }
 
-   {  // begin test Questionnaire
+   {  
+	
+	   // begin test Questionnaire
       val qn = Questionnaire.create.name("Deep Interrogation")
       qn.save
+      
       
 /* Question type 1 = free text answer
  * Question type 2 = Multiple choice answer 
@@ -583,8 +586,39 @@ class Boot {
 	
 	
 				
-			}
+			},
+			
             
+         Question.
+            create.
+            questionType(1).
+            questionFormulation("What is your name?").
+            freeTextFixedCorrectAnswerQuestion
+            {  val fq = FreeTextFixedCorrectAnswerQuestion.create
+               fq.save
+               fq
+            },
+         Question.
+            create.
+            questionType(2).
+            questionFormulation("What color is this?").
+            multipleChoiceQuestion
+            {
+				val quest = MultipleChoiceQuestion.create.correctAnswer(0).question("What color is this?")
+			 
+			 //some quicker writing way then 3 times the same stuff?
+				quest.answers += MultipleChoiceAnswer.create.answer("Red")
+
+
+				quest.answers += MultipleChoiceAnswer.create.answer("Yellow")
+				quest.answers += MultipleChoiceAnswer.create.answer("Purple")
+//---
+				quest.save
+				quest
+	
+	
+				
+			}
             
       )
 

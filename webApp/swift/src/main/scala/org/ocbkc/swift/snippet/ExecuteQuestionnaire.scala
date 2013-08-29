@@ -14,11 +14,11 @@ import Helpers._
 class ExecuteQuestionnaire
 {  
 	
+		var freetextanswer = ""
 	def renderQuestions(ns: NodeSeq, questionnaire:Questionnaire):NodeSeq = 
    {  val questions:List[Question] = Questionnaire_Question_join.findAll( By(Questionnaire_Question_join.questionnaire, questionnaire)).map( join => join.question.obj.open_! )
 		
 		
-		var freetextanswer = ""
       val ret = questions.flatMap
       {  question =>
          {  // generate html
@@ -42,7 +42,7 @@ val multiAnswers = MultipleChoiceAnswer.findAll( By(MultipleChoiceAnswer.questio
 log("Answer with question id: " +question.id.is +"   "+multiAnswers)
                         val bindResultFtcqTemplate = bind( "mcq", ftcqTemplate,
                            "text"      -> Text(question.questionFormulation.is),
-                           "option"  -> SHtml.select(multiAnswers.zipWithIndex.flatMap(x => Seq(x._2.toString -> x._1)).toSeq, Empty, () => _) //I just wrote my own Seq converter :) :P
+                           "option"  -> SHtml.select(multiAnswers.flatMap(x => Seq(x -> x)).toSeq, Empty, procSelection) //I just wrote my own Seq converter :) :P
                         )
                         log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
                         bindResultFtcqTemplate
@@ -58,7 +58,7 @@ log("Answer with question id: " +question.id.is +"   "+multiAnswers)
                         log("   ftcqTemplate = " + ftcqTemplate )
                         val bindResultFtcqTemplate = bind( "ftcq", ftcqTemplate,
                            "text"      -> Text(question.questionFormulation.is),
-                           "answerTf"  -> SHtml.text("", freetextanswer = _)
+                           "answerTf"  -> SHtml.text("", freetextanswer = _, "id" -> question.id.is.toString)
                         )
                         log("   ftcqTemplate after bind = " + bindResultFtcqTemplate)
                         bindResultFtcqTemplate
@@ -79,22 +79,28 @@ log("Answer with question id: " +question.id.is +"   "+multiAnswers)
    {//{ TEST: simply pick the first questionnaire
       val qns = Questionnaire.findAll
       val firstQn = qns match
-         {  case qn::restQ => qn
-            case Nil       => logAndThrow("No test questionnaire found")
-         }
+       {  case qn::restQ => qn
+       case Nil       => logAndThrow("No test questionnaire found")
+      
+      }
     //}
 
    bind("top", ns,
          "qnName"    -> Text(firstQn.name.is),
-         "question"  -> renderQuestions(ns, firstQn),
+         "question"  -> Questionnaire.findAll.flatMap(x => renderQuestions(ns, x)) ,
          "submitBt"  -> SHtml.submit("Send Answers", procQuestion)
       )
    }
    
    def procQuestion()
    {
-	   //todo what?
+	   S.notice(freetextanswer);
+	   //todo what?, Yes; todo what?
 	   
+   }
+   
+   def procSelection(selectOption:String){
+	   S.notice(selectOption);
    }
 }
 
