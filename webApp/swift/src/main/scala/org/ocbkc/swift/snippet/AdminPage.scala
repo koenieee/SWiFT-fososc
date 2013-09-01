@@ -53,8 +53,7 @@ class AdminPage
 	var n_blaat = JaraDur.is 
 	 // println(lines)
 	 
-		SetHtml("jararesult", SHtml.text("test")); 
-	 
+		
 	def settings =
 	{
 			
@@ -87,7 +86,7 @@ class AdminPage
 
  		log("Calling Jara")
 		   
-        PlayingSimulator.start(JaraDur.is.toLong*3600000)
+       // PlayingSimulator.start(JaraDur.is.toLong*3600000)
 		
 		SetHtml("jararesult",Text("Simulation Ended!"));
 	}
