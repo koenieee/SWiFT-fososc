@@ -66,7 +66,7 @@ object SimGod
 
    def run( runConditionHolds:(Long, TimeInMillis) => Boolean ) =
    {  startTimeCurrentRun = Some(SystemWithTesting.currentTimeMillis)
-      var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities
+      var unoccupiedEntitiesWithoutProposedActivities:List[SimEntity] = SimEntity.newSimEntities; SimEntity.newSimEntities = Nil
       //val uEWPA = unoccupiedEntitiesWithoutProposedActivities // abbreviations <&y2012.12.26.17:32:26& will not work like this, how will they?>
       var unoccupiedEntitiesWithProposedActivities:List[(SimEntity, Jn_Start_Stop)] = Nil // Requirement: always sorted by start time
       //val uEWPA = unoccupiedEntitiesWithProposedActivities

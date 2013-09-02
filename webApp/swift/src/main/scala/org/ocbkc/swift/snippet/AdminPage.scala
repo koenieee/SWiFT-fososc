@@ -70,8 +70,9 @@ class AdminPage
 
                 InitialiseJgit()
 
- 		log("Calling Jara")
-		   
+                Constitution.createConstiAlphaIfDoesntExist
+
+ 		log("Calling Jara")	          
                 PlayingSimulator.start(JaraDur.is.toLong)
 		
 	}

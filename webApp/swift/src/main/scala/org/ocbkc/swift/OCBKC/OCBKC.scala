@@ -688,6 +688,17 @@ object Constitution
          }
       }
    }
+
+   def createConstiAlphaIfDoesntExist =
+   {  if(constis == Nil)
+      {  log("There are no constitutions yet, so adding constitution alpha to constitution-population.")
+         val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
+         val adminId = GlobalConstant.adminOpt.get.id.is
+         val constiAlpha = Constitution.create(adminId)
+         constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
+         constiAlpha.makeLatestVersionReleaseCandidateIfPossible
+      }
+   }
 }
 
 class StudyHistory
