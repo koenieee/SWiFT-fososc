@@ -26,7 +26,8 @@ import Test._
 object PlayingSimulator
 {  def start(durationInMillis:Long) =
    {  println("PlayingSimulator.start called")
-         val durationSimulation = durationInMillis //3*24*60*60*1000 //
+      SimGod.resetJara
+      val durationSimulation = durationInMillis //3*24*60*60*1000 //
       println(durationSimulation)
       TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true
