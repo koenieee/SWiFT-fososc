@@ -560,7 +560,7 @@ class Boot {
          Question.
             create.
             questionType(1).
-            questionFormulation("What is the name of your new computer, and has it already been baptised?").
+            questionFormulation("What is the name of your new computer?").
             freeTextFixedCorrectAnswerQuestion
             {  val fq = FreeTextFixedCorrectAnswerQuestion.create
                fq.save

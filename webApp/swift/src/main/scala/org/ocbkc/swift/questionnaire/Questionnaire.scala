@@ -109,11 +109,9 @@ package org.ocbkc.questionnaire
    class FreeTextFixedCorrectAnswerQuestion extends LongKeyedMapper[FreeTextFixedCorrectAnswerQuestion] with IdPK
    {  def getSingleton = FreeTextFixedCorrectAnswerQuestion
       object correctAnswer extends MappedString(this, MAX_SIZE_ANSWER_FreeTextFixedCorrectAnswerQuestion)
-      object maximumNumberOfAnswers extends MappedInt(this)
    }
 
    object FreeTextFixedCorrectAnswerQuestion extends FreeTextFixedCorrectAnswerQuestion with LongKeyedMetaMapper[FreeTextFixedCorrectAnswerQuestion]
    {  
    }
-
 }
