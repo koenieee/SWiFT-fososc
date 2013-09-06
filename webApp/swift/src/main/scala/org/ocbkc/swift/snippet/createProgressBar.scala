@@ -70,7 +70,7 @@ mapRound2DisplayName.flatMap
       bind( "completedRound", completedRoundTempl,
       "linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2)),
        "separ" -> seperator
-		  )
+		  )++seperator
       
       } 
       else if( displayNameWithIndex._1 == indexLatestRound )
@@ -78,15 +78,18 @@ mapRound2DisplayName.flatMap
       
       bind( "latestReachedRound", latestRoundTempl,"linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2)),
        "separ" -> seperator
-		  )
+		  )++seperator
      
      }         
-
+	else if( displayNameWithIndex._2 == "End Session" )
+		{  
+			bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2)
+		  )
+	}
       else
       {
-		  bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2),
-			"separ" -> seperator
-		  )
+		  bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2)
+		  )++seperator
       	 
 	  }
 	  
