@@ -10,6 +10,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.ScalaHelpers._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
@@ -104,14 +105,18 @@ trait CoreTrait
    }
 
    def URstartAlgorithmicDefenceStage1:FolnuminquaQuery =
-   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+   {  if( latestRoundFluencySession == RoundQuestionAttack )
+      {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+      }
       gameCore.algorithmicDefenceGenerator
    }
 
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
      */
    def URstartAlgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
-   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+   {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage1 )
+      {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+      }
       val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
@@ -133,7 +138,9 @@ trait CoreTrait
    }
 
    def URfinaliseSession =
-   {  latestRoundFluencySession = NotInFluencySession 
+   {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage2 )
+      {  latestRoundFluencySession = NotInFluencySession
+      }
    }
 
    protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
@@ -257,7 +264,11 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    }
 
    def URstartQuestionAttack:QuestionAndCorrectAnswer = 
-   {  latestRoundFluencySession = RoundQuestionAttack
+   {  latestRoundFluencySession match
+      {  case RoundBridgeConstruction  => { latestRoundFluencySession = RoundQuestionAttack; true}
+         case _                        => doNothing
+      }
+
       gameCore.generateQuestionAndCorrectAnswer
    }
 /*
