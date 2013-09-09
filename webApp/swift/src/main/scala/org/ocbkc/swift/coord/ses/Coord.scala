@@ -57,6 +57,15 @@ case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
+val roundsInOrder = List( RoundStartSession, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
+
+def reviewable(rfs:RoundFluencySession):Boolean =
+{  rfs match
+   {  
+      case _                   => true
+   }
+}
+
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait
 {  var cc: CoreContent = null
