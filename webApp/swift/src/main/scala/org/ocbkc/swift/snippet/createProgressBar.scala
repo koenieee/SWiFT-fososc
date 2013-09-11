@@ -45,43 +45,36 @@ val roundToComeTempl = chooseTemplate("progressbar", "roundToCome", progressBarT
 val seperator =  chooseTemplate("progressbar", "seperator", progressBarTempl )
 val mapRound2DisplayName = Map( RoundStartSession -> "Start", RoundTranslation -> "Translation", RoundBridgeConstruction -> "Bridge", RoundQuestionAttack -> "Question Attack", RoundAlgorithmicDefenceStage1->"Defence 1", RoundAlgorithmicDefenceStage2->"Defence 2", RoundFinaliseSession->"End Session")
 
-val mapRound2DisplayLinks = Map( RoundTranslation -> "translationRound.html", RoundBridgeConstruction -> "bridgeconstruction.html", RoundQuestionAttack -> "questionAttackRound.html" ,RoundAlgorithmicDefenceStage1 -> "algorithmicDefenceRound.html", RoundAlgorithmicDefenceStage2->"algorithmicDefenceRoundStage2.html",RoundFinaliseSession->"End Session")
-
+val mapRound2DisplayLinks = Map( RoundStartSession -> "startSession.html", RoundTranslation -> "translationRound.html", RoundBridgeConstruction -> "bridgeconstruction.html", RoundQuestionAttack -> "questionAttackRound.html" ,RoundAlgorithmicDefenceStage1 -> "algorithmicDefenceRound.html", RoundAlgorithmicDefenceStage2 -> "algorithmicDefenceRoundStage2.html", RoundFinaliseSession -> "finaliseSession.html")
+import RoundFluencySessionInfo._
 val indexLatestRound = roundsInOrder.indexOf( lrfs )
 
 roundsInOrder.zipWithIndex.flatMap
 {  roundWithIndex =>
-   {  
-	   if( roundWithIndex._1 < indexLatestRound )
-      {  if(reviewable( roundWithIndex._2 ) ...
-      bind( "completedRound", completedRoundTempl,
-      "linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2)),
-		  )++seperator
-      
-      } 
-      else if( displayNameWithIndex._1 == indexLatestRound )
-      {  
-      
-      bind( "latestReachedRound", latestRoundTempl,"linkToRound"  ->  SHtml.link(mapRound2DisplayLinks(displayNameWithIndex._1)._2, () => (), Text(mapRound2DisplayName(displayNameWithIndex._1)._2))
-		  )++seperator
-     
-     }         
-	else if( displayNameWithIndex._1 == mapRound2DisplayName.count - 1 )
-		{  
-			bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2)
-		  )
-	}
+   {  val displayNameRound = mapRound2DisplayName(roundWithIndex._1)
+      val linkToRound = mapRound2DisplayLinks(roundWithIndex._1)
+      val displayTextRound = Text(displayNameRound)
+      val ifReviewableLinkElseText =
+            if(reviewable( roundWithIndex._1 ))
+            {  SHtml.link(linkToRound, () => (), displayTextRound)
+            }else
+            {  displayTextRound
+            }
+
+      if( roundWithIndex._2 < indexLatestRound )
+      {  bind("completedRound", completedRoundTempl, "displayText" -> ifReviewableLinkElseText) ++ seperator
+      }
+      else if( roundWithIndex._2 == indexLatestRound )
+      {  bind("latestReachedRound", latestRoundTempl, "displayText" -> ifReviewableLinkElseText) ++ seperator
+      }
+      else if( roundWithIndex._2 == roundsInOrder.size - 1 )
+      {  bind("roundToCome", roundToComeTempl, "displayText" -> displayTextRound)
+      }
       else
-      {
-		  bind( "roundToCome", roundToComeTempl ,"disabledRound"  ->  Text(mapRound2DisplayName(displayNameWithIndex._1)._2)
-		  )++seperator
-      	 
-	  }
-	  
-	 
-      	
+      {  bind("roundToCome", roundToComeTempl, "displayText" -> displayTextRound) ++ seperator
+      }
    }
-} 
+}
 
 
 

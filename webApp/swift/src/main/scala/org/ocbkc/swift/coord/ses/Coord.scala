@@ -49,20 +49,25 @@ package ses
 //import Round._
 
 case class RoundFluencySession
+case object RoundStartSession extends RoundFluencySession
 case object RoundTranslation extends RoundFluencySession
 case object RoundBridgeConstruction extends RoundFluencySession
 case object RoundQuestionAttack extends RoundFluencySession
 case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 // <&y2013.07.22.17:03:31& rename RoundAlgorithmicDefenceStage2 to ShowFinalResults. It is not a round.>
 case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
+case object RoundFinaliseSession extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
-val roundsInOrder = List( RoundStartSession, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
+object RoundFluencySessionInfo
+{  val roundsInOrder = List(RoundStartSession, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
 
-def reviewable(rfs:RoundFluencySession):Boolean =
-{  rfs match
-   {  
-      case _                   => true
+   def reviewable(rfs:RoundFluencySession):Boolean =
+   {  rfs match
+      {  case RoundStartSession    => false
+         case RoundFinaliseSession => false
+         case _                    => true
+      }
    }
 }
 
