@@ -146,8 +146,6 @@ object TestSettings
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
    
-  val readJaraDur = "56007"
-
 
 }
 
