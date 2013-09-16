@@ -305,7 +305,6 @@ class Boot {
    log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
    val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
-                              GlobalConstant.adminOpt = Some(player)
                               player 
                            } // do nothing, player exists.
       case _            => {  log("   Doesn't exist: creating it...")

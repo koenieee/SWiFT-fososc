@@ -82,7 +82,7 @@ class AdminPage
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
 		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR))
 
-        InitialiseJgit()
+                InitialiseJgit()
 
                 Constitution.createConstiAlphaIfDoesntExist
 
