@@ -22,8 +22,10 @@ object GlobalConstant
 
    val TEST = true
    val NEWLINE = System.getProperty("line.separator")
+
    val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
    val OS = System.getProperty("os.name").toLowerCase
+
    
    val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
     val MAIN_VERSION = scala.io.Source.fromFile(WEBAPP_BASE_DIR + "/mainVersion.txt").mkString // Read versioningProtocol.txt in the base directory of the web application to find out how to change version numbers. Read version_history.html to find out what has changed in subsequent versions...
@@ -52,6 +54,7 @@ object GlobalConstant
    val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
+   
    var adminOpt:Option[Player] = None
    def adminGitUserId = {  println("retrieving adminGitUserId...")
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
@@ -86,17 +89,9 @@ object GlobalConstant
    jgitRepo.getConfig().setBoolean("core", null, "bare", false)
    */
    
-   val jgitBuilder:FileRepositoryBuilder = new FileRepositoryBuilder()
-   val jgitRepo:Repository = jgitBuilder.setGitDir(new File(CONSTITUTIONHTMLDIR + "/.git"))
-      //.readEnvironment() // scan environment GIT_* variables
-      //.findGitDir() // scan up the file system tree <&y2012.06.30.19:51:12& perhaps leave this one out, it SHOULD be in this dir, not in a superdir>
-      .build()
-   println("   jgitRepo directory: " + jgitRepo.getDirectory() )
-   println("   jgitRepo is bare (false is correct): " + jgitRepo.isBare())
-   
-
-   val jgit = new Git(jgitRepo) // <? &y2012.06.30.18:53:23& or isn't this thread safe? I now share one jgit object accross user-sessions (I think... because I instantiate this thing in Boot.scala). Perhaps I should instantiate one per user-session...>
-   println(jgit.status().call().getUntracked)
+   var jgitBuilder:Option[FileRepositoryBuilder] = None
+   var jgitRepo:Option[Repository] = None   
+   var jgit:Option[Git] = None
 
    // create paths
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)
@@ -138,17 +133,23 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  val AUTOLOGIN                       = false
-   val AUTOTRANSLATION                 = false
-   val CREATETESTUSERBASE              = true
+   val AUTOTRANSLATION                 = false // true
+   val CREATETESTUSERBASE              = false // true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
-   val SIMULATEPLAYINGWITHJARA         = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
-   var SIMULATEPLAYINGWITHJARARUNNING = false // simulation process is currently running
+   val STARTJARASIMULATIONDURINGBOOT   = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
    val SIMULATEPLAYINGWITHFIRSTSIMSYSTEM = false // true mutually exclusive with CREATEDUMMYCONSTITUTIONS
+  
+ 
+   // { never change the following manually, they are used by other parts of the program
+   var SIMULATEPLAYINGWITHJARARUNNING  = false // simulation process is currently running
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
+   var SIMULATEPLAYINGWITHJARA = false
+   // }
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
    // vim swap true false: s/true \/\/ false/false \/\/ true/gc
+   
 
 }
 

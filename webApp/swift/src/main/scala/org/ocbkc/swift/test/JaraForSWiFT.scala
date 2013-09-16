@@ -19,25 +19,35 @@ import scala.math.Numeric
 object Test
 {  val debug = true
    val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
-
 }
 
 import Test._
 
 object PlayingSimulator
-{     def start =
-   {  log("PlayingSimulator.start called")
-      log("[MUSTDO] build in simulation for checking/unchecking releaseCandidate checkbox.")
-      log("[SHOULDDO] still to-do to get complete simulation concerning release candidates: simulate activities: undo release candidate, choose an earlier version to be release candidate, and more?")
+{  def start(durationInMillis:Long) =
+   {  println("PlayingSimulator.start called")
+      SimGod.resetJara
+      val durationSimulation = durationInMillis //3*24*60*60*1000 //
+      println(durationSimulation)
+      TestSettings.SIMULATECLOCK = true
+      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true
+
+      val adminId = GlobalConstant.adminOpt.get.id.is
+      val constiAlpha = Constitution.create(adminId)
+      constiAlpha.publish(
+"""<h2>Article 1</h2>
+
+<p>publication 1</p>
+""", "publication 1", adminId.toString
+      )
 
       new SimSubscriptions()
-
-      val durationSimulation = 2*24*60*60*1000
       val startTimeSim = SystemWithTesting.currentTimeMillis
       SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
       
-      //SimGod.run{ case (iteration, _) => iteration < 100 }
-   }
+
+
+}
 }
 
 /** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.

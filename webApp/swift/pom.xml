@@ -317,7 +317,6 @@
 						  <overWrite>true</overWrite>
 						  <outputDirectory>${basedir}/binaries/paradox</outputDirectory>
 					  </artifactItem>
-
 					  <artifactItem>
 						  <groupId>org.ocbkc.swift</groupId>
 						  <artifactId>binaries_swift</artifactId>
@@ -326,7 +325,6 @@
 						  <overWrite>true</overWrite>
 						  <outputDirectory>${basedir}/binaries/swift</outputDirectory>
 					  </artifactItem>
-                                       
 				  </artifactItems>
 		  </configuration>
 		 </plugin>

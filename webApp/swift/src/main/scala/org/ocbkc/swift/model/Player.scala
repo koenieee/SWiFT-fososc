@@ -88,6 +88,10 @@ class Player extends MegaProtoUser[Player] {
    def followedConstis:List[ConstiId] =
    {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.is}
    }
+   
+   //object deletePlayer extends MappedString(this, 100)
+  // object createPlayer extends MappedString(this, 100)
+   
 }
 
 }
