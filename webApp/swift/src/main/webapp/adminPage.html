@@ -1,0 +1,32 @@
+<lift:surround with="default" at="content">
+
+   <style type="text/css">
+    td, th {border: 1px solid black;}
+   </style>
+
+
+
+ <div data-lift="AdminPage.settings">
+	 
+    <div id="jsonscript"></div>
+<h1>Admin Page</h1>
+
+<hr />
+<h2>Run Jara simulation</h2>
+Simulation in Hours: <input type="number" value="1" id="inputbox"/>(Example: 1, 2, 4 hours etc.)<Br/>
+
+<i>Warning: the greater the number, the longer it takes to run the simulation!</i>
+<br /><br />
+<hr />
+<button onclick="" class="startSimu" id="startSimu" value="submit" >Start Simulation</button>
+<br/>
+<br/>
+
+<div id="jararesult"></div>
+</div>
+
+<hr />
+
+
+
+</lift:surround>

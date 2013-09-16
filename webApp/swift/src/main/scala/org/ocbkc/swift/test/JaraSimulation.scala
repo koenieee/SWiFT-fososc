@@ -47,6 +47,12 @@ object SimGod
    var startTimeCurrentRun:Option[POSIXtime] = None
    var endTimeLastRun:Option[POSIXtime] = None
 
+   def resetJara = 
+   {  SimEntity.reset
+      startTimeCurrentRun = None
+      endTimeLastRun = None
+   }
+
    def sortByStop(sjs:List[(SimEntity, Jn_Start_Stop)]) =
    {  sjs.sortWith{ case ((_, Jn_Start_Stop(_,stop1)), (_, Jn_Start_Stop(_,stop2))) => stop1 < stop2 }
    }
@@ -89,17 +95,17 @@ object SimGod
             val unoccupiedEntitiesWithProposedActivitiesStripped = unoccupiedEntitiesWithProposedActivities.map{ case (u,_) => u }
 
             if( occupiedEntities.intersect( unoccupiedEntitiesWithProposedActivitiesStripped ) != Nil )
-            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint") 
+            {  throw new RuntimeException("occupiedEntities and unoccupiedEntitiesWithProposedActivities are not disjoint") 
             }else
-            {  println("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are disjoint")
+            {  println("occupiedEntities and unoccupiedEntitiesWithProposedActivities are disjoint")
             }
 
             if( unoccupiedEntitiesWithProposedActivitiesStripped.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
-            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+            {  throw new RuntimeException("unoccupiedEntitiesWithProposedActivities and unoccupiedEntitiesWithoutProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
             }
 
             if( occupiedEntities.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
-            {  throw new RuntimeException("occupiedEntitiesWithFirstStopTime and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
+            {  throw new RuntimeException("occupiedEntities and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
             }
 
             if( ( occupiedEntities ++ unoccupiedEntitiesWithProposedActivitiesStripped ++ unoccupiedEntitiesWithoutProposedActivities ).toSet != SimEntity.simEntities.toSet )
@@ -204,6 +210,11 @@ object SimEntity
       simEntities = se :: simEntities
       newSimEntities = se :: newSimEntities
    }
+
+   def reset =
+   {  simEntities    = Nil
+      newSimEntities = Nil
+   }
 }
 
 case class Jn_Delay_Duration(delay:TimeInMillis, duration:TimeInMillis)
@@ -219,7 +230,6 @@ case class Jn_Delay_Duration(delay:TimeInMillis, duration:TimeInMillis)
 case class Jn_Start_Stop(start:POSIXtime, stop:POSIXtime)
 {
 }
-
 
 trait SimEntity
 {  val qStart = State("qStart") // there is always at least a Start state. Note: because it is an inner class (State), the State-type belongs to exactly one SmEntity instance.
