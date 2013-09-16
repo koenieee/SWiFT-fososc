@@ -810,7 +810,14 @@ object PlayerScores
     */
    def shortestTranslation(p: Player) =
    {  log("[MUSTDO]")
-      //val starttime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
+      /* Hints:
+         - IMPORTANT: ----> use coreContentObjectsWhichCount <-----
+         - partly imitate what happens in class SessionHistory to calculate shortest durations.
+      */
+
+
+
+//val starttime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
       
       //val stoptime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.stopTime.is)
       
@@ -834,9 +841,6 @@ object PlayerScores
      
    //  filter( cc => cc.answerPlayerCorrect == false ).map(_.startTime.is)
     // println(all_players)
-      /* Hints: 
-         - use coreContentObjectsWhichCount
-         - partly imitate what happens in class SessionHistory to calculate shortest durations.  */
    }
 
    /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
@@ -845,7 +849,7 @@ object PlayerScores
    {  log("overallShortestTranslation called")
 
       /* Hints:
-         - iterate over all Players, and use shortestTranslation
+         - IMPORTANT ---> iterate over all Players, and use shortestTranslation <----
       */
 
 
