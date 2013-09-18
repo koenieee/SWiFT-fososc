@@ -81,7 +81,7 @@ package org.ocbkc.questionnaire
    class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with OneToMany[Long, MultipleChoiceQuestion] with IdPK
    {  def getSingleton = MultipleChoiceQuestion
   
-      object correctAnswer extends MappedInt(this) // 1 = option 1, 2 = option 2
+      object correctAnswer extends MappedLongForeignKey(MultipleChoiceAnswer)
       object question extends MappedString(this, 200)
       
 	object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.question_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
@@ -96,7 +96,7 @@ package org.ocbkc.questionnaire
    class MultipleChoiceAnswer  extends LongKeyedMapper[MultipleChoiceAnswer] with OneToMany[Long, MultipleChoiceAnswer] with IdPK
    {  def getSingleton = MultipleChoiceAnswer
       object question_id extends MappedLongForeignKey(this, MultipleChoiceQuestion)
-   object answer extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION) // answer 1;answer2;etc.
+   object answerFormulation extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION)
       
 
    }
