@@ -571,22 +571,21 @@ class Boot {
             questionType(2).
             questionFormulation("What is the punishment for pushing redundant files to repos?").
             multipleChoiceQuestion
-            {
-				val quest = MultipleChoiceQuestion.create.correctAnswer(2).question("What is the punishment for pushing redundant files to repos?")
-			 
-			 //some quicker writing way then 3 times the same stuff?
-				quest.answers += MultipleChoiceAnswer.create.answer("Write a lot of lines")
+            {  val answers = List("Write a lot of lines", "Remove the files", "I don't know").map{ MultipleChoiceAnswer.create.answerFormulation(_) }
+               answers.foreach{ _.save }
 
-
-				quest.answers += MultipleChoiceAnswer.create.answer("Remove the files")
-				quest.answers += MultipleChoiceAnswer.create.answer("I don't know")
+               val correctAnswers = List(answers(1))
 //---
-				quest.save
-				quest
+
+	       val quest = MultipleChoiceQuestion.create.question("What is the punishment for pushing redundant files to repos?")
+               answers.foreach{ quest.answers += _ }
+               correctAnswers.foreach{ quest.correctAnswers += _ }
+	       quest.save
+	       quest
 	
 	
 				
-			},
+	       },
 			
             
          Question.
@@ -604,14 +603,14 @@ class Boot {
             questionFormulation("What color is this?").
             multipleChoiceQuestion
             {
-				val quest = MultipleChoiceQuestion.create.correctAnswer(0).question("What color is this?")
+				val quest = MultipleChoiceQuestion.create.question("What color is this?")
 			 
-			 //some quicker writing way then 3 times the same stuff?
-				quest.answers += MultipleChoiceAnswer.create.answer("Red")
+                              //some quicker writing way then 3 times the same stuff? --> yes see refacoring of one of the questions above.
+				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Red")
 
 
-				quest.answers += MultipleChoiceAnswer.create.answer("Yellow")
-				quest.answers += MultipleChoiceAnswer.create.answer("Purple")
+				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Yellow")
+				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Purple")
 //---
 				quest.save
 				quest

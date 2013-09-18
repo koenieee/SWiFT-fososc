@@ -76,15 +76,19 @@ package org.ocbkc.questionnaire
    object QuestionnaireSession extends QuestionnaireSession with LongKeyedMetaMapper[QuestionnaireSession]
    {  
    }
-   /**
+   /** This represents a "generalised" multiple choice question which, depending on the settings, can require more options to be chosen by the person making the question. For example, questions could be: Question 1: choose the 3 highest mountains in the world from the following list: ... . Question 2: Which philosophers in the following list influenced Hegel? ...
+       @minimalNumberOfAnswers the minimal number of options the user must choose. (The user interface SHOULD complain if he choses fewer options)
+       @maximumNumberOfAnswers the maximum number of options the user may choose. (The user interface SHOULD complain if he choses more options)
      */
    class MultipleChoiceQuestion  extends LongKeyedMapper[MultipleChoiceQuestion] with OneToMany[Long, MultipleChoiceQuestion] with IdPK
    {  def getSingleton = MultipleChoiceQuestion
-  
-      object correctAnswer extends MappedLongForeignKey(MultipleChoiceAnswer)
+      object minimalNumberOfAnswers extends MappedInt(this)
+      object maximumNumberOfAnswers extends MappedInt(this) 
+      object correctAnswers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.question_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
+
       object question extends MappedString(this, 200)
       
-	object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.question_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
+      object answers extends MappedOneToMany(MultipleChoiceAnswer, MultipleChoiceAnswer.question_id, OrderBy(MultipleChoiceAnswer.id, Ascending))
 
       // in this branch temporarily deleted Answers and more stuff
    }
@@ -96,9 +100,7 @@ package org.ocbkc.questionnaire
    class MultipleChoiceAnswer  extends LongKeyedMapper[MultipleChoiceAnswer] with OneToMany[Long, MultipleChoiceAnswer] with IdPK
    {  def getSingleton = MultipleChoiceAnswer
       object question_id extends MappedLongForeignKey(this, MultipleChoiceQuestion)
-   object answerFormulation extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION)
-      
-
+      object answerFormulation extends MappedString(this, MAX_SIZE_MULTIPLE_OPTION)
    }
 
    object MultipleChoiceAnswer extends MultipleChoiceAnswer with LongKeyedMetaMapper[MultipleChoiceAnswer]

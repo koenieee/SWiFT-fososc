@@ -36,7 +36,7 @@ class ExecuteQuestionnaire
                         
                         val ftcqTemplate = chooseTemplate("question", "multipleChoiceQuestion", questionTemplates)
 
-val multiAnswers = MultipleChoiceAnswer.findAll( By(MultipleChoiceAnswer.question_id, question.multipleChoiceQuestion.is)).map(_.answer.is)
+val multiAnswers = MultipleChoiceAnswer.findAll( By(MultipleChoiceAnswer.question_id, question.multipleChoiceQuestion.is)).map(_.answerFormulation.is)
 		
 //val database_answers = multiAnswers(question.id.toInt).answers.answer.i
 log("Answer with question id: " +question.id.is +"   "+multiAnswers)
