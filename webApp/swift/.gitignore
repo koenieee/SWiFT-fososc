@@ -1,0 +1,7 @@
+.settings/
+.project
+.classpath
+.idea/
+.settings/
+swift.iml
+target/

@@ -730,6 +730,7 @@ object OCBKCinfoPlayer
 package scoring
 {
 import GlobalConstant.AverageFluency
+import net.liftweb.mapper.By
 
 object PlayerScores
 {  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
@@ -793,22 +794,26 @@ object PlayerScores
    /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith).
      */
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
-   {  log("[MUSTDO]")
- // val playercorrect = CoreContent.findAll(By(CoreContent.answerPlayerCorrect, true))
-  
-      /* Hints
-       - (study lift Mapper framework)
-       - study the doc of CoreContent
-       - use the integer OneToStartWith.minSessionsB4access2allConstis as the threshold for sessions which count. Read the documentation in this object.
-       - Look at the class percentageCorrect to see an example of how to retrieve core content objects of a certain player.
-      */
+   {  log("coreContentObjectsWhichCount ")
 
-      Nil // <-- to be replaced
+      val all = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == false)    //testing: false. Must BE TRUE!!
+        val mini =     all.size
+
+    // if(mini > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("  corecontent > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
+         all
+     /* Hints
+    C- (study lift Mapper framework)     C
+    C- study the doc of CoreContent       C
+   C - use the integer OneToStartWith.minSessionsB4access2allConstis as the threshold for sessions which count. Read the documentation in this object.
+   C - Look at the class percentageCorrect to see an example of how to retrieve core content objects of a certain player.
+   */
+
+      // <-- to be replaced
    }
 
    /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
     */
-   def shortestTranslation(p: Player) =
+   def shortestTranslation(p: Player):Option[(CoreContent, Long)] =
    {  log("[MUSTDO]")
       /* Hints:
          - IMPORTANT: ----> use coreContentObjectsWhichCount <-----
@@ -816,6 +821,7 @@ object PlayerScores
       */
 
 
+    //println(coreContentObjectsWhichCount(p))
 
 //val starttime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
       
@@ -825,20 +831,19 @@ object PlayerScores
      
      //todo recursive pattern matching::
      //Koen: must be faster right? Maybe possible to do all this in one query to the database instead of 2
-     val all_players = PlayerCoreContent_join.findAllFields(Seq[SelectableField](PlayerCoreContent_join.player)).map(_.player.is).distinct
-     
-     //works for all players:
-      all_players.foreach{
-		  test => 
-		  val time = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, test) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == true )
-      val starttime = time.map(_.startTime.is)
-      val stoptime = time.map(_.stopTime.is)
-     
-		  println((stoptime zip starttime).map (c => {c._1-c._2}))//.reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
-		  
-     }
-     println(all_players)
-     
+   //  val all_players = PlayerCoreContent_join.findAllFields(Seq[SelectableField](PlayerCoreContent_join.player)).map(_.player.is).distinct
+
+               val coretent = coreContentObjectsWhichCount(p)
+
+     val zippie = (coretent.map(_.stopTime.is) zip coretent.map(_.startTime.is))
+      val ids  = coretent.map(_.id.is)
+
+     //(zippie.map(c => c._1._2 - c._2).reduceRight((x,v) => if (x < v) x else v))//.reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
+
+     val test = zippie.map(c => c._1 - c._2).zip (ids)
+     val new_tent = coretent.zip (ids)
+
+ new_tent.find(x=> x._2 == test.min._2)
    //  filter( cc => cc.answerPlayerCorrect == false ).map(_.startTime.is)
     // println(all_players)
    }
@@ -847,6 +852,7 @@ object PlayerScores
      */
    def overallShortestTranslation():CoreContent = 
    {  log("overallShortestTranslation called")
+
 
       /* Hints:
          - IMPORTANT ---> iterate over all Players, and use shortestTranslation <----
@@ -877,7 +883,8 @@ object ConstiScores
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, constiId:ConstiId):Option[Double] =
    {  log("averagePercentageCorrect called")
-      Constitution.getById(constiId) match
+
+     Constitution.getById(constiId) match
       {  case Some(consti) => 
             consti.lastReleaseCommitId match
             {  case Some(lastReleaseCommitId) =>  averagePercentageCorrect(minimalNumberOfSessionsPerPlayer, lastReleaseCommitId)
