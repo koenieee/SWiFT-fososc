@@ -37,7 +37,7 @@ class createProgress {
     val completedRoundTempl = chooseTemplate("progressbar", "completedRound", progressBarTempl)
     val latestRoundTempl = chooseTemplate("progressbar", "latestRoundReached", progressBarTempl)
     val roundToComeTempl = chooseTemplate("progressbar", "roundToCome", progressBarTempl)
-    val seperator = chooseTemplate("progressbar", "seperator", progressBarTempl)
+    val seperator:NodeSeq = chooseTemplate("progressbar", "seperator", progressBarTempl)
       val percen_all =  chooseTemplate("progressbar", "all", graphProgress)
     
     val percentageBindTempl =  chooseTemplate("progressbar", "upper", graphProgress)
@@ -69,14 +69,18 @@ class createProgress {
             displayTextRound
           }
         
-        if (roundWithIndex._2 < indexLatestRound) {
-         bind("completedRound", completedRoundTempl, "displayText" -> ifReviewableLinkElseText) ++ seperator 
-        } else if (roundWithIndex._2 == indexLatestRound) {
-            bind("latestReachedRound", latestRoundTempl, "displayText" -> ifReviewableLinkElseText) ++ seperator
-        } else if (roundWithIndex._2 == roundsInOrder.size - 1) {
-          bind("roundToCome", roundToComeTempl, "displayText" -> displayTextRound)
-        } else {
-         bind("roundToCome", roundToComeTempl, "displayText" -> displayTextRound) ++ seperator
+        val roundDisplayHtml:NodeSeq = if (roundWithIndex._2 < indexLatestRound)
+        {   bind("completedRound", completedRoundTempl, "displayText" -> ifReviewableLinkElseText)
+        } else if (roundWithIndex._2 == indexLatestRound) 
+        {   bind("latestReachedRound", latestRoundTempl, "displayText" -> ifReviewableLinkElseText)
+        } else
+        {   bind("roundToCome", roundToComeTempl, "displayText" -> displayTextRound)
+        }
+        
+        if ( roundWithIndex._2 == roundsInOrder.size - 1 )
+        {   roundDisplayHtml 
+        }else 
+        {   roundDisplayHtml ++ seperator
         }
       }
     }

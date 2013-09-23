@@ -153,7 +153,7 @@ trait CoreTrait
 
    def URfinaliseSession =
    {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage2 )
-      {  latestRoundFluencySession = NotInFluencySession
+      {  latestRoundFluencySession = RoundFinaliseSession
       }
    }
 

@@ -292,7 +292,10 @@ class Boot {
                val lrfs = sesCoordLR.latestRoundFluencySession
                log("   latestRoundFluencySession = " + lrfs)
                lrfs match
-               {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
+               {  case NotInFluencySession | RoundFinaliseSession =>
+                  {  sesCoordLR.latestRoundFluencySession(NotInFluencySession) // <SHOULDDO this is a temp fix, this should happen when someone closes the session>
+                     S.redirectTo("fluencyGameSes/startSession")
+                  }
                   case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
                   case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
                   case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
