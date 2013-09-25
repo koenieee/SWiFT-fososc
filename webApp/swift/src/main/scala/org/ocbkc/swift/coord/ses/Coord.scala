@@ -157,6 +157,12 @@ trait CoreTrait
       }
    }
 
+   def closeSession =
+   {  log("closeSession")
+      if( latestRoundFluencySession == NotInFluencySession ) log("   session was already closed.")
+      latestRoundFluencySession = NotInFluencySession
+   }
+
    protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
    {  currentPlayer.firstChosenConstitution.is match
       {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")

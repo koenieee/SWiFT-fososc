@@ -293,8 +293,8 @@ class Boot {
                log("   latestRoundFluencySession = " + lrfs)
                lrfs match
                {  case NotInFluencySession | RoundFinaliseSession =>
-                  {  sesCoordLR.latestRoundFluencySession(NotInFluencySession) // <SHOULDDO this is a temp fix, this should happen when someone closes the session>
-                     S.redirectTo("fluencyGameSes/startSession")
+                  {  sesCoordLR.closeSession // <SHOULDDO this is a temp fix, this should happen when someone closes the session> <remove from here, this is not the right place! dispatch4ConstiTrainingDecision is not called at the complete beginning of the session>
+                     S.redirectTo("fluencyGameSes/startSession") 
                   }
                   case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
                   case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
