@@ -187,8 +187,8 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
@@ -292,10 +292,10 @@ class Boot {
                val lrfs = sesCoordLR.latestRoundFluencySession
                log("   latestRoundFluencySession = " + lrfs)
                lrfs match
-               {  case NotInFluencySession | RoundFinaliseSession =>
-                  {  sesCoordLR.closeSession // <SHOULDDO this is a temp fix, this should happen when someone closes the session> <remove from here, this is not the right place! dispatch4ConstiTrainingDecision is not called at the complete beginning of the session>
-                     S.redirectTo("fluencyGameSes/startSession") 
+               {  case NotInFluencySession =>
+                  {  S.redirectTo("fluencyGameSes/startSession")
                   }
+                  case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
                   case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
                   case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
                   case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
