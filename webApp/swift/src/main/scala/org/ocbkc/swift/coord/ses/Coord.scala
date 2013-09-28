@@ -213,7 +213,10 @@ trait CoreTrait
    }
 
    def editable(rfs:RoundFluencySession):Boolean =
-   {  roundsInOrder.indexOf(rfs) <= roundsInOrder.indexOf(latestRoundFluencySession)
+   {  log("ses.Core.editable called")
+      val ret = roundsInOrder.indexOf(rfs) >= roundsInOrder.indexOf(latestRoundFluencySession)
+      log("   round " + rfs + ": editable = " + ret)
+      ret
    }
 }
 

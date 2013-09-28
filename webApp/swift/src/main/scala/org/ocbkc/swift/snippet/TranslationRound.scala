@@ -81,7 +81,7 @@ class TranslationRound
       case class FilledFile(ParseResult) extends SWiFTParseResult
       */
       val editable = sesCoordLR.editable(RoundTranslation)
-      val editableAttrib = if( editable )
+      val editableAttrib = if( !editable )
       {  List("disabled" -> "disabled")
       }else
       {  List()
