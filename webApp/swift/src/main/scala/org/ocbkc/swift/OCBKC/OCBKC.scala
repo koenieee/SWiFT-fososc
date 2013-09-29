@@ -838,6 +838,7 @@ object PlayerScores
      val zippie = (coretent.map(_.stopTime.is) zip coretent.map(_.startTime.is))
       val ids  = coretent.map(_.id.is)
 
+
      //(zippie.map(c => c._1._2 - c._2).reduceRight((x,v) => if (x < v) x else v))//.reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
 
      val test = zippie.map(c => c._1 - c._2).zip (ids)
@@ -853,7 +854,22 @@ object PlayerScores
    def overallShortestTranslation():CoreContent = 
    {  log("overallShortestTranslation called")
 
+     val all_players = Player.findAll
 
+    val ls = all_players.map{
+      x  => shortestTranslation(x) match{
+        case Some(thing) =>  Map(x.id->(thing._1.stopTime - thing._1.startTime).toDouble/1000 )
+        case None => None
+      }
+
+
+
+     }
+    // PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
+
+     println(ls);
+              //TODO: Get MIN of LIST(Map), and select the CoreContent from that player
+     //shortestTranslation()
       /* Hints:
          - IMPORTANT ---> iterate over all Players, and use shortestTranslation <----
       */

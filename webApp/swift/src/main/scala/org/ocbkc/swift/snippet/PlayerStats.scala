@@ -25,7 +25,8 @@ class PlayerStats
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
       val test = PlayerScores.shortestTranslation(player)//it looks like its working, for all players  //0 //averageDurationTranslation(player, -1)
-            bind( "top", ns, 
+     PlayerScores.overallShortestTranslation();
+            bind( "top", ns,
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
             "numberCorrect"     -> Text("" + sesCoord.sesHis.numberCorrect),
