@@ -212,6 +212,8 @@ trait CoreTrait
       // }
    }
 
+   /** @todo refactor all round-snippets to call this method. Practically this is not necessary for rounds for which you know they are never or always editable, but "theoretically" it is more correct, because it allows for easy future changes if specifications of the rounds would change.
+   */
    def editable(rfs:RoundFluencySession):Boolean =
    {  log("ses.Core.editable called")
       val ret = roundsInOrder.indexOf(rfs) >= roundsInOrder.indexOf(latestRoundFluencySession)
