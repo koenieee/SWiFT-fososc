@@ -28,7 +28,7 @@ class BridgeConstruction
 
    val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
-   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.cc.textCTLbyComputer
+   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer
 
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartBridgeConstruction
@@ -49,7 +49,7 @@ class BridgeConstruction
          println("   bridgeCorrect = " + bridgeCorrect)
          // sesCoord
          // <&y2011.10.23.17:49:39&>
-         println("   bridge = " + sesCoordLR.cc.bridgeCTL2NLplayer)
+         println("   bridge = " + sesCoordLR.si.bridgeCTL2NLplayer)
          
          sesCoord.URstopBridgeConstruction
          
@@ -62,9 +62,9 @@ class BridgeConstruction
          // )
          println("BridgeConstruction.processSubjectPlayerTf called")
          sesBriCo.subjectTf = contentTf
-         sesCoordLR.cc.bridgeCTL2NLplayer = "" // <&y2012.02.21.09:35:55&09:35:55 right location to do this?>
+         sesCoordLR.si.bridgeCTL2NLplayer = "" // <&y2012.02.21.09:35:55&09:35:55 right location to do this?>
 
-         sesCoordLR.cc.bridgeCTL2NLplayer += "entity(" + contentTf + "," + sesCoordLR.cc.subjectNL + ")\n"
+         sesCoordLR.si.bridgeCTL2NLplayer += "entity(" + contentTf + "," + sesCoordLR.si.subjectNL + ")\n"
          // <&y2012.02.16.10:00:27& or should I use string builder?>
       }
 
@@ -72,7 +72,7 @@ class BridgeConstruction
       {  // <&y2012.02.10.10:09:24& check here whether the provided prediate indeed occurs in the CTL translation of player>
          println("BridgeConstruction.processPredicatePlayerTf called")
          sesBriCoLR.predicateTf = contentTf
-         sesCoordLR.cc.bridgeCTL2NLplayer += "hurelan(" + sesCoordLR.cc.hurelanRole1NL + "," + contentTf + "," + sesCoordLR.cc.hurelanRole2NL + ")\n"
+         sesCoordLR.si.bridgeCTL2NLplayer += "hurelan(" + sesCoordLR.si.hurelanRole1NL + "," + contentTf + "," + sesCoordLR.si.hurelanRole2NL + ")\n"
       }
       
       def processTestBridgeBt() =
@@ -84,7 +84,7 @@ class BridgeConstruction
       // <? why can't scala infer that contentTranslationTA must be a String. (Omitting String, will result in an error).
 
       def processBridgeCTL2NLtA(contentTranslationTA:String) =
-      {  sesCoordLR.cc.bridgeCTL2NLplayer = contentTranslationTA  
+      {  sesCoordLR.si.bridgeCTL2NLplayer = contentTranslationTA  
          // sesCoordLR.translation = contentTranslationTA // <&y2011.11.17.18:53:43& add check in Coord.scala that the translation has indeed been defined when you start using it somewhere, perhaps with Option>
       }
 
@@ -95,7 +95,7 @@ class BridgeConstruction
       */
 /*
       def testBridgeText:ParseResult = 
-      {   if(sesCoordLR.cc.bridgeCTL2NLplayer != "")
+      {   if(sesCoordLR.si.bridgeCTL2NLplayer != "")
                {  FilledFile(testSyntaxBridge) match 
                   { case (correct, msg) => if(correct)  else "Contains errors: " + msg
                   }
@@ -116,12 +116,12 @@ class BridgeConstruction
       }
 
       val testExampleBridge = "hurelan(s,p,t)\nentity(c1,Akwasi)"
-      //sesCoordLR.cc.bridgeCTL2NLcomputer
+      //sesCoordLR.si.bridgeCTL2NLcomputer
       val testExampleTextCTL = "p({a},{b})"
 
 /* <? &y2012.02.22.14:48:06& somehow the following does not work. Why not?>
 
-      val toBeBoundInTheBindFunction = sesCoordLR.cc.constantsByPlayer match 
+      val toBeBoundInTheBindFunction = sesCoordLR.si.constantsByPlayer match 
                                              {  case Some(constants) => SHtml.ajaxSelectElem(constants, Empty)(processPredicatePlayerTf)
                                                 case None            => println("   No constants found in translation player."); Text("Your translation doesn't contain any constants")
                                              }
@@ -131,16 +131,16 @@ class BridgeConstruction
 
 
 
-      val constants = sesCoordLR.cc.constantsByPlayer match 
+      val constants = sesCoordLR.si.constantsByPlayer match 
                                              {  case Some(consts) => consts
                                                 case None         => println("   No constants found in translation player."); Nil
                                              }
 
       var boundForm = bind( "form", ns, 
-            "translation"                 -> Text(sesCoordLR.cc.textCTLbyPlayer),
+            "translation"                 -> Text(sesCoordLR.si.textCTLbyPlayer),
             //"subjectCTLbyPlayer"        -> SHtml.text(sesBriCo.subjectTf, processSubjectPlayerTf),
             "subjectCTLbyPlayer"          -> SHtml.select(constants.map(c=>(c,c)), Empty, processSubjectPlayerTf),
-            "predicateCTLbyPlayer"        -> ( sesCoordLR.cc.predsByPlayer match 
+            "predicateCTLbyPlayer"        -> ( sesCoordLR.si.predsByPlayer match 
                                              {  case Some(Nil)       => println("   No constants found in translation player."); Text("Note: your translation doesn't contain any predicates.")
 
                                                 case Some(preds)     => SHtml.select(preds.map(p=>(p,p)), Empty, processPredicatePlayerTf)
@@ -148,11 +148,11 @@ class BridgeConstruction
                                              }
                                              ),
             //"predicateCTLbyPlayer"        -> Text(sesBriCoLR.predicateTf),
-            "constructedBridgeCTL2NL"     -> Text(sesCoordLR.cc.bridgeCTL2NLplayer),
+            "constructedBridgeCTL2NL"     -> Text(sesCoordLR.si.bridgeCTL2NLplayer),
             "errorInInfo2ConstructBridge" -> errorBridgeWebText,
             "submitBt"                    -> SHtml.submit("Submit", processSubmission)
           )
-      bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.cc.textNL))
+      bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.si.textNL))
    }
 }
 

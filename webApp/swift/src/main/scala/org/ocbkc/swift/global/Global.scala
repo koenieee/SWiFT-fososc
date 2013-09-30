@@ -49,7 +49,7 @@ object GlobalConstant
    val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
-   val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
+   val SESSIONINFOOBJECTDIR = PERSISTDIR + "/sessionInfoobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
    var adminOpt:Option[Player] = None
@@ -101,7 +101,7 @@ object GlobalConstant
    // create paths
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)
    createDirIfNotExists(CONSTITUTIONHTMLDIR)
-   createDirIfNotExists(CORECONTENTOBJECTDIR)
+   createDirIfNotExists(SESSIONINFOOBJECTDIR)
    createDirIfNotExists(INITIALISATIOnDATaDIR)
 
 /** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>

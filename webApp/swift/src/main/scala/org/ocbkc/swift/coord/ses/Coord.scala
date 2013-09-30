@@ -57,7 +57,7 @@ case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait
-{  var cc: CoreContent = null
+{  var si: SessionInfo = null
    val sesHis = new SessionHistory()
    val gameCore: TraitGameCore = new NotUna(currentPlayer.id.get)
 
@@ -90,15 +90,15 @@ trait CoreTrait
 
    def URstartTranslation:String =  
    {  latestRoundFluencySession = RoundTranslation
-      cc = gameCore.initialiseCoreContent
-      cc.startTime(SystemWithTesting.currentTimeMillis).save
-      cc.startTimeTranslation(cc.startTime.is).save
-      cc.textNL
+      si = gameCore.initialiseSessionInfo
+      si.startTime(SystemWithTesting.currentTimeMillis).save
+      si.startTimeTranslation(si.startTime.is).save
+      si.textNL
    }
 
    def URstopTranslation =
    {  log("URstopTranslation called")
-      cc.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+      si.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
       Unit
    }
 
@@ -113,10 +113,10 @@ trait CoreTrait
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
-      cc.stopTime(System.currentTimeMillis).save
-      sesHis.coreContents ::= cc      
-      cc.serialize // serialize the JSON part
-      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+      si.stopTime(System.currentTimeMillis).save
+      sesHis.sessionInfos ::= si      
+      si.serialize // serialize the JSON part
+      PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
 
       // send update mail to followers that the score for a release of this constitution is updated
       val fCC = Constitution.getById(currentPlayer.firstChosenConstitution.get).get
@@ -203,11 +203,11 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
       {  case Full(id)  => { prefix = id }
          case _         => { throw new RuntimeException("  No user id found.") }
       }
-      println("   reading corecontent objects from database...")
-      val ccs = PlayerCoreContent_join.findAll(By(PlayerCoreContent_join.player, currentPlayer)).map{ join => join.coreContent.obj.open_! }
+      println("   reading sessionInfo objects from database...")
+      val sis = PlayerSessionInfo_join.findAll(By(PlayerSessionInfo_join.player, currentPlayer)).map{ join => join.sessionInfo.obj.open_! }
 
-      sesHis.coreContents = ccs
-      println("   found " + ccs.length + " CoreContent objects for this player")
+      sesHis.sessionInfos = sis
+      println("   found " + sis.length + " SessionInfo objects for this player")
    }
    // var sesHis:SessionHistory = new SessionHistory 
    // <&y2012.01.02.23:15:26& initialise SessionHistory object with data made persistant in the past>
@@ -230,10 +230,10 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
 /*
    def URstartTranslation:String =  
    {  round = Trans
-      cc = gameCore.initialiseCoreContent
-      cc.startTime(System.currentTimeMillis).save
-      cc.startTimeTranslation(cc.startTime.is).save
-      cc.textNL
+      si = gameCore.initialiseSessionInfo
+      si.startTime(System.currentTimeMillis).save
+      si.startTimeTranslation(si.startTime.is).save
+      si.textNL
    }
 */
 
@@ -258,26 +258,26 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
-      cc.stopTime(System.currentTimeMillis).save
-      sesHis.coreContents ::= cc      
-      cc.serialize // serialize the JSON part
-      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
+      si.stopTime(System.currentTimeMillis).save
+      sesHis.sessionInfos ::= si      
+      si.serialize // serialize the JSON part
+      PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
       res
    }
 */
-// <&y2012.02.21.19:22:56& refactor by using built-in parser of CoreContent.?>
+// <&y2012.02.21.19:22:56& refactor by using built-in parser of SessionInfo.?>
    def testSyntaxTranslation:String = 
-   {  cc.ParseTextCTLbyPlayer
-      val warn = cc.parseWarningMsgTxtCTLplayer
-      if(!warn.equals("")) warn else cc.parseErrorMsgTextCTLplayer
+   {  si.ParseTextCTLbyPlayer
+      val warn = si.parseWarningMsgTxtCTLplayer
+      if(!warn.equals("")) warn else si.parseErrorMsgTextCTLplayer
    }
 
    def testSyntaxBridge = 
    {  import scala.util.parsing.combinator.Parsers
-      if( cc.bridgeCTL2NLplayer == "" ) 
+      if( si.bridgeCTL2NLplayer == "" ) 
          None
       else
-         Some(HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer))
+         Some(HurelanBridge.parseAll(HurelanBridge.bridge, si.bridgeCTL2NLplayer))
    }
 
    def addFollower(p:Player, c:Constitution) =
@@ -308,15 +308,15 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
    {  val cTM = SystemWithTesting.currentTimeMillis
       log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
-      cc.startTime(cTM).save
-      cc.startTimeTranslation(cTM).save
-      cc.stopTime(cTM + duration).save
-      cc.stopTimeTranslation(cTM + duration).save
+      si.startTime(cTM).save
+      si.startTimeTranslation(cTM).save
+      si.stopTime(cTM + duration).save
+      si.stopTimeTranslation(cTM + duration).save
 
-      cc.answerPlayerCorrect(winSession).save
-      cc.serialize
-      PlayerCoreContent_join.create.player(currentPlayer).coreContent(cc).save
-      sesHis.coreContents ::= cc  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+      si.answerPlayerCorrect(winSession).save
+      si.serialize
+      PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
+      sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
 
       turnReleaseCandidateIntoVirginIfPossible
    }

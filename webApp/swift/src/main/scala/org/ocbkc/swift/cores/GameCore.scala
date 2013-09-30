@@ -37,7 +37,9 @@ import gameCoreHelperTypes._
 
 trait TraitGameCore
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
-   def initialiseCoreContent:CoreContent // <does this really belong here?>
+   val gameCoreName:String
+   def initialiseSessionInfo:SessionInfo // <does this really belong here?>
+   
    def generateText:String
    def algorithmicDefenceGenerator:FolnuminquaQuery
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
@@ -56,17 +58,31 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 
 // helper class for return type of generateQuestionAndCorrectAnswer
 
+class Efe(val playerIdInit:Long) extends TraitGameCore
+{  val gameCoreName="efe"
+   def initialiseSessionInfo:SessionInfo // <does this really belong here?>
+   def generateText:String
+   def algorithmicDefenceGenerator:FolnuminquaQuery
+   def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
+   def doAlgorithmicDefence:(scala.Boolean, String, String, String)
+   // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
+
+}
+
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
+   val gameCoreName="NotUna"
    val playerId = playerIdInit
    /* This doesn't only generate the text, but everything: the ctf text, the nl text, the question for the attack, and the answer based on the text. (Note that for the latter, the Clean program actually applies the reasoner to textCTLbyComputer, it is not "baked in".)      
    */
-   var cc:CoreContent = null
+   var si:SessionInfo = null
 
-   def initialiseCoreContent:CoreContent = 
+   def initialiseSessionInfo:SessionInfo = 
    {  // regex must contain exactly 1 group which will be returned as a match.
-      cc = new CoreContent
-      cc.userId(playerId)
+      si = new SessionInfo
+      si.gameCoreName(gameCoreName).save
+      si.userId(playerId).save
+
       def extractRegExGroup(regexStr:String, sbc: String):String =
       {  val regex = new Regex(regexStr)
          val m     = regex.findFirstMatchIn(sbc)
@@ -124,21 +140,21 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       err.println("generateNewSessionBundle: use as random number = " + ran)
       sbClean = ( ( SWIFTBINARIES + "/textgenerator " + ran ) !!)
       
-      cc.textNL = extractNl(sbClean)
-      cc.textCTLbyComputer = extractCTL(sbClean)
-      cc.questionNL = extractNLquestion(sbClean)
-      cc.questionCTLcomputer = extractQuestionCTLcomputer(sbClean)
-      cc.algoDefComputer = cc.questionCTLcomputer
-      cc.answerComputerCTL = extractAnswerCTL(sbClean)
-      cc.answerComputerNL = extractAnswerNL(sbClean)
-      cc.questionRelatedBridgeStats = extractQRBS(sbClean)
-      cc.subjectNL = extractSubjectNL(cc.questionRelatedBridgeStats)
+      si.textNL = extractNl(sbClean)
+      si.textCTLbyComputer = extractCTL(sbClean)
+      si.questionNL = extractNLquestion(sbClean)
+      si.questionCTLcomputer = extractQuestionCTLcomputer(sbClean)
+      si.algoDefComputer = si.questionCTLcomputer
+      si.answerComputerCTL = extractAnswerCTL(sbClean)
+      si.answerComputerNL = extractAnswerNL(sbClean)
+      si.questionRelatedBridgeStats = extractQRBS(sbClean)
+      si.subjectNL = extractSubjectNL(si.questionRelatedBridgeStats)
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      cc.hurelanRole1NL = extractRegExGroup("""HurelanStat \(_HurelanStat_ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\](""" + HurelanBridge.wordNLregexStr + """)""", cc.questionRelatedBridgeStats)
-      cc.hurelanRole2NL = extractRegExGroup("""HurelanStat \(_HurelanStat_ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\](""" + HurelanBridge.wordNLregexStr +""")""", cc.questionRelatedBridgeStats)
-      cc.bridgeCTL2NLcomputer = extractBridgeCTL2NLcomputer(sbClean)
+      si.hurelanRole1NL = extractRegExGroup("""HurelanStat \(_HurelanStat_ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\](""" + HurelanBridge.wordNLregexStr + """)""", si.questionRelatedBridgeStats)
+      si.hurelanRole2NL = extractRegExGroup("""HurelanStat \(_HurelanStat_ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\](""" + HurelanBridge.wordNLregexStr +""")""", si.questionRelatedBridgeStats)
+      si.bridgeCTL2NLcomputer = extractBridgeCTL2NLcomputer(sbClean)
 
-      cc
+      si
    }
 
    def algorithmicDefenceGenerator:FolnuminquaQuery = 
@@ -148,27 +164,27 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       // <&y2011.12.12.16:27:40& Build in test whether all required GameCore properties are set>
       err.println("algorithmicDefenceGenerator: start")
       // <&y2012.05.07.18:49:04& rewrite in SWiFT format>
-      val bridgeCTL2NLplayerCleanFormat = HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer)  match { case HurelanBridge.Success(result,_) => result; case _ => throw new RuntimeException(" Error while parsing bridgeCTL2NLplayer") }
-      // <&y2012.01.27.23:02:44& refactor this: put bridgeCTL2NLplayerCleanFormat in the CoreContent model, and check there whether it needs updates or not.>
-      val cmd_output = cleanBridge(SWIFTBINARIES + "/adGen", cc.bridgeCTL2NLcomputer + NEWLINE + cc.algoDefComputer + NEWLINE + bridgeCTL2NLplayerCleanFormat + NEWLINE) 
+      val bridgeCTL2NLplayerCleanFormat = HurelanBridge.parseAll(HurelanBridge.bridge, si.bridgeCTL2NLplayer)  match { case HurelanBridge.Success(result,_) => result; case _ => throw new RuntimeException(" Error while parsing bridgeCTL2NLplayer") }
+      // <&y2012.01.27.23:02:44& refactor this: put bridgeCTL2NLplayerCleanFormat in the SessionInfo model, and check there whether it needs updates or not.>
+      val cmd_output = cleanBridge(SWIFTBINARIES + "/adGen", si.bridgeCTL2NLcomputer + NEWLINE + si.algoDefComputer + NEWLINE + bridgeCTL2NLplayerCleanFormat + NEWLINE) 
       /* Example in scala format (instance of FolnuminquaQuery): Sharpest(NumResPat(Geq(), PatVar(numpatvarname), Var(boundvarname), PredApp(p,consts)))
      */
       val algoDefPlayerSerializedWithLiftJson = cmd_output
       implicit val formats = Serialization.formats(ShortTypeHints(List(classOf[Var], classOf[Constant]))) + (new EnumSerializer(ComparisonOperator))
       println("   trying to deserialize:" + algoDefPlayerSerializedWithLiftJson)
       val algoDefPlayerScalaFormat = Serialization.read[Sharpest](algoDefPlayerSerializedWithLiftJson) // <&y2012.05.16.22:35:10& is it possible to use the name of superclass of the case class Sharpest after the read?>
-      cc.algoDefPlayer = Some(algoDefPlayerScalaFormat)
+      si.algoDefPlayer = Some(algoDefPlayerScalaFormat)
       algoDefPlayerScalaFormat
    }
    // for now it is assumed that only ONE question is generated per session (which is never improved or changed.)
    def generateText:String = 
-   {  initialiseCoreContent
-      cc.textNL
+   {  initialiseSessionInfo
+      si.textNL
    }
 
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer =
-   {  new QuestionAndCorrectAnswer(cc.questionNL, cc.questionCTLcomputer) // it has already been done in this increment, so no additional calculations are required.
+   {  new QuestionAndCorrectAnswer(si.questionNL, si.questionCTLcomputer) // it has already been done in this increment, so no additional calculations are required.
    }
 
 
@@ -228,12 +244,12 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
    {  // 1. do algorithmic defence of player's translation  
       err.println("start doAlgorithmicDefence")
       // >>> SUC
-      // <&y2012.05.18.17:00:18& perhaps better to do the parsing in the CoreContents class at the moment the player's text ctl is provided. You have to parse it anyway to check for syntactic correctness.>
+      // <&y2012.05.18.17:00:18& perhaps better to do the parsing in the SessionInfos class at the moment the player's text ctl is provided. You have to parse it anyway to check for syntactic correctness.>
 
-      cc.textCTLbyPlayerScalaFormat match
+      si.textCTLbyPlayerScalaFormat match
       {  case Some(textCTLbyPlayerScalaFormat_Loc)  => 
-         {  cc.algoDefPlayer match
-            {  case Some(algoDefPlayerLoc) => cc.answerPlayerCTL = Folnuminqua.query(algoDefPlayerLoc, textCTLbyPlayerScalaFormat_Loc).toString // <&y2012.05.18.20:15:07& I shuld reteurn the result in the answer lang, not only a number (check this). For this rewrite tpfolnuminqua>
+         {  si.algoDefPlayer match
+            {  case Some(algoDefPlayerLoc) => si.answerPlayerCTL = Folnuminqua.query(algoDefPlayerLoc, textCTLbyPlayerScalaFormat_Loc).toString // <&y2012.05.18.20:15:07& I shuld reteurn the result in the answer lang, not only a number (check this). For this rewrite tpfolnuminqua>
                case None                   => throw new RuntimeException(" no algorithmic defence available, should always be present in this stage of the game.")
             }
          }
@@ -242,19 +258,19 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
 
       // 2. translate the answer in CTL to NL as well <&y2012.05.19.18:26:13& SHOULDDO do this later, first a quick fix: simply return the answer. The problem is that the reasoner in scala currently doesn't return the answer in the answer lang, but it just returns a number.>
       /*
-      err.println("   answerPlayerCTL = " + cc.answerPlayerCTL)
-      val bridgeCTL2NLplayerCleanFormat = HurelanBridge.parseAll(HurelanBridge.bridge, cc.bridgeCTL2NLplayer) match { case HurelanBridge.Success(result,_) => result; case _ => throw new RuntimeException(" Error while parsing bridgeCTL2NLplayer") }
-      if( !cc.answerPlayerCTL.equals("Unknown") )
-      {  cc.answerPlayerNL = cleanBridge(SWIFTBINARIES + "/answerInCTL2NL_CI", cc.answerPlayerCTL + NEWLINE + bridgeCTL2NLplayerCleanFormat + NEWLINE)
+      err.println("   answerPlayerCTL = " + si.answerPlayerCTL)
+      val bridgeCTL2NLplayerCleanFormat = HurelanBridge.parseAll(HurelanBridge.bridge, si.bridgeCTL2NLplayer) match { case HurelanBridge.Success(result,_) => result; case _ => throw new RuntimeException(" Error while parsing bridgeCTL2NLplayer") }
+      if( !si.answerPlayerCTL.equals("Unknown") )
+      {  si.answerPlayerNL = cleanBridge(SWIFTBINARIES + "/answerInCTL2NL_CI", si.answerPlayerCTL + NEWLINE + bridgeCTL2NLplayerCleanFormat + NEWLINE)
       }
       */
 
       // <&y2012.05.19.21:20:06& as soon as answerInCTL2NL is ported to scala, do the following differently (= translate answerPlayerCTL into answerPlayerNL> 
-      cc.answerPlayerNL = cc.answerComputerNL.replaceAll("""(minimally )[0-9]+""", "$1" + cc.answerPlayerCTL) // <_&y2012.05.19.21:11:46& dangerous, if there are other digits in the string...>
+      si.answerPlayerNL = si.answerComputerNL.replaceAll("""(minimally )[0-9]+""", "$1" + si.answerPlayerCTL) // <_&y2012.05.19.21:11:46& dangerous, if there are other digits in the string...>
 
-      cc.answerPlayerCorrect(cc.answerPlayerNL.equals(cc.answerComputerNL)).save
+      si.answerPlayerCorrect(si.answerPlayerNL.equals(si.answerComputerNL)).save
 
-      (cc.answerPlayerCorrect.is, cc.answerPlayerNL, "TODO: reasonercomment (needed?)", cc.answerPlayerCTL)
+      (si.answerPlayerCorrect.is, si.answerPlayerNL, "TODO: reasonercomment (needed?)", si.answerPlayerCTL)
       // <<< EUC
    }
 }

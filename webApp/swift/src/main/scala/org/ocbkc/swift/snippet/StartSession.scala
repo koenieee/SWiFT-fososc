@@ -90,9 +90,9 @@ class StartSession
          */
          implicit val formats = Serialization.formats(NoTypeHints)
          
-         //var testSer:String = Serialization.write(cc)
+         //var testSer:String = Serialization.write(si)
          //err.println("  sesHis serialised to: " + testSer)
-         //val testDeSer:CoreContent = Serialization.read[CoreContent](testSer)
+         //val testDeSer:SessionInfo = Serialization.read[SessionInfo](testSer)
          
          val testSer:String = Serialization.write(new TestPersistency())
          println("  Test1 = " + testSer)

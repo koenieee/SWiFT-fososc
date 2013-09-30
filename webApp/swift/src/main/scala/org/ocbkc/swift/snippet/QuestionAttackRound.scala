@@ -32,10 +32,10 @@ class QuestionAttackRound
                   "continue"      -> SHtml.submit("Continue", processSubmission)
                )
       bind( "qar", boundForm, 
-            "questionNL" ->   Text(sesCoord.cc.questionNL),
-            "questionCTL" ->  Text(sesCoord.cc.questionCTLcomputer),
+            "questionNL" ->   Text(sesCoord.si.questionNL),
+            "questionCTL" ->  Text(sesCoord.si.questionCTLcomputer),
             //"questionNo" ->   Text("TODO: questionNo"),
-            "computerAnswerFromSource" -> Text(sesCoord.cc.answerComputerNL)
+            "computerAnswerFromSource" -> Text(sesCoord.si.answerComputerNL)
           )
    }
 }

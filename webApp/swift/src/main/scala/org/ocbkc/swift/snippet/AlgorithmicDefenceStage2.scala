@@ -27,13 +27,13 @@ class AlgorithmicDefenceRoundStage2
       bind(  
          "top", ns,
          "continue" -> SHtml.submit("Continue", processSubmission), // <&y2011.11.09.13:39:03& change to "explain error" when applicable>
-         "questionNL"      -> Text(sesCoordLR.cc.questionNL), 
-         "algoDefPlayer"     -> Text(sesCoordLR.cc.algoDefPlayer.toString),
-         "answerFromSourceCTL"   -> Text(sesCoordLR.cc.answerComputerCTL),
-         "answerFromSourceNL"    -> Text(sesCoordLR.cc.answerComputerNL),
-         "answerFromTransCTL"    -> Text(sesCoordLR.cc.answerPlayerCTL),
-         "answerFromTransNL"     -> Text(sesCoordLR.cc.answerPlayerNL),
-         "conclusion"            -> Text( if (sesCoordLR.cc.answerPlayerCorrect) "The answer derived from your translation is completely correct. You won!" else "The answer derived from your translation is wrong! Buzinga! Got ya'!")
+         "questionNL"      -> Text(sesCoordLR.si.questionNL), 
+         "algoDefPlayer"     -> Text(sesCoordLR.si.algoDefPlayer.toString),
+         "answerFromSourceCTL"   -> Text(sesCoordLR.si.answerComputerCTL),
+         "answerFromSourceNL"    -> Text(sesCoordLR.si.answerComputerNL),
+         "answerFromTransCTL"    -> Text(sesCoordLR.si.answerPlayerCTL),
+         "answerFromTransNL"     -> Text(sesCoordLR.si.answerPlayerNL),
+         "conclusion"            -> Text( if (sesCoordLR.si.answerPlayerCorrect) "The answer derived from your translation is completely correct. You won!" else "The answer derived from your translation is wrong! Buzinga! Got ya'!")
          //"questionNo"      -> Text("TODO: questionNo")
       )
    }

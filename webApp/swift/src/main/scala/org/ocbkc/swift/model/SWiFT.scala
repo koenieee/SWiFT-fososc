@@ -86,7 +86,7 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
   */
 
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
-case class CoreContent( var textNL: String,
+case class SessionInfo( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer: String,
                         var textCTLbyComputer: String,
@@ -105,9 +105,10 @@ case class CoreContent( var textNL: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
                         var subjectNL:String
-                      ) extends LongKeyedMapper[CoreContent] with IdPK
-{  def getSingleton = CoreContentMetaMapperObj
+                      ) extends LongKeyedMapper[SessionInfo] with IdPK
+{  def getSingleton = SessionInfoMetaMapperObj
    // object player extends MappedLongForeignKey(this, Player)
+   object gameCoreName extends MappedString(this, 100)
    object startTime extends MappedLong(this)
    object stopTime extends MappedLong(this)
    object startTimeTranslation extends MappedLong(this)
@@ -206,109 +207,109 @@ case class CoreContent( var textNL: String,
 
    var parseErrorMsgTextCTLplayer:String = ""
    var parseWarningMsgTxtCTLplayer:String = ""
-   /* <&y2012.09.26.12:38:17& COULDDO perhaps refactor: call the serialize method from CoreContentMetaMapperObj.save (by overriding the latter method). Without additional checks, that will however be less efficient, because at each save invocation a lot will be written over and over to disk...> */
+   /* <&y2012.09.26.12:38:17& COULDDO perhaps refactor: call the serialize method from SessionInfoMetaMapperObj.save (by overriding the latter method). Without additional checks, that will however be less efficient, because at each save invocation a lot will be written over and over to disk...> */
    def serialize =
    {  implicit val formats = Serialization.formats(NoTypeHints)
-      var ccSer:String = Serialization.write(this)
-      println("  corecontents serialised to: " + ccSer)
-      // write session to file with unique name, e.g.: playerName/corecontent/
+      var siSer:String = Serialization.write(this)
+      println("  sessionInfos serialised to: " + siSer)
+      // write session to file with unique name, e.g.: playerName/sessionInfo/
 
       var prefix:String = userId.toString
 
       // <&y2012.01.07.17:59:19& MUSTDO: what happens with Player.CurrentUserId, if someone deletes his user account, will the number be reused for another, new, user, if so that would be a problem>
-      var outFile = new File(CORECONTENTOBJECTDIR + "/cc" + this.id )
+      var outFile = new File(SESSIONINFOOBJECTDIR + "/si" + this.id )
       println("   creating file: " + outFile.getAbsolutePath)
       // <&y2012.01.07.18:15:09& in following I get runtime exception: couldn't find file. Perhaps applicatio doesn't have right? Or perhaps I may not use / in filenames>
       outFile.getParentFile().mkdirs()
       // outFile.createNewFile() // <&y2011.12.23.13:39:00& is this required, or is the file automatically created when trying to write to it?>
       val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
-      out.println(ccSer)
+      out.println(siSer)
       out.close
 
-      val testDeSer:CoreContent = Serialization.read[CoreContent](ccSer)
+      val testDeSer:SessionInfo = Serialization.read[SessionInfo](siSer)
    }
 
-   def copyJsonSerializedFieldsFrom(cc:CoreContent) =
-   {  this.textNL = cc.textNL
-      this.questionNL = cc.questionNL
-      this.questionCTLcomputer = cc.questionCTLcomputer
-      this.textCTLbyComputer = cc.textCTLbyComputer
-      this.bridgeCTL2NLcomputer = cc.bridgeCTL2NLcomputer
-      this.algoDefComputer = cc.algoDefComputer
-      this.answerComputerCTL = cc.answerComputerCTL
-      this.answerComputerNL = cc.answerComputerNL
-      this.textCTLbyPlayer_  = cc.textCTLbyPlayer_ 
-      this.constantsByPlayer = cc.constantsByPlayer
-      this.predsByPlayer = cc.predsByPlayer
-      this.bridgeCTL2NLplayer = cc.bridgeCTL2NLplayer
-      this.algoDefPlayer = cc.algoDefPlayer
-      this.answerPlayerCTL = cc.answerPlayerCTL
-      this.answerPlayerNL = cc.answerPlayerNL
-      this.questionRelatedBridgeStats = cc.questionRelatedBridgeStats
-      this.hurelanRole1NL = cc.hurelanRole1NL
-      this.hurelanRole2NL = cc.hurelanRole2NL
-      this.subjectNL = cc.subjectNL
+   def copyJsonSerializedFieldsFrom(si:SessionInfo) =
+   {  this.textNL = si.textNL
+      this.questionNL = si.questionNL
+      this.questionCTLcomputer = si.questionCTLcomputer
+      this.textCTLbyComputer = si.textCTLbyComputer
+      this.bridgeCTL2NLcomputer = si.bridgeCTL2NLcomputer
+      this.algoDefComputer = si.algoDefComputer
+      this.answerComputerCTL = si.answerComputerCTL
+      this.answerComputerNL = si.answerComputerNL
+      this.textCTLbyPlayer_  = si.textCTLbyPlayer_ 
+      this.constantsByPlayer = si.constantsByPlayer
+      this.predsByPlayer = si.predsByPlayer
+      this.bridgeCTL2NLplayer = si.bridgeCTL2NLplayer
+      this.algoDefPlayer = si.algoDefPlayer
+      this.answerPlayerCTL = si.answerPlayerCTL
+      this.answerPlayerNL = si.answerPlayerNL
+      this.questionRelatedBridgeStats = si.questionRelatedBridgeStats
+      this.hurelanRole1NL = si.hurelanRole1NL
+      this.hurelanRole2NL = si.hurelanRole2NL
+      this.subjectNL = si.subjectNL
    }
 }
 
-// "join" of player and corecontent
-case class PlayerCoreContent_join extends LongKeyedMapper[PlayerCoreContent_join] with IdPK
-{  def getSingleton = PlayerCoreContent_join
+// "join" of player and sessionInfo
+case class PlayerSessionInfo_join extends LongKeyedMapper[PlayerSessionInfo_join] with IdPK
+{  def getSingleton = PlayerSessionInfo_join
    object player extends MappedLongForeignKey(this, Player)
-   object coreContent extends MappedLongForeignKey(this, CoreContentMetaMapperObj)
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)
 }
 
-object PlayerCoreContent_join extends PlayerCoreContent_join with LongKeyedMetaMapper[PlayerCoreContent_join]
-{  def join(player:Player, cc:CoreContent)
-   {  this.create.player(player).coreContent(cc)
+object PlayerSessionInfo_join extends PlayerSessionInfo_join with LongKeyedMetaMapper[PlayerSessionInfo_join]
+{  def join(player:Player, si:SessionInfo)
+   {  this.create.player(player).sessionInfo(si)
    }
 }
 
 
-object CoreContentMetaMapperObj extends CoreContent with LongKeyedMetaMapper[CoreContent]
+object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[SessionInfo]
 {  override def create =
    {  super.create
    }
    
 
    // possibly confusing: createInstance is used when READING info. that was made persistent... 
-   override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,CoreContent) => Unit]]) : CoreContent =
-   {  val cc = super.createInstance(dbId, rs, mapFuncs)
-      val ccFileName = CORECONTENTOBJECTDIR + "/cc" + cc.id
-      val ccFile  = new File( ccFileName )
+   override def createInstance(dbId: ConnectionIdentifier, rs : ResultSet, mapFuncs: List[Box[(ResultSet,Int,SessionInfo) => Unit]]) : SessionInfo =
+   {  val si = super.createInstance(dbId, rs, mapFuncs)
+      val siFileName = SESSIONINFOOBJECTDIR + "/si" + si.id
+      val siFile  = new File( siFileName )
       implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
-      val in:BufferedReader   = new BufferedReader(new FileReader(ccFile))
+      val in:BufferedReader   = new BufferedReader(new FileReader(siFile))
       var inStr:String        = in.readLine
-      if( inStr == null) throw new RuntimeException("   Problems reading " + ccFileName )
-      val ccLoc:CoreContent   = Serialization.read[CoreContent](inStr)
-      cc.copyJsonSerializedFieldsFrom(ccLoc)
+      if( inStr == null) throw new RuntimeException("   Problems reading " + siFileName )
+      val siLoc:SessionInfo   = Serialization.read[SessionInfo](inStr)
+      si.copyJsonSerializedFieldsFrom(siLoc)
 
       in.close 
 
-      cc
+      si
    }
 }
 
 // <&y2012.01.08.18:25:04& or should this object belong to Coord?>
 class SessionHistory
-{  var coreContents:List[CoreContent] = Nil
-   def correctCcs = coreContents.filter( cc => cc.answerPlayerCorrect )
+{  var sessionInfos:List[SessionInfo] = Nil
+   def correctCcs = sessionInfos.filter( si => si.answerPlayerCorrect )
 
-   def totalNumber = coreContents.length
-   def numberCorrect = coreContents.count( cc => cc.answerPlayerCorrect )
+   def totalNumber = sessionInfos.length
+   def numberCorrect = sessionInfos.count( si => si.answerPlayerCorrect )
 
    // import Ordering.LongOrdering
-   object OrderingOnDurationTranslation extends Ordering[CoreContent]
-   {  def compare(cc1:CoreContent, cc2:CoreContent) = scala.math.Ordering.Long.compare( cc1.durationTranslation.get, cc2.durationTranslation.get  )
+   object OrderingOnDurationTranslation extends Ordering[SessionInfo]
+   {  def compare(si1:SessionInfo, si2:SessionInfo) = scala.math.Ordering.Long.compare( si1.durationTranslation.get, si2.durationTranslation.get  )
    }   
 
    // <&y2012.01.11.23:37:48& couldo refactor: calculate this directly using a map to duration first, and then selecting the min>
    def shortestTranslationTime:Option[Double] = sessionWithShortestDurationAndCorrectTranslation match 
       {  case None => None 
-         case Some(cc) => Some(cc.durationTranslation.get.toDouble/1000)
+         case Some(si) => Some(si.durationTranslation.get.toDouble/1000)
       }
 
-   def sessionWithShortestDurationAndCorrectTranslation:Option[CoreContent] = correctCcs match 
+   def sessionWithShortestDurationAndCorrectTranslation:Option[SessionInfo] = correctCcs match 
       {  case Nil => None 
          case _   => Some(correctCcs.min( OrderingOnDurationTranslation  ))
       }
