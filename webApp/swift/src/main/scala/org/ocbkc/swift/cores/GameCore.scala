@@ -57,6 +57,7 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 */
 
 // helper class for return type of generateQuestionAndCorrectAnswer
+/* { BUC
 
 class Efe(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
@@ -68,6 +69,7 @@ class Efe(val playerIdInit:Long) extends TraitGameCore
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
 }
+*///} EUC
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
