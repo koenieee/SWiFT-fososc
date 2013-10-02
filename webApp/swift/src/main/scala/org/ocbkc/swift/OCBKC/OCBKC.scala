@@ -791,10 +791,10 @@ object PlayerScores
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
   
-   /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith).
+   /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith). So, of the list of all CoreContent objects which are correct, only the first n will be returned.
      */
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
-   {  log("coreContentObjectsWhichCount ")
+   {  log("coreContentObjectsWhichCount called")
 
       val all = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == false)    //testing: false. Must BE TRUE!!
         val mini =     all.size
@@ -1151,7 +1151,7 @@ abstract class ConstiSelectionProcedure
   */
 case object NoProc extends ConstiSelectionProcedure
 
-/** The OneToStartWith constitution selection procedure, allows a new Player (P) to freely select exactly one consti from the list of all constis, to guide P to play the game. As long as P has not played certain minimal (globally fixed) number of game sessions, P may and cannot see the other constitutions. After this minimal amount, however, all constis will become visible, and P can, from that moment on, participate in constigames.
+/** The OneToStartWith constitution selection procedure, allows a new Player (P) to freely select exactly one consti from the list of all constis, to guide P to play the game. As long as P has not played a certain minimal (globally fixed) number of game sessions, P may and cannot see the other constitutions. After this minimal amount, however, all constis will become visible, and P can, from that moment on, participate in constigames.
   */
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
