@@ -791,7 +791,7 @@ object PlayerScores
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
   
-   /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith). So, of the list of all CoreContent objects which are correct, only the first n will be returned.
+   /** Only returns all CoreContent objects which represent sessions which are correct and took place before access to all constis (see documentation of OneToStartWith). So, of the list of all CoreContent objects which are correct and ordered by starttime, only the first  n  will be returned, where n = OneToStartWith.minSessionsB4access2allConstis.
      */
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
    {  log("coreContentObjectsWhichCount called")
