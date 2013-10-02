@@ -38,8 +38,15 @@ import gameCoreHelperTypes._
 trait TraitGameCore
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
    val gameCoreName:String
-   def initialiseSessionInfo:SessionInfo // <does this really belong here?>
-   
+   val playerId:Long
+   var si:SessionInfo
+
+   def initialiseSessionInfo:SessionInfo = // <does this really belong here?>
+   {  si = new SessionInfo
+      si.gameCoreName(gameCoreName).save
+      si.userId(playerId).save
+      si
+   }
    def generateText:String
    def algorithmicDefenceGenerator:FolnuminquaQuery
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
@@ -57,11 +64,15 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 */
 
 // helper class for return type of generateQuestionAndCorrectAnswer
-/* { BUC
+/*/ { BUC
 
 class Efe(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
-   def initialiseSessionInfo:SessionInfo // <does this really belong here?>
+   def initialiseSessionInfo:SessionInfo =
+   {  super.initialiseSessionInfo
+      null // <finish>
+   }
+
    def generateText:String
    def algorithmicDefenceGenerator:FolnuminquaQuery
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
@@ -75,16 +86,13 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
    val gameCoreName="NotUna"
    val playerId = playerIdInit
+   var si:SessionInfo = null
    /* This doesn't only generate the text, but everything: the ctf text, the nl text, the question for the attack, and the answer based on the text. (Note that for the latter, the Clean program actually applies the reasoner to textCTLbyComputer, it is not "baked in".)      
    */
-   var si:SessionInfo = null
 
-   def initialiseSessionInfo:SessionInfo = 
+   override def initialiseSessionInfo:SessionInfo = 
    {  // regex must contain exactly 1 group which will be returned as a match.
-      si = new SessionInfo
-      si.gameCoreName(gameCoreName).save
-      si.userId(playerId).save
-
+      super.initialiseSessionInfo
       def extractRegExGroup(regexStr:String, sbc: String):String =
       {  val regex = new Regex(regexStr)
          val m     = regex.findFirstMatchIn(sbc)
