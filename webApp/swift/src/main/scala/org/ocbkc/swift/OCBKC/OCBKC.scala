@@ -796,11 +796,9 @@ object PlayerScores
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
    {  log("coreContentObjectsWhichCount called")
 
-      val all = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == false)    //testing: false. Must BE TRUE!!
-        val mini =     all.size
+      val all = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == false).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, OneToStartWith.minSessionsB4access2allConstis)  //testing: false. Must BE TRUE!!
 
-    // if(mini > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("  corecontent > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
-         all
+      all
      /* Hints
     C- (study lift Mapper framework)     C
     C- study the doc of CoreContent       C
@@ -813,61 +811,41 @@ object PlayerScores
 
    /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
     */
-   def shortestTranslation(p: Player):Option[(CoreContent, Long)] =
-   {  log("[MUSTDO]")
+   def shortestTranslation(p: Player):List[CoreContent] =
+   {  log("shortestTranslation called")
       /* Hints:
          - IMPORTANT: ----> use coreContentObjectsWhichCount <-----
          - partly imitate what happens in class SessionHistory to calculate shortest durations.
       */
 
-
-    //println(coreContentObjectsWhichCount(p))
-
-//val starttime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
-      
-      //val stoptime = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.stopTime.is)
-      
-     // println((stoptime zip starttime).map (c => {c._1-c._2}).reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
-     
-     //todo recursive pattern matching::
-     //Koen: must be faster right? Maybe possible to do all this in one query to the database instead of 2
-   //  val all_players = PlayerCoreContent_join.findAllFields(Seq[SelectableField](PlayerCoreContent_join.player)).map(_.player.is).distinct
-
-               val coretent = coreContentObjectsWhichCount(p)
-
-     val zippie = (coretent.map(_.stopTime.is) zip coretent.map(_.startTime.is))
-      val ids  = coretent.map(_.id.is)
+        val coretent = coreContentObjectsWhichCount(p)
+            //      println(coretent)
+val fastest:List[CoreContent] = coretent.sortBy(x=> x.durationTranslation) //first one is the fastest.
 
 
-     //(zippie.map(c => c._1._2 - c._2).reduceRight((x,v) => if (x < v) x else v))//.reduceRight((x,v) => if (x < v) x else v)) //shortest time per player
+fastest
 
-     val test = zippie.map(c => c._1 - c._2).zip (ids)
-     val new_tent = coretent.zip (ids)
-
- new_tent.find(x=> x._2 == test.min._2)
-   //  filter( cc => cc.answerPlayerCorrect == false ).map(_.startTime.is)
-    // println(all_players)
    }
 
    /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
      */
    def overallShortestTranslation():CoreContent = 
    {  log("overallShortestTranslation called")
-
+    //  println()
      val all_players = Player.findAll
-
-    val ls = all_players.map{
-      x  => shortestTranslation(x) match{
-        case Some(thing) =>  Map(x.id->(thing._1.stopTime - thing._1.startTime).toDouble/1000 )
-        case None => None
+      // CoreContent(a,b,c,d,e,f)
+   //  println(shortestTranslation(all_players(0)))
+    val ls:List[Option[CoreContent]] = all_players.map{
+     x  =>  shortestTranslation(x).headOption
       }
+  //  ls.sortBy(x=>x.get.durationTranslation)
+      println("fastest one:" + ls )
 
 
-
-     }
+  //   }
     // PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
 
-     println(ls);
+   //  println(ls);
               //TODO: Get MIN of LIST(Map), and select the CoreContent from that player
      //shortestTranslation()
       /* Hints:
