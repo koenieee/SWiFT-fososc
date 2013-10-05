@@ -24,13 +24,14 @@ class PlayerStats
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
-      val test = PlayerScores.shortestTranslation(player)//it looks like its working, for all players  //0 //averageDurationTranslation(player, -1)
-     PlayerScores.overallShortestTranslation();
+      val own_fastest_trans = PlayerScores.shortestTranslation(player).headOption match{case None => "None"; case Some(x) => x.durationTranslation.get }//it looks like its working, for all players  //0 //averageDurationTranslation(player, -1)
+     val fastest_trans_time = PlayerScores.overallShortestTranslation() match{case None => "None"; case Some(x) => x.durationTranslation.get }
             bind( "top", ns,
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
             "numberCorrect"     -> Text("" + sesCoord.sesHis.numberCorrect),
-            "playerShortest"     -> Text("" + test),
+            "playerShortest"     -> Text("" + own_fastest_trans ),
+              "overallShortest"     -> Text("" + fastest_trans_time ),
             "percentageCorrect" -> Text("" + optionToUI(sesCoord.sesHis.percentageCorrect))
           )
    }

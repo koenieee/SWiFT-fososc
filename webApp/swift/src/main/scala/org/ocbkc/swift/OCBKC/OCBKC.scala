@@ -829,7 +829,7 @@ fastest
 
    /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
      */
-   def overallShortestTranslation():CoreContent = 
+   def overallShortestTranslation():Option[CoreContent] =
    {  log("overallShortestTranslation called")
     //  println()
      val all_players = Player.findAll
@@ -839,7 +839,8 @@ fastest
      x  =>  shortestTranslation(x).headOption
       }
   //  ls.sortBy(x=>x.get.durationTranslation)
-      println("fastest one:" + ls )
+    val sorted_fastest = ls.flatten.sortBy(x=> x.durationTranslation)
+     sorted_fastest.headOption
 
 
   //   }
@@ -855,7 +856,7 @@ fastest
 
       //val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
       //todo by koen
-      null // <-- to be replaced by the correct result
+     // null // <-- to be replaced by the correct result
    }
 
    /*
