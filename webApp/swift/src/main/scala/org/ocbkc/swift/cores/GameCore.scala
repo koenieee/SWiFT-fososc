@@ -48,7 +48,7 @@ trait TraitGameCore
       si
    }
    def generateText:String
-   def algorithmicDefenceGenerator:FolnuminquaQuery
+   def algorithmicDefenceGenerator:FolnuminquaQuery =
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
    def doAlgorithmicDefence:(scala.Boolean, String, String, String)
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
@@ -64,13 +64,26 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 */
 
 // helper class for return type of generateQuestionAndCorrectAnswer
-/*/ { BUC
+//*/ { BUC
 
 class Efe(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
    def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
       null // <finish>
+      si.textNL = "Todo algorithm for generating efechallenge natural language text" 
+      si.textCTLbyComputer = "TODO CTL text by Computer"
+      si.questionNL = "TODO question NL"
+      si.questionCTLcomputer = "TODO questionCTLcomputer"
+      si.algoDefComputer = si.questionCTLcomputer
+      si.answerComputerCTL = "answer computer ctl"
+      si.answerComputerNL = "answer computer NL"
+      si.questionRelatedBridgeStats = "questionRelatedBridgeStats"
+      si.subjectNL = "subjectNL"
+      // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
+      si.hurelanRole1NL = "hurelanRole1NL"
+      si.hurelanRole2NL = "hurelanRole2NL"
+      si.bridgeCTL2NLcomputer = "bridgeCTL2NLcomputer"
    }
 
    def generateText:String
@@ -80,7 +93,7 @@ class Efe(val playerIdInit:Long) extends TraitGameCore
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
 }
-*///} EUC
+//} EUC
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
