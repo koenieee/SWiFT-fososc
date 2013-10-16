@@ -4,7 +4,7 @@ import System._
 import java.io._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
-import org.ocbkc.swift.parser.CLIwithFileInput
+import org.ocbkc.swift.test.CLIwithFileInput
 import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
 // import scala.util.parsing.combinator.Parsers._

@@ -8,6 +8,7 @@ import org.ocbkc.swift.tpwrap._
 import query._
 import System.err.println
 import java.io._
+import org.ocbkc.swift.test.CLIwithFileInput
 
 /* Assumed is: args(0) = input file, where first line is list of space separated constantnames, the rest is the folminqua file */
 object TestTpFolnuminquaCLI extends CLIwithFileInput

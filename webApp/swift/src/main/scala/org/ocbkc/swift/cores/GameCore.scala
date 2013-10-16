@@ -48,7 +48,7 @@ trait TraitGameCore
       si
    }
    def generateText:String
-   def algorithmicDefenceGenerator:FolnuminquaQuery =
+   def algorithmicDefenceGenerator:FolnuminquaQuery
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
    def doAlgorithmicDefence:(scala.Boolean, String, String, String)
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
@@ -68,7 +68,9 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 
 class Efe(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
-   def initialiseSessionInfo:SessionInfo =
+   var si:SessionInfo = null
+   val playerId = playerIdInit
+   override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
       null // <finish>
       si.textNL = "Todo algorithm for generating efechallenge natural language text" 
@@ -84,12 +86,13 @@ class Efe(val playerIdInit:Long) extends TraitGameCore
       si.hurelanRole1NL = "hurelanRole1NL"
       si.hurelanRole2NL = "hurelanRole2NL"
       si.bridgeCTL2NLcomputer = "bridgeCTL2NLcomputer"
+      si
    }
 
-   def generateText:String
-   def algorithmicDefenceGenerator:FolnuminquaQuery
-   def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
-   def doAlgorithmicDefence:(scala.Boolean, String, String, String)
+   def generateText = "todo"
+   def algorithmicDefenceGenerator:FolnuminquaQuery = null // <TODO>
+   def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
+   def doAlgorithmicDefence:(scala.Boolean, String, String, String) = null // <TODO>
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
 }

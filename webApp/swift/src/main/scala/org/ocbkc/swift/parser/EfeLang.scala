@@ -9,17 +9,27 @@ None so far
 */
 
 package org.ocbkc.swift.parser
-{
+
 import scala.collection.JavaConversions._
 import scala.util.parsing.combinator._
 import System._
 import java.io._
 import org.ocbkc.swift.logilang._
-// import org.ocbkc.swift.logilang.FOLutils // <&y2012.04.04.20:10:13& remove this line when debugging done>
+import org.ocbkc.swift.test.CLIwithFileInput
 
-class Efe extends ...
-{  def efeDocument =
-   "B("
+object Efe2FOLtheoryParserCLI extends CLIwithFileInput
+{  def main(args: Array[String])
+   {  applyFunctionToFile(Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, _).toString, args(0))
+   }
+}
+// List((((B~'po')~akwasi)~'pc'), (((F~()~kjdkf)~)))
+class Efe2FOLtheoryParser extends AlphaGroupParser
+{  def efeDocument = repsep(sentence, rep(NL)) <~ rep(NL) ^^ { sentList => sentList.mkString("\n") }
+   def sentence = (((((spaces ~> predId) <~ "(") ~ constantId) <~ ")") <~ spaces) ^^ { case predId ~ constantId => predId + "(" + constantId + ")" }
+   def predId = "B" | "F"
+   def constantId = id
 }
 
-
+object Efe2FOLtheoryParser extends Efe2FOLtheoryParser
+{
+}

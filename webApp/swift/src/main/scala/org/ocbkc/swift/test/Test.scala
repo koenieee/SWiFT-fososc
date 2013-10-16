@@ -95,4 +95,19 @@ object TestHelpers
    }
 }
 
+class CLIwithFileInput
+{  def applyFunctionToFile(function:String => String, filename:String) 
+   {  println("inputfilename: " + filename)
+      
+      //var inFile = new File(arg(0))
+      //val in:BufferedReader = new BufferedReader(new FileReader(inFile))
+      //var input:String
+      val source = scala.io.Source.fromFile(filename)
+      val lines = source.mkString // <&y2012.02.19.00:00:27& careful: this always adds a newline after each string in the source, even if it is a last line without a newline. Really so? Make SLI from this>
+      source.close()
+      println("inputfile: \n" + lines)
+      println( function(lines) )
+   }
+}
+
 }
