@@ -1,8 +1,6 @@
 /*
 Part of SWiFT game (c) Chide Groenouwe
 
-
-
 ### CONVENTIONS
 None so far
 
@@ -25,7 +23,13 @@ object Efe2FOLtheoryParserCLI extends CLIwithFileInput
 // List((((B~'po')~akwasi)~'pc'), (((F~()~kjdkf)~)))
 class Efe2FOLtheoryParser extends AlphaGroupParser
 {  def efeDocument = repsep(sentence, rep(NL)) <~ rep(NL) ^^ { sentList => sentList.mkString("\n") }
-   def sentence = (((((spaces ~> predId) <~ "(") ~ constantId) <~ ")") <~ spaces) ^^ { case predId ~ constantId => predId + "(" + constantId + ")" }
+   def sentence = (((((spaces ~> predId) <~ "(") ~ constantId) <~ ")") <~ spaces) ^^ {
+      case predId ~ constantId =>
+      {  val pred = Predicate(predId, 1)
+         PredApp(pred, List(Constant(constantId)))
+      }
+   }
+
    def predId = "B" | "F"
    def constantId = id
 }
