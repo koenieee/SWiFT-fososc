@@ -22,7 +22,18 @@ object Efe2FOLtheoryParserCLI extends CLIwithFileInput
 }
 // List((((B~'po')~akwasi)~'pc'), (((F~()~kjdkf)~)))
 class Efe2FOLtheoryParser extends AlphaGroupParser
-{  def efeDocument = repsep(sentence, rep(NL)) <~ rep(NL) ^^ { sentList => sentList.mkString("\n") }
+{  def efeDocument = repsep(sentence, rep(NL)) <~ rep(NL) ^^ { case sentList =>
+      val ft = new FOLtheory
+      ft.addStats(sentList) match
+      {  case None => { println("efe2FOLtheoryParser returned:\n" + ft); ft } // successful
+         case Some(Tuple2(s,i)) =>
+         {  val m = "efe2FOLtheoryParser.efeDocument: my dear, dear beloved, friend, a fatal error occurred, couldn't add one or more statement(s) to the Scala FOLtheory class!"
+            println(m)
+            throw new RuntimeException(m)
+         }
+      }
+   }
+
    def sentence = (((((spaces ~> predId) <~ "(") ~ constantId) <~ ")") <~ spaces) ^^ {
       case predId ~ constantId =>
       {  val pred = Predicate(predId, 1)
