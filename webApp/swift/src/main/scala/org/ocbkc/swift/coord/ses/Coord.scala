@@ -15,7 +15,7 @@ import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.test._
 import System._
-import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
+import org.ocbkc.swift.cores.{TraitGameCore, EfeLang}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import net.liftweb.json._
 import java.io._
@@ -59,7 +59,7 @@ case object NotInFluencySession extends RoundFluencySession
 trait CoreTrait
 {  var si: SessionInfo = null
    val sesHis = new SessionHistory()
-   val gameCore: TraitGameCore = new NotUna(currentPlayer.id.get)
+   val gameCore: TraitGameCore = new EfeLang(currentPlayer.id.get)
 
    def currentPlayer:Player
    val currentPlayerId = currentPlayer.id.get
