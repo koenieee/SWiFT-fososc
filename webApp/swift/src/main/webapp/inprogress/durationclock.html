@@ -1,56 +1,40 @@
 <html>
 <head>
-<title>Countdown Clock Swift Fosocs</title>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js" type="text/javascript"></script>
-<script>
-/*********************************************************************
-//Ik heb twee lopende klokjes. 1tje loopt per 1 seconde en de ander loopt per 1 milliseconde, het probleem alleen is dat ze (nog) niet op elkaar zijn afgestemd.
-//Je moet maar eens goed kijken: want als de seconde verschuift is de milliseconde b.v. bij de 4 terwijl dat bij de 9 of 10 zou moeten zijn.
-//Klok heb ik zelf gemaakt want ik kon geen goed voorbeeld vinden.
-*/////////////////////////////////////////////////////////////////////
+<title>Timer</title>
+<script type="text/javascript">
+	var seconds = 0;
+	var minutes = 0;
+	
+function zeroPad(time) {
+	var numZeropad = time + '';
+	while(numZeropad.length < 2) {
+		numZeropad = "0" + numZeropad;
+		}
+	return numZeropad;
+	}
 
-    $(document).ready(function(){
-   	 var current = 0;
-   	 var mini = 0;
-   	 var mini_stop = 9;
-   	 var ding;
-   	 var f=function()
-   		 {
-   			 ding = current;
-   			 ++current
-   		 }
+	function countSecs() {
+    	seconds++;
 
-   	 var x = function()
-   	 {   		 
-   			 $('#sec').text(ding + '.' + mini);
-   			 
-   	 
-   			 if(mini == mini_stop)
-   			 {
-   				 mini = 0;
-   			 }
-   			 
-   			 ++mini;
-   		 
-   	 }
-   	 setInterval(f, 1000);
-   	 setInterval(x, 100);
-   	 //intervalID_mini = setInterval(x, mini);
-   	 //f();
-   	 //x();
+		if (seconds > 9) {
+    		 minutes++;
+    		 seconds = 0;
+  			}
+		document.getElementById("timeBox").innerHTML = "<center>" + minutes + "." + seconds+"</center>";
+ 		}
 
 
-   	 
-    });
-
+     window.setInterval(countSecs,100);
+ 
 
 </script>
 </head>
 <body>
-<Br><br>
-<font size="16"><b><center>Countdown clock in Javascript
-<p id="sec"></p>
-Leuk zo'n klokje, maar ze lopen wel asynchroon :P :(
+
+
+<font size="16"><b><center>Countdown clock in Javascript</center>
+<div id="timeBox"></div>
+
 
 </body>
 </html>

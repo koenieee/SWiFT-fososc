@@ -31,7 +31,8 @@ class BridgeConstruction
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.cc.textCTLbyComputer
 
    def render(ns: NodeSeq): NodeSeq =
-   {  sesCoordLR.URstartBridgeConstruction
+   {  if(!sesCoordLR.URstartBridgeConstruction)
+         S.redirectTo("TODOpageCorrespondingWithLatestRoundFluencySession")
       
       def processSubmission() = 
       {  println("BridgeConstruction.processSubmission called")

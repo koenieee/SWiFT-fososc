@@ -1,7 +1,23 @@
 <lift:surround with="default" at="content">
+<script src="../javascript/jquery-1.9.1.js"></script>
+<link rel="stylesheet" href="../javascript/jquery-ui.css" />
+<script src="../javascript/jquery-ui.js"></script>
+<script>
+$(function() {
+$( '#progressbar' ).progressbar({
+value: 48
+});
+
+</script>
 <h1>Question Attack Round</h1>
+	<div id="progressbar"></div>
+
 <lift:QuestionAttackRound form="POST">
 
+	<center>
+	<lift:createProgress.text />
+</center>
+<Br/>
 <!-- <&y2011.11.23.21:25:44&  only one question now, if more questions, you can make use of the already defined questinoNo pattern> -->
 <h2>Question in English</h2> <!-- qar = question attack round -->
 <qar:questionNL />
@@ -15,4 +31,6 @@
 <form:continue />
 
 </lift:QuestionAttackRound>
+<br /><br />
+
 </lift:surround>

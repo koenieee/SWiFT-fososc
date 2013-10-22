@@ -37,36 +37,24 @@ class AdminStats
 {
 	println("AdminStats  page is called")
 	
+	val players_current_loggedin = Player.loggedInUsers()
 
-//val test = Player.loggedIn match {
- // case Full(user) => "Hello " + user.firstName + "!"
- // case _ => "Who are you? Please login."
-//}
-	//def testLoggedIn(page : String)
-   ///   val test = Player.currentUser.open_!
-      //user.children.flatMap(child.name)
-	
-	//val players_current_loggedin = test
-	var n_blaat = "test";
-	//Player.bulkDelete_!!(By(Player.superUser,false))
-	 
-	val players_current_loggedin = Player.loggedInUsers().toString();
-   
 
-	def settings (xhtml : NodeSeq) : NodeSeq =
-	{
+	def settings() =
+	{    // println(players_current_loggedin);
 
-		  bind("entry", xhtml,
-			"LoggedPlayers" -> SHtml.text(players_current_loggedin, n_blaat = _))
-			
+			"#row *" #> players_current_loggedin.map{x =>
+        "#userid *" #> x.id.toString &
+          "#username *" #> x.firstName &
+          "#email *" #> x.email &
+      "#subs *" #> x.firstChosenConstitution.get
+      }
 
-	}
+
+  }
 
 }
-object SessionState {
 
-   object loggedInUserName extends SessionVar[Box[String]](Empty)
-}
 
 }
 

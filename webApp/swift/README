@@ -21,3 +21,10 @@ Instruction to use it:
 - If you want to use the data produced during this simulation after a restart, change the SIMULATEPLAYINGWITHJARA back to false. This is recommended, if you are in the cyclic process of testing/coding SWiFT, because simulating over and over again is very time consuming.
 - If you want to run the simulation again: repeat the same process.
 - If you want to start with a clean slate, and stop simulation, then suffice with running cleanAllPersistencyInfo and set SIMULATEPLAYINGWITHJARA to false.
+
+3. Running SWiFT with backup solution
+
+To run SWiFT with backup option use this command:
+```
+mvn antrun:run jetty:run
+```

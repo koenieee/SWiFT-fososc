@@ -19,6 +19,7 @@ class FinaliseSession
 
    def render(ns: NodeSeq): NodeSeq =
    {  //var playerAnswerTF = ""
+      sesCoordLR.URfinaliseSession
       
       def processSubmission() = 
       {  println("processSubmission called")

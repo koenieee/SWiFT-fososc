@@ -37,15 +37,16 @@ object Player extends Player with MetaMegaProtoUser[Player] {
    
    //information about logged in users:
    
-var LoggedInUsers1 = List[String]();
+var LoggedInUsers1 = List[Player]();
 
 //def isLoggedIn(who: Player) = currentUserIds.contains(who.id.is) // not using this
 
-def loggedInUsers(): List[String] = LoggedInUsers1.toList
+def loggedInUsers(): List[Player] = LoggedInUsers1
 
-override def logUserIn(who: Player) {super.logUserIn(who); this.synchronized( LoggedInUsers1  ::= who.id.is.toString())}
+def remove(num: Player, list: List[Player]) = list diff List(num)
+override def logUserIn(who: Player) {super.logUserIn(who); this.synchronized( LoggedInUsers1  ::= who) }
 
-override def logUserOut() {this.synchronized( LoggedInUsers1  ::= Player.currentUserId.toString()); super.logUserOut()} //==> Private Object, so not working ATM
+override def logUserOut() {this.synchronized(LoggedInUsers1 = remove(Player.currentUser match { case Full(x) => x.thisPlayer},LoggedInUsers1)); super.logUserOut()} //==> Private Object, so not working ATM
 
 }
 
@@ -101,6 +102,10 @@ class Player extends MegaProtoUser[Player] {
    def followedConstis:List[ConstiId] =
    {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.is}
    }
+   
+   //object deletePlayer extends MappedString(this, 100)
+  // object createPlayer extends MappedString(this, 100)
+   
 }
 
 }

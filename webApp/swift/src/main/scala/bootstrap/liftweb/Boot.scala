@@ -16,7 +16,7 @@ import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.OCBKCinfoPlayer._
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.persist.PersDataUpgrader4SWiFT
-import org.eclipse.jgit.api._
+import org.ocbkc.swift.jgit.InitialiseJgit
 import java.io._
 import org.ocbkc.swift.snippet.sesCoord
 import scala.util.Random
@@ -29,7 +29,7 @@ import org.ocbkc.swift.coord.ses._
 
 import org.ocbkc.generic.random._
 import ocbkc.swift.test.simulation.jara._
-
+import net.liftmodules.JQueryModule
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -37,6 +37,11 @@ import ocbkc.swift.test.simulation.jara._
  */
 class Boot {
   def boot {
+	  
+
+
+	JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
+	JQueryModule.init()
    log("Boot.boot called")
    
    PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
@@ -187,6 +192,8 @@ class Boot {
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("adminStats", "adminStats" :: Nil, "Admin stats", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+      Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+
       Menu(
          Loc(
             "constitution",
@@ -257,18 +264,7 @@ class Boot {
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
     LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
 
-    // Initialise git repository for constitutions if there isn't one created yet.
-    // Check whether there is already git tracking
-    val gitfile = new File(GlobalConstant.CONSTITUTIONHTMLDIR + "/.git")
-    if( gitfile.exists)
-    { log("   .git file exists in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", so everything is under (version) control, my dear organic friend...")
-    }
-    else
-    { log("   .git file doesn't exist yet in " + GlobalConstant.CONSTITUTIONHTMLDIR + ", creating new git repo...")
-      val jgitInitCommand:InitCommand = Git.init
-      jgitInitCommand.setDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-      jgitInitCommand.call
-    }
+   InitialiseJgit()
 
  // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 
@@ -316,11 +312,10 @@ class Boot {
    log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
    val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
    {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
-                              GlobalConstant.adminOpt = Some(player)
                               player 
                            } // do nothing, player exists.
       case _            => {  log("   Doesn't exist: creating it...")
-                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfghjk").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                              val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                               p.save
                               p
                            }
@@ -379,24 +374,18 @@ class Boot {
          Unit
       }
    }
-   
+
    // create constitution alpha from the initialisationData dir, only if there exist no constitutions yet (otherwise, assume that it has been created (and not deleted) since the last time the application was up)
-   if(Constitution.constis == Nil)
-   {  log("There are no constitutions yet, so adding constitution alpha to constitution-population.")
-      val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
-      val adminId = GlobalConstant.adminOpt.get.id.is
-      val constiAlpha = Constitution.create(adminId)
-      constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
-      constiAlpha.makeLatestVersionReleaseCandidateIfPossible
-   }
+   Constitution.createConstiAlphaIfDoesntExist
 
    if(TestSettings.SIMULATEPLAYINGWITHJARA)
    {  TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <_&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>[A &y2013.04.15.19:57:38& this has been done in another branch, merge it]
 
-      PlayingSimulator.start
+      PlayingSimulator.start(45000);
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
+
    }
 
    if(TestSettings.SIMULATEPLAYINGWITHFIRSTSIMSYSTEM)

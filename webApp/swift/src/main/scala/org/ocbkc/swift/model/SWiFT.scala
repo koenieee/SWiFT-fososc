@@ -81,6 +81,10 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
 // #BS: only put inforeps that directly represents the subject matter, so no control structures, but only the content produced by the player, etc.
 */
 
+/** @param startTime represents the starttime of the fluency game session.
+  * @param startTimeTranslation contains the start time of the translation round. Note that its content may in many cases be equal to startTime.
+  */
+
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
 case class CoreContent( var textNL: String,
                         var questionNL: String,
