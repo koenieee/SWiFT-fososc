@@ -123,7 +123,7 @@ class Folminqua extends AlphaGroupParser
    // <&y2012.02.26.01:54:47& solve error here:                           below should be at least one constant, not zero!>
    def eqstat                          = eqpre ~ "(" ~ constantId ~ "," ~ rep1sep(constantId, ",") ~ ")" ^^ { case eqpre ~ "(" ~ constant ~ "," ~ list ~ ")" => ("(FHeqstat (_Tuple2 " + (if (eqpre.equals("equal")) "Eq" else "Neq") + " " + printList((constant::list).map(addLength),"[",",","]") + "))", constant::list, Nil)}
    def eqpre                           = "equal" | "inequal"
-   def pre2stat                      = preId ~ "(" ~ constantList ~ "," ~ constantList ~ ")" ^^ { case preId ~ "(" ~ set1 ~ "," ~ set2 ~ ")" => ("(FHpre2stat (_Tuple2 " + addLength(pre Id) + " (_Tuple2 " + printList(set1.map(addLength), "[", ",", "]") + " " + printList(set2.map(addLength),"[",",","]") + ")))", (set1 ++ set2).distinct, List(preId))}
+   def pre2stat                      = preId ~ "(" ~ constantList ~ "," ~ constantList ~ ")" ^^ { case preId ~ "(" ~ set1 ~ "," ~ set2 ~ ")" => ("(FHpre2stat (_Tuple2 " + addLength(preId) + " (_Tuple2 " + printList(set1.map(addLength), "[", ",", "]") + " " + printList(set2.map(addLength),"[",",","]") + ")))", (set1 ++ set2).distinct, List(preId))}
    def constantList                    = (constantId ^^ ( x => List(x)) ) | ("{" ~> repsep(constantId,",")) <~ "}"
    def constantId                      = id//  ^^ (x => "[" + (x.length) + "]" + x)
    def preId                           = id//  ^^ (x => "[" + (x.length) + "]" + x)
