@@ -14,9 +14,10 @@ import scala.util.matching.Regex._
 import java.io._
 //import java.lang._
 import org.ocbkc.swift.parser._
+
 import net.liftweb.json._
 import net.liftweb.json.ext._
-//import scala.util.parsing.combinator.Parsers
+import scala.util.parsing.combinator.Parsers
 
 /* Conventions:
 - Names of classes correspond with design $JN/...
@@ -40,25 +41,28 @@ trait TraitGameCore
    val gameCoreName:String
    val playerId:Long
    var si:SessionInfo
-   val parserCTLsingleton:
-   val parserCTL: // for example 
+   def getParserCTLsingleton:SWiFTparser
+   val parserCTLsingleton = getParserCTLsingleton
+   val parserCTL:Parser[SWiFTparser] // <String should be replaced with the right type>
+   var parseWarningMsgTxtCTLplayer:String = ""
+   var parseErrorMsgTextCTLplayer:String = ""
 
    def parseTextCTLbyPlayer:Boolean = 
    {  println("ParseTextCTLbyPlayer called")
-      textCTLplayerUpdated4terParsing = false
-      if(textCTLbyPlayer.equals("")) parseWarningMsgTxtCTLplayer = "Warning: empty file." else parseWarningMsgTxtCTLplayer = ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
+      si.textCTLplayerUpdated4terParsing = false
+      parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
 
       // orginal: Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
-      parserCTLsingleton.parseAll(parserCTL, textCTLbyPlayer) match
-         {  case parserCTLsingleton.Success(ftl,_)         => {  textCTLbyPlayerScalaFormat_ = Some(ftl)
-                                                                        constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
-                                                                        predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
+      parserCTLsingleton.parseAll(parserCTL, si.textCTLbyPlayer) match
+         {  case parserCTLsingleton.Success(ftl,_)         => {  si.textCTLbyPlayerScalaFormat_ = Some(ftl)
+                                                                        si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
+                                                                        si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
                                                                         parseErrorMsgTextCTLplayer = ""
                                                                         true
                                                                      }
-            case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => {  textCTLbyPlayerScalaFormat_   = None
-                                                                        constantsByPlayer             = None
-                                                                        predsByPlayer                 = None
+            case failMsg@getParserCTLsingleton.Failure(_,_)   => {  textCTLbyPlayerScalaFormat_   = None
+                                                                        si.constantsByPlayer             = None
+                                                                        si.predsByPlayer                 = None
                                                                         println("  parse error: " + failMsg.toString)
                                                                         parseErrorMsgTextCTLplayer = failMsg.toString
                                                                         false 
@@ -130,8 +134,6 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
    /* This doesn't only generate the text, but everything: the ctf text, the nl text, the question for the attack, and the answer based on the text. (Note that for the latter, the Clean program actually applies the reasoner to textCTLbyComputer, it is not "baked in".)      
    */
 
-   var parseErrorMsgTextCTLplayer:String = ""
-   var parseWarningMsgTxtCTLplayer:String = ""
    /* <&y2012.09.26.12:38:17& COULDDO perhaps refactor: call the serialize method from SessionInfoMetaMapperObj.save (by overriding the latter method). Without additional checks, that will however be less efficient, because at each save invocation a lot will be written over and over to disk...> */
 
    override def initialiseSessionInfo:SessionInfo = 

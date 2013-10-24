@@ -265,11 +265,11 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
       res
    }
 */
-// <&y2012.02.21.19:22:56& refactor by using built-in parser of SessionInfo.?>
+// <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
    def testSyntaxTranslation:String = 
-   {  si.ParseTextCTLbyPlayer
-      val warn = si.parseWarningMsgTxtCTLplayer
-      if(!warn.equals("")) warn else si.parseErrorMsgTextCTLplayer
+   {  gameCore.parseTextCTLbyPlayer
+      val warn = gameCore.parseWarningMsgTxtCTLplayer
+      if(!warn.equals("")) warn else gameCore.parseErrorMsgTextCTLplayer
    }
 
    def testSyntaxBridge = 

@@ -86,6 +86,9 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
   */
 
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
+/** SessionInfo is general: it can hold data of any SWiFT challenge. Therefore, for example, specific parsers (for specific KR languages are not defined here, but in the GameCore.
+  */
+
 case class SessionInfo( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer: String,
