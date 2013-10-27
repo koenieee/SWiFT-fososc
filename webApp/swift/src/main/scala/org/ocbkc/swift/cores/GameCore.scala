@@ -41,34 +41,10 @@ trait TraitGameCore
    val gameCoreName:String
    val playerId:Long
    var si:SessionInfo
-   def getParserCTLsingleton:SWiFTparser
-   val parserCTLsingleton = getParserCTLsingleton
-   val parserCTL:Parser[SWiFTparser] // <String should be replaced with the right type>
    var parseWarningMsgTxtCTLplayer:String = ""
    var parseErrorMsgTextCTLplayer:String = ""
 
-   def parseTextCTLbyPlayer:Boolean = 
-   {  println("ParseTextCTLbyPlayer called")
-      si.textCTLplayerUpdated4terParsing = false
-      parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
-
-      // orginal: Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
-      parserCTLsingleton.parseAll(parserCTL, si.textCTLbyPlayer) match
-         {  case parserCTLsingleton.Success(ftl,_)         => {  si.textCTLbyPlayerScalaFormat_ = Some(ftl)
-                                                                        si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
-                                                                        si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
-                                                                        parseErrorMsgTextCTLplayer = ""
-                                                                        true
-                                                                     }
-            case failMsg@getParserCTLsingleton.Failure(_,_)   => {  textCTLbyPlayerScalaFormat_   = None
-                                                                        si.constantsByPlayer             = None
-                                                                        si.predsByPlayer                 = None
-                                                                        println("  parse error: " + failMsg.toString)
-                                                                        parseErrorMsgTextCTLplayer = failMsg.toString
-                                                                        false 
-                                                                     }
-         }
-   }
+   def parseTextCTLbyPlayer:Boolean
    def initialiseSessionInfo:SessionInfo = // <does this really belong here?>
    {  si = new SessionInfo
       si.gameCoreName(gameCoreName).save
@@ -117,6 +93,45 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si
    }
 
+   var textCTLplayerUpdated4terParsing = false
+   var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
+
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_ = t }
+   def textCTLbyPlayer = textCTLbyPlayer_
+
+//var textCTLbyPlayerCleanFormat_ :Option[String] = None
+
+   def textCTLbyPlayerScalaFormat:Option[FOLtheory] =
+   {  if(textCTLplayerUpdated4terParsing)
+      {  textCTLplayerUpdated4terParsing = false
+         if(!ParseTextCTLbyPlayer) None else textCTLbyPlayerScalaFormat_
+      }
+      else
+         textCTLbyPlayerScalaFormat_
+   }
+
+   def parseTextCTLbyPlayer:Boolean =
+   {  println("ParseTextCTLbyPlayer called")
+      textCTLplayerUpdated4terParsing = false
+      parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
+
+      //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
+      Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, si.textCTLbyPlayer) match
+         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {        si.textCTLbyPlayerScalaFormat_ = Some(ftl)
+                                                                        si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
+                                                                        si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
+                                                                        parseErrorMsgTextCTLplayer = ""
+                                                                        true
+                                                                     }
+            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   =>       {  si.textCTLbyPlayerScalaFormat_   = None
+                                                                        si.constantsByPlayer             = None
+                                                                        si.predsByPlayer                 = None
+                                                                        println("  parse error: " + failMsg.toString)
+                                                                        parseErrorMsgTextCTLplayer = failMsg.toString
+                                                                        false 
+                                                                     }
+         }
+   }
    def generateText = "todo"
    def algorithmicDefenceGenerator:FolnuminquaQuery = null // <TODO>
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
@@ -211,6 +226,29 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       si.bridgeCTL2NLcomputer = extractBridgeCTL2NLcomputer(sbClean)
 
       si
+   }
+
+
+   def parseTextCTLbyPlayer:Boolean = 
+   {  println("ParseTextCTLbyPlayer called")
+      si.textCTLplayerUpdated4terParsing = false
+      parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
+
+      Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, si.textCTLbyPlayer) match
+         {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => {  si.textCTLbyPlayerScalaFormat_ = Some(ftl)
+                                                                        si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
+                                                                        si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
+                                                                        parseErrorMsgTextCTLplayer = ""
+                                                                        true
+                                                                     }
+            case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => {  si.textCTLbyPlayerScalaFormat_      = None
+                                                                        si.constantsByPlayer             = None
+                                                                        si.predsByPlayer                 = None
+                                                                        println("  parse error: " + failMsg.toString)
+                                                                        parseErrorMsgTextCTLplayer = failMsg.toString
+                                                                        false 
+                                                                     }
+         }
    }
 
    def algorithmicDefenceGenerator:FolnuminquaQuery = 
