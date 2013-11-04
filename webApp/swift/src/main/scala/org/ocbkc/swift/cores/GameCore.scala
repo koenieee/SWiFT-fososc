@@ -1,6 +1,7 @@
 // change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
 package org.ocbkc.swift.cores
-{  
+{
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.reas._
@@ -74,6 +75,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
    var si:SessionInfo = null
    val playerId = playerIdInit
+
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
       null // <finish>
@@ -96,18 +98,27 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
    var textCTLplayerUpdated4terParsing = false
    var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
 
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_ = t }
-   def textCTLbyPlayer = textCTLbyPlayer_
+   def textCTLbyPlayerChanged(newTextCTL:String) =
+   {  log("textCTLbyPlayerChanged called (call-back method from SessionInfo")
+      textCTLplayerUpdated4terParsing = true
+   }
+
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; si.textCTLbyPlayer_ = t }
+   def textCTLbyPlayer = si.textCTLbyPlayer_
 
 //var textCTLbyPlayerCleanFormat_ :Option[String] = None
 
    def textCTLbyPlayerScalaFormat:Option[FOLtheory] =
-   {  if(textCTLplayerUpdated4terParsing)
-      {  textCTLplayerUpdated4terParsing = false
-         if(!ParseTextCTLbyPlayer) None else textCTLbyPlayerScalaFormat_
+   {  log("textCTLbyPlayerScalaFormat called")
+      if(textCTLplayerUpdated4terParsing)
+      {  log("textCTLplayerUpdated4terParsing is true, so parsing text")
+         textCTLplayerUpdated4terParsing = false
+         if(!parseTextCTLbyPlayer) None else textCTLbyPlayerScalaFormat_
       }
       else
+      {  log("textCTLplayerUpdated4terParsing is false, so parsing is not needed. You know, ain't doing nothing if not needed. Have something better to do, taking a nap for example, dude.")
          textCTLbyPlayerScalaFormat_
+      }
    }
 
    def parseTextCTLbyPlayer:Boolean =
@@ -117,13 +128,13 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
 
       //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
       Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, si.textCTLbyPlayer) match
-         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {        si.textCTLbyPlayerScalaFormat_ = Some(ftl)
+         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {        textCTLbyPlayerScalaFormat_ = Some(ftl)
                                                                         si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
                                                                         si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
                                                                         parseErrorMsgTextCTLplayer = ""
                                                                         true
                                                                      }
-            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   =>       {  si.textCTLbyPlayerScalaFormat_   = None
+            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   =>       {  textCTLbyPlayerScalaFormat_   = None
                                                                         si.constantsByPlayer             = None
                                                                         si.predsByPlayer                 = None
                                                                         println("  parse error: " + failMsg.toString)
@@ -140,6 +151,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
 
 }
 //} EUC
+
+/* @todo temporarily switched of, put back during develop.refactor4addingAnyFluencyChallenge, which also requires some refactoring of things now put in Efe, while they should be put on a more general level (in the TraitGameCore)
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
@@ -231,7 +244,7 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
 
    def parseTextCTLbyPlayer:Boolean = 
    {  println("ParseTextCTLbyPlayer called")
-      si.textCTLplayerUpdated4terParsing = false
+      textCTLplayerUpdated4terParsing = false
       parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
 
       Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, si.textCTLbyPlayer) match
@@ -368,6 +381,8 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       // <<< EUC
    }
 }
+
+*/
 
 // Helper return types, allows returning a subset of the above things in a type
 

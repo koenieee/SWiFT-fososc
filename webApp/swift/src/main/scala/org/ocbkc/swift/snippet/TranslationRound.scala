@@ -43,7 +43,7 @@ class TranslationRound
          sesCoord.URstopTranslation
          
          if(transCorrect) 
-         {  sesCoordLR.si.ParseTextCTLbyPlayer // <&y2012.02.22.15:31:48& is now needed to get constantsByPlayer and predsByPlayer filled. In future this should not be needed (see SessionInfo)>
+         {  sesCoordLR.gameCore.parseTextCTLbyPlayer // <&y2012.02.22.15:31:48& is now needed to get constantsByPlayer and predsByPlayer filled. In future this should not be needed (see SessionInfo)>
             S.redirectTo("bridgeconstruction.html") 
          }   
          else S.redirectTo("translationRound.html") 

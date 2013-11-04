@@ -12,6 +12,7 @@ import org.ocbkc.swift.OCBKC._
 import net.liftweb.json._
 import java.io._
 import org.ocbkc.swift.global.GlobalConstant._
+import org.ocbkc.swift.global.Logging._
 
 /*
 class Source extends Enumeration
@@ -97,7 +98,7 @@ case class SessionInfo( var textNL: String,
                         var algoDefComputer: String,
                         var answerComputerCTL: String,
                         var answerComputerNL: String,
-                        var textCTLbyPlayer_ : String,
+                        var textCTLbyPlayer_ : String, // don't change this one directly
                         var constantsByPlayer:Option[List[String]],
                         var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
@@ -118,8 +119,11 @@ case class SessionInfo( var textNL: String,
    object stopTimeTranslation extends MappedLong(this)
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
-   
+
    def this() = this("","","","","","","","","",None,None,"",None,"","","","","","")
+
+   var observers:List[TextCTLbyPlayerObserver] = Nil
+
    def durationTranslation:Option[Long] = // <&y2012.10.28.19:58:50& TODO: refactor with checking if startTimeTranslation is defined?>
    {  println("   durationTranslation called")
       println("   startTimeTranslation.is == " + startTimeTranslation.is)
@@ -127,12 +131,6 @@ case class SessionInfo( var textNL: String,
       if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
    }
 
-   var textCTLplayerUpdated4terParsing = false
-   def textCTLbyPlayer = textCTLbyPlayer_
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; textCTLbyPlayer_ = t }
-
-   //var textCTLbyPlayerCleanFormat_ :Option[String] = None
-   var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
    // None is there is a parse error
 
    /* out: None: parse error, which can be found in the field parseErrorMsgTextCTLplayer
@@ -149,14 +147,7 @@ case class SessionInfo( var textNL: String,
          textCTLbyPlayerCleanFormat_
    }
    */
-   def textCTLbyPlayerScalaFormat:Option[FOLtheory] =
-   {  if(textCTLplayerUpdated4terParsing)
-      {  textCTLplayerUpdated4terParsing = false
-         if(!ParseTextCTLbyPlayer) None else textCTLbyPlayerScalaFormat_
-      }
-      else
-         textCTLbyPlayerScalaFormat_
-   }
+
 
 
 
@@ -209,6 +200,17 @@ case class SessionInfo( var textNL: String,
       val testDeSer:SessionInfo = Serialization.read[SessionInfo](siSer)
    }
 
+   def textCTLbyPlayer_=(t:String) =
+   {  observers.foreach{ _.textCTLbyPlayerChanged(textCTLbyPlayer) }
+      textCTLbyPlayer_ = t
+   }
+
+   def textCTLbyPlayer = textCTLbyPlayer_
+
+   def registerObserverTextCTLbyPlayer(observer:TextCTLbyPlayerObserver) =
+   {  if(!observers.contains(observer)) observers ::= observer
+   }
+
    def copyJsonSerializedFieldsFrom(si:SessionInfo) =
    {  this.textNL = si.textNL
       this.questionNL = si.questionNL
@@ -230,6 +232,15 @@ case class SessionInfo( var textNL: String,
       this.hurelanRole2NL = si.hurelanRole2NL
       this.subjectNL = si.subjectNL
    }
+}
+/** @todo Move this one to a general lib
+  */
+trait Observer
+{
+}
+
+trait TextCTLbyPlayerObserver extends Observer
+{  def textCTLbyPlayerChanged(newTextCTL:String)
 }
 
 // "join" of player and sessionInfo
