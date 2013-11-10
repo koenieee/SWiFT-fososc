@@ -1,5 +1,6 @@
 package org.ocbkc.swift.model
 {
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
@@ -120,7 +121,11 @@ case class CoreContent( var textNL: String,
    {  println("   durationTranslation called")
       println("   startTimeTranslation.is == " + startTimeTranslation.is)
       println("   stopTimeTranslation.is == " + stopTimeTranslation.is)
-      if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else Some(stopTimeTranslation.is - startTimeTranslation.is)
+      if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else
+      {  val result = Some(stopTimeTranslation.is - startTimeTranslation.is)
+         log("   durationTranslation = " + result)
+         result
+      }
    }
 
    var textCTLplayerUpdated4terParsing = false
