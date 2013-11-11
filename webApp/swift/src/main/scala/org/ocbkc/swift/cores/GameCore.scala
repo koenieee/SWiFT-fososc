@@ -152,7 +152,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
 }
 //} EUC
 
-/* @todo temporarily switched of, put back during develop.refactor4addingAnyFluencyChallenge, which also requires some refactoring of things now put in Efe, while they should be put on a more general level (in the TraitGameCore)
+/* @todo temporarily switched of NotUna, put back during develop.refactor4addingAnyFluencyChallenge, which also requires some refactoring of things now put in Efe, while they should be put on a more general level (in the TraitGameCore)
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
