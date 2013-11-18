@@ -116,4 +116,19 @@ package org.ocbkc.questionnaire
    object FreeTextFixedCorrectAnswerQuestion extends FreeTextFixedCorrectAnswerQuestion with LongKeyedMetaMapper[FreeTextFixedCorrectAnswerQuestion]
    {  
    }
+
+  class UserAnswers extends  LongKeyedMapper[UserAnswers] with IdPK
+  {
+    def getSingleton = UserAnswers;
+    object current_question extends MappedLongForeignKey(this, Question)
+    object session_id extends MappedString(this, 500)
+    //todo
+
+  }
+
+  object UserAnswers extends UserAnswers with  LongKeyedMetaMapper[UserAnswers]
+  {
+  }
+
+
 }

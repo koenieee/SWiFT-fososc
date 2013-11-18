@@ -66,7 +66,7 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, MultipleChoiceAnswer,FreeTextFixedCorrectAnswerQuestion, Questionnaire_Question_join)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join, Question, Questionnaire, QuestionnaireSession, MultipleChoiceQuestion, MultipleChoiceAnswer,FreeTextFixedCorrectAnswerQuestion, Questionnaire_Question_join, UserAnswers)
 
     // Build SiteMap
     /* originally generated code:
@@ -603,21 +603,21 @@ class Boot {
             questionFormulation("What color is this?").
             multipleChoiceQuestion
             {
-				val quest = MultipleChoiceQuestion.create.question("What color is this?")
-			 
-                              //some quicker writing way then 3 times the same stuff? --> yes see refacoring of one of the questions above.
-				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Red")
+              val answers = List("Yellow", "Red", "Purple").map{ MultipleChoiceAnswer.create.answerFormulation(_) }
+              answers.foreach{ _.save }
+
+              val correctAnswers = List(answers(1))
+              //---
+
+              val quest = MultipleChoiceQuestion.create.question("What color is this?")
+              answers.foreach{ quest.answers += _ }
+              correctAnswers.foreach{ quest.correctAnswers += _ }
+              quest.save
+              quest
 
 
-				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Yellow")
-				quest.answers += MultipleChoiceAnswer.create.answerFormulation("Purple")
-//---
-				quest.save
-				quest
-	
-	
-				
-			}
+
+            }
             
       )
 
