@@ -55,6 +55,7 @@ Running example:
 // <&y2012.04.23.17:53:13& perhaps better to also define a Folminqua explicitly, now I use my FOL classes (which are I, btw,  think now identical to Folminqua, and not FOL)>
 /**
   * @todo &y2013.11.18.15:33:38& should return the answer in the answer language, not only as an Int.
+  * @todo &y2013.11.23.18:53:48& is it so that it indeed can reason over any FOLtheory? First, FOLtheory is currently not the complete FOL. Can it reason over any of the current FOLtheory statements? Second, can it reason over any FOLtheory when it FOLtheory is extended to complete FOL?
   */
 
    def query(query:FolnuminquaQuery, ft:FOLtheory):Int =
