@@ -463,7 +463,7 @@ SEED_4ranPerson  :== randomSeeds!!4
 
 
 SynRep :: (FHdoc, BridgeStats_)
-// Note: we don't generate the answer as well... qwer
+// Note: we don't generate the answer as well...
 // <&y2011.08.08.16:09:40& change HurelanStat such that entities are in ordered construct (e.g. List) instead of name. Will simplify other implementations.
 // <&y2011.08.08.17:32:59&> currently, in the nl construct "... are XXX of ...", only the first position may have multiplicity 1>, the other must be 1. Change so that this can also be the other way around.
 // <&y2012.02.08.19:10:45& add entitybridgestats to bridge!>

@@ -53,6 +53,10 @@ Running example:
 */
 
 // <&y2012.04.23.17:53:13& perhaps better to also define a Folminqua explicitly, now I use my FOL classes (which are I, btw,  think now identical to Folminqua, and not FOL)>
+/**
+  * @todo &y2013.11.18.15:33:38& should return the answer in the answer language, not only as an Int.
+  */
+
    def query(query:FolnuminquaQuery, ft:FOLtheory):Int =
    {  // &y2012.04.23.17:50:00& Only what matches is currently supported. Thus, warnings that the match statement is not exhaustive is a consequence of deliberate choice.
       println("####   incoming FOLtheory:\n" + ft)
