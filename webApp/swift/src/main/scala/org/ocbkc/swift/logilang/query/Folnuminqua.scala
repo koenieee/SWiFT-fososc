@@ -1,4 +1,4 @@
-package org.ocbkc.swift.logilang.query
+package org.ocbkc.swift.logilang.query.folnuminqua
 {
 import System._
 import java.io._
@@ -76,7 +76,6 @@ import ComparisonOperator._
 case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends FolnuminquaQuery
 case class PatVar(id:String)
 //case class Var(id:String)
-
 
 /*  <&y2012.04.23.17:01:11&For current increment, do not yet implement the following, but do it for a next:>
 class ComparisonOperator
