@@ -33,12 +33,10 @@ object TestPlosemoCLI extends CLIwithFileInput
 // END TEST
 
 
-// not complete FOL yet
-
 // Questionlanguage: Folnuminqua
 
 // each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-case class PlosemoSentence
+case class PlosemoPat
 {  /*
    def serialize =
    {  // implicit val formats = Serialization.formats(NoTypeHints)
@@ -52,7 +50,7 @@ case class PlosemoSentence
 }
 
 // NumResPat = Number Retriction Pattern 
-case class MostInfo(numrespat:NumResPat) extends PlosemoSentence // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
+case class MostInfo(patVar: PatVar, SetQuaSenPat: setQuaSenPat) extends PlosemoPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
 {  def serialize =
    {  /* <? &y2012.05.18.15:40:46& the following gives an error because + cannot be used to add Formats. How can this be accomplished? Or isn't it possible, and if not, why not?>/(   relatedTo = {[lift-json]}
    
@@ -73,7 +71,7 @@ object ComparisonOperator extends Enumeration
 
 import ComparisonOperator._
 
-case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends Plosemo
+case class setQuaSenPat(TODO:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends PlosemoPat
 case class PatVar(id:String)
 //case class Var(id:String)
 
