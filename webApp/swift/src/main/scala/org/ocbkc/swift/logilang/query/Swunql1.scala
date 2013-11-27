@@ -7,8 +7,12 @@ import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.parser.CLIwithFileInput
 import net.liftweb.json._
 
-case class SwunqlSent
+abstract class Swunql1Sent
 {  
 }
+
+case class SwunqlPlosemoPat(plosemoPat:PlosemoPat) extends Swunql1Sent
+
+case class SwunqlFolnuminqueQueryPat(folnuminqueQuery:FolnuminquaQuery) extends Swunql1Sent
 
 

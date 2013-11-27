@@ -1,4 +1,4 @@
-package org.ocbkc.swift.reas
+package org.ocbkc.swift.reas.folnuminqua
 {
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang._
