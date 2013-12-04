@@ -7,8 +7,8 @@ package org.ocbkc.swift.logilang.query.plosemo
 import System._
 import java.io._
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.test.CLIwithFileInput
 import org.ocbkc.swift.logilang.query._
-import org.ocbkc.swift.parser.CLIwithFileInput
 import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
 // import scala.util.parsing.combinator.Parsers._
@@ -17,7 +17,6 @@ import net.liftweb.json.ext.EnumSerializer
 Abbreviation for constitution: consti (const is to much similar to constant).
 
 */
-
 
 // BEGIN TEST
 object TestPlosemoCLI extends CLIwithFileInput
@@ -38,7 +37,7 @@ object TestPlosemoCLI extends CLIwithFileInput
 // Questionlanguage: Folnuminqua
 
 // each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-case class PlosemoPat
+trait PlosemoPat
 {  
 }
 /** Example in pure format: mostInfo(s_, forall x from s_.P(c_2, x))
@@ -58,20 +57,7 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlosemoPat // I d
 }
 
 // Example: mostInfo(s_, forall x from s_.P(c_2, x))
-case class Forall(vr:Var, set:PatVar, predApp:PredApp) extends PlosemoPat
-case class PatVar(id:String)
-case class PredApp(p: Predicate, terms:List[Term]) // share this with the yet to implement AnswerLang for Plosemo.
-
-case class Constant(name:String) extends Term // share this with the yet to implement AnswerLang for Plosemo.
-{  override def toString =
-   {  "Constant(name = " + name + ")"
-   }
-}
-
-case class Var(name:String) extends Term
-{  override def toString =
-   {  "Var(name = " + name + ")" // , id = " + hashCode + ")"
-   }
-}
+case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlosemoPat
+case class PredApp_Plosemo(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlosemoPat
 
 }

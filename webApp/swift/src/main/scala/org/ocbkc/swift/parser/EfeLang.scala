@@ -37,7 +37,7 @@ class Efe2FOLtheoryParser extends AlphaGroupParser
    def sentence = (((((spaces ~> predId) <~ "(") ~ constantId) <~ ")") <~ spaces) ^^ {
       case predId ~ constantId =>
       {  val pred = Predicate(predId, 1)
-         PredApp(pred, List(Constant(constantId)))
+         PredApp_FOL(pred, List(Constant(constantId)))
       }
    }
 

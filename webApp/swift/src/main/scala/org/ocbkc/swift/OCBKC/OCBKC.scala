@@ -2,7 +2,7 @@ package org.ocbkc.swift.OCBKC
 {
 import _root_.scala.xml._
 import System._
-import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
+import org.ocbkc.swift.cores.{TraitGameCore}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Logging._

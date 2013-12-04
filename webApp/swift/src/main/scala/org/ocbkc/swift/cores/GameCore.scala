@@ -4,6 +4,7 @@ package org.ocbkc.swift.cores
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.GlobalConstant._

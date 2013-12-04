@@ -1,5 +1,6 @@
 package org.ocbkc.swift.logilang
 {
+import org.ocbkc.swift.reas._
 import org.ocbkc.swift.logilang.query._
 import System._
 import java.io._
@@ -11,9 +12,10 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 */
 
 // not complete FOL yet
+// < therefore place rename to FOLminqua for example. If you extend it, simply create another language next to it which is the extension... >
 
 // each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-class FOLtheory extends FOLutils
+class FOLtheory extends FOLutils with CTLbase
 {  // <&y2012.04.03.22:31:27& constants and predicates could also be represented as hashmaps for more efficiency>
    var constants:List[Constant]     = Nil // [&y2012.04.13.09:39:59& as far as I can see, I don't really need this list.]
    var predicates:List[Predicate]   = Nil // [&y2012.04.13.09:40:13& this is really needed, to check whether a new predicate-application MAY be added (arity-check)]
@@ -33,7 +35,7 @@ class FOLtheory extends FOLutils
    // convenience function to directly add a predicate statement based on the name of it
    def addPredAppByString(predicateName:String, terms:List[Constant]):Boolean =
    {  gocPredicate(predicateName, terms.length) match
-      {  case Some(p)    =>  { addPredApp(PredApp(p, terms)); true }
+      {  case Some(p)    =>  { addPredApp(PredApp_FOL(p, terms)); true }
          case None       =>  false
       }
    }
@@ -42,8 +44,8 @@ class FOLtheory extends FOLutils
    {  stats = stats :+ stat
    }
 
-   // Optimised addStat for when you know the stat is a PredApp
-   def addPredApp(pa:PredApp):Boolean =
+   // Optimised addStat for when you know the stat is a PredApp_FOL
+   def addPredApp(pa:PredApp_FOL):Boolean =
    {  val p = pa.correct
       if( p )  stats = stats :+ pa
       p
@@ -56,7 +58,7 @@ class FOLtheory extends FOLutils
       // <_& &y2012.03.30.10:00:58& should I allow more "languages" (with the same predicate ID (name), having different arities.) or not?>[A &y2012.05.12.12:59:01& that is the design decision I have taken: there may be more predicates with the same name, as long as they are not used in the same theory...]
       // <&y2012.04.27.09:40:15& check here of formula is closed)>
       val add:Boolean = stat match
-      {  case pa@PredApp(p, cs) => { 
+      {  case pa@PredApp_FOL(p, cs) => { 
                                     val correctArity = pa.correct
                                     val closed = ( cs.find( { case _:Constant => false; case _ => true } ) == None )
                                     if(correctArity && closed) 
@@ -168,8 +170,8 @@ class FOLtheory extends FOLutils
       println("   constants in: c1=" + c1 + " c2=" + c2)
       println("   stats in:" + stats)
       stats = stats.map( 
-         { case PredApp(a, cs)    =>
-           {   PredApp(a, substituteConstantInList(cs))
+         { case PredApp_FOL(a, cs)    =>
+           {   PredApp_FOL(a, substituteConstantInList(cs))
            }
            case Unequal(d1,d2)   =>  Unequal(substituteConstantSingle(d1).asInstanceOf[Constant], substituteConstantSingle(d2).asInstanceOf[Constant])
            case Equal(d1,d2)     =>  Equal(substituteConstantSingle(d1).asInstanceOf[Constant], substituteConstantSingle(d2).asInstanceOf[Constant])
@@ -179,9 +181,9 @@ class FOLtheory extends FOLutils
       constants = constants.filterNot(_ == c1)
       println("   stats becomes:" + stats)
 
-      def substituteConstantInList(cs:List[Term]) = cs.map( substituteConstantSingle )
+      def substituteConstantInList(cs:List[SimpleTerm]) = cs.map( substituteConstantSingle )
 
-      def substituteConstantSingle(t:Term) = if( t == c1 ) c2 else t
+      def substituteConstantSingle(t:SimpleTerm) = if( t == c1 ) c2 else t
    }
 
    override def toString =
@@ -192,7 +194,7 @@ class FOLtheory extends FOLutils
    // <_&y2012.05.07.12:28:15& empty theory is translated incorrectly to ".", should simply become an empty string>
    def exportToTPTPfof:String =
    {  def stat2fof(stat:FOLstatement):String = stat match 
-      {  case PredApp(p, cs)        => p.name + cs.asInstanceOf[List[Constant]].map(_.name).mkString("(",",",")") // <&y2012.04.27.19:42:05& cs must be constants, because statements are all closed formulae.
+      {  case PredApp_FOL(p, cs)        => p.name + cs.asInstanceOf[List[Constant]].map(_.name).mkString("(",",",")") // <&y2012.04.27.19:42:05& cs must be constants, because statements are all closed formulae.
          case Equal(c1, c2)         => c1.name + " = " + c2.name
          case Unequal(c1, c2)       => c1.name + " != " + c2.name
       }
@@ -225,7 +227,7 @@ class FOLutils
 }
 
 object FOLutils extends FOLutils
-sealed class FOLstatement
+sealed trait FOLstatement
 case class Equal(cv1:Constant, cv2: Constant)      extends FOLstatement
 {  override def toString =
    {  "Equal(" + cv1 + ", " + cv2 + ")"
@@ -250,7 +252,11 @@ object Unequal
    }
 }
 
-case class PredApp(p:Predicate, terms:List[Term]) extends FOLstatement // PredApp = predicate application
+case class PredApp_FOL(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FOLstatement
+
+/** Move to general CTL lib
+  */
+case class PredApp(p:Predicate, terms:List[SimpleTerm]) // PredApp = predicate application
 {  def correct:Boolean =
    {  this match 
       {  case PredApp(p,t) => p.arity == t.size
@@ -258,20 +264,23 @@ case class PredApp(p:Predicate, terms:List[Term]) extends FOLstatement // PredAp
    }
 }
 /*
-class Term(val name:String)
+class SimpleTerm(val name:String)
 {  override def toString =
    {  //"Constant(name = " + name + ")"
-      "Term(name = " + name + ", id = " + hashCode + ")"
+      "SimpleTerm(name = " + name + ", id = " + hashCode + ")"
    }
 }
 */
+/** SimpleTerm represents a term which consists of a variable or a constant (and NOT a function).
+    @BS: do not change the classes which extend this SimpleTerm, as this would change the definition of the language which use SimpleTerm. That why it is "Sealed". If you need an extension of the term (with functions), define a new Term-class and make it extend this class and, additionally, function applications.
+  */
 
-trait Term
+sealed trait SimpleTerm
 {  val name:String
 }
 
 /*
-class TermSerializer extends CustomSerializer[Term](format => (
+class SimpleTermSerializer extends CustomSerializer[SimpleTerm](format => (
          { 
            case JObject(JField("start", JInt(s)) :: JField("end", JInt(e)) :: Nil) => 
              new Interval(s.longValue, e.longValue) 
@@ -285,14 +294,16 @@ class TermSerializer extends CustomSerializer[Term](format => (
 */
 // <&y2012.04.10.19:18:02& make the constructor of class Cons private if possible>
 // <&y2012.04.24.09:52:25& why not use a case class?>
-case class Constant(name:String) extends Term
+case class Constant(name:String) extends SimpleTerm
 {  override def toString =
    {  "Constant(name = " + name + ")"
       //"Constant(name = " + name + ", id = " + hashCode + ")"
    }
 }
 
-case class Var(name:String) extends Term
+/** Refactor: move to reusable language parts file.
+  */
+case class Var(name:String) extends SimpleTerm
 {  override def toString =
    {  //"Constant(name = " + name + ")"
       "Var(name = " + name + ")" // , id = " + hashCode + ")"

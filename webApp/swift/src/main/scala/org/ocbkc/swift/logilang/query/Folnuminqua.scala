@@ -66,29 +66,11 @@ case class Sharpest(numrespat:NumResPat) extends FolnuminquaQuery // I don't ass
    }
 }
 
-object ComparisonOperator extends Enumeration
-{  type ComparisonOperator = Value
-   val Geq = Value
-}
 
 import ComparisonOperator._
 
 case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends FolnuminquaQuery
-case class PatVar(id:String)
-//case class Var(id:String)
-
-/*  <&y2012.04.23.17:01:11&For current increment, do not yet implement the following, but do it for a next:>
-class ComparisonOperator
-
-case class Eqt() extends ComparisonOperator
-case class Gt() extends ComparisonOperator
-case class Lt() extends ComparisonOperator
-case class Geq() extends ComparisonOperator
-case class Leq() extends ComparisonOperator
-*/
-// <&y2012.04.22.00:22:40& make use of Clean data structures I designed: copy the idea here.>
-}
 
 // Answer language:
 
-
+}

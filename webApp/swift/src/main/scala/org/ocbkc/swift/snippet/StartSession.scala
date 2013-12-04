@@ -15,7 +15,8 @@ import org.ocbkc.swift.model._
 import System.err.println
 import net.liftweb.json._
 import org.ocbkc.swift.logilang.query.folnuminqua._
-import org.ocbkc.swift.logilang.query.folnuminqua.ComparisonOperator._
+import org.ocbkc.swift.logilang.query.ComparisonOperator._
+import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 
 import net.liftweb.json._

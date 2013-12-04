@@ -4,7 +4,8 @@
 */
 package org.ocbkc.swift.coord
 {  
-import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
+import org.ocbkc.swift.logilang.query.plosemo._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._

@@ -1,7 +1,7 @@
 package org.ocbkc.swift.model
 {
 import org.ocbkc.swift.parser._
-import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang._
 import System.err.println
 import _root_.net.liftweb.mapper._

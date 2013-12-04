@@ -168,7 +168,7 @@ class Folminqua2FOLtheoryParser extends AlphaGroupParser
       {  val pred = Predicate(preId, 2)
          val constantsSet1 = set1.map(cname => Constant(cname))
          val constantsSet2 = set2.map(cname => Constant(cname))
-         FOLutils.pairsFrom2Lists(constantsSet1, constantsSet2).map(p => PredApp(pred, List(p._1, p._2)))
+         FOLutils.pairsFrom2Lists(constantsSet1, constantsSet2).map(p => PredApp_FOL(pred, List(p._1, p._2)))
       }
    }
 
