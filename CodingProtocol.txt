@@ -1,3 +1,18 @@
 - When adding new artificats to the pom.xml file, always refer to a specific version of an artifact. If you don't do this, maven may attempt to download the newest version, while the code has not been adapted yet. E.g. you can run into missing goals (because they were deprecated), your code may not compile (because the code refers to deprecated classes), etc. etc.
 
+### Coding lay-out ###
+
+- Use spaced tabs, so each tab should consist of whitespaces, and not a TAB symbol.
+   - Recommended: set your text editor to automatically convert the TAB-key to whitespaces.
+- Use tab size = 3 spaces
+   - Recommended: set your text editor to a tab-width of 3 spaces.
+- Use the following style of using curly brackets:
+
+def intelligentMethod() =
+{  [here code]
+   [etc.]
+}
+- Start the code on the same line as the opening curly bracket, just as in the example above.
+
+
 
