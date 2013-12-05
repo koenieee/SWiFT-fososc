@@ -1,4 +1,4 @@
-// change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
+.// change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
 package org.ocbkc.swift.cores
 {  
 import org.ocbkc.swift.logilang._
@@ -55,6 +55,9 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 */
 
 // helper class for return type of generateQuestionAndCorrectAnswer
+/** Specifications can be found in the following documents in the same git repository:
+  * TODOdefaultCommandForOpening ./specs/NotUna_FluencyGame_TODO_SCAN.pdf 
+  */
 
 class NotUna(val playerIdInit:Long) extends TraitGameCore
 {  //var translation: String = ""
@@ -131,7 +134,10 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
       cc.algoDefComputer = cc.questionCTLcomputer
       cc.answerComputerCTL = extractAnswerCTL(sbClean)
       cc.answerComputerNL = extractAnswerNL(sbClean)
-      cc.questionRelatedBridgeStats = extractQRBS(sbClean)
+      cc.questionRelatedBridgeStats = extractQRBS(sbClean) /* 
+         @coulddo rename to questionRelatedBridgeStatsComputer
+         <@todo is this one used at all?>[A yes is used, to help constructing the bridge by the player.]
+         */
       cc.subjectNL = extractSubjectNL(cc.questionRelatedBridgeStats)
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
       cc.hurelanRole1NL = extractRegExGroup("""HurelanStat \(_HurelanStat_ \[[0-9]+\][a-zA-Z_]+ \[[0-9]+\](""" + HurelanBridge.wordNLregexStr + """)""", cc.questionRelatedBridgeStats)
