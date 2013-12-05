@@ -17,10 +17,10 @@ def intelligentMethod() =
    [etc.]
 }
 - Start the code on the same line as the opening curly bracket, just as in the example above.
-- But a space each , separating an parameter:
+- Put a space after each , which separates a parameter:
 
 def intelligentMethod(x:Int, y:Int, z:Int)
-- Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and ==:
+- Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and == (except for .):
 
 if( x == 5 ) 
 {  [do this]
@@ -29,6 +29,13 @@ if( x == 5 )
 - Other aspects: do as one sees fit. For example, the following style is also allowed (no space after '(' and before ')')
 
 if(x == 5)
+
+- Vertically align => symbols after cases:
+
+list match
+{  case Nil => None
+   case _   => Some(list(rs.nextInt(list.length)))
+}
 
 - A complete example is the following:
 
@@ -45,7 +52,7 @@ object RandomExtras
    }
 }
 
-- If there is any good reason, one may locally deviate from the code layout rules defined in this document.
+- If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.
 
 TODO examples
 
