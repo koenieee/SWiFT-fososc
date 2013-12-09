@@ -13,9 +13,9 @@ import System.err.println
 import java.io._
 import org.ocbkc.swift.test.CLIwithFileInput
 import org.ocbkc.swift.global.Logging._
-import org.specs2.mutable._
+//import org.specs2.mutable._
 
-class PlosemoProverSpec extends Specification
+/*class PlosemoProverSpec extends Specification
 {  val predicateB = Predicate("B",1)
    val plosemoQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
    val folTheory = new FOLtheory
@@ -27,7 +27,7 @@ class PlosemoProverSpec extends Specification
    {  " equal null, because we are still testing" in
       {  queryResult must be equalTo(null)
       }
-   }
+   }*/
    /*
    "The 'Hello world' string" should {
  "contain 11 characters" in {
@@ -39,17 +39,21 @@ class PlosemoProverSpec extends Specification
  "end with 'world'" in {
    "Hello world" must endWith("world")
    */
-}
+//}
 
 object TestPlosemoProverCLI extends CLIwithFileInput
 {  def main(args: Array[String]) =
-   {   
+   {  println("SWiFTpom.dir == " + System.getProperty("SWiFTpom.dir"))
+
       if( args.length != 0 ) println("Usage: command (without parameters)")
       else
       {  val predicateB = Predicate("B",1)
-         val plosemoQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
+         val predicateF = Predicate("F",1)
+         val plosemoQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateF, List(Var("x")))))
          val folTheory = new FOLtheory
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("makkelPowerConnect"))))
+         folTheory.addStat(PredApp_FOL(predicateB, List(Constant("loxolopPower"))))
+         folTheory.addStat(PredApp_FOL(predicateF, List(Constant("ebePower"))))
          Prover.query(plosemoQuery, folTheory)
       }
       /*
@@ -98,7 +102,7 @@ object Prover extends reas.ProverTrait
                      val fofPVname = "PV" + forallVar.name // <rename to official name of pattern variables in fof.> Possibly confusing: pattern variable in Plosemo != pattern variable in FOF (in this case)!
                      predApp match
                      {  case  PredApp(p, consts) =>
-                        {  "fof(form" + ft.stats.length + ", question, ? [" + fofPVname + "] : " + p.name + consts.map( c => if( c.name.equals(forallVar) ) fofPVname else c.name ).mkString("(",",",")") + ")."
+                        {  "fof(form" + ft.stats.length + ", question, ? [" + fofPVname + "] : " + p.name + consts.map( c => if( c.equals(forallVar) ) fofPVname else c.name ).mkString("(",",",")") + ")."
                         }
                      }
                   }
