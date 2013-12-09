@@ -1,4 +1,4 @@
-package org.ocbkc.swift.logilang
+package org.ocbkc.swift.logilang // @todo move to package ... + FOL
 {
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.logilang.query._
@@ -227,7 +227,7 @@ class FOLutils
 }
 
 object FOLutils extends FOLutils
-sealed trait FOLstatement
+sealed trait FOLstatement // @todo rename to -sentence
 case class Equal(cv1:Constant, cv2: Constant)      extends FOLstatement
 {  override def toString =
    {  "Equal(" + cv1 + ", " + cv2 + ")"
@@ -352,6 +352,15 @@ object Predicate
       // &y2012.04.05.00:33:36& also do this for constants, and then change the gocPredicate and gocConstant in FOLtheory, to never use new Predicate/Constant, but always this apply method.
    }
 
+}
+
+}
+
+package org.ocbkc.swift.logilang.fofa
+{
+sealed trait FofaSentence
+case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp) extends FofaSentence
+case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSentence
 }
 
 }

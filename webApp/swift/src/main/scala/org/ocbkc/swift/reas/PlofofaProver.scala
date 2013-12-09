@@ -1,12 +1,12 @@
 // <rename reas to prover>
-package org.ocbkc.swift.reas.plosemo
+package org.ocbkc.swift.reas.plofofa
 {
 import org.ocbkc.swift.reas
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.ComparisonOperator._
-import org.ocbkc.swift.logilang.query.plosemo._
+import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.tpwrap._
 import query._
 import System.err.println
@@ -15,15 +15,15 @@ import org.ocbkc.swift.test.CLIwithFileInput
 import org.ocbkc.swift.global.Logging._
 //import org.specs2.mutable._
 
-/*class PlosemoProverSpec extends Specification
+/*class PlofofaProverSpec extends Specification
 {  val predicateB = Predicate("B",1)
-   val plosemoQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
+   val plofofaQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
    val folTheory = new FOLtheory
    folTheory.addStat(PredApp_FOL(predicateB, List(Constant("makkelPowerConnect"))))
 
-   val queryResult = Prover.query(plosemoQuery, folTheory)
+   val queryResult = Prover.query(plofofaQuery, folTheory)
 
-   "Prover.query(plosemoQuery, folTheory)" should
+   "Prover.query(plofofaQuery, folTheory)" should
    {  " equal null, because we are still testing" in
       {  queryResult must be equalTo(null)
       }
@@ -41,7 +41,7 @@ import org.ocbkc.swift.global.Logging._
    */
 //}
 
-object TestPlosemoProverCLI extends CLIwithFileInput
+object TestPlofofaProverCLI extends CLIwithFileInput
 {  def main(args: Array[String]) =
    {  println("SWiFTpom.dir == " + System.getProperty("SWiFTpom.dir"))
 
@@ -49,12 +49,12 @@ object TestPlosemoProverCLI extends CLIwithFileInput
       else
       {  val predicateB = Predicate("B",1)
          val predicateF = Predicate("F",1)
-         val plosemoQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateF, List(Var("x")))))
+         val plofofaQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateF, List(Var("x")))))
          val folTheory = new FOLtheory
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("makkelPowerConnect"))))
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("loxolopPower"))))
          folTheory.addStat(PredApp_FOL(predicateF, List(Constant("ebePower"))))
-         Prover.query(plosemoQuery, folTheory)
+         Prover.query(plofofaQuery, folTheory)
       }
       /*
       if( args.length != 1 ) println("Usage: command filename")
@@ -84,8 +84,8 @@ object TestPlosemoProverCLI extends CLIwithFileInput
    }
 }
 object Prover extends reas.ProverTrait
-{  def query(query:PlosemoPat, ft:FOLtheory) = // return type TODO
-   {  log("reas.plosemo.Prover called")
+{  def query(query:PlofofaPat, ft:FOLtheory):FofaSentence =
+   {  log("reas.plofofa.Prover called")
       log("   query = " + query)
 
       // translate FOLtheory to FOF
@@ -99,7 +99,7 @@ object Prover extends reas.ProverTrait
                   {  log("   error in query, pattern variables are not the same")
                   } else
                   {  // transform to fof query
-                     val fofPVname = "PV" + forallVar.name // <rename to official name of pattern variables in fof.> Possibly confusing: pattern variable in Plosemo != pattern variable in FOF (in this case)!
+                     val fofPVname = "PV" + forallVar.name // <rename to official name of pattern variables in fof.> Possibly confusing: pattern variable in Plofofa != pattern variable in FOF (in this case)!
                      predApp match
                      {  case  PredApp(p, consts) =>
                         {  "fof(form" + ft.stats.length + ", question, ? [" + fofPVname + "] : " + p.name + consts.map( c => if( c.equals(forallVar) ) fofPVname else c.name ).mkString("(",",",")") + ")."

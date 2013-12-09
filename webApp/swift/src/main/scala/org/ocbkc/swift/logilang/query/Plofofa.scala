@@ -2,7 +2,7 @@
 - using a superclass with innerclasses defining Predicate, PredApp, etc, so that these can be reused, while still having a slightly different semantics, or additional constructs added to them. For now, each CTL is defined from scratch.
 */
 
-package org.ocbkc.swift.logilang.query.plosemo
+package org.ocbkc.swift.logilang.query.plofofa
 {
 import System._
 import java.io._
@@ -19,7 +19,7 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 */
 
 // BEGIN TEST
-object TestPlosemoCLI extends CLIwithFileInput
+object TestPlofofaCLI extends CLIwithFileInput
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command, without arguments")
       def f:String =
@@ -31,18 +31,14 @@ object TestPlosemoCLI extends CLIwithFileInput
    }
 }
 
-
 // END TEST
 
-// Questionlanguage: Folnuminqua
-
-// each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-trait PlosemoPat
+trait PlofofaPat
 {  
 }
 /** Example in pure format: mostInfo(s_, forall x from s_.P(c_2, x))
   */
-case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlosemoPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
+case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
 {  def serialize =
    {  /* <? &y2012.05.18.15:40:46& the following gives an error because + cannot be used to add Formats. How can this be accomplished? Or isn't it possible, and if not, why not?>/(   relatedTo = {[lift-json]}
    
@@ -57,7 +53,6 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlosemoPat // I d
 }
 
 // Example: mostInfo(s_, forall x from s_.P(c_2, x))
-case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlosemoPat
-case class PredApp_Plosemo(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlosemoPat
-
+case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlofofaPat
+case class PredApp_Plofofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlofofaPat
 }
