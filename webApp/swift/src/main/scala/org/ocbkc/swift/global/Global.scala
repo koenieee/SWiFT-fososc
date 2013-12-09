@@ -15,14 +15,21 @@ import org.eclipse.jgit.storage.file._
 import java.io._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.global.Logging._
 
 object GlobalConstant
-{  
- 
-
-   val TEST = true
+{  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
-   val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
+   val WEBAPP_BASE_DIR =
+   {  val  SWiFTpomDirProp = System.getProperty("SWiFTpom.dir")
+      if(SWiFTpomDirProp != null)
+         SWiFTpomDirProp
+      else
+         System.getProperty("user.dir")
+   }
+
+   log("   WEBAPP_BASE_DIR = " + WEBAPP_BASE_DIR)
+
    val OS = System.getProperty("os.name").toLowerCase
    
    val PERSISTENT_DATA_MAIN_VERSION_PATHNAME = WEBAPP_BASE_DIR + "/persistentDatastructureMainVersion.txt"
@@ -114,7 +121,7 @@ object GlobalConstant
       if( !outFile.exists )
       {  println("   path " + pathname + " (this is a path to Pure Wisdom) doesn't exist yet")
          val mkdirSuccess = outFile.mkdirs
-         println("   so creating...  succesful: " + { if(mkdirSuccess) "of course, as always, success is my middle name..." else "Fuck it, no... This is ruining my good humour." } )
+         println("   so creating...  succesful: " + { if(mkdirSuccess) "of course, as always, success is my middle name..." else "No... this is ruining my good humour." } )
          mkdirSuccess
       } else
       {  println("   path already exists, dude, you woke me for nothin'... That means free time for me, humble method, I'm gonna continue my dreamy nap...")
