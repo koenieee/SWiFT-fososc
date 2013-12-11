@@ -4,9 +4,12 @@ package org.ocbkc.swift.reas.plofofa
 import org.ocbkc.swift.reas
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.logilang.fofa._
+import org.ocbkc.swift.logilang.fofa
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.ComparisonOperator._
 import org.ocbkc.swift.logilang.query.plofofa._
+import org.ocbkc.swift.logilang.query.plofofa
 import org.ocbkc.swift.tpwrap._
 import query._
 import System.err.println
@@ -49,12 +52,13 @@ object TestPlofofaProverCLI extends CLIwithFileInput
       else
       {  val predicateB = Predicate("B",1)
          val predicateF = Predicate("F",1)
-         val plofofaQuery = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(predicateF, List(Var("x")))))
+         val plofofaQuery = MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
          val folTheory = new FOLtheory
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("makkelPowerConnect"))))
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("loxolopPower"))))
          folTheory.addStat(PredApp_FOL(predicateF, List(Constant("ebePower"))))
-         Prover.query(plofofaQuery, folTheory)
+         folTheory.addStat(PredApp_FOL(predicateB, List(Constant("rotsigeBodemMakkeltje"))))
+         val result = Prover.query(plofofaQuery, folTheory)
       }
       /*
       if( args.length != 1 ) println("Usage: command filename")
@@ -94,7 +98,7 @@ object Prover extends reas.ProverTrait
       val queryFof = query match
       {  case MostInfo(patVar, forallPat) =>
          {  forallPat match
-            {  case Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp) =>
+            {  case plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp) =>
                {  if( setPatVar != patVar )
                   {  log("   error in query, pattern variables are not the same")
                   } else
@@ -125,7 +129,15 @@ object Prover extends reas.ProverTrait
       // apply eprover
       val eproverResult = Eprover("--cpu-limit=30 --memory-limit=Auto --tstp-format -s --answers " + fullpath)
       println("####   eprover's result =\n" + eproverResult)
-      null // TODO finish
+
+      val result = query match
+      {  case MostInfo(patVar, plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp)) =>
+         fofa.Forall(forallVar, eproverResult.extractConstants, predApp)
+      }
+
+      log(" Final result: " + result)
+
+      result
    }
 }
 

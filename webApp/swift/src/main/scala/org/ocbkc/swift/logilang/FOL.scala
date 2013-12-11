@@ -358,9 +358,11 @@ object Predicate
 
 package org.ocbkc.swift.logilang.fofa
 {
+
+import org.ocbkc.swift.logilang._
+
 sealed trait FofaSentence
 case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp) extends FofaSentence
 case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSentence
-}
 
 }
