@@ -81,18 +81,22 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
    {  super.initialiseSessionInfo
       null // <finish>
       si.textNL = "Todo algorithm for generating efechallenge natural language text" 
-      si.textCTLbyComputer = "TODO CTL text by Computer"
-      si.questionNL = "TODO question NL"
-      si.questionCTLcomputer = "TODO questionCTLcomputer"
+      si.textCTLbyComputer = "B(instoppertje)\nF(loxolop)\n" // Fixed dummy for now TODO CTL text by Computer"
+      si.questionNL = "Which things and people are big?" // TODO replace with generated item
+      si.questionCTLcomputer_pureFormat = "mostInfo(s_, forall x from s_ .B(x)" /*
+         - TODO replace with generated item
+         - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers). */
       si.algoDefComputer = si.questionCTLcomputer
-      si.answerComputerCTL = "answer computer ctl"
-      si.answerComputerNL = "answer computer NL"
-      si.questionRelatedBridgeStats = "questionRelatedBridgeStats"
+      si.answerComputerCTL = "forall x from {instoppertje}.B(x)"
+/*       - TODO replace with generated item
+         - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
+*/
+
+      si.answerComputerNL = "instoppertje is big."
+      si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL"
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.hurelanRole1NL = "hurelanRole1NL"
-      si.hurelanRole2NL = "hurelanRole2NL"
-      si.bridgeCTL2NLcomputer = "bridgeCTL2NLcomputer"
+      si.bridgeCTL2NLcomputer = "TODObridgeCTL2NLcomputer"
       si
    }
 
