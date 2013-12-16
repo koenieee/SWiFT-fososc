@@ -5,8 +5,7 @@ import org.ocbkc.swift.global.Types._
 import scala.util.Random
 
 package org.ocbkc.swift.test
-{  
-   // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
+{  // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
 {  import TestHelpers._
    println("constructor SystemWithTesting called")

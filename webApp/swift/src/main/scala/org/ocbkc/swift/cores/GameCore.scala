@@ -83,9 +83,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si.textNL = "Todo algorithm for generating efechallenge natural language text" 
       si.textCTLbyComputer = "B(instoppertje)\nF(loxolop)\n" // Fixed dummy for now TODO CTL text by Computer"
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_pureFormat = "mostInfo(s_, forall x from s_ .B(x)" /*
+      si.questionCTLcomputer_pf = "mostInfo(s_, forall x from s_ .B(x)" /*
          - TODO replace with generated item
-         - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers). */
+         - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer = si.questionCTLcomputer
       si.answerComputerCTL = "forall x from {instoppertje}.B(x)"
 /*       - TODO replace with generated item

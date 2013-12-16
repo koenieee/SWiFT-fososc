@@ -36,6 +36,49 @@ object TestPlofofaCLI extends CLIwithFileInput
 trait PlofofaPat
 {  
 }
+
+/** Multi-representation PlofofaPat
+  */
+class PlofofaPat_rb()
+{  def this(pf: String) = TODOintialisePf
+   def this(sf: PlofofaPat) = TODOinitialiseSf
+
+   private var pf_ = Option[String] // Pure format
+   private var sf_: Option[PlofofaPat] // Scala data-structure format
+
+   def sf=_ ():PlofofaPat =
+   {  sf_ match
+      {  
+      }
+   }
+
+   def sf:PlofofaPat = // TODO check getter setter sugar application
+   sf_ match
+   {  case Some[sfLocal] => sfLocal
+      case None      =>
+      {  pf_ match
+         {  case Some[pf] =>
+            {  sf_ = pf2sf(pf)
+               sf_
+            }
+            case None     => logAndThrow("PlofofaPat.sf: no representations available.")
+         }
+      }
+   }
+
+   /** Translation pure format to Scala format
+     */
+   def pf2sf() =
+   {  logAndThrow("PlofofaPat_rb.pf2sf Not implemented in this increment: avoid usage, by always explicitly providing the scala format of the plofofapat.")
+   }
+
+   def sf2pf() =
+   {  sf match
+      {
+      }
+   }
+}
+
 /** Example in pure format: mostInfo(s_, forall x from s_.P(c_2, x))
   */
 case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
