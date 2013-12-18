@@ -8,18 +8,28 @@
 
 - Use spaced tabs, so each tab should consist of whitespaces, and not a TAB symbol.
    - Recommended: set your text editor to automatically convert the TAB-key to whitespaces.
+
 - Use tab size = 3 spaces
    - Recommended: set your text editor to a tab-width of 3 spaces.
-- Use the following style of using curly brackets:
+
+- Follow the following style when using curly brackets:
 
 def intelligentMethod() =
 {  [here code]
    [etc.]
 }
-- Start the code on the same line as the opening curly bracket, just as in the example above.
-- But a space each , separating an parameter:
+
+- Start the code on the same line as the opening curly bracket, just as in the example above. So don't do this:
+def intelligentMethod() =
+{  
+   [here code]
+   [etc.]
+}
+
+- But a space after each comma (',') separating a parameter:
 
 def intelligentMethod(x:Int, y:Int, z:Int)
+
 - Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and ==:
 
 if( x == 5 ) 
@@ -29,6 +39,13 @@ if( x == 5 )
 - Other aspects: do as one sees fit. For example, the following style is also allowed (no space after '(' and before ')')
 
 if(x == 5)
+
+- Vertically align => symbols after cases:
+
+list match
+{  case Nil => None
+   case _   => Some(list(rs.nextInt(list.length)))
+}
 
 - A complete example is the following:
 
@@ -45,7 +62,7 @@ object RandomExtras
    }
 }
 
-- If there is any good reason, one may locally deviate from the code layout rules defined in this document.
+- If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.
 
 TODO examples
 

@@ -1,4 +1,4 @@
-.// change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
+// change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
 package org.ocbkc.swift.cores
 {  
 import org.ocbkc.swift.logilang._
