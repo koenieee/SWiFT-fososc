@@ -93,11 +93,10 @@ Note: _pf = pure format
 
 case class SessionInfo( var textNL: String,
                         var questionNL: String,
-                        var questionCTLcomputer_pf: String,
-                        var questionCTLcomputer_sf: String, // 
+                        var questionCTLcomputer_rb: Option[PlofofaPat_rb],
                         var textCTLbyComputer: String,
                         var bridgeCTL2NLcomputer: String,
-                        var algoDefComputer: String,
+                        var algoDefComputer_rb: Option[PlofofaPat_rb],
                         var answerComputerCTL: String,
                         var answerComputerNL: String,
                         var textCTLbyPlayer_ : String, // don't change this one directly

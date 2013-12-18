@@ -86,7 +86,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si.questionCTLcomputer_pf = "mostInfo(s_, forall x from s_ .B(x)" /*
          - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
-      si.algoDefComputer = si.questionCTLcomputer
+      si.algoDefComputer_rb = si.questionCTLcomputer_rb
       si.answerComputerCTL = "forall x from {instoppertje}.B(x)"
 /*       - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).

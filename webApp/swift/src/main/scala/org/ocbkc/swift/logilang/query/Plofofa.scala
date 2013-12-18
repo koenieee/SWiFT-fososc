@@ -11,6 +11,7 @@ import org.ocbkc.swift.test.CLIwithFileInput
 import org.ocbkc.swift.logilang.query._
 import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
+import org.ocbkc.swift.global.Logging._
 // import scala.util.parsing.combinator.Parsers._
 
 /* Conventions:
@@ -40,24 +41,18 @@ trait PlofofaPat
 /** Multi-representation PlofofaPat
   */
 class PlofofaPat_rb()
-{  def this(pf: String) = TODOintialisePf
-   def this(sf: PlofofaPat) = TODOinitialiseSf
+{  def this(pf: String) = { this(); pf_ = Some(pf) }
+   def this(sf: PlofofaPat) = { this(); sf_ = Some(sf) }
 
-   private var pf_ = Option[String] // Pure format
-   private var sf_: Option[PlofofaPat] // Scala data-structure format
+   private var pf_ :Option[String] = None // Pure format
+   private var sf_ :Option[PlofofaPat] = None // Scala data-structure format
 
-   def sf=_ ():PlofofaPat =
-   {  sf_ match
-      {  
-      }
-   }
-
-   def sf:PlofofaPat = // TODO check getter setter sugar application
+   def sf:PlofofaPat =
    sf_ match
-   {  case Some[sfLocal] => sfLocal
+   {  case Some(sfLocal) => sfLocal
       case None      =>
       {  pf_ match
-         {  case Some[pf] =>
+         {  case Some(pf) =>
             {  sf_ = pf2sf(pf)
                sf_
             }
@@ -73,9 +68,9 @@ class PlofofaPat_rb()
    }
 
    def sf2pf() =
-   {  sf match
+   {/*sf match
       {
-      }
+      }*/
    }
 }
 
