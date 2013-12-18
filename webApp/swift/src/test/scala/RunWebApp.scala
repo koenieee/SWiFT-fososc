@@ -24,11 +24,11 @@ object RunWebApp extends Application
       }
       server.stop()
       server.join()
-    } catch 
-    {  case exc : Exception => 
-       {  exc.printStackTrace()
-          System.exit(100)
-       }
-    } 
+   }catch 
+   { case exc : Exception => 
+     {  exc.printStackTrace()
+        System.exit(100)
+     }
+   } 
 }
 
