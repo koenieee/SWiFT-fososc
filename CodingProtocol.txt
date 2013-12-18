@@ -8,19 +8,29 @@
 
 - Use spaced tabs, so each tab should consist of whitespaces, and not a TAB symbol.
    - Recommended: set your text editor to automatically convert the TAB-key to whitespaces.
+
 - Use tab size = 3 spaces
    - Recommended: set your text editor to a tab-width of 3 spaces.
-- Use the following style of using curly brackets:
+
+- Follow the following style when using curly brackets:
 
 def intelligentMethod() =
 {  [here code]
    [etc.]
 }
-- Start the code on the same line as the opening curly bracket, just as in the example above.
-- Put a space after each , which separates a parameter:
+
+- Start the code on the same line as the opening curly bracket, just as in the example above. So don't do this:
+def intelligentMethod() =
+{  
+   [here code]
+   [etc.]
+}
+
+- But a space after each comma (',') separating a parameter:
 
 def intelligentMethod(x:Int, y:Int, z:Int)
-- Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and == (except for .):
+
+- Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and ==:
 
 if( x == 5 ) 
 {  [do this]
