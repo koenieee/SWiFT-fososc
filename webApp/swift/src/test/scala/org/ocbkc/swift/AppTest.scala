@@ -50,7 +50,7 @@ class AppTest extends TestCase("app")
 
          /*
          if (file.isFile && file.exists && handledXml(file.getName)) 
-	 {  try
+         {  try
             {  import java.io.FileInputStream
                val fis = new FileInputStream(file)
                try 
@@ -64,12 +64,12 @@ class AppTest extends TestCase("app")
          }
          */
 
-      if (file.isFile && file.exists && handledXHtml(file.getName)) 
-      {  PCDataXmlParser(new _root_.java.io.FileInputStream(file.getAbsolutePath)) match 
-	 {  case Full(_) => // file is ok
-            case _ => failed = file :: failed
+         if (file.isFile && file.exists && handledXHtml(file.getName)) 
+         {  PCDataXmlParser(new _root_.java.io.FileInputStream(file.getAbsolutePath)) match 
+	    {  case Full(_) => // file is ok
+             case _ => failed = file :: failed
+            }
          }
-      }
       }
 
       wellFormed(new File("src/main/webapp"))
