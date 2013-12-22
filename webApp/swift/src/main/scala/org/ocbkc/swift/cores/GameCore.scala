@@ -1,10 +1,12 @@
 // change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
 package org.ocbkc.swift.cores
 {
+
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
+import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.GlobalConstant._
@@ -80,12 +82,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
       null // <finish>
-      si.textNL = "Todo algorithm for generating efechallenge natural language text" 
-      si.textCTLbyComputer = "B(instoppertje)\nF(loxolop)\n" // Fixed dummy for now TODO CTL text by Computer"
+      si.textNL = "loxolop is fast and gaia is big" 
+      si.textCTLbyComputer = "B(gaia)\nF(loxolop)\n" // Fixed dummy for now TODO CTL text by Computer"
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_pf = "mostInfo(s_, forall x from s_ .B(x)" /*
+      si.questionCTLcomputer_rb = Some(new PlofofaPat_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
          - TODO replace with generated item
-         - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
+         - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
       si.answerComputerCTL = "forall x from {instoppertje}.B(x)"
 /*       - TODO replace with generated item

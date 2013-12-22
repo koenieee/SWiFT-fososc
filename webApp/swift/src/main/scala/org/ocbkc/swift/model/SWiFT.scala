@@ -2,6 +2,7 @@ package org.ocbkc.swift.model
 {
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang.query.folnuminqua._
+import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang._
 import System.err.println
 import _root_.net.liftweb.mapper._
@@ -121,7 +122,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","","","","","","","","",None,None,"",None,"","","","","","")
+   def this() = this("","",None,"","",None,"","","",None,None,"",None,"","","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 
@@ -215,10 +216,10 @@ case class SessionInfo( var textNL: String,
    def copyJsonSerializedFieldsFrom(si:SessionInfo) =
    {  this.textNL = si.textNL
       this.questionNL = si.questionNL
-      this.questionCTLcomputer = si.questionCTLcomputer
+      this.questionCTLcomputer_rb = si.questionCTLcomputer_rb
       this.textCTLbyComputer = si.textCTLbyComputer
       this.bridgeCTL2NLcomputer = si.bridgeCTL2NLcomputer
-      this.algoDefComputer = si.algoDefComputer
+      this.algoDefComputer_rb = si.algoDefComputer_rb
       this.answerComputerCTL = si.answerComputerCTL
       this.answerComputerNL = si.answerComputerNL
       this.textCTLbyPlayer_  = si.textCTLbyPlayer_ 

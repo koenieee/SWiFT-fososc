@@ -48,32 +48,37 @@ class PlofofaPat_rb()
    private var sf_ :Option[PlofofaPat] = None // Scala data-structure format
 
    def sf:PlofofaPat =
-   sf_ match
-   {  case Some(sfLocal) => sfLocal
-      case None      =>
-      {  pf_ match
-         {  case Some(pf) =>
-            {  sf_ = pf2sf(pf)
-               sf_
+   {  sf_ match
+      {  case Some(sfLocal) => sfLocal
+         case None      =>
+         {  pf_ match
+            {  case Some(pf) =>
+               {  sf_ = Some(PlofofaFormatTransforms.pf2sf(pf))
+                  sf_.get
+               }
+               case None     => logAndThrow("PlofofaPat.sf: no representations available.")
             }
-            case None     => logAndThrow("PlofofaPat.sf: no representations available.")
          }
       }
    }
 
-   /** Translation pure format to Scala format
-     */
-   def pf2sf() =
+}
+
+
+object PlofofaFormatTransforms
+{  def pf2sf(pf:String):PlofofaPat  =
    {  logAndThrow("PlofofaPat_rb.pf2sf Not implemented in this increment: avoid usage, by always explicitly providing the scala format of the plofofapat.")
    }
 
-   def sf2pf() =
+   /** Translation Scala-format to pure-format
+     */
+   def sf2pf(sf:PlofofaPat):String =
    {/*sf match
       {
       }*/
+      "TODO"
    }
 }
-
 /** Example in pure format: mostInfo(s_, forall x from s_.P(c_2, x))
   */
 case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.

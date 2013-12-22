@@ -33,7 +33,7 @@ class QuestionAttackRound
                )
       bind( "qar", boundForm, 
             "questionNL" ->   Text(sesCoord.si.questionNL),
-            "questionCTL" ->  Text(sesCoord.si.questionCTLcomputer),
+            "questionCTL" ->  Text(sesCoord.si.questionCTLcomputer_rb.toString),
             //"questionNo" ->   Text("TODO: questionNo"),
             "computerAnswerFromSource" -> Text(sesCoord.si.answerComputerNL)
           )
