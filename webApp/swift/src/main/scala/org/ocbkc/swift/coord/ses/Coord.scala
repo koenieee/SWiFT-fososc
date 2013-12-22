@@ -267,6 +267,7 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
    }
 */
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
+
    def testSyntaxTranslation:String = 
    {  gameCore.parseTextCTLbyPlayer
       val warn = gameCore.parseWarningMsgTxtCTLplayer
