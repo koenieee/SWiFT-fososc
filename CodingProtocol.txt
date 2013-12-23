@@ -77,7 +77,7 @@ TODO examples
 
 
 
-### Naming conventions
+### Naming conventions ###
 
 - Make use of lower case camel case for variable names
 
