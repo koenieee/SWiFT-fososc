@@ -40,20 +40,15 @@ class StudyConstitution
 
          S.param("id") match
          {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                                 { case Some(constLoc)   => { println("   Constitution id:" + idLoc); sesCoord.firstChosenConstitution = Some(constLoc); constLoc 
-							    }
-                                   case None             => { println("   BUG: constitution with id " + idLoc + " not found"); S.redirectTo("notfound") 
-							    }
+                                 { case Some(constLoc)   => { println("   Constitution id:" + idLoc); sesCoord.firstChosenConstitution = Some(constLoc); constLoc  }
+                                   case None             => { println("   BUG: constitution with id " + idLoc + " not found"); S.redirectTo("notfound") }
                                  }
-            case _            => { println("   BUG: no id URL-parameter in studyConstitution.html given"); S.redirectTo("errorIdNotFound") 
-				 }
+            case _            => { println("   BUG: no id URL-parameter in studyConstitution.html given"); S.redirectTo("errorIdNotFound") }
    */
 
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
-   {  case Full(id)  => { id.toInt 
-			}
-      case _         => { throw new RuntimeException("  No user id found.") 
-			}
+   {  case Full(id)  => { id.toInt }
+      case _         => { throw new RuntimeException("  No user id found.") }
    }
 
    /*      
@@ -75,8 +70,7 @@ class StudyConstitution
                            "creator"            -> Text(
                                        Player.find(consti.creatorUserID) match
                                        {  case Full(player)  => player.swiftDisplayName
-                                          case _             => { println("    bug: Player with id " + consti.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." 
-								}
+                                          case _             => { println("    bug: Player with id " + consti.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." }
                                        }
                                                        )
 
