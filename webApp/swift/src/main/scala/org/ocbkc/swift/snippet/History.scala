@@ -33,9 +33,8 @@ class History
    }
 
    def historyTableRows(ns:NodeSeq):NodeSeq =
-      { 
-		   println("historyTableRows called")
-		TableSorter("#myTable");
+   {  println("historyTableRows called")
+      TableSorter("#myTable");
       
       implicit val displayIfNone = "-"
       if( const == null ) println("   bug: const == null")
@@ -71,11 +70,12 @@ class History
                                        println("   const.commitIdsReleases: " + const.commitIdsReleases)
                                        println("   searching revcom.name = " + revcom.name)
                                        if(isRelease) Text("R" + const.releaseIndex(revcom.name)) else Text("-")
-                                    },
+                                  },
             "author"             -> Text
                                     (  Player.find(playerId) match
                                        {  case Full(player)  => player.swiftDisplayName
-                                          case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, please report it)" }
+                                          case _             => { println("    bug: Player with id " + playerId + " not found."); "player unknown (this is a bug, please report it)" 
+                                                                }
                                        }
                                     ),
             "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, revcom.name, GlobalConstant.AverageFluency.fluencyConstantK)) else "-" }
@@ -109,8 +109,7 @@ class History
    }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  
-      bind( "top", ns, 
+   {  bind( "top", ns, 
             "constname"    -> Text(const.constiId.toString),
             "diffBt"       -> SHtml.button("Show difference", processDiffButton),
             "history"      -> historyTableRows(ns) 
