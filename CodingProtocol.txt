@@ -12,7 +12,7 @@
 - Use tab size = 3 spaces
    - Recommended: set your text editor to a tab-width of 3 spaces.
 
-- Follow the following style when using curly brackets:
+- In general, follow the following style when using curly brackets for program blocks:
 
 def intelligentMethod() =
 {  [here code]
@@ -25,6 +25,10 @@ def intelligentMethod() =
    [here code]
    [etc.]
 }
+
+- An alternative style for short program blocks is the following:
+
+case Some(constLoc)   => { println("   Constitution id:" + idLoc); constLoc }
 
 - But a space after each comma (',') separating a parameter:
 
@@ -70,6 +74,21 @@ package sky.with.high.clouds
 [here first line of code]
 
 }
+
+- In any assignment, a long right hand side, consists of one single statement (not enclosed in { }) should in general be written as follows:
+
+val currentUserId:Int =
+   Player.currentUserId match
+   {  case Full(id)  => { id.toInt }
+      case _         => { throw new RuntimeException("  No user id found.") }
+   }
+
+def function(x:Int) =
+   Player.currentUserId match
+   {  case Full(id)  => { id.toInt }
+      case _         => { throw new RuntimeException("  No user id found.") }
+   }
+
 
 - If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.
 
@@ -129,7 +148,6 @@ taglist.map( x"x? o yeah, wait, that is a tag" => log(x "hmm, what was it again,
 
 Of course there may be differences among individuals, however, the rule: if it takes the same amount of effort, choose the solution which is best for more people. Using 't' or 'x' in the previous example is the same effort, but the first will make your code more easily readable for more people.
 
-
 - TIP: Naming each local variable may be time consuming, however, by simply using an abbreviation of a meaningful name assigned to a variable or a datatype that is associated with the new variable, you can easily create names hardly without additional thinking. Example:
 
 Good:
@@ -141,3 +159,4 @@ Not good:
 val numberCorrect = coreContentObjects.count( y => y.answerPlayerCorrect )
 
 
+]
