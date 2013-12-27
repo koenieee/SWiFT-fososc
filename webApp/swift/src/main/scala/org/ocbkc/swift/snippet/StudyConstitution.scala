@@ -40,7 +40,7 @@ class StudyConstitution
 
          S.param("id") match
          {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                                 { case Some(constLoc)   => { println("   Constitution id:" + idLoc); sesCoord.firstChosenConstitution = Some(constLoc); constLoc  }
+                                 { case Some(constLoc)   => { println("   Constitution id:" + idLoc); sesCoord.firstChosenConstitution = Some(constLoc); constLoc }
                                    case None             => { println("   BUG: constitution with id " + idLoc + " not found"); S.redirectTo("notfound") }
                                  }
             case _            => { println("   BUG: no id URL-parameter in studyConstitution.html given"); S.redirectTo("errorIdNotFound") }
