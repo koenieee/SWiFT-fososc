@@ -11,6 +11,8 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.model.Player
+import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.LiftHelpers._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
@@ -20,6 +22,9 @@ import scala.util.parsing.combinator.Parsers //{Success, Failure}
 import org.ocbkc.swift.logilang.bridge.brone
 
 // BriCo = BridgeConstruction
+package efe
+{
+
 object sesBriCo extends SessionVar(new BridgeConstructionSessionInfo)
 
 class BridgeConstructionSessionInfo
@@ -28,14 +33,14 @@ class BridgeConstructionSessionInfo
 }
 
 class BridgeConstruction
-{  val sesBriCoLR = sesBriCo.is
+{  val sesBricoLR = sesBriCo.is
 
    val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer
 
 // { transformed2efe
-   def processMenu4EntityBridge(entNLname:String) =
+   def processMenu4EntityBridgeSelect(entNLname:String) =
    {  //TODO
    }
    
@@ -45,21 +50,28 @@ class BridgeConstruction
                                                 case None         => println("   No constants found in translation player."); Nil
                                              }
    
-      constants.flatmap
-      {  entNLnames = List("testLoxolop", "testMoekelPower") // <replace>
-         val entBridgeConstructionTemplate = chooseTemplate("top", "entBridgeConstructionTemplate", ns)
-         bind( "top", entBridgeConstructionTemplate, 
-            "constantName"          -> Text(constantIdentifier),
-            "naturalLanguageSelect" -> SHtml.select(entNLnames, Empty, processMenu4EntityBridgeSelect(_, constantIdentifier))
-         )
+      constants.flatMap
+      {  constantIdentifier =>
+         {  val entNLnames = List("testLoxolop", "testMoekelPower") // <replace>
+            val entBridgeConstructionTemplate = chooseTemplate("top", "entBridgeConstructionTemplate", ns)
+            log("entBridgeConstructionTemplate = " + entBridgeConstructionTemplate)
+
+            logp( { ns:NodeSeq => "Result of bind ebct with entBridgeConstructionTemplate: " + ns.toString },
+                  bind( "ebct", entBridgeConstructionTemplate, 
+                        "constantName"    -> Text(constantIdentifier),
+                        "entNLselectBox"  -> SHtml.select(entNLnames.map(name => (name,name)), Empty, processMenu4EntityBridgeSelect(_))
+               )
+            )
+         }
       }
    }
 // }
+
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartBridgeConstruction
       
       def processSubmission() = 
-      {  println("BridgeConstruction.processSubmission called")
+      {  println("efe.BridgeConstruction.processSubmission called")
          
          // check errors on submission here
          
@@ -71,24 +83,21 @@ class BridgeConstruction
          
          S.redirectTo("questionAttackRound.html")
       }
-
-
-
-*/
-
-
-
-      bind( "top", ns, 
+// { transformed2efe
+      bind( "top", ns,
             "translation"                 -> Text(sesCoordLR.si.textCTLbyPlayer),
-            "entBridgeConstructionMenus"  -> generateMenus4EntityBridge,
+            "entBridgeConstructionMenus"  -> generateMenus4EntityBridge(ns),
             "constructedBridgeCTL2NL"     -> Text(sesCoordLR.si.bridgeCTL2NLplayer),
-            "errorInInfo2ConstructBridge" -> errorBridgeWebText,
+            // "errorInInfo2ConstructBridge" -> errorBridgeWebText,
             "sourceText"                  -> Text(sesCoordLR.si.textNL),
-            "submitBt"                    -> SHtml.submit("Submit", processSubmission)
+            "submitBt"                    -> SHtml.submit("Submit", processSubmission),
+            "entBridgeConstructionTemplate" ->  emptyNode
           )
+// }
    }
 }
 
+}
 }
 }
 

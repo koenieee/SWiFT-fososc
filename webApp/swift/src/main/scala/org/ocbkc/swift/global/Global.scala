@@ -168,6 +168,13 @@ object Logging
    def log(msg:String) =
    {  println(msg)
    }
+
+   /** Log and pass
+     */
+   def logp[T](msg: T => String, obj:T):T =
+   {  println(msg(obj))
+      obj
+   }
 }
 
 object LiftHelpers

@@ -1,4 +1,4 @@
-package org.ocbkc.swift 
+package org.ocbkc.swift
 {
 package snippet 
 {
@@ -15,6 +15,9 @@ import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
 import scala.util.parsing.combinator.Parsers //{Success, Failure}
+
+package notuna
+{
 // BriCo = BridgeConstruction
 object sesBriCo extends SessionVar(new BridgeConstructionSessionInfo)
 
@@ -156,5 +159,6 @@ class BridgeConstruction
    }
 }
 
+}
 }
 }

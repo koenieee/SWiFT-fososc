@@ -44,7 +44,7 @@ class TranslationRound
          
          if(transCorrect) 
          {  sesCoordLR.gameCore.parseTextCTLbyPlayer // <&y2012.02.22.15:31:48& is now needed to get constantsByPlayer and predsByPlayer filled. In future this should not be needed (see SessionInfo)>
-            S.redirectTo("bridgeconstruction.html") 
+            S.redirectTo("bridgeconstruction_efe.html") 
          }   
          else S.redirectTo("translationRound.html") 
       }
