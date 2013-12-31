@@ -35,47 +35,44 @@ import net.liftmodules.JQueryModule
  * A class that's instantiated early and run.  It allows the application
  * to modify lift's environment
  */
-class Boot {
-  def boot {
-	  
-
-
-	JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
-	JQueryModule.init()
-   log("Boot.boot called")
+class Boot 
+{  def boot
+   {  JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
+      JQueryModule.init()
+      log("Boot.boot called")
    
-   PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
-   PersDataUpgrader4SWiFT.apply
+      PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
+      PersDataUpgrader4SWiFT.apply
 
-   LiftRules.useXhtmlMimeType = false
-    if (!DB.jndiJdbcConnAvailable_?) {
-      val vendor = 
-	new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+      LiftRules.useXhtmlMimeType = false
+      if (!DB.jndiJdbcConnAvailable_?) 
+      {  val vendor = 
+	 new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
 			     Props.get("db.url") openOr 
 			     "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
 			     Props.get("db.user"), Props.get("db.password"))
 
-      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
+         LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
 
-      DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
-    }
+         DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
+      }
 
-    /* todo, not yet used, build this in at a later stage
-    val roles =
+      /* todo, not yet used, build this in at a later stage
+      val roles =
       AuthRole("ForbiddenRole", // no one should ever have this role, because both admin and player have possibilities which the other role hasn't
         AuthRole("Admin"),
         AuthRole("Player")
         )
-    */
+      */
 
-    // where to search snippet
-    LiftRules.addToPackages("org.ocbkc.swift")
+      // where to search snippet
+      LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
+      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
 
-    // Build SiteMap
-    /* originally generated code:
-    def sitemap() = SiteMap(
+      // Build SiteMap
+      /* originally generated code:
+      def sitemap() = SiteMap(
       Menu("Home") / "index" >> User.AddUserMenusAfter, // Simple menu form
       // Menu with special Link
       Menu(Loc("Static", Link(List("static"), true, "/static/index"), 
@@ -83,74 +80,74 @@ class Boot {
 
      */
 
-/* TODO in row to be removed, this approach turns out not to work. Perhaps git stash it somewhere.
-   def studyConstitutionLink = 
-   {  log("studyConstitutionLink called")
-      "studyConstitution?id=" + 
-      {  Player.currentUser match 
-         {  case Full(player) =>
+     /* TODO in row to be removed, this approach turns out not to work. Perhaps git stash it somewhere.
+     def studyConstitutionLink = 
+     {  log("studyConstitutionLink called")
+        "studyConstitution?id=" + 
+        {  Player.currentUser match 
+           {  case Full(player) =>
                player.firstChosenConstitution match
                {  case Some(const) => const.id.toString
                   case _           => log("   BUG: no first chosen constition found"); "BugNoFirstChosenConstitutionFound"
                }
             case _              => log("   BUG: no player found"); "BugNoPlayerFound" // or is this no bug? Perhaps lift always renders the menu item, even if it is not displayed.
-         }
-      } :: Nil
-   }
-*/
-   // part of ...
-
-   /** Only call when you are 100% certain a user is logged in, otherwise this must be considered a bug
+           }
+        } :: Nil
+     }
      */
-   def currentPlayer =
-   {  Player.currentUser.get
-   }
+     // part of ...
 
-   // returns also false when no player is logged in.
-   // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
-   def playerLoggedInAndChoseFirstConstitution:Boolean =
-   {  log("Boot.playerLoggedInAndChoseFirstConstitution called")
-      val r =  playerIsLoggedIn &&
-               {  Player.currentUser match
-                  {  case Full(player) => player.firstChosenConstitution != -1 // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set? Now doing it with the protocol that -1 means not defined.>
+     /** Only call when you are 100% certain a user is logged in, otherwise this must be considered a bug
+     */
+     def currentPlayer =
+     {  Player.currentUser.get
+     }
+
+     // returns also false when no player is logged in.
+     // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
+     def playerLoggedInAndChoseFirstConstitution:Boolean =
+     {  log("Boot.playerLoggedInAndChoseFirstConstitution called")
+        val r =  playerIsLoggedIn &&
+                 {  Player.currentUser match
+                    {  case Full(player) => player.firstChosenConstitution != -1 // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set? Now doing it with the protocol that -1 means not defined.>
                      case _            => throw new RuntimeException("   no player found.") // This cannot happen.
-                  }
-               }
-      log("   return value = " + r)
-      r
-   }
+                    }
+                 }
+        log("   return value = " + r)
+        r
+     }
 
-   def playerIsAdmin(player:Player):Boolean =
-   {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
-   }
+     def playerIsAdmin(player:Player):Boolean =
+     {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
+     }
 
-   // assumes playerIsLoggedIn
-   def loggedInPlayerIsAdmin:Boolean =
-   {  playerIsAdmin(Player.currentUser.open_!)
-   }
+     // assumes playerIsLoggedIn
+     def loggedInPlayerIsAdmin:Boolean =
+     {  playerIsAdmin(Player.currentUser.open_!)
+     }
 
-  // returns -1 when no player is logged in
-  // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
-   def playedSessions:Long = 
-    { val r = if(playerIsLoggedIn)
-      {  val sesCoordLR = sesCoord.is
-         sesCoordLR.sesHis.totalNumber
-      }
-      else
-         -1
+     // returns -1 when no player is logged in
+     // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
+     def playedSessions:Long = 
+     {  val r = if(playerIsLoggedIn)
+        {  val sesCoordLR = sesCoord.is
+           sesCoordLR.sesHis.totalNumber
+        }
+        else
+        -1
 
-      log("   playedSessions = " + r)
-      r
-    }
+        log("   playedSessions = " + r)
+        r
+     }
 
-    def playerIsLoggedIn:Boolean = 
-    { val r = Player.currentUser.isDefined
-      r
-    }
+     def playerIsLoggedIn:Boolean = 
+     {  val r = Player.currentUser.isDefined
+        r
+     }
 
-   //def playerIsLoggedInAndPlayed minSessionsPerPlayer
+     //def playerIsLoggedInAndPlayed minSessionsPerPlayer
 
-    def sitemap() = SiteMap(
+     def sitemap() = SiteMap(
       Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
       Menu(Loc("Help", "generalHelp" :: Nil, "Help")),
       //Menu(Loc("About", "aboutPage" :: Nil, "About")),
@@ -179,60 +176,60 @@ class Boot {
                false            
          },
          () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
+         Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
          If(() => {  val r = ( playerLoggedInAndChoseFirstConstitution &&
-                        ( playedSessions < OneToStartWith.minSessionsB4access2allConstis ) )
+                     ( playedSessions < OneToStartWith.minSessionsB4access2allConstis ) )
                      log(" Loc(Study Constitution) access = " + r)
                      r 
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
-      Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
-      Menu(
+         Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+         Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+         Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+         Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+         Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+         Menu(
          Loc(
             "constitution",
             "constitution" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || playerIsAdmin(currentPlayer) )) , () => RedirectResponse("/index"))
+               )
             )
-         )
-      ),
-      Menu(
+         ),
+         Menu(
          Loc(
             "history",
             "history" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || loggedInPlayerIsAdmin ) ), () => RedirectResponse("/index"))
+               )
             )
-         )
-      ),
-      Menu(
+         ),
+         Menu(
          Loc(
             "fluencyGameSes",
             new Link("fluencyGameSes" :: Nil, true),
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && !playerIsAdmin(currentPlayer) ), () => RedirectResponse("/index"))
+               )
             )
          )
-      )
-   ,
-      Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
-    )
+         ,
+         Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
+         )
 
-    LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
+         LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
 
-    /*
-     * Show the spinny image when an Ajax call starts
-     */
-    LiftRules.ajaxStart =
-      Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
+         /*
+         * Show the spinny image when an Ajax call starts
+         */
+         LiftRules.ajaxStart =
+         Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
 
     /*
      * Make the spinny image go away when it ends
@@ -363,9 +360,7 @@ class Boot {
          randomHisCreationList.map(
             { case (idx, publisher) =>            
                consti.publish(
-"""<h2>Article 1</h2>
-
-<p>publication """ + idx + """</p>
+"""<h2>Article 1</h2><p>publication """ + idx + """</p>
 """, "publication " + idx, publisher.id.toString)
             }
          )
@@ -492,12 +487,15 @@ class Boot {
          mapWithLeftContext(eventList, 0L, f)
       }
 
-      val simulatedEvent = simulatedEventsGroupedByPlayer.map{ eventPlayer => toAbsoluteTimes(eventPlayer) }
+      val simulatedEvent = simulatedEventsGroupedByPlayer.map
+ 			   {  eventPlayer => toAbsoluteTimes(eventPlayer) 
+			   }
 
       val simulatedEventsAbsoluteTimes = simulatedEventsGroupedByPlayer
                                           .map{ eventPlayer => toAbsoluteTimes(eventPlayer) }
                                           .flatten
-                                          .sortWith{ case Tuple2(event1, event2) => (event1._1 < event2._1) }
+                                          .sortWith
+					  {  case Tuple2(event1, event2) => (event1._1 < event2._1) }
       // COULDDO now turn eventList back into list with pause times between events instead of times from the start of the event queue, and adapt runEvent (it simplifies runEvent).
 
       // run eventList
@@ -521,12 +519,12 @@ class Boot {
    TableSorter.init
 
    // make it possible to inspect lift database by going to server-address/console
-   if (Props.devMode || Props.testMode) {
-      log("   make it possible to inspect lift database by going to server-address/console")
-     LiftRules.liftRequest.append({case r if (r.path.partPath match {
-       case "console" :: _ => true
-       case _ => false}
-     ) => false})
+   if (Props.devMode || Props.testMode) 
+   {  log("   make it possible to inspect lift database by going to server-address/console")
+      LiftRules.liftRequest.append({case r if (r.path.partPath match 
+      {  case "console" :: _ => true
+         case _ => false}
+         ) => false})
    }
 
       log("Boot.boot finished")
@@ -537,8 +535,8 @@ class Boot {
   /**
    * Force the request to be UTF-8
    */
-  private def makeUtf8(req: HTTPRequest) {
-    req.setCharacterEncoding("UTF-8")
+  private def makeUtf8(req: HTTPRequest) 
+  {  req.setCharacterEncoding("UTF-8")
   }
 
 }
