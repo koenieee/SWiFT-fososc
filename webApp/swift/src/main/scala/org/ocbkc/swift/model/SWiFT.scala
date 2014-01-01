@@ -4,6 +4,7 @@ import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.logilang.bridge.brone._
 import System.err.println
 import _root_.net.liftweb.mapper._
 import net.liftweb.db.ConnectionIdentifier
@@ -96,7 +97,7 @@ case class SessionInfo( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer_rb: Option[PlofofaPat_rb],
                         var textCTLbyComputer: String,
-                        var bridgeCTL2NLcomputer: String,
+                        var bridgeCTL2NLcomputer: Option[List[BroneSent]],
                         var algoDefComputer_rb: Option[PlofofaPat_rb],
                         var answerComputerCTL: String,
                         var answerComputerNL: String,

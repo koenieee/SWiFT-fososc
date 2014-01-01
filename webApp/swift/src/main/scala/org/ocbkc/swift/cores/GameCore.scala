@@ -7,6 +7,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
+import org.ocbkc.swift.logilang.bridge. brone._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.GlobalConstant._
@@ -98,7 +99,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL"
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = "TODObridgeCTL2NLcomputer"
+      si.bridgeCTL2NLcomputer = Some(List(EntityBridge(List("Loxolop"), List("c_loxolop")), EntityBridge(List("Makkelpower"), List("c_makkelpower"))))
       si
    }
 

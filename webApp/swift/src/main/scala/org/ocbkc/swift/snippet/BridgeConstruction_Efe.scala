@@ -49,10 +49,10 @@ class BridgeConstruction
                                              {  case Some(consts) => consts
                                                 case None         => println("   No constants found in translation player."); Nil
                                              }
-   
+      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.map{ brone_sent => brone_sent.entNLname(0) }
       constants.flatMap
       {  constantIdentifier =>
-         {  val entNLnames = List("testLoxolop", "testMoekelPower") // <replace>
+         {
             val entBridgeConstructionTemplate = chooseTemplate("top", "entBridgeConstructionTemplate", ns)
             log("entBridgeConstructionTemplate = " + entBridgeConstructionTemplate)
 
