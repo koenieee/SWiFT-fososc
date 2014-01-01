@@ -160,3 +160,9 @@ val numberCorrect = coreContentObjects.count( y => y.answerPlayerCorrect )
 
 
 ]
+
+#### Assignments #####
+
+- Within the source code:
+
+A[name of developer]? Means: possibly suitable assignment for the given developer.
