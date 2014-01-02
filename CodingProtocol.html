@@ -1,0 +1,88 @@
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+<head>
+
+<title>CodingProtocol</title>
+
+<body>
+
+<p>
+<b>### Build management ###</b>
+</p>
+<br>
+<p>
+- When adding new artifacts to the pom.xml file, always refer to a specific version of an artifact. If you don't do this, maven may attempt to download the newest version, while the code has not been adapted yet. E.g. you can run into missing goals (because they were deprecated), your code may not compile (because the code refers to deprecated classes), etc. etc.
+</p>
+
+<p>
+### Source code layout ###
+<br>
+- Use spaced tabs, so each tab should consist of whitespaces, and not a TAB symbol.
+   - Recommended: set your text editor to automatically convert the TAB-key to whitespaces.
+<br>
+- Use tab size = 3 spaces
+   - Recommended: set your text editor to a tab-width of 3 spaces.
+<br>
+- Follow the following style when using curly brackets:
+<br>
+<pre class="prettyprint">def intelligentMethod() =
+{  [here code]
+   [etc.]
+}
+</pre> 
+<br>
+- Start the code on the same line as the opening curly bracket, just as in the example above. So don't do this:
+<pre class="prettyprint">def intelligentMethod() =
+{  
+   [here code]
+   [etc.]
+}
+</pre>
+<br>
+- But a space after each comma (',') separating a parameter:
+<br>
+<pre class="prettyprint">def intelligentMethod(x:Int, y:Int, z:Int)</pre>
+<br>
+- Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and ==:
+<br>
+<pre class="prettyprint">if( x == 5 ) 
+{  [do this]
+}
+</pre>
+<br>
+- Other aspects: do as one sees fit. For example, the following style is also allowed (no space after '(' and before ')')
+<br>
+<pre class="prettyprint">if(x == 5)</pre>
+<br>
+- Vertically align => symbols after cases:
+<br>
+<pre class="prettyprint">list match
+{  case Nil => None
+   case _   => Some(list(rs.nextInt(list.length)))
+}
+</pre>
+<br>
+- A complete example is the following:
+<br>
+<pre class="prettyprint">object RandomExtras
+{  def nextBetween(ranSeq:Random, min:Int, max:Int):Int = 
+   {  min + ranSeq.nextInt( max - min + 1 )
+   }
+<br>
+   def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
+   {  list match
+      {  case Nil => None
+         case _   => Some(list(rs.nextInt(list.length)))
+      }
+   }
+}
+</pre>
+<br>
+- If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.
+<br>
+TODO examples
+</p>
+
+</body>
+
+</head>
