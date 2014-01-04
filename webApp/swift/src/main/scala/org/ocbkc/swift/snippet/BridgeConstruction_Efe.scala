@@ -19,7 +19,7 @@ import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
 import scala.util.parsing.combinator.Parsers //{Success, Failure}
-import org.ocbkc.swift.logilang.bridge.brone
+import org.ocbkc.swift.logilang.bridge.brone._
 
 // BriCo = BridgeConstruction
 package efe
@@ -49,7 +49,7 @@ class BridgeConstruction
                                              {  case Some(consts) => consts
                                                 case None         => println("   No constants found in translation player."); Nil
                                              }
-      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.map{ brone_sent => brone_sent.entNLname(0) }
+      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.collect{ case eb:EntityBridge => eb.asInstanceOf[EntityBridge] }.map{ eb => eb.entNLname(0) }
       constants.flatMap
       {  constantIdentifier =>
          {

@@ -99,7 +99,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL"
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = Some(List(EntityBridge(List("Loxolop"), List("c_loxolop")), EntityBridge(List("Makkelpower"), List("c_makkelpower"))))
+      si.bridgeCTL2NLcomputer = Some(List(EntityBridge(List("c_loxolop"), List("Loxolop")), EntityBridge(List("c_makkelpower"), List("Makkel-power"))))
       si
    }
 
