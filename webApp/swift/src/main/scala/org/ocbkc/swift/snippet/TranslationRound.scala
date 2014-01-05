@@ -21,7 +21,7 @@ import scala.util.parsing.combinator.Parsers //{Success, Failure}
 class TranslationRound
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
-   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer
+   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
    def render(ns: NodeSeq): NodeSeq =
    {  def processSubmission() = 

@@ -37,7 +37,7 @@ class BridgeConstruction
 
    val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
-   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer
+   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
 // { transformed2efe
    def processMenu4EntityBridgeSelect(entNLname:String) =

@@ -2,12 +2,16 @@
 package org.ocbkc.swift.cores
 {
 
+import org.ocbkc.swift.logilang._
+import scala.util.Random
+import org.ocbkc.generic.random.RandomExtras
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.natlang
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
-import org.ocbkc.swift.logilang.bridge. brone._
+import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.GlobalConstant._
@@ -79,12 +83,38 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
 {  val gameCoreName="efe"
    var si:SessionInfo = null
    val playerId = playerIdInit
+   
+   case class EfeDocAndBridge(doc:FOLtheory, bridge:List[BroneSent])
+
+   def randomGenerateCTLdoc:EfeDocAndBridge =
+   {  log("randomGenerateCTLdoc started")
+      import RandomExtras.pickRandomElementFromList
+      val rg = new Random()
+
+      val generatedEfeDoc = new FOLtheory
+      // first increment: create 1 sentence
+      
+      val bigPredicate = generatedEfeDoc.gocPredicate("B", 1).get
+      val fastPredicate = generatedEfeDoc.gocPredicate("F", 1).get
+      
+      val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg )
+
+      val randomPersonCTLname = "ctlName" + randomPersonNLname
+      val randomPersonConstant = generatedEfeDoc.addConstant(Constant(randomPersonCTLname))
+      val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg )
+      val entityBridge = EntityBridge(List(randomPersonCTLname), List(randomPersonNLname.get))
+
+      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
+      
+
+      logp( { edab:EfeDocAndBridge => "   Generated EfeDocAndBridge = " + edab } , EfeDocAndBridge(generatedEfeDoc, List(entityBridge)))
+   }
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      null // <finish>
       si.textNL = "loxolop is fast and gaia is big" 
-      si.textCTLbyComputer = "B(gaia)\nF(loxolop)\n" // Fixed dummy for now TODO CTL text by Computer"
+      val computerGeneratedEfeDocAndBridge = randomGenerateCTLdoc // Fixed dummy for now TODO CTL text by Computer"
+      si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
       si.questionCTLcomputer_rb = Some(new PlofofaPat_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
          - TODO replace with generated item
@@ -99,7 +129,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL"
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = Some(List(EntityBridge(List("c_loxolop"), List("Loxolop")), EntityBridge(List("c_makkelpower"), List("Makkel-power"))))
+      si.bridgeCTL2NLcomputer = Some(computerGeneratedEfeDocAndBridge.bridge)
       si
    }
 

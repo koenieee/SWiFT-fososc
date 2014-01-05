@@ -96,7 +96,7 @@ Note: _pf = pure format
 case class SessionInfo( var textNL: String,
                         var questionNL: String,
                         var questionCTLcomputer_rb: Option[PlofofaPat_rb],
-                        var textCTLbyComputer: String,
+                        var textCTLbyComputer: Option[FOLtheory],
                         var bridgeCTL2NLcomputer: Option[List[BroneSent]],
                         var algoDefComputer_rb: Option[PlofofaPat_rb],
                         var answerComputerCTL: String,
@@ -123,7 +123,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,"",None,None,"","","",None,None,"",None,"","","","","","")
+   def this() = this("","",None,None,None,None,"","","",None,None,"",None,"","","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 

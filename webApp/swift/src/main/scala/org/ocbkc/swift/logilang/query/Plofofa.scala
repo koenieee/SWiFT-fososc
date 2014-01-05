@@ -12,6 +12,8 @@ import org.ocbkc.swift.logilang.query._
 import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.logilang.bridge.brone._
+
 // import scala.util.parsing.combinator.Parsers._
 
 /* Conventions:
@@ -98,4 +100,14 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I d
 // Example: mostInfo(s_, forall x from s_.P(c_2, x))
 case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlofofaPat
 case class PredApp_Plofofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlofofaPat
+
+/** Tranforms a query in Plofofa using one set of bridgestats, to the equivalent query in Plofafa using another set of bridgestats.
+  * This can be used to translate queries when people used different constants to denote entities, etc.
+  */
+object QueryTranslator
+{  def apply(bridgeStatsComputer:List[BroneSent], bridgestatsPlayer:List[BroneSent], query:PlofofaPat):PlofofaPat =
+   {  null // TODO
+   }
+}
+
 }
