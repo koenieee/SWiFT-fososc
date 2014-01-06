@@ -100,7 +100,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg )
 
       val randomPersonCTLname = "ctlName" + randomPersonNLname
-      val randomPersonConstant = generatedEfeDoc.addConstant(Constant(randomPersonCTLname))
+      val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
       val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg )
       val entityBridge = EntityBridge(List(randomPersonCTLname), List(randomPersonNLname.get))
 

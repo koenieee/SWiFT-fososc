@@ -137,6 +137,9 @@ class FOLtheory extends FOLutils with CTLbase
    }
 
 
+   /** Preferably use gocConstant. This method is primarily intended for internal usage.
+     * @todo perhaps make private?
+     */
 
    def addConstant(c:Constant) = 
    {  constants = addIfNotPresent(c, constants) // <&y2012.04.09.14:18:17& how efficient is this, is constant completely copied or are its elements reused?>
