@@ -25,13 +25,17 @@ object Translation
    def FOltheory2NL_straight(ft:FOltheory, bs:BridgeDoc) =
    {  ft.stats.map
       {  predicateApp2NL(_, bs)
-      }
+      }.collect{ case(Some(NLsent)) => NLsent }
    }
 
-   def predicateApp2NL(predapp:PredApp, bs:BridgeDoc) =
+   def predicateApp2NL(predapp:PredApp, bs:BridgeDoc):Option[String] =
    {  predapp match
-      {  case PredApp_FOL(pred, terms) =>
-         {  
+      {  case PredApp_FOL(p@Predicate(pname, arity), List(constant)) =>
+         {  if(arity == 1)
+            {  bs.constant2NLnoun(c) ++ " is " ++  bs.predicate2NLAdjective(p) ++ "."
+            }
+            else
+               None
          }
       }
    }
