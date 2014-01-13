@@ -337,7 +337,9 @@ class Predicate(val name:String, val arity:Long) // <&y2012.04.05.00:32:52& how 
    }
 }
 
-// Predicate factory, keeps track of all predicates, only creates a new one when it is a new (name, arity) combination, otherwise it will return existing predicate symbol. Factory contains all predicates used by all theories (and also allows usage in solist "theory-less" statements).
+/** Predicate factory, keeps track of all predicates, only creates a new one when it is a new (name, arity) combination, otherwise it will return existing predicate symbol. Factory contains all predicates used by all theories (and also allows usage in solist "theory-less" statements).
+   @todo isn't this exactly the same behaviour as a normal case class, with the automatically generated companion object?
+ */
 object Predicate
 {  var predicates:List[Predicate] = Nil
 

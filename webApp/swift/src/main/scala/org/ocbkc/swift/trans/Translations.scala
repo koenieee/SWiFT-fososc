@@ -1,3 +1,8 @@
+package org.ocbkc.swift.trans
+
+import org.ocbkc.swift.logilang.bridge.brone._
+import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.global.Logging._
 
 /**
   * @todo: provide a method which produces different alternative translations into NL, for example 
@@ -22,17 +27,17 @@ object Translation
 
             "Akwasi is big and fast."
    */
-   def FOltheory2NL_straight(ft:FOltheory, bs:BridgeDoc) =
+   def FOltheory2NL_straight(ft:FOLtheory, bs:BridgeDoc) =
    {  ft.stats.map
       {  predicateApp2NL(_, bs)
-      }.collect{ case(Some(NLsent)) => NLsent }
+      }.collect{ case(Some(nlSent)) => nlSent }
    }
 
-   def predicateApp2NL(predapp:PredApp, bs:BridgeDoc):Option[String] =
-   {  predapp match
-      {  case PredApp_FOL(p@Predicate(pname, arity), List(constant)) =>
-         {  if(arity == 1)
-            {  bs.constant2NLnoun(c) ++ " is " ++  bs.predicate2NLAdjective(p) ++ "."
+   def predicateApp2NL(folStat:FOLstatement, bs:BridgeDoc):Option[String] =
+   {  folStat match
+      {  case PredApp_FOL(pred, List(constant:Constant)) =>
+         {  if(pred.arity == 1)
+            {  Some(bs.constant2NLnoun(constant).getOrElse(logAndThrow("No bridgesentence for constant " + constant))+ " is " +  bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred)) + ".")
             }
             else
                None

@@ -49,7 +49,7 @@ class BridgeConstruction
                                              {  case Some(consts) => consts
                                                 case None         => println("   No constants found in translation player."); Nil
                                              }
-      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.collect{ case eb:EntityBridge => eb.asInstanceOf[EntityBridge] }.map{ eb => eb.entNLname(0) }
+      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLname(0) }
       constants.flatMap
       {  constantIdentifier =>
          {

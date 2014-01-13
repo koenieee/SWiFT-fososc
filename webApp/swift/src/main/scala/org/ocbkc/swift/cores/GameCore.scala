@@ -1,7 +1,6 @@
 // change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
 package org.ocbkc.swift.cores
 {
-
 import org.ocbkc.swift.logilang._
 import scala.util.Random
 import org.ocbkc.generic.random.RandomExtras
@@ -23,7 +22,7 @@ import scala.util.matching.Regex._
 import java.io._
 //import java.lang._
 import org.ocbkc.swift.parser._
-
+import org.ocbkc.swift.trans._
 import net.liftweb.json._
 import net.liftweb.json.ext._
 import scala.util.parsing.combinator.Parsers
@@ -84,7 +83,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
    var si:SessionInfo = null
    val playerId = playerIdInit
    
-   case class EfeDocAndBridge(doc:FOLtheory, bridge:List[BroneSent])
+   case class EfeDocAndBridge(doc:FOLtheory, bridge:BridgeDoc)
 
    def randomGenerateCTLdoc:EfeDocAndBridge =
    {  log("randomGenerateCTLdoc started")
@@ -95,26 +94,32 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
       // first increment: create 1 sentence
       
       val bigPredicate = generatedEfeDoc.gocPredicate("B", 1).get
+      val bigPredicateBridge = PredicateBridgeSent("B", List("big"))
+
       val fastPredicate = generatedEfeDoc.gocPredicate("F", 1).get
+      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
       
       val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg )
 
       val randomPersonCTLname = "ctlName" + randomPersonNLname
       val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
       val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg )
-      val entityBridge = EntityBridge(List(randomPersonCTLname), List(randomPersonNLname.get))
+      val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname.get))
+
+      val bridgeDoc = new BridgeDoc
+      bridgeDoc.bridgeSents ++= List(entityBridge, bigPredicateBridge, fastPredicateBridge)
 
       generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
       
 
-      logp( { edab:EfeDocAndBridge => "   Generated EfeDocAndBridge = " + edab } , EfeDocAndBridge(generatedEfeDoc, List(entityBridge)))
+      logp( { edab:EfeDocAndBridge => "   Generated EfeDocAndBridge = " + edab } , EfeDocAndBridge(generatedEfeDoc, bridgeDoc))
    }
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      si.textNL = "loxolop is fast and gaia is big" 
       val computerGeneratedEfeDocAndBridge = randomGenerateCTLdoc // Fixed dummy for now TODO CTL text by Computer"
       si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
+      si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
       si.questionCTLcomputer_rb = Some(new PlofofaPat_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
          - TODO replace with generated item
