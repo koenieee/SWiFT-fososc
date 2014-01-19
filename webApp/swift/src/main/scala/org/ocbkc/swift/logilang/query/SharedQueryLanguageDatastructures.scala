@@ -1,5 +1,8 @@
 package org.ocbkc.swift.logilang.query
 
+/** Supertrait of query-sentences.
+  */
+trait QuerySent
 
 /** <&y2013.12.02.15:12:34& refactor, move to general CTL construction lib>
   */

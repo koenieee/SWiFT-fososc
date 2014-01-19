@@ -6,6 +6,7 @@ package org.ocbkc.swift.coord
 {  
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
+import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
@@ -57,10 +58,10 @@ case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
-trait CoreTrait
+trait CoreTrait[QuerySent__TP <: QuerySent]
 {  var si: SessionInfo = null
    val sesHis = new SessionHistory()
-   val gameCore: TraitGameCore = new EfeLang(currentPlayer.id.get)
+   val gameCore:TraitGameCore[QuerySent__TP]
 
    def currentPlayer:Player
    val currentPlayerId = currentPlayer.id.get
@@ -90,7 +91,9 @@ trait CoreTrait
    }
 
    def URstartTranslation:String =  
-   {  latestRoundFluencySession = RoundTranslation
+   {  log("URstartTranslation")
+      latestRoundFluencySession = RoundTranslation
+      log("   gameCore == null " + (gameCore == null) )
       si = gameCore.initialiseSessionInfo
       si.startTime(SystemWithTesting.currentTimeMillis).save
       si.startTimeTranslation(si.startTime.is).save
@@ -103,7 +106,7 @@ trait CoreTrait
       Unit
    }
 
-   def URstartAlgorithmicDefenceStage1:FolnuminquaQuery =
+   def URstartAlgorithmicDefenceStage1:QuerySent__TP = 
    {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
       gameCore.algorithmicDefenceGenerator
    }
@@ -169,9 +172,14 @@ trait CoreTrait
    }
 }
 
-class Core(/* val player: User, var text: Text,v ar round: Round */) extends CoreTrait
+import org.ocbkc.swift.cores.EfeChallengeTypes._
+
+class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
+/* {  override val gameCore = new EfeLang(currentPlayer.id.get)
+} with */ CoreTrait[EfeQuerySent]
 {  println("ses.Core.constructor called")
-   
+   override val gameCore = new EfeLang(currentPlayer.id.get)
+  
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
    // BEGIN temporary solution for constiSelectionProcedure
    var isFirstTimePlayer:Boolean = true // <&y2012.08.04.19:43:17& set this to true after first session has been completed (or other conditions?)>
@@ -302,9 +310,14 @@ class Core(/* val player: User, var text: Text,v ar round: Round */) extends Cor
 */
 }
 
-// simulation of Core for testing purposes
-class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
+
+/** simulation of Core for testing purposes
+  * @todo may need some refactoring: also need a simulated gameCore, now it is tied to one specific game core. After that you can also replace the type parameter with CoreTrait[DummyQuerySent]
+  */
+
+class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent]
 {  override def currentPlayer = currentPlayerVal
+   val gameCore = new EfeLang(currentPlayer.id.get)
 
    // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
@@ -328,6 +341,8 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait
    }
 */
 }
+
+class DummyQuerySent extends QuerySent
 
 
 /* Assumptions and conventions regarding UI:

@@ -1,4 +1,6 @@
-// change this when moving the project.// <&y2011.11.07.13:19:35& perhaps in future move gamecore to own package>
+/**
+  * Rename "core" to something as "fluencychallenge"
+  */
 package org.ocbkc.swift.cores
 {
 import org.ocbkc.swift.logilang._
@@ -44,7 +46,7 @@ package gameCoreHelperTypes
 
 import gameCoreHelperTypes._
 
-trait TraitGameCore
+trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */<:QuerySent]
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
    val gameCoreName:String
    val playerId:Long
@@ -60,7 +62,7 @@ trait TraitGameCore
       si
    }
    def generateText:String
-   def algorithmicDefenceGenerator:FolnuminquaQuery
+   def algorithmicDefenceGenerator:QuerySent__TP
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
    def doAlgorithmicDefence:(scala.Boolean, String, String, String)
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
@@ -75,11 +77,22 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 >
 */
 
+/** Naming conventions:
+  * TODO
+  */
+object EfeChallengeTypes
+{  type EfeQuerySent = PlofofaPat
+}
+
+
 // helper class for return type of generateQuestionAndCorrectAnswer
 //*/ { BUC
 
-class EfeLang(val playerIdInit:Long) extends TraitGameCore
-{  val gameCoreName="efe"
+import EfeChallengeTypes._
+
+class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent]
+{  log("Constructor EfeLang called")
+   val gameCoreName = "efe"
    var si:SessionInfo = null
    val playerId = playerIdInit
    
@@ -187,7 +200,14 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore
          }
    }
    def generateText = "todo"
-   def algorithmicDefenceGenerator:FolnuminquaQuery = null // <TODO>
+
+   /** @todo (mustdo): currently, the generated query is fixed. Make it dependent on the textCTL (e.g. if a fast predicate occurs, ask about fast objects)
+     */
+   def algorithmicDefenceGenerator:EfeQuerySent =
+   {  val query = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))
+      query
+   }
+
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
    def doAlgorithmicDefence:(scala.Boolean, String, String, String) = null // <TODO>
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>

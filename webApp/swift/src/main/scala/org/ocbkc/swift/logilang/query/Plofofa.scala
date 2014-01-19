@@ -36,7 +36,7 @@ object TestPlofofaCLI extends CLIwithFileInput
 
 // END TEST
 
-trait PlofofaPat
+trait PlofofaPat extends QuerySent
 {  
 }
 

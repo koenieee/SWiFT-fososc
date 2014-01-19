@@ -10,7 +10,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.model._
-import org.ocbkc.swift.coord.ses.Core
+import org.ocbkc.swift.coord.ses.EfeCore
 
 import Helpers._
 
