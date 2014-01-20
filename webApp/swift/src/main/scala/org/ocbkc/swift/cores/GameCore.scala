@@ -4,6 +4,8 @@
 package org.ocbkc.swift.cores
 {
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.logilang.fofa._
+import org.ocbkc.swift.logilang.fofa
 import scala.util.Random
 import org.ocbkc.generic.random.RandomExtras
 import org.ocbkc.swift.global.Logging._
@@ -12,6 +14,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
+import org.ocbkc.swift.logilang.query.plofofa
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.model._
@@ -46,7 +49,7 @@ package gameCoreHelperTypes
 
 import gameCoreHelperTypes._
 
-trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */<:QuerySent]
+trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
    val gameCoreName:String
    val playerId:Long
@@ -78,10 +81,11 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 */
 
 /** Naming conventions:
-  * TODO
+  * These aliases are intended to make the code more readable by providing the role the type plays in this challenge. E.g. the query language sentence of the Efe challenge is PlofofaPat.
   */
 object EfeChallengeTypes
-{  type EfeQuerySent = PlofofaPat
+{  type EfeQuerySent       = PlofofaPat
+   type EfeAnswerLangSent  = FofaSent
 }
 
 
@@ -90,7 +94,7 @@ object EfeChallengeTypes
 
 import EfeChallengeTypes._
 
-class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent]
+class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnswerLangSent]
 {  log("Constructor EfeLang called")
    val gameCoreName = "efe"
    var si:SessionInfo = null
@@ -143,9 +147,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent]
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */
 
-      si.answerComputerNL = "instoppertje is big."
+      si.answerComputerNL = "TODO answerComputerNL."
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
-      si.subjectNL = "subjectNL"
+      si.subjectNL = "subjectNL" // <still applicable?>
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
       si.bridgeCTL2NLcomputer = Some(computerGeneratedEfeDocAndBridge.bridge)
       si
@@ -201,15 +205,28 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent]
    }
    def generateText = "todo"
 
-   /** @todo (mustdo): currently, the generated query is fixed. Make it dependent on the textCTL (e.g. if a fast predicate occurs, ask about fast objects)
+   /** @todo (mustdo): 
      */
    def algorithmicDefenceGenerator:EfeQuerySent =
-   {  val query = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))
+   {  val query_temp = MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))
+      log("[MUSTDO] translate the algoDefComputer to algoDefPlayer, then erase query_temp")
+      log("[MUSTDO] also store in si variable")
+      val query = query_temp
       query
    }
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
-   def doAlgorithmicDefence:(scala.Boolean, String, String, String) = null // <TODO>
+   // <refactor move to trait?>
+   case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:AnswerLangSent__TP)
+
+   def doAlgorithmicDefence:AlgorithmicDefenceResult =
+   {  val answerPlayerCTL = si.textCTLbyPlayer match
+      {  case Some(tcbp) => Prover.query(si.algoDefPlayer, si.textCTLbyPlayer)
+         case None       => logAndThrow("No textCTLbyPlayer found...")
+      }
+
+      AlgorithmicDefenceResult(true /* TODO */, "TODOanswerPlayerNL", "", answerPlayerCTL)
+   }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
 }

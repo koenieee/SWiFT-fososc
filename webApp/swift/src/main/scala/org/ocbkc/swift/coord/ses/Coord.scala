@@ -58,10 +58,10 @@ case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 // in trait, make for easy reuse for creating test simulation sessions.
-trait CoreTrait[QuerySent__TP <: QuerySent]
+trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  var si: SessionInfo = null
    val sesHis = new SessionHistory()
-   val gameCore:TraitGameCore[QuerySent__TP]
+   val gameCore:TraitGameCore[QuerySent__TP, AnswerLangSent__TP]
 
    def currentPlayer:Player
    val currentPlayerId = currentPlayer.id.get
@@ -176,7 +176,7 @@ import org.ocbkc.swift.cores.EfeChallengeTypes._
 
 class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 /* {  override val gameCore = new EfeLang(currentPlayer.id.get)
-} with */ CoreTrait[EfeQuerySent]
+} with */ CoreTrait[EfeQuerySent, EfeAnswerLangSent]
 {  println("ses.Core.constructor called")
    override val gameCore = new EfeLang(currentPlayer.id.get)
   
@@ -312,10 +312,10 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 
 
 /** simulation of Core for testing purposes
-  * @todo may need some refactoring: also need a simulated gameCore, now it is tied to one specific game core. After that you can also replace the type parameter with CoreTrait[DummyQuerySent]
+  * @todo may need some refactoring: also need a simulated gameCore, now it is tied to one specific game core. After that you can also replace the type parameter with CoreTrait[DummyQuerySent, DummyAnswerLangSent]
   */
 
-class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent]
+class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent, EfeAnswerLangSent]
 {  override def currentPlayer = currentPlayerVal
    val gameCore = new EfeLang(currentPlayer.id.get)
 

@@ -106,7 +106,7 @@ case class SessionInfo( var textNL: String,
                         var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
                         var algoDefPlayer: Option[FolnuminquaQuery],
-                        var answerPlayerCTL: String,
+                        var answerPlayerCTL: String, // <change to Scala format, or representation bundle format?>
                         var answerPlayerNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
