@@ -4,6 +4,7 @@ import org.ocbkc.swift.reas._
 import org.ocbkc.swift.logilang.query._
 import System._
 import java.io._
+import org.ocbkc.swift.parser._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -379,7 +380,11 @@ case class PredApp_Fofa(override val p:Predicate, override val terms:List[Simple
 
 package org.ocbkc.swift.logilang.efe
 {
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.parser._
+//import 
+
 /** @todo move to separate file
   * Note that (the more expressive) FOLtheory is used as the Scala representation.
   */
@@ -393,16 +398,15 @@ object EfeDoc_rb extends CTLrepresentationBundleFactory[EfeDoc_rb]
 
 object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory]
 {  override def pf2sf(pf:String) =
-   {  parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
+   {  val parseWarningMsg  = if(pf.equals("")) "Warning: empty document." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
 
       //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
       Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, pf) match
-         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {        parseErrorMsgTextCTLplayer = ""
-                                                                        Pf2sfResult(Some(ftl), "")
-                                                                     }
-            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   =>       {  log("  parse error: " + failMsg.toString)
-                                                                        Pf2sfResult(None, failMsg.toString)
-                                                                     }
+         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {  Pf2sfResult(Some(ftl), "", parseWarningMsg)
+                                                               }
+            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   => {  log("  parse error: " + failMsg.toString)
+                                                                  Pf2sfResult(None, failMsg.toString, parseWarningMsg)
+                                                               }
          }
    }
 }

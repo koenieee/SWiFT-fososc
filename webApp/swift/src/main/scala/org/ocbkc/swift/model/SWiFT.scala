@@ -93,6 +93,7 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
 /** SessionInfo is general: it can hold data of any SWiFT challenge. Therefore, for example, specific parsers (for specific KR languages are not defined here, but in the GameCore.
 @todo: &y2014.01.20.16:13:05& holding data for any challenge is currently a problem, because currently some datatypes are fixed (such as textCTLbyPlayer_). Refactor such that it becomes general again, or make this a superclass.
 Note: _pf = pure format
+  * @param textCTLbyPlayer_ This is a String, and not a RepresentationBundle, because a player can have entered a syntactically incorrect document.
   */
 
 case class SessionInfo( var textNL: String,
@@ -103,7 +104,7 @@ case class SessionInfo( var textNL: String,
                         var algoDefComputer_rb: Option[EfeQuerySent_rb],
                         var answerComputerCTL: String,
                         var answerComputerNL: String,
-                        var textCTLbyPlayer_ : Option[EfeKRdoc_rb], // don't change this one directly
+                        var textCTLbyPlayer_ : String, // don't change this one directly.
                         var constantsByPlayer:Option[List[String]],
                         var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
@@ -125,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,"","","",None,None,"",None,"","","","","","")
+   def this() = this("","",None,None,None,None,"","",None,None,None,"",None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 

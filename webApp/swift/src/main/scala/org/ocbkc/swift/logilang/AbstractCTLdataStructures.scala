@@ -36,10 +36,10 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
                {  sf_ =
                      Some(
                         transform.pf2sf(pf) match
-                        {  case transform.Pf2sfResult(None, parseErrorMsg) => 
+                        {  case transform.Pf2sfResult(None, parseErrorMsg, _) => 
                            {  logAndThrow("There is a parse error in the pf format " + parseErrorMsg)
                            }
-                           case transform.Pf2sfResult(Some(sfLocal), _) => sfLocal
+                           case transform.Pf2sfResult(Some(sfLocal), _, _) => sfLocal
                         }
                      )
 
@@ -52,8 +52,8 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
    }  
 }
 
-trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP]
-{  protected def apply():CTLrepresentationBundle__TP // the default factory must be supplied. Th
+trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP <: CTLrepresentationBundle[Object]]
+{  protected def apply():CTLrepresentationBundle__TP // the default factory must be supplied.
    
    case class FactoryResult(parseResult:Option[CTLrepresentationBundle__TP], parseErrorMessage:String)
 
@@ -67,7 +67,7 @@ trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP]
 }
 
 trait CTLrepresentationTransforms[ScalaRepresentation__TP]
-{  case class Pf2sfResult(parseResult:Option[ScalaRepresentation__TP], parseErrorMessage:String)
+{  case class Pf2sfResult(parseResult:Option[ScalaRepresentation__TP], parseErrorMessage:String, parseWarningMessage:String)
    /** Translation pure format to Scala format. Returns None when there is an error in the syntax of pf.
      */
    def pf2sf(pf:String):Pf2sfResult

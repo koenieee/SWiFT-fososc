@@ -1,3 +1,6 @@
+
+WIW &y2014.01.27.22:24:25&: how to cope with EfeDoc_rb and updating the textctlplayer (including erronuous document) elegantly?
+
 /**
   * Rename "core" to something as "fluencychallenge"
   */
@@ -95,7 +98,6 @@ object EfeChallengeTypes
 
 
 // helper class for return type of generateQuestionAndCorrectAnswer
-//*/ { BUC
 
 import EfeChallengeTypes._
 
@@ -143,7 +145,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
       si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_rb = Some(new PlofofaPat_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
+      si.questionCTLcomputer_rb = Some(EfeQuerySent_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
@@ -161,14 +163,14 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    }
 
    var textCTLplayerUpdated4terParsing = false
-   var textCTLbyPlayerScalaFormat_ :Option[FOLtheory] = None
+   var textCTLbyPlayer_rb :Option[EfeDoc_rb] = None
 
    def textCTLbyPlayerChanged(newTextCTL:String) =
    {  log("textCTLbyPlayerChanged called (call-back method from SessionInfo")
       textCTLplayerUpdated4terParsing = true
    }
 
-   def textCTLbyPlayer_=(t:EfeKRdoc_rb) = { textCTLplayerUpdated4terParsing = true; si.textCTLbyPlayer_ =  Some(t) }
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; /* WIW textCTLbyPlayer_rb = EfeDoc_rb(); */ si.textCTLbyPlayer_ =  t }
    def textCTLbyPlayer = si.textCTLbyPlayer_
 
 //var textCTLbyPlayerCleanFormat_ :Option[String] = None

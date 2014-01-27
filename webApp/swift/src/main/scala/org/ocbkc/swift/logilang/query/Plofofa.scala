@@ -45,11 +45,13 @@ trait PlofofaPat extends QuerySent
 class PlofofaPat_rb() extends CTLrepresentationBundle // extends QuerySent @todo &y2014.01.20.16:28:57& extends QuerySent: yes or no?
 {  override val displayNameCTL = "PlofofaPat"
    val transform = PlofofaRepresentationTransforms
-   def this(pf: String) = { this(); pf_ = Some(pf) }
-   def this(sf: PlofofaPat ) = { this(); sf_ = Some(sf) }
 }
 
-object PlofofaRepresentationTransforms extends CTLrepresentationTransform[PlofofaPat]
+object PlofofaPat_rb extends CTLrepresentationBundleFactory[PlofofaPat_rb]
+{  override def apply = new PlofofaPat_rb()
+}
+
+object PlofofaRepresentationTransforms extends CTLrepresentationTransforms[PlofofaPat]
 {  override def pf2sf(pf:String):PlofofaPat  =
    {  logAndThrow("PlofofaPat_rb.pf2sf Not implemented in this increment: avoid usage, by always explicitly providing the scala format of the plofofapat.")
    }
