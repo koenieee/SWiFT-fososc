@@ -40,41 +40,23 @@ trait PlofofaPat extends QuerySent
 {  
 }
 
-/** Multi-representation PlofofaPat
+/** PlofofaPat representation bundle
   */
-class PlofofaPat_rb()
-{  def this(pf: String) = { this(); pf_ = Some(pf) }
-   def this(sf: PlofofaPat) = { this(); sf_ = Some(sf) }
-
-   private var pf_ :Option[String] = None // Pure format
-   private var sf_ :Option[PlofofaPat] = None // Scala data-structure format
-
-   def sf:PlofofaPat =
-   {  sf_ match
-      {  case Some(sfLocal) => sfLocal
-         case None      =>
-         {  pf_ match
-            {  case Some(pf) =>
-               {  sf_ = Some(PlofofaFormatTransforms.pf2sf(pf))
-                  sf_.get
-               }
-               case None     => logAndThrow("PlofofaPat.sf: no representations available.")
-            }
-         }
-      }
-   }
-
+class PlofofaPat_rb() extends CTLrepresentationBundle // extends QuerySent @todo &y2014.01.20.16:28:57& extends QuerySent: yes or no?
+{  override val displayNameCTL = "PlofofaPat"
+   val transform = PlofofaRepresentationTransforms
+   def this(pf: String) = { this(); pf_ = Some(pf) }
+   def this(sf: PlofofaPat ) = { this(); sf_ = Some(sf) }
 }
 
-
-object PlofofaFormatTransforms
-{  def pf2sf(pf:String):PlofofaPat  =
+object PlofofaRepresentationTransforms extends CTLrepresentationTransform[PlofofaPat]
+{  override def pf2sf(pf:String):PlofofaPat  =
    {  logAndThrow("PlofofaPat_rb.pf2sf Not implemented in this increment: avoid usage, by always explicitly providing the scala format of the plofofapat.")
    }
 
    /** Translation Scala-format to pure-format
      */
-   def sf2pf(sf:PlofofaPat):String =
+   override def sf2pf(sf:PlofofaPat):String =
    {/*sf match
       {
       }*/

@@ -1,5 +1,6 @@
 package org.ocbkc.swift.model
 {
+import org.ocbkc.swift.cores.EfeChallengeTypes._
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
@@ -90,23 +91,24 @@ class SessionBundle(var textNL:TextNL, var textCTL:TextCTL, var qa: QuestionAtta
 
 // <&y2011.12.12.22:11:13& Chide: I can do some refactoring later. Tried to be more generic previously, but this stage turned out to early for too much elegance.>
 /** SessionInfo is general: it can hold data of any SWiFT challenge. Therefore, for example, specific parsers (for specific KR languages are not defined here, but in the GameCore.
+@todo: &y2014.01.20.16:13:05& holding data for any challenge is currently a problem, because currently some datatypes are fixed (such as textCTLbyPlayer_). Refactor such that it becomes general again, or make this a superclass.
 Note: _pf = pure format
   */
 
 case class SessionInfo( var textNL: String,
                         var questionNL: String,
-                        var questionCTLcomputer_rb: Option[PlofofaPat_rb],
+                        var questionCTLcomputer_rb: Option[EfeQuerySent_rb],
                         var textCTLbyComputer: Option[FOLtheory],
                         var bridgeCTL2NLcomputer: Option[BridgeDoc],
-                        var algoDefComputer_rb: Option[PlofofaPat_rb],
+                        var algoDefComputer_rb: Option[EfeQuerySent_rb],
                         var answerComputerCTL: String,
                         var answerComputerNL: String,
-                        var textCTLbyPlayer_ : String, // don't change this one directly
+                        var textCTLbyPlayer_ : Option[EfeKRdoc_rb], // don't change this one directly
                         var constantsByPlayer:Option[List[String]],
                         var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
-                        var algoDefPlayer: Option[FolnuminquaQuery],
-                        var answerPlayerCTL: String, // <change to Scala format, or representation bundle format?>
+                        var algoDefPlayer: Option[EfeQuerySent],
+                        var answerPlayerCTL: Option[EfeAnswerLangSent],
                         var answerPlayerNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,

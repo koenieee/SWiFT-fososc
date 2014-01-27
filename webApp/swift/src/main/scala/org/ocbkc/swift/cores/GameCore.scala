@@ -6,6 +6,7 @@ package org.ocbkc.swift.cores
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.fofa._
 import org.ocbkc.swift.logilang.fofa
+import org.ocbkc.swift.logilang.efe._
 import scala.util.Random
 import org.ocbkc.generic.random.RandomExtras
 import org.ocbkc.swift.global.Logging._
@@ -17,6 +18,7 @@ import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang.query.plofofa
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.reas._
+import org.ocbkc.swift.reas
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.coord.ses._
@@ -85,7 +87,10 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
   */
 object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
+   type EfeQuerySent_rb    = PlofofaPat_rb
    type EfeAnswerLangSent  = FofaSent
+   type EfeKRdoc           = FOLtheory
+   type EfeKRdoc_rb        = EfeDoc_rb
 }
 
 
@@ -163,7 +168,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       textCTLplayerUpdated4terParsing = true
    }
 
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; si.textCTLbyPlayer_ = t }
+   def textCTLbyPlayer_=(t:EfeKRdoc_rb) = { textCTLplayerUpdated4terParsing = true; si.textCTLbyPlayer_ =  Some(t) }
    def textCTLbyPlayer = si.textCTLbyPlayer_
 
 //var textCTLbyPlayerCleanFormat_ :Option[String] = None
@@ -181,6 +186,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       }
    }
 
+   /** MUSTDO: this work is now done by the repesentation bundle
+     */
+   /*
    def parseTextCTLbyPlayer:Boolean =
    {  println("ParseTextCTLbyPlayer called")
       textCTLplayerUpdated4terParsing = false
@@ -203,6 +211,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
                                                                      }
          }
    }
+   */
    def generateText = "todo"
 
    /** @todo (mustdo): 
@@ -217,11 +226,11 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
    // <refactor move to trait?>
-   case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:AnswerLangSent__TP)
+   case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:EfeAnswerLangSent)
 
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
    {  val answerPlayerCTL = si.textCTLbyPlayer match
-      {  case Some(tcbp) => Prover.query(si.algoDefPlayer, si.textCTLbyPlayer)
+      {  case Some(tcbp) => reas.plofofa.Prover.query(si.algoDefPlayer.get, si.textCTLbyPlayer.get.sf)
          case None       => logAndThrow("No textCTLbyPlayer found...")
       }
 
