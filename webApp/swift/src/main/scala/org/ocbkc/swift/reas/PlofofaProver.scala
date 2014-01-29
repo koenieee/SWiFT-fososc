@@ -88,7 +88,10 @@ object TestPlofofaProverCLI extends CLIwithFileInput
    }
 }
 object Prover extends reas.ProverTrait
-{  def query(query:PlofofaPat, ft:FOLtheory):FofaSent =
+{  def query(query:PlofofaPat_rb, ft:FOLtheory):FofaSent =
+   {  query(query.sf, ft)
+   }
+   def query(query:PlofofaPat, ft:FOLtheory):FofaSent =
    {  log("reas.plofofa.Prover called")
       log("   query = " + query)
 

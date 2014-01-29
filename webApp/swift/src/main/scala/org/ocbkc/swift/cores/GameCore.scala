@@ -1,6 +1,3 @@
-
-WIW &y2014.01.27.22:24:25&: how to cope with EfeDoc_rb and updating the textctlplayer (including erronuous document) elegantly?
-
 /**
   * Rename "core" to something as "fluencychallenge"
   */
@@ -91,9 +88,11 @@ Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-
 object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
    type EfeQuerySent_rb    = PlofofaPat_rb
+   val EfeQuerySent_rb     = PlofofaPat_rb
    type EfeAnswerLangSent  = FofaSent
    type EfeKRdoc           = FOLtheory
    type EfeKRdoc_rb        = EfeDoc_rb
+   val EfeKRdoc_rb         = EfeDoc_rb
 }
 
 
@@ -145,7 +144,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
       si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_rb = Some(EfeQuerySent_rb("mostInfo(s_, forall x from s_ .B(x)")) /*
+      si.questionCTLcomputer_rb = Some{   EfeQuerySent_rb("mostInfo(s_, forall x from s_ .B(x)") match
+                                          {  case EfeQuerySent_rb.FactoryResult(Some(ctl_rb), _)   => ctl_rb
+                                             case EfeQuerySent_rb.FactoryResult(None, errMsg)      => logAndThrow(errMsg)
+                                          }
+                                      }
+                                          /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
@@ -162,8 +166,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       si
    }
 
-   var textCTLplayerUpdated4terParsing = false
-   var textCTLbyPlayer_rb :Option[EfeDoc_rb] = None
+   var textCTLplayerUpdated4terParsing = true // starts with true, because also includes situation that no parsing has taken place ever.
+   var textCTLbyPlayer_rb :Option[EfeKRdoc_rb] = None
 
    def textCTLbyPlayerChanged(newTextCTL:String) =
    {  log("textCTLbyPlayerChanged called (call-back method from SessionInfo")
@@ -173,18 +177,28 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; /* WIW textCTLbyPlayer_rb = EfeDoc_rb(); */ si.textCTLbyPlayer_ =  t }
    def textCTLbyPlayer = si.textCTLbyPlayer_
 
-//var textCTLbyPlayerCleanFormat_ :Option[String] = None
+   var textCTLbyPlayer_rb_cached:Option[EfeKRdoc_rb.FactoryResult] = None
 
-   def textCTLbyPlayerScalaFormat:Option[FOLtheory] =
-   {  log("textCTLbyPlayerScalaFormat called")
-      if(textCTLplayerUpdated4terParsing)
-      {  log("textCTLplayerUpdated4terParsing is true, so parsing text")
-         textCTLplayerUpdated4terParsing = false
-         if(!parseTextCTLbyPlayer) None else textCTLbyPlayerScalaFormat_
+   def textCTLbyPlayer_rb:Option[EfeKRdoc_rb] =
+   {  textCTLbyPlayer_withErrorInfo_rb match
+      {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _)   => Some(ctl_rb)
+         case EfeKRdoc_rb.FactoryResult(None, errMsg)      => None
       }
-      else
-      {  log("textCTLplayerUpdated4terParsing is false, so parsing is not needed. You know, ain't doing nothing if not needed. Have something better to do, taking a nap for example, dude.")
-         textCTLbyPlayerScalaFormat_
+   }
+   
+   def textCTLbyPlayer_withErrorInfo_rb:EfeKRdoc_rb.FactoryResult =
+   {  log("textCTLbyPlayer_rb called")
+      if(textCTLplayerUpdated4terParsing)
+      {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
+
+         if(textCTLplayerUpdated4terParsing)
+         {  log("   textCTLplayerUpdated4terParsing, so parsing (again).")
+            textCTLplayerUpdated4terParsing = false
+            EfeDoc_rb(textCTLbyPlayer)
+         }else
+         {  log("   !textCTLplayerUpdated4terParsing, so using cached value")
+            textCTLbyPlayer_rb_cached.get // get must be possible because parsing has taken place (and therefore the caching).
+         }
       }
    }
 
@@ -231,11 +245,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:EfeAnswerLangSent)
 
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
-   {  val answerPlayerCTL = si.textCTLbyPlayer match
-      {  case Some(tcbp) => reas.plofofa.Prover.query(si.algoDefPlayer.get, si.textCTLbyPlayer.get.sf)
-         case None       => logAndThrow("No textCTLbyPlayer found...")
-      }
-
+   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, si.textCTLbyPlayer_rb.get)
       AlgorithmicDefenceResult(true /* TODO */, "TODOanswerPlayerNL", "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
@@ -331,7 +341,6 @@ class NotUna(val playerIdInit:Long) extends TraitGameCore
 
       si
    }
-
 
    def parseTextCTLbyPlayer:Boolean = 
    {  println("ParseTextCTLbyPlayer called")
