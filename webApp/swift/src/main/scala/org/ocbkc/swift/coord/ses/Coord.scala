@@ -113,12 +113,12 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
      */
-   def URstartAlgorithmicDefenceStage2:(scala.Boolean, String, String, String) =
+   def URstartAlgorithmicDefenceStage2:gameCore.AlgorithmicDefenceResult =
    {  val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
       si.stopTime(System.currentTimeMillis).save
-      sesHis.sessionInfos ::= si      
+      sesHis.sessionInfos ::= si
       si.serialize // serialize the JSON part
       PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
 
@@ -277,9 +277,10 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
 
    def testSyntaxTranslation:String = 
-   {  gameCore.parseTextCTLbyPlayer
-      val warn = gameCore.parseWarningMsgTxtCTLplayer
-      if(!warn.equals("")) warn else gameCore.parseErrorMsgTextCTLplayer
+   {  gameCore.textCTLbyPlayer_rb_withErrorInfo match
+      {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _,       warnMsg) => warnMsg
+         case EfeKRdoc_rb.FactoryResult(None,         errMsg,  _)       => errMsg
+      }
    }
 
    def testSyntaxBridge = 

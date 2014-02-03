@@ -19,8 +19,7 @@ trait CTLsent
 /** Requires the pf to be correct. Otherwise it will reject creating the representation bundle.
   */
 abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
-{
-   val transform:CTLrepresentationTransforms[ScalaRepresentation__TP]
+{  val transform:CTLrepresentationTransforms[ScalaRepresentation__TP]
 
    var pf_ :Option[String] = None // pure format
    protected var sf_ :Option[ScalaRepresentation__TP] = None // Scala data-structure format
@@ -36,7 +35,7 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
                {  sf_ =
                      Some(
                         transform.pf2sf(pf) match
-                        {  case transform.Pf2sfResult(None, parseErrorMsg, _) => 
+                        {  case ParseResult[](None, parseErrorMsg, _) => 
                            {  logAndThrow("There is a parse error in the pf format " + parseErrorMsg)
                            }
                            case transform.Pf2sfResult(Some(sfLocal), _, _) => sfLocal
@@ -55,22 +54,34 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
 trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP <: CTLrepresentationBundle[Object]]
 {  protected def apply():CTLrepresentationBundle__TP // the default factory must be supplied.
    
-   case class FactoryResult(parseResult:Option[CTLrepresentationBundle__TP], parseErrorMessage:String)
+   case class FactoryResult(parseResult:Option[CTLrepresentationBundle__TP], parseErrorMessage:String, parseWarningMessage:String)
 
+   /** @returns ParseResult
+     */
    def apply(pf: String):FactoryResult =
    {  val crb:CTLrepresentationBundle__TP = apply()
-      //@todo mustdo check whether pf parses correctly, otherwise reject creation.
-      crb.pf_ = Some(pf)
-      FactoryResult(Some(crb), "") // @todo include parse error when not succeeded etc.
+
+      transform.pf2sf(pf) match
+      {  case ParseResult(None,       errMsg, warnMsg)  => FactoryResult(None, errMsg, warnMsg)
+         case ParseResult(Some(sf),   _,      warnMsg)  =>
+         {  crb.pf_ = Some(pf)
+            crb.sf_ = Some(sf)
+            FactoryResult(crb,  ""    , warnMsg)
+         }
+      }
    }
 // TODO   def apply(sf: ScalaRepresentation__TP) = { this(); sf_ = Some(sf) }
 }
 
+
+/** @todo move to more general lib (parser lib)
+  */
+case class ParseResult[ParseResultExpression__TP](parseResult:Option[ParseResultExpression__TP], parseErrorMessage:String, parseWarningMessage:String)
+
 trait CTLrepresentationTransforms[ScalaRepresentation__TP]
-{  case class Pf2sfResult(parseResult:Option[ScalaRepresentation__TP], parseErrorMessage:String, parseWarningMessage:String)
-   /** Translation pure format to Scala format. Returns None when there is an error in the syntax of pf.
+{  /** Translation pure format to Scala format. Returns None when there is an error in the syntax of pf.
      */
-   def pf2sf(pf:String):Pf2sfResult
+   def pf2sf(pf:String):ParseResult[ScalaRepresentation__TP]
 
    /** Translation Scala-format to pure-format
      */

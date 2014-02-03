@@ -42,7 +42,7 @@ trait PlofofaPat extends QuerySent
 
 /** PlofofaPat representation bundle
   */
-class PlofofaPat_rb() extends CTLrepresentationBundle // extends QuerySent @todo &y2014.01.20.16:28:57& extends QuerySent: yes or no?
+class PlofofaPat_rb() extends CTLrepresentationBundle[PlofofaPat] // extends QuerySent @todo &y2014.01.20.16:28:57& extends QuerySent: yes or no?
 {  override val displayNameCTL = "PlofofaPat"
    val transform = PlofofaRepresentationTransforms
 }

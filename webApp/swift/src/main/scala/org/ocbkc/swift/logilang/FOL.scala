@@ -370,7 +370,7 @@ import org.ocbkc.swift.logilang._
 
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
   */
-sealed trait FofaSent
+sealed trait FofaSent extends CTLsent
 case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp) extends FofaSent
 case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent
 
@@ -390,6 +390,7 @@ import org.ocbkc.swift.parser._
   */
 class EfeDoc_rb extends CTLrepresentationBundle[FOLtheory]
 {  override val displayNameCTL = "EfeDoc"
+   override val transform = EfeRepresentationTransforms
 }
 
 object EfeDoc_rb extends CTLrepresentationBundleFactory[EfeDoc_rb]
@@ -402,10 +403,10 @@ object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory
 
       //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
       Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, pf) match
-         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {  Pf2sfResult(Some(ftl), "", parseWarningMsg)
+         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {  ParseResult[FOLtheory](Some(ftl), "", parseWarningMsg)
                                                                }
             case failMsg@Efe2FOLtheoryParser.Failure(_,_)   => {  log("  parse error: " + failMsg.toString)
-                                                                  Pf2sfResult(None, failMsg.toString, parseWarningMsg)
+                                                                  ParseResult[FOLtheory](None, failMsg.toString, parseWarningMsg)
                                                                }
          }
    }

@@ -108,7 +108,7 @@ case class SessionInfo( var textNL: String,
                         var constantsByPlayer:Option[List[String]],
                         var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
-                        var algoDefPlayer: Option[EfeQuerySent],
+                        var algoDefPlayer: Option[EfeQuerySent_rb],
                         var answerPlayerCTL: Option[EfeAnswerLangSent],
                         var answerPlayerNL: String,
                         var questionRelatedBridgeStats: String,
@@ -126,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,"","",None,None,None,"",None,None,"","","","","")
+   def this() = this("","",None,None,None,None,"","","",None,None,"",None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 

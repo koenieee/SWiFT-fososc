@@ -87,18 +87,23 @@ object TestPlofofaProverCLI extends CLIwithFileInput
       */
    }
 }
+
 object Prover extends reas.ProverTrait
-{  def query(query:PlofofaPat_rb, ft:FOLtheory):FofaSent =
-   {  query(query.sf, ft)
+{  /** This method represents a 
+     * @todo shoulddo: change FOLtheory to FOLtheory_rb
+     */
+   def query(queryParam:PlofofaPat_rb, ft:FOLtheory):FofaSent =
+   {  this.query(queryParam.sf, ft)
    }
-   def query(query:PlofofaPat, ft:FOLtheory):FofaSent =
+
+   def query(queryParam:PlofofaPat, ft:FOLtheory):FofaSent =
    {  log("reas.plofofa.Prover called")
-      log("   query = " + query)
+      log("   query = " + queryParam)
 
       // translate FOLtheory to FOF
       val ftFof = ft.exportToTPTPfof
       // translate query to FOF
-      val queryFof = query match
+      val queryFof = queryParam match
       {  case MostInfo(patVar, forallPat) =>
          {  forallPat match
             {  case plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp) =>
@@ -133,7 +138,7 @@ object Prover extends reas.ProverTrait
       val eproverResult = Eprover("--cpu-limit=30 --memory-limit=Auto --tstp-format -s --answers " + fullpath)
       println("####   eprover's result =\n" + eproverResult)
 
-      val result = query match
+      val result = queryParam match
       {  case MostInfo(patVar, plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp)) =>
          fofa.Forall(forallVar, eproverResult.extractConstants, predApp)
       }

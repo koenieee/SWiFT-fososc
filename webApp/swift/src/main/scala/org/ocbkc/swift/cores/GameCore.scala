@@ -69,7 +69,9 @@ trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, Answe
    def generateText:String
    def algorithmicDefenceGenerator:QuerySent__TP
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
-   def doAlgorithmicDefence:(scala.Boolean, String, String, String)
+   
+   case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:AnswerLangSent__TP)
+   def doAlgorithmicDefence:AlgorithmicDefenceResult
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 }
 
@@ -99,6 +101,9 @@ object EfeChallengeTypes
 // helper class for return type of generateQuestionAndCorrectAnswer
 
 import EfeChallengeTypes._
+
+/** @todo &y2014.02.01.18:22:29& why not make EfeLang a singleton object?
+  */
 
 class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnswerLangSent]
 {  log("Constructor EfeLang called")
@@ -145,8 +150,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
       si.questionCTLcomputer_rb = Some{   EfeQuerySent_rb("mostInfo(s_, forall x from s_ .B(x)") match
-                                          {  case EfeQuerySent_rb.FactoryResult(Some(ctl_rb), _)   => ctl_rb
-                                             case EfeQuerySent_rb.FactoryResult(None, errMsg)      => logAndThrow(errMsg)
+                                          {  case EfeQuerySent_rb.FactoryResult(Some(ctl_rb), _, _)   => ctl_rb
+                                             case EfeQuerySent_rb.FactoryResult(None, errMsg, _)       => logAndThrow(errMsg)
                                           }
                                       }
                                           /*
@@ -167,7 +172,6 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    }
 
    var textCTLplayerUpdated4terParsing = true // starts with true, because also includes situation that no parsing has taken place ever.
-   var textCTLbyPlayer_rb :Option[EfeKRdoc_rb] = None
 
    def textCTLbyPlayerChanged(newTextCTL:String) =
    {  log("textCTLbyPlayerChanged called (call-back method from SessionInfo")
@@ -179,55 +183,28 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
 
    var textCTLbyPlayer_rb_cached:Option[EfeKRdoc_rb.FactoryResult] = None
 
-   def textCTLbyPlayer_rb:Option[EfeKRdoc_rb] =
-   {  textCTLbyPlayer_withErrorInfo_rb match
-      {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _)   => Some(ctl_rb)
-         case EfeKRdoc_rb.FactoryResult(None, errMsg)      => None
+   def textCTLbyPlayer_rb:Option[EfeDoc_rb] =
+   {  textCTLbyPlayer_rb_withErrorInfo match
+      {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _, _)   => Some(ctl_rb)
+         case EfeKRdoc_rb.FactoryResult(None, _, _)      => None
       }
    }
    
-   def textCTLbyPlayer_withErrorInfo_rb:EfeKRdoc_rb.FactoryResult =
+   def textCTLbyPlayer_rb_withErrorInfo:EfeKRdoc_rb.FactoryResult =
    {  log("textCTLbyPlayer_rb called")
+
       if(textCTLplayerUpdated4terParsing)
       {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
-
-         if(textCTLplayerUpdated4terParsing)
-         {  log("   textCTLplayerUpdated4terParsing, so parsing (again).")
-            textCTLplayerUpdated4terParsing = false
-            EfeDoc_rb(textCTLbyPlayer)
-         }else
-         {  log("   !textCTLplayerUpdated4terParsing, so using cached value")
-            textCTLbyPlayer_rb_cached.get // get must be possible because parsing has taken place (and therefore the caching).
-         }
+         textCTLplayerUpdated4terParsing = false
+         EfeDoc_rb(textCTLbyPlayer) // ERROR: return type of this goes wrong (scala infers "Unit") 
+      }else
+      {  log("   !textCTLplayerUpdated4terParsing, so using cached value")
+         textCTLbyPlayer_rb_cached.get // ERROR: return type of this goes wrong (scala infers "Unit") 
+         //get must be possible because parsing has taken place (and therefore the caching).
+         EfeDoc_rb(textCTLbyPlayer)
       }
    }
 
-   /** MUSTDO: this work is now done by the repesentation bundle
-     */
-   /*
-   def parseTextCTLbyPlayer:Boolean =
-   {  println("ParseTextCTLbyPlayer called")
-      textCTLplayerUpdated4terParsing = false
-      parseWarningMsgTxtCTLplayer = if(si.textCTLbyPlayer.equals("")) "Warning: empty file." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
-
-      //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
-      Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, si.textCTLbyPlayer) match
-         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {        textCTLbyPlayerScalaFormat_ = Some(ftl)
-                                                                        si.constantsByPlayer           = Some(ftl.constants.map({ case Constant(id) => id }))
-                                                                        si.predsByPlayer               = Some(ftl.predicates.map(pred => pred.name))
-                                                                        parseErrorMsgTextCTLplayer = ""
-                                                                        true
-                                                                     }
-            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   =>       {  textCTLbyPlayerScalaFormat_   = None
-                                                                        si.constantsByPlayer             = None
-                                                                        si.predsByPlayer                 = None
-                                                                        println("  parse error: " + failMsg.toString)
-                                                                        parseErrorMsgTextCTLplayer = failMsg.toString
-                                                                        false 
-                                                                     }
-         }
-   }
-   */
    def generateText = "todo"
 
    /** @todo (mustdo): 
@@ -241,11 +218,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    }
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
-   // <refactor move to trait?>
-   case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:EfeAnswerLangSent)
 
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
-   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, si.textCTLbyPlayer_rb.get)
+   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover is works on a more expressive CTL than EfeDoc.
       AlgorithmicDefenceResult(true /* TODO */, "TODOanswerPlayerNL", "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
