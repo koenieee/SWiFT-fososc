@@ -57,9 +57,9 @@ trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, Answe
    val playerId:Long
    var si:SessionInfo
    var parseWarningMsgTxtCTLplayer:String = ""
+
    var parseErrorMsgTextCTLplayer:String = ""
 
-   def parseTextCTLbyPlayer:Boolean
    def initialiseSessionInfo:SessionInfo = // <does this really belong here?>
    {  si = new SessionInfo
       si.gameCoreName(gameCoreName).save
