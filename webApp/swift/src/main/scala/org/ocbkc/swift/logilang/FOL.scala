@@ -393,7 +393,7 @@ class EfeDoc_rb extends CTLrepresentationBundle[FOLtheory]
    override val transform = EfeRepresentationTransforms
 }
 
-object EfeDoc_rb extends CTLrepresentationBundleFactory[EfeDoc_rb]
+object EfeDoc_rb extends CTLrepresentationBundleFactory[FOLtheory, EfeDoc_rb]
 {  override def apply = new EfeDoc_rb
 }
 
@@ -410,6 +410,8 @@ object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory
                                                                }
          }
    }
+
+   override def sf2pf(sf:FOLtheory) = logAndThrow("TODO")
 }
 
 }

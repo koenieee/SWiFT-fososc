@@ -47,12 +47,12 @@ class PlofofaPat_rb() extends CTLrepresentationBundle[PlofofaPat] // extends Que
    val transform = PlofofaRepresentationTransforms
 }
 
-object PlofofaPat_rb extends CTLrepresentationBundleFactory[PlofofaPat_rb]
+object PlofofaPat_rb extends CTLrepresentationBundleFactory[PlofofaPat, PlofofaPat_rb]
 {  override def apply = new PlofofaPat_rb()
 }
 
 object PlofofaRepresentationTransforms extends CTLrepresentationTransforms[PlofofaPat]
-{  override def pf2sf(pf:String):PlofofaPat  =
+{  override def pf2sf(pf:String):ParseResult[PlofofaPat]  =
    {  logAndThrow("PlofofaPat_rb.pf2sf Not implemented in this increment: avoid usage, by always explicitly providing the scala format of the plofofapat.")
    }
 

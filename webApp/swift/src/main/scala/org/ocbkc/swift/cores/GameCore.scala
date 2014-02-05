@@ -149,11 +149,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
       si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
       si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_rb = Some{   EfeQuerySent_rb("mostInfo(s_, forall x from s_ .B(x)") match
-                                          {  case EfeQuerySent_rb.FactoryResult(Some(ctl_rb), _, _)   => ctl_rb
-                                             case EfeQuerySent_rb.FactoryResult(None, errMsg, _)       => logAndThrow(errMsg)
-                                          }
-                                      }
+      si.questionCTLcomputer_rb = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))))
                                           /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
@@ -177,7 +173,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
    {  log("textCTLbyPlayerChanged called (call-back method from SessionInfo")
       textCTLplayerUpdated4terParsing = true
    }
-
+   /** @todo It may be more elegant to put this intelligent setter and getter in the class SessionInfo instead, and then attach the GameCore to it using the observer pattern.
+     */
    def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; /* WIW textCTLbyPlayer_rb = EfeDoc_rb(); */ si.textCTLbyPlayer_ =  t }
    def textCTLbyPlayer = si.textCTLbyPlayer_
 
@@ -196,12 +193,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
       if(textCTLplayerUpdated4terParsing)
       {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
          textCTLplayerUpdated4terParsing = false
-         EfeDoc_rb(textCTLbyPlayer) // ERROR: return type of this goes wrong (scala infers "Unit") 
+         val e = EfeDoc_rb(textCTLbyPlayer)
+         textCTLbyPlayer_rb_cached = Some(e)
+         e
       }else
       {  log("   !textCTLplayerUpdated4terParsing, so using cached value")
-         textCTLbyPlayer_rb_cached.get // ERROR: return type of this goes wrong (scala infers "Unit") 
-         //get must be possible because parsing has taken place (and therefore the caching).
-         EfeDoc_rb(textCTLbyPlayer)
+         textCTLbyPlayer_rb_cached.get
       }
    }
 

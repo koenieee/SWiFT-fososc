@@ -105,8 +105,8 @@ case class SessionInfo( var textNL: String,
                         var answerComputerCTL: String,
                         var answerComputerNL: String,
                         var textCTLbyPlayer_ : String, // don't change this one directly.
-                        var constantsByPlayer:Option[List[String]],
-                        var predsByPlayer:Option[List[String]],
+//                      var constantsByPlayer:Option[List[String]],
+//                      var predsByPlayer:Option[List[String]],
                         var bridgeCTL2NLplayer: String,
                         var algoDefPlayer: Option[EfeQuerySent_rb],
                         var answerPlayerCTL: Option[EfeAnswerLangSent],
@@ -126,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,"","","",None,None,"",None,None,"","","","","")
+   def this() = this("","",None,None,None,None,"","","","",None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 
@@ -227,8 +227,8 @@ case class SessionInfo( var textNL: String,
       this.answerComputerCTL = si.answerComputerCTL
       this.answerComputerNL = si.answerComputerNL
       this.textCTLbyPlayer_  = si.textCTLbyPlayer_ 
-      this.constantsByPlayer = si.constantsByPlayer
-      this.predsByPlayer = si.predsByPlayer
+//    this.constantsByPlayer = si.constantsByPlayer
+//    this.predsByPlayer = si.predsByPlayer
       this.bridgeCTL2NLplayer = si.bridgeCTL2NLplayer
       this.algoDefPlayer = si.algoDefPlayer
       this.answerPlayerCTL = si.answerPlayerCTL

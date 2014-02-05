@@ -51,9 +51,9 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
    }  
 }
 
-trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP <: CTLrepresentationBundle[Object]]
+//trait CTLrepresentationBundleFactory[ScalaRepresentation__TP]
+trait CTLrepresentationBundleFactory[ScalaRepresentation__TP, CTLrepresentationBundle__TP <: CTLrepresentationBundle[ScalaRepresentation__TP]]
 {  protected def apply():CTLrepresentationBundle__TP // the default factory must be supplied.
-   
    case class FactoryResult(parseResult:Option[CTLrepresentationBundle__TP], parseErrorMessage:String, parseWarningMessage:String)
 
    /** @returns
@@ -71,7 +71,13 @@ trait CTLrepresentationBundleFactory[CTLrepresentationBundle__TP <: CTLrepresent
          }
       }
    }
-// TODO   def apply(sf: ScalaRepresentation__TP) = { this(); sf_ = Some(sf) }
+
+   def apply(sf: ScalaRepresentation__TP):CTLrepresentationBundle__TP =
+   {  val crb:CTLrepresentationBundle__TP = apply()
+
+      crb.sf_ = Some(sf)
+      crb
+   }
 }
 
 

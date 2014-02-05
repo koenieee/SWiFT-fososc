@@ -43,8 +43,7 @@ class TranslationRound
          sesCoord.URstopTranslation
          
          if(transCorrect) 
-         {  sesCoordLR.gameCore.parseTextCTLbyPlayer // <&y2012.02.22.15:31:48& is now needed to get constantsByPlayer and predsByPlayer filled. In future this should not be needed (see SessionInfo)>
-            S.redirectTo("bridgeconstruction_efe.html") 
+         {  S.redirectTo("bridgeconstruction_efe.html") 
          }   
          else S.redirectTo("translationRound.html") 
       }
@@ -57,7 +56,7 @@ class TranslationRound
 
       // <? why can't scala infer that contentTranslationTA must be a String. (Omitting String, will result in an error).
       def processTranslationTA(contentTranslationTA:String) =
-      {  sesCoordLR.si.textCTLbyPlayer = contentTranslationTA // <&y2011.11.17.18:53:43& add check in Coord.scala that the translation has indeed been defined when you start using it somewhere, perhaps with Option>
+      {  sesCoordLR.gameCore.textCTLbyPlayer = contentTranslationTA // <&y2011.11.17.18:53:43& add check in Coord.scala that the translation has indeed been defined when you start using it somewhere, perhaps with Option>
          // test
          val a = Player.currentUserId
          if(a.isEmpty)
@@ -66,7 +65,7 @@ class TranslationRound
             println("   currentUserId = " + a.open_!)
       }
 
-      // <&y2012.02.26.01:34:10& perhaps more elegant to make use iof built-in parser of SessionInfo>
+      // <&y2012.02.26.01:34:10& perhaps more elegant to make use of built-in parser of SessionInfo>
       def errorTransWebText =
       {  Text( sesCoordLR.testSyntaxTranslation match
                {  case ""           => "Correct"  
@@ -83,7 +82,7 @@ class TranslationRound
    
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
-            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "style" -> "width: 100%;"), // todo: how to make text area page width?
+            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "style" -> "width: 100%;"),
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission),

@@ -45,10 +45,7 @@ class BridgeConstruction
    }
    
    def generateMenus4EntityBridge(ns:NodeSeq):NodeSeq =
-   {  val constants = sesCoordLR.si.constantsByPlayer match 
-                                             {  case Some(consts) => consts
-                                                case None         => println("   No constants found in translation player."); Nil
-                                             }
+   {  val constants = sesCoordLR.constantsByPlayer
       val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLname(0) }
       constants.flatMap
       {  constantIdentifier =>

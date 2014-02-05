@@ -309,6 +309,13 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
    }
 */
+
+   def constantsByPlayer:List[String] =
+   {  gameCore.textCTLbyPlayer_rb match
+      {  case Some(tcbp_rb) => tcbp_rb.sf.constants.map{ _.name }
+         case None => List()
+      }
+   }
 }
 
 
