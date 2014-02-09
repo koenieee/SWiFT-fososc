@@ -91,7 +91,7 @@ object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
    type EfeQuerySent_rb    = PlofofaPat_rb
    val EfeQuerySent_rb     = PlofofaPat_rb
-   type EfeAnswerLangSent  = FofaSent
+   type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
    type EfeKRdoc           = FOLtheory
    type EfeKRdoc_rb        = EfeDoc_rb
    val EfeKRdoc_rb         = EfeDoc_rb
@@ -105,7 +105,7 @@ import EfeChallengeTypes._
 /** @todo &y2014.02.01.18:22:29& why not make EfeLang a singleton object?
   */
 
-class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnswerLangSent]
+class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeAnswerLangSent/* change to _rb when available */]
 {  log("Constructor EfeLang called")
    val gameCoreName = "efe"
    var si:SessionInfo = null
@@ -206,19 +206,22 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent, EfeAnsw
 
    /** @todo (mustdo): 
      */
-   def algorithmicDefenceGenerator:EfeQuerySent =
-   {  val query_temp = MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))
+   def algorithmicDefenceGenerator:EfeQuerySent_rb =
+   {  val ret = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x"))))))
+      si.algoDefPlayer = Some(ret)
       log("[MUSTDO] translate the algoDefComputer to algoDefPlayer, then erase query_temp")
       log("[MUSTDO] also store in si variable")
-      val query = query_temp
-      query
+      ret
    }
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
 
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
-   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover is works on a more expressive CTL than EfeDoc.
-      AlgorithmicDefenceResult(true /* TODO */, "TODOanswerPlayerNL", "", answerPlayerCTL)
+   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
+      si.answerPlayerCTL = Some(answerPlayerCTL)
+      si.answerPlayerNL = answerPlayerCTL.toString
+      
+      AlgorithmicDefenceResult(true /* TODO */, si.answerPlayerNL, "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 

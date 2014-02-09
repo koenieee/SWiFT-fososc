@@ -110,7 +110,7 @@ case class SessionInfo( var textNL: String,
                         var bridgeCTL2NLplayer: String,
                         var algoDefPlayer: Option[EfeQuerySent_rb],
                         var answerPlayerCTL: Option[EfeAnswerLangSent],
-                        var answerPlayerNL: String,
+                        var answerPlayerNL: String, // remove after changing answerPlayerCTL to _rb format
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,

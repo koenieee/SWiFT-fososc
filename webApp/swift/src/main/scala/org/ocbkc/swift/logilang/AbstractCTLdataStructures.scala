@@ -12,6 +12,7 @@ import org.ocbkc.swift.global.Logging._
 trait QueryLang // <move to package .query.
 trait CTLbase
 trait CTLsent
+trait CTLsent_rb
 
 /* <&y2014.01.26.19:05:50& if only allowing correct pf in CTLrepresentationTransforms, don't I again introduce the necessity to build in "already parsed" checks in SessionInfo again???> [A &y2014.01.26.19:05:56& yes, as far as I can tell. For now, just skip this optimization]
 */
@@ -25,6 +26,17 @@ abstract class CTLrepresentationBundle[ScalaRepresentation__TP]()
    private[logilang] var sf_ :Option[ScalaRepresentation__TP] = None // Scala data-structure format
 
    val displayNameCTL:String
+
+   def pf:String =
+   {  pf_ match
+      {  case Some(pfLocal) => pfLocal
+         case None =>
+         {  val pfLocal = sf_.get.toString // get should always work because there are only two representations in this bundle. If pf_ is not defined, sf_ MUST be.
+            pf_ = Some(pfLocal)
+            pfLocal
+         }
+      }
+   }
 
    def sf:ScalaRepresentation__TP =
    {  sf_ match
