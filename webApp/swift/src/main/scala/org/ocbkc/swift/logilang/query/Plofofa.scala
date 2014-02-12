@@ -85,6 +85,11 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I d
 case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlofofaPat
 case class PredApp_Plofofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlofofaPat
 
+
+package translators
+{
+import org.ocbkc.swift.logilang.translations._
+
 /** Tranforms a query in Plofofa using one set of bridgestats, to the equivalent query in Plofafa using another set of bridgestats.
   * This can be used to translate queries when people used different constants to denote entities, etc.
   */
@@ -94,4 +99,24 @@ object QueryTranslator
    }
 }
 
+object TranslatePlofofaSentToNL extends Translate2NL[PlofofaPat_rb]
+{  override def apply(prb: PlofofaPat_rb, bs: BridgeDoc):String =
+   {  translate(prb.sf, bs)
+   }
+
+
+   private def translate(p: PlofofaPat, bs: BridgeDoc):String =
+   {  p match
+      {  case Forall(vr:Var, setPatVar:PatVar, PredApp_Plofofa(pred, _)) =>
+         {  "Mention people or things which are " ++  bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred)) ++ "."
+         }
+
+         case MostInfo(patVar, forallPat: Forall) =>
+         {  translate(forallPat, bs) ++ " And... do not mention some, but mention all of them!"
+         }
+      }
+   }
+}
+
+}
 }

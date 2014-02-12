@@ -9,10 +9,10 @@ package org.ocbkc.swift.logilang
 
 import org.ocbkc.swift.global.Logging._
  
-trait QueryLang // <move to package .query.
+trait QueryLang // <move to package .query>
 trait CTLbase
 trait CTLsent
-trait CTLsent_rb
+//trait CTLsent_rb
 
 /* <&y2014.01.26.19:05:50& if only allowing correct pf in CTLrepresentationTransforms, don't I again introduce the necessity to build in "already parsed" checks in SessionInfo again???> [A &y2014.01.26.19:05:56& yes, as far as I can tell. For now, just skip this optimization]
 */

@@ -1,3 +1,5 @@
+/** @todo &y2014.02.12.16:44:38& unify with other translations package
+  */
 package org.ocbkc.swift.trans
 
 import org.ocbkc.swift.logilang.bridge.brone._

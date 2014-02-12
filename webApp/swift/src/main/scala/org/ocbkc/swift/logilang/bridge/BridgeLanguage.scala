@@ -61,3 +61,36 @@ class BridgeDoc
    {  predicateBridgeSents.find{ case PredicateBridgeSent(predCTLname,_) => predCTLname == p.name  }.collect{ case PredicateBridgeSent(predCTLname, predNLname) => predNLname(0) }
    }
 }
+
+/** move to separate file
+  */
+package translators
+{
+import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.logilang.query.plofofa._
+
+/** Translators which translate between the same CTL, used with different bridges.
+  */
+trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent]
+{  def apply(ctlsent: CTLsent__TP):CTLsent__TP
+}
+
+object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb]
+{  override def apply(prb: PlofofaPat_rb):PlofofaPat_rb =
+   {  prb // the same! There are no constants in the (current version of the) Plofofa language 
+   
+   
+/* For the future:
+ *      PlofofaPat_rb.sf match
+ *      {  case Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) =>
+ *         {  Forall(
+ *         }
+ *
+ *         case MostInfo(patVar, forallPat: Forall) =>
+ *         {  MostInfo(patVar, apply(forallPat))
+ *         }
+ *      }
+ */
+   }
+}
+}

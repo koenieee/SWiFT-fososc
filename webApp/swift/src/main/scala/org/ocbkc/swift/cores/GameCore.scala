@@ -16,6 +16,7 @@ import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang.query.plofofa
+import org.ocbkc.swift.logilang.query.plofofa.translators._
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.reas
@@ -33,6 +34,8 @@ import org.ocbkc.swift.trans._
 import net.liftweb.json._
 import net.liftweb.json.ext._
 import scala.util.parsing.combinator.Parsers
+import org.ocbkc.swift.logilang.bridge.brone.translators._
+
 
 /* Conventions:
 - Names of classes correspond with design $JN/...
@@ -111,9 +114,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    var si:SessionInfo = null
    val playerId = playerIdInit
    
-   case class EfeDocAndBridge(doc:FOLtheory, bridge:BridgeDoc)
+   case class EfeDocAndBridgeAndAlgoDef(doc:FOLtheory, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb )
 
-   def randomGenerateCTLdoc:EfeDocAndBridge =
+   def randomGenerateCTLdoc:EfeDocAndBridgeAndAlgoDef =
    {  log("randomGenerateCTLdoc started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
@@ -139,31 +142,32 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
       generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
       
+      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(randomPredicate.get, List(Var("x"))))))
 
-      logp( { edab:EfeDocAndBridge => "   Generated EfeDocAndBridge = " + edab } , EfeDocAndBridge(generatedEfeDoc, bridgeDoc))
+      logp( { edab:EfeDocAndBridgeAndAlgoDef => "   Generated EfeDocAndBridgeAndAlgoDef = " + edab } , EfeDocAndBridgeAndAlgoDef(generatedEfeDoc, bridgeDoc, algoDef_rb))
    }
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      val computerGeneratedEfeDocAndBridge = randomGenerateCTLdoc // Fixed dummy for now TODO CTL text by Computer"
-      si.textCTLbyComputer = Some(computerGeneratedEfeDocAndBridge.doc)
-      si.textNL = Translation.FOltheory2NL_straight(computerGeneratedEfeDocAndBridge.doc, computerGeneratedEfeDocAndBridge.bridge)(0)
-      si.questionNL = "Which things and people are big?" // TODO replace with generated item
-      si.questionCTLcomputer_rb = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))))
+      val cg = randomGenerateCTLdoc // cg = computer generated
+      si.textCTLbyComputer = Some(cg.doc)
+      si.textNL = Translation.FOltheory2NL_straight(cg.doc, cg.bridge)(0)
+      si.questionCTLcomputer_rb = Some(cg.algoDef_rb)
+      si.questionNL = TranslatePlofofaSentToNL(cg.algoDef_rb, cg.bridge)
                                           /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
-      si.answerComputerCTL = "forall x from {instoppertje}.B(x)"
+      si.answerComputerCTL = "TODO answerComputerCTL"
 /*       - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */
 
-      si.answerComputerNL = "TODO answerComputerNL."
+      si.answerComputerNL = "TODO answerComputerNL"
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL" // <still applicable?>
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = Some(computerGeneratedEfeDocAndBridge.bridge)
+      si.bridgeCTL2NLcomputer = Some(cg.bridge)
       si
    }
 
@@ -207,10 +211,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /** @todo (mustdo): 
      */
    def algorithmicDefenceGenerator:EfeQuerySent_rb =
-   {  val ret = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x"))))))
+   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get)
       si.algoDefPlayer = Some(ret)
-      log("[MUSTDO] translate the algoDefComputer to algoDefPlayer, then erase query_temp")
-      log("[MUSTDO] also store in si variable")
       ret
    }
 
