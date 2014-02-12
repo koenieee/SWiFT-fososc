@@ -26,7 +26,7 @@ object TestPlofofaCLI extends CLIwithFileInput
 {  def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command, without arguments")
       def f:String =
-      {  val query = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp(Predicate("B",1), List(Var("x")))))
+      {  val query = MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp_Plofofa(Predicate("B",1), List(Var("x")))))
          "   query serialized: " + query.serialize
       }
       //applyFunctionToFile(f)
@@ -82,11 +82,10 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I d
 }
 
 // Example: mostInfo(s_, forall x from s_.P(c_2, x))
-case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp) extends PlofofaPat
+case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp_Plofofa) extends PlofofaPat
 case class PredApp_Plofofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with PlofofaPat
 
-
-package translators
+package translator
 {
 import org.ocbkc.swift.logilang.translations._
 
@@ -107,11 +106,11 @@ object TranslatePlofofaSentToNL extends Translate2NL[PlofofaPat_rb]
 
    private def translate(p: PlofofaPat, bs: BridgeDoc):String =
    {  p match
-      {  case Forall(vr:Var, setPatVar:PatVar, PredApp_Plofofa(pred, _)) =>
+      {  case Forall(vr, setPatVar, PredApp_Plofofa(pred, _)) =>
          {  "Mention people or things which are " ++  bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred)) ++ "."
          }
-
-         case MostInfo(patVar, forallPat: Forall) =>
+//Forall(Var(name = x),PatVar(s),PredApp(Predicate(name = F, arity = 1),List(Var(name = x)))) (of class org.ocbkc.swift.logilang.query.plofofa.Forall)
+         case MostInfo(patVar, forallPat) =>
          {  translate(forallPat, bs) ++ " And... do not mention some, but mention all of them!"
          }
       }

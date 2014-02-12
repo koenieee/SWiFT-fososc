@@ -373,8 +373,34 @@ import org.ocbkc.swift.logilang._
 sealed trait FofaSent extends CTLsent
 case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp) extends FofaSent
 case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent
+/*
+package translator
+{  import org.ocbkc.swift.logilang.translations._
 
+/** 
+  * 
+  */
+object TranslateFofaSentToNL extends Translate2NL[FofaSent] // change to _rb if that comes available
+{  override def apply(prb: FofaSent, bs: BridgeDoc):String =
+   {  translate(prb.sf, bs)
+   }
 
+   private def translate(p: FofaSent, bs: BridgeDoc):String =
+   {  p match
+      {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
+         {  val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
+            "People and things which are " ++ predNL ++ " are the following: " ++ constantList.mkString(", ")  ++ "."
+         }
+//Forall(Var(name = x),PatVar(s),PredApp(Predicate(name = F, arity = 1),List(Var(name = x)))) (of class org.ocbkc.swift.logilang.query.plofofa.Forall)
+         case MostInfo(patVar, forallPat) =>
+         {  translate(forallPat, bs) ++ " And... do not mention some, but mention all of them!"
+         }
+      }
+   }
+}
+
+}
+*/
 
 }
 

@@ -250,7 +250,7 @@ class Boot {
     }
   */  
     //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
-    if(TestSettings.AUTOLOGIN) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn("1") ) }
+    if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
 
     // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage

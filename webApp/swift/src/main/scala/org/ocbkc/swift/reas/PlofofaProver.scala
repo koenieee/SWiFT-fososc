@@ -52,7 +52,7 @@ object TestPlofofaProverCLI extends CLIwithFileInput
       else
       {  val predicateB = Predicate("B",1)
          val predicateF = Predicate("F",1)
-         val plofofaQuery = MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(predicateB, List(Var("x")))))
+         val plofofaQuery = MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(predicateB, List(Var("x")))))
          val folTheory = new FOLtheory
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("makkelPowerConnect"))))
          folTheory.addStat(PredApp_FOL(predicateB, List(Constant("loxolopPower"))))
@@ -113,7 +113,7 @@ object Prover extends reas.ProverTrait
                   {  // transform to fof query
                      val fofPVname = "PV" + forallVar.name // <rename to official name of pattern variables in fof.> Possibly confusing: pattern variable in Plofofa != pattern variable in FOF (in this case)!
                      predApp match
-                     {  case  PredApp(p, consts) =>
+                     {  case  PredApp_Plofofa(p, consts) =>
                         {  "fof(form" + ft.stats.length + ", question, ? [" + fofPVname + "] : " + p.name + consts.map( c => if( c.equals(forallVar) ) fofPVname else c.name ).mkString("(",",",")") + ")."
                         }
                      }

@@ -102,7 +102,7 @@ case class SessionInfo( var textNL: String,
                         var textCTLbyComputer: Option[FOLtheory],
                         var bridgeCTL2NLcomputer: Option[BridgeDoc],
                         var algoDefComputer_rb: Option[EfeQuerySent_rb],
-                        var answerComputerCTL: String,
+                        var answerComputerCTL: Option[EfeAnswerLangSent],
                         var answerComputerNL: String,
                         var textCTLbyPlayer_ : String, // don't change this one directly.
 //                      var constantsByPlayer:Option[List[String]],
@@ -126,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,"","","","",None,None,"","","","","")
+   def this() = this("","",None,None,None,None,None,"","","",None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 

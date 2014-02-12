@@ -26,10 +26,10 @@ class AlgorithmicDefenceRoundStage2
 
       bind(  
          "top", ns,
-         "continue" -> SHtml.submit("Continue", processSubmission), // <&y2011.11.09.13:39:03& change to "explain error" when applicable>
-         "questionNL"      -> Text(sesCoordLR.si.questionNL), 
-         "algoDefPlayer"     -> Text(sesCoordLR.si.algoDefPlayer.toString),
-         "answerFromSourceCTL"   -> Text(sesCoordLR.si.answerComputerCTL),
+         "continue"              -> SHtml.submit("Continue", processSubmission), // <&y2011.11.09.13:39:03& change to "explain error" when applicable>
+         "questionNL"            -> Text(sesCoordLR.si.questionNL), 
+         "algoDefPlayer"         -> Text(sesCoordLR.si.algoDefPlayer.get.sf.toString), // @todo replace with pf as soon as implemented
+         "answerFromSourceCTL"   -> Text(sesCoordLR.si.answerComputerCTL.get.toString),
          "answerFromSourceNL"    -> Text(sesCoordLR.si.answerComputerNL),
          "answerFromTransCTL"    -> Text(sesCoordLR.si.answerPlayerCTL.get.toString),
          "answerFromTransNL"     -> Text(sesCoordLR.si.answerPlayerNL),

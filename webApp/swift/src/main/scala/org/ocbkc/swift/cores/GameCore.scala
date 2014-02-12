@@ -114,9 +114,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    var si:SessionInfo = null
    val playerId = playerIdInit
    
-   case class EfeDocAndBridgeAndAlgoDef(doc:FOLtheory, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb )
+   case class ComputerGeneratedRepresentations(doc:FOLtheory, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent)
 
-   def randomGenerateCTLdoc:EfeDocAndBridgeAndAlgoDef =
+   def randomGenerateCTLdoc:ComputerGeneratedRepresentations =
    {  log("randomGenerateCTLdoc started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
@@ -142,9 +142,10 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
       generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
       
-      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp(randomPredicate.get, List(Var("x"))))))
+      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate.get, List(Var("x"))))))
+      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp(randomPredicate.get, List(Var("x"))))
 
-      logp( { edab:EfeDocAndBridgeAndAlgoDef => "   Generated EfeDocAndBridgeAndAlgoDef = " + edab } , EfeDocAndBridgeAndAlgoDef(generatedEfeDoc, bridgeDoc, algoDef_rb))
+      logp( { edab:ComputerGeneratedRepresentations => "   Generated ComputerGeneratedRepresentations = " + edab } , ComputerGeneratedRepresentations(generatedEfeDoc, bridgeDoc, algoDef_rb, answerCTL))
    }
 
    override def initialiseSessionInfo:SessionInfo =
@@ -158,7 +159,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
-      si.answerComputerCTL = "TODO answerComputerCTL"
+      si.answerComputerCTL = Some(cg.answerCTL)
 /*       - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */

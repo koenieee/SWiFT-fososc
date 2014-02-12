@@ -144,7 +144,10 @@ object Types
 
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
-{  val AUTOLOGIN                       = false
+{  object AUTOLOGIN
+   {  val ON = true
+      val USER_ID = "2"
+   }
    val AUTOTRANSLATION                 = false // true
    val CREATETESTUSERBASE              = true
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
