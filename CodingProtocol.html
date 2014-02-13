@@ -1,0 +1,94 @@
+<script src="https://google-code-prettify.googlecode.com/svn/loader/run_prettify.js"></script>
+
+<head>
+
+<title>CodingProtocol</title>
+
+<body>
+
+<p>
+<h1><font color="maroon">Build management</font></h1>
+</p>
+<br>
+<p>
+<ul>
+<li>When adding new artifacts to the pom.xml file, always refer to a specific version of an artifact. If you don't do this, maven may attempt to download the newest version, while the code has not been adapted yet. E.g. you can run into missing goals (because they were deprecated), your code may not compile (because the code refers to deprecated classes), etc. etc.</li>
+</ul>
+</p>
+
+<p>
+<h2><font color="teal">Source code layout</font></h2>
+<br>
+<ul>
+<li>Use spaced tabs, so each tab should consist of whitespaces, and not a TAB symbol.
+   <ul>
+   <li>Recommended: set your text editor to automatically convert the TAB-key to whitespaces.</li>
+   </ul>
+</li>
+<br>
+<li>Use tab size = 3 spaces
+   <ul>
+   <li>Recommended: set your text editor to a tab-width of 3 spaces.</li>
+   </ul>
+</li>
+</ul>
+<br>
+<ul>
+<li>Follow the following style when using curly brackets:</li>
+<pre class="prettyprint">def intelligentMethod() =
+{  [here code]
+   [etc.]
+}
+</pre> 
+<br>
+<li>Start the code on the same line as the opening curly bracket, just as in the example above. So don't do this:</li>
+<pre class="prettyprint">def intelligentMethod() =
+{  
+   [here code]
+   [etc.]
+}
+</pre>
+<br>
+<li>But a space after each comma (',') separating a parameter:</li>
+<pre class="prettyprint">def intelligentMethod(x:Int, y:Int, z:Int)</pre>
+<br>
+<li>Preferably place whitespaces around infix operators and other infix symbols, such as +, ++, =>, and ==:</li>
+<pre class="prettyprint">if( x == 5 ) 
+{  [do this]
+}
+</pre>
+<br>
+<li>Other aspects: do as one sees fit. For example, the following style is also allowed (no space after '(' and before ')')</li>
+<pre class="prettyprint">if(x == 5)</pre>
+<br>
+<li>Vertically align => symbols after cases:</li>
+<pre class="prettyprint">list match
+{  case Nil => None
+   case _   => Some(list(rs.nextInt(list.length)))
+}
+</pre>
+<br>
+<li>A complete example is the following:</li>
+<pre class="prettyprint">object RandomExtras
+{  def nextBetween(ranSeq:Random, min:Int, max:Int):Int = 
+   {  min + ranSeq.nextInt( max - min + 1 )
+   }
+<br>
+   def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
+   {  list match
+      {  case Nil => None
+         case _   => Some(list(rs.nextInt(list.length)))
+      }
+   }
+}
+</pre>
+<br>
+<li>If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.</li>
+</ul>
+</p>
+
+<h4><font color="teal">TODO examples</font></h4>
+
+</body>
+
+</head>
