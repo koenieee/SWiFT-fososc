@@ -72,7 +72,7 @@ import org.ocbkc.swift.logilang.query.plofofa._
 /** Translators which translate between the same CTL, used with different bridges.
   */
 trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent]
-{  def apply(ctlsent: CTLsent__TP):CTLsent__TP
+{  def apply(ctlsent: CTLsent__TP, bsSource: BridgeDoc, bsTarget: BridgeDoc):CTLsent__TP
 }
 
 object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb]

@@ -107,7 +107,7 @@ case class SessionInfo( var textNL: String,
                         var textCTLbyPlayer_ : String, // don't change this one directly.
 //                      var constantsByPlayer:Option[List[String]],
 //                      var predsByPlayer:Option[List[String]],
-                        var bridgeCTL2NLplayer: String,
+                        var bridgeCTL2NLplayer: Option[BridgeDoc],
                         var algoDefPlayer: Option[EfeQuerySent_rb],
                         var answerPlayerCTL: Option[EfeAnswerLangSent],
                         var answerPlayerNL: String, // remove after changing answerPlayerCTL to _rb format

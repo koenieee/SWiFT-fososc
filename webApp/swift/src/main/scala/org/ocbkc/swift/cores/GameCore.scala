@@ -5,6 +5,7 @@ package org.ocbkc.swift.cores
 {
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.fofa._
+import org.ocbkc.swift.logilang.fofa.translator._
 import org.ocbkc.swift.logilang.fofa
 import org.ocbkc.swift.logilang.efe._
 import scala.util.Random
@@ -164,7 +165,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */
 
-      si.answerComputerNL = "TODO answerComputerNL"
+      si.answerComputerNL = TranslateFofaSentToNL(cg.answerCTL, cg.bridge)
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL" // <still applicable?>
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
@@ -222,7 +223,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
    {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
       si.answerPlayerCTL = Some(answerPlayerCTL)
-      si.answerPlayerNL = answerPlayerCTL.toString
+      si.answerPlayerNL = TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer.get)
       
       AlgorithmicDefenceResult(true /* TODO */, si.answerPlayerNL, "", answerPlayerCTL)
    }
