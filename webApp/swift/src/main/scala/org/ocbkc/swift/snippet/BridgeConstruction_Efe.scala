@@ -20,6 +20,7 @@ import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
 import scala.util.parsing.combinator.Parsers //{Success, Failure}
 import org.ocbkc.swift.logilang.bridge.brone._
+import org.ocbkc.swift.logilang._
 
 // BriCo = BridgeConstruction
 package efe
@@ -40,23 +41,23 @@ class BridgeConstruction
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
 // { transformed2efe
-   def processMenu4EntityBridgeSelect(entNLname:String) =
-   {  //TODO
+   def processMenu4EntityBridgeSelect(constant:Constant, entNLname:String) =
+   {  sesCoordLR.addToPlayerBridge(constant, entNLname)
    }
    
    def generateMenus4EntityBridge(ns:NodeSeq):NodeSeq =
    {  val constants = sesCoordLR.constantsByPlayer
       val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLname(0) }
       constants.flatMap
-      {  constantIdentifier =>
+      {  constant =>
          {
             val entBridgeConstructionTemplate = chooseTemplate("top", "entBridgeConstructionTemplate", ns)
             log("entBridgeConstructionTemplate = " + entBridgeConstructionTemplate)
 
             logp( { ns:NodeSeq => "Result of bind ebct with entBridgeConstructionTemplate: " + ns.toString },
                   bind( "ebct", entBridgeConstructionTemplate, 
-                        "constantName"    -> Text(constantIdentifier),
-                        "entNLselectBox"  -> SHtml.select(entNLnames.map(name => (name,name)), Empty, processMenu4EntityBridgeSelect(_))
+                        "constantName"    -> Text(constant.name),
+                        "entNLselectBox"  -> SHtml.select(entNLnames.map(name => (name,name)), Empty, processMenu4EntityBridgeSelect(constant, _))
                )
             )
          }
@@ -84,7 +85,7 @@ class BridgeConstruction
       bind( "top", ns,
             "translation"                 -> Text(sesCoordLR.si.textCTLbyPlayer),
             "entBridgeConstructionMenus"  -> generateMenus4EntityBridge(ns),
-            "constructedBridgeCTL2NL"     -> Text(sesCoordLR.si.bridgeCTL2NLplayer),
+            "constructedBridgeCTL2NL"     -> Text(sesCoordLR.si.bridgeCTL2NLplayer.toString),
             // "errorInInfo2ConstructBridge" -> errorBridgeWebText,
             "sourceText"                  -> Text(sesCoordLR.si.textNL),
             "submitBt"                    -> SHtml.submit("Submit", processSubmission),

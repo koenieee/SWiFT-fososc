@@ -29,6 +29,7 @@ import net.liftweb.util.Mailer._
 
 import net.liftweb.common.{Box,Empty,Failure,Full}
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.logilang.bridge.brone._
 import _root_.net.liftweb.mapper.By
 import org.ocbkc.swift.global.Types._
 
@@ -283,14 +284,6 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
       }
    }
 
-   def testSyntaxBridge = 
-   {  import scala.util.parsing.combinator.Parsers
-      if( si.bridgeCTL2NLplayer == "" ) 
-         None
-      else
-         Some(HurelanBridge.parseAll(HurelanBridge.bridge, si.bridgeCTL2NLplayer))
-   }
-
    def addFollower(p:Player, c:Constitution) =
    {  val userId = p.userIdAsString
       c.addFollower(p)
@@ -310,7 +303,23 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    }
 */
 
-   def constantsByPlayer:List[String] =
+
+   /** @todo add error checking: or is this not needed?
+     */
+   def addToPlayerBridge(constant:Constant, entNLname:String)
+   {  val bridgeDoc = gameCore.getOrCreatePlayerBridge
+
+      bridgeDoc.bridgeSents += EntityBridgeSent(constant.name, List(entNLname))
+   }
+
+   def constantsByPlayer:List[Constant] =
+   {  gameCore.textCTLbyPlayer_rb match
+      {  case Some(tcbp_rb) => tcbp_rb.sf.constants
+         case None => List()
+      }
+   }
+
+   def namesOfConstantsByPlayer:List[String] =
    {  gameCore.textCTLbyPlayer_rb match
       {  case Some(tcbp_rb) => tcbp_rb.sf.constants.map{ _.name }
          case None => List()

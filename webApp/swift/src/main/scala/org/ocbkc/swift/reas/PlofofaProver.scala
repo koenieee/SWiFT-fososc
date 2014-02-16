@@ -139,8 +139,9 @@ object Prover extends reas.ProverTrait
       println("####   eprover's result =\n" + eproverResult)
 
       val result = queryParam match
-      {  case MostInfo(patVar, plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp)) =>
-         fofa.Forall(forallVar, eproverResult.extractConstants, predApp)
+      {  case MostInfo(patVar, plofofa.Forall(forallVar:Var, setPatVar:PatVar, PredApp_Plofofa(pred, terms))) =>
+         {  fofa.Forall(forallVar, eproverResult.extractConstants, PredApp_Fofa(pred, terms))
+         }
       }
 
       log(" Final result: " + result)

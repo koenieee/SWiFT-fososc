@@ -126,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,None,"","","",None,None,"","","","","")
+   def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 

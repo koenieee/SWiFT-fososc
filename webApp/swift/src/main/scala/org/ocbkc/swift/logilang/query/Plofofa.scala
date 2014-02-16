@@ -13,6 +13,7 @@ import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang.bridge.brone._
+import org.ocbkc.swift.logilang.translations._
 
 // import scala.util.parsing.combinator.Parsers._
 
@@ -89,6 +90,7 @@ package translator
 {
 import org.ocbkc.swift.logilang.translations._
 
+
 /** Tranforms a query in Plofofa using one set of bridgestats, to the equivalent query in Plofafa using another set of bridgestats.
   * This can be used to translate queries when people used different constants to denote entities, etc.
   */
@@ -98,11 +100,10 @@ object QueryTranslator
    }
 }
 
-object TranslatePlofofaSentToNL extends Translate2NL[PlofofaPat_rb]
+object TranslatePlofofaSentToNL extends TranslateCTL2NL[PlofofaPat_rb]
 {  override def apply(prb: PlofofaPat_rb, bs: BridgeDoc):String =
    {  translate(prb.sf, bs)
    }
-
 
    private def translate(p: PlofofaPat, bs: BridgeDoc):String =
    {  p match

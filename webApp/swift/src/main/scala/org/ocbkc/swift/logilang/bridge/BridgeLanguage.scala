@@ -76,7 +76,7 @@ trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent]
 }
 
 object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb]
-{  override def apply(prb: PlofofaPat_rb):PlofofaPat_rb =
+{  override def apply(prb: PlofofaPat_rb, bsSource: BridgeDoc, bsTarget: BridgeDoc):PlofofaPat_rb =
    {  prb // the same! There are no constants in the (current version of the) Plofofa language 
    
    

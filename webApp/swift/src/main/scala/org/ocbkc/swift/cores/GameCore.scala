@@ -17,7 +17,7 @@ import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang.query.plofofa
-import org.ocbkc.swift.logilang.query.plofofa.translators._
+import org.ocbkc.swift.logilang.query.plofofa.translator._
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.reas._
 import org.ocbkc.swift.reas
@@ -117,19 +117,26 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    
    case class ComputerGeneratedRepresentations(doc:FOLtheory, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent)
 
+   /** EfeLang is not equal to FOL, but FOL is just used, with some predefined predicates. The "right" solution would be to define a new language in a separate package. This is a quick solution. Just throw a FOLtheory through this method, and it will add the predefined predicates. Moreover it will return the BridgeDoc.
+     */
+   def initialiseEfeDoc(efeDoc:FOLtheory):(BridgeDoc, Predicate, Predicate) =
+   {  val fastPredicate       = efeDoc.gocPredicate("F", 1).get
+      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
+      val bigPredicate        = efeDoc.gocPredicate("B", 1).get
+      val bigPredicateBridge  = PredicateBridgeSent("B", List("big"))
+      val bd                  = new BridgeDoc
+      bd.bridgeSents          ++= List(fastPredicateBridge, bigPredicateBridge)
+      (bd, fastPredicate, bigPredicate)
+   }
+
    def randomGenerateCTLdoc:ComputerGeneratedRepresentations =
-   {  log("randomGenerateCTLdoc started")
+   {  log("randomGenerateCTLdocc started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
 
       val generatedEfeDoc = new FOLtheory
+      val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
       // first increment: create 1 sentence
-      
-      val bigPredicate = generatedEfeDoc.gocPredicate("B", 1).get
-      val bigPredicateBridge = PredicateBridgeSent("B", List("big"))
-
-      val fastPredicate = generatedEfeDoc.gocPredicate("F", 1).get
-      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
       
       val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg )
 
@@ -138,13 +145,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg )
       val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname.get))
 
-      val bridgeDoc = new BridgeDoc
-      bridgeDoc.bridgeSents ++= List(entityBridge, bigPredicateBridge, fastPredicateBridge)
+      bridgeDoc.bridgeSents ++= List(entityBridge)
 
       generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
       
       val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate.get, List(Var("x"))))))
-      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp(randomPredicate.get, List(Var("x"))))
+      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate.get, List(Var("x"))))
 
       logp( { edab:ComputerGeneratedRepresentations => "   Generated ComputerGeneratedRepresentations = " + edab } , ComputerGeneratedRepresentations(generatedEfeDoc, bridgeDoc, algoDef_rb, answerCTL))
    }
@@ -213,7 +219,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /** @todo (mustdo): 
      */
    def algorithmicDefenceGenerator:EfeQuerySent_rb =
-   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get)
+   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get, si.bridgeCTL2NLcomputer.get, si.bridgeCTL2NLplayer.get)
       si.algoDefPlayer = Some(ret)
       ret
    }
@@ -228,6 +234,17 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       AlgorithmicDefenceResult(true /* TODO */, si.answerPlayerNL, "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
+
+   def getOrCreatePlayerBridge:BridgeDoc =
+   {  si.bridgeCTL2NLplayer match
+      {  case None =>
+         {  val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(textCTLbyPlayer_rb.getOrElse(logAndThrow("Never call this method when textCTLbyPlayer has nto been defined yet")).sf)
+            si.bridgeCTL2NLplayer = Some(bridgeDoc)
+            bridgeDoc
+         }
+         case Some(b) => b
+      }
+   }
 
 }
 //} EUC

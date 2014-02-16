@@ -14,7 +14,10 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 // not complete FOL yet
 // < therefore place rename to FOLminqua for example. If you extend it, simply create another language next to it which is the extension... >
 
-// each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
+// each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are part
+
+/** @todo don't know whether tying the language to the theory is the best idea. Sometimes you want to share predicates between theories.
+  */
 class FOLtheory extends FOLutils with CTLbase
 {  // <&y2012.04.03.22:31:27& constants and predicates could also be represented as hashmaps for more efficiency>
    var constants:List[Constant]     = Nil // [&y2012.04.13.09:39:59& as far as I can see, I don't really need this list.]
@@ -374,7 +377,7 @@ import org.ocbkc.swift.logilang._
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
   */
 sealed trait FofaSent extends CTLsent
-case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp) extends FofaSent
+case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
