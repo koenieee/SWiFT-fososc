@@ -25,7 +25,7 @@ class PlayerStats
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
       val own_fastest_trans = PlayerScores.shortestTranslation(player).headOption match{case None => "None"; case Some(x) => x.durationTranslation.get }//it looks like its working, for all players  //0 //averageDurationTranslation(player, -1)
-     val fastest_trans_time = PlayerScores.overallShortestTranslation() match{case None => "None"; case Some(x) => x.durationTranslation.get }
+      val fastest_trans_time = PlayerScores.overallShortestTranslation() match{case None => "None"; case Some(x) => x.durationTranslation.get }
             bind( "top", ns,
             "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
             "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),

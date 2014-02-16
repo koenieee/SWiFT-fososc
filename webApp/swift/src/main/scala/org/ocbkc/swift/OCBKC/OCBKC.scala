@@ -820,10 +820,10 @@ object PlayerScores
 
         val coretent = coreContentObjectsWhichCount(p)
             //      println(coretent)
-val fastest:List[CoreContent] = coretent.sortBy(x=> x.durationTranslation) //first one is the fastest.
+        val fastest:List[CoreContent] = coretent.sortBy(_.durationTranslation) //first one is the fastest.
 
 
-fastest
+        fastest
 
    }
 
@@ -836,10 +836,10 @@ fastest
       // CoreContent(a,b,c,d,e,f)
    //  println(shortestTranslation(all_players(0)))
     val ls:List[Option[CoreContent]] = all_players.map{
-     x  =>  shortestTranslation(x).headOption
+     ply  =>  shortestTranslation(ply).headOption
       }
   //  ls.sortBy(x=>x.get.durationTranslation)
-    val sorted_fastest = ls.flatten.sortBy(x=> x.durationTranslation)
+    val sorted_fastest = ls.flatten.sortBy(_.durationTranslation)
      sorted_fastest.headOption
 
 
