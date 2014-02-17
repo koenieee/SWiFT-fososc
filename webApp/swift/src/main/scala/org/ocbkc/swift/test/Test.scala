@@ -5,8 +5,7 @@ import org.ocbkc.swift.global.Types._
 import scala.util.Random
 
 package org.ocbkc.swift.test
-{  
-   // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
+{  // <&y2012.10.16.20:51:51& coulddo refactor this with reflection, so that the implementation can be optimised = if no test, all code directly calls System.currentTimeMillis>
 object SystemWithTesting
 {  import TestHelpers._
    println("constructor SystemWithTesting called")
@@ -92,6 +91,21 @@ object TestHelpers
       val days    = ( duration / (1000L*60L*60L*24L) )
       
       days + "d." + hours + "h." + minutes + "m." + seconds + "s." + milliseconds + "ms ( = " + duration + "ms)"
+   }
+}
+
+class CLIwithFileInput
+{  def applyFunctionToFile(function:String => String, filename:String) 
+   {  println("inputfilename: " + filename)
+      
+      //var inFile = new File(arg(0))
+      //val in:BufferedReader = new BufferedReader(new FileReader(inFile))
+      //var input:String
+      val source = scala.io.Source.fromFile(filename)
+      val lines = source.mkString // <&y2012.02.19.00:00:27& careful: this always adds a newline after each string in the source, even if it is a last line without a newline. Really so? Make SLI from this>
+      source.close()
+      println("inputfile: \n" + lines)
+      println( function(lines) )
    }
 }
 

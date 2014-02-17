@@ -80,7 +80,7 @@ class AdminPage
 
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
 		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-		FileUtils.deleteDirectory(new File(GlobalConstant.CORECONTENTOBJECTDIR))
+		FileUtils.deleteDirectory(new File(GlobalConstant.SESSIONINFOOBJECTDIR))
 
                 InitialiseJgit()
 

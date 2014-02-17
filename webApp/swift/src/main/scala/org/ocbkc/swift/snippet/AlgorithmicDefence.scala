@@ -29,10 +29,10 @@ class AlgorithmicDefenceRound
       val answer   = bind(  
                "top", ns, 
                "startderivation"    -> SHtml.submit("Start Derivation!", processSubmission),
-               "questionNL"         -> Text(sesCoordLR.cc.questionNL), 
-               "algoDefPlayer"      -> Text(sesCoordLR.cc.algoDefPlayer.toString),
-               //"questionNo"      -> Text("TODO: questionNo"), 
-               "computerAnswerFromSource" -> Text(sesCoordLR.cc.answerComputerNL)
+               "questionNL"         -> Text(sesCoordLR.si.questionNL), 
+               "algoDefPlayer"      -> Text(sesCoordLR.si.algoDefPlayer.get.sf.toString),
+               //"questionNo"       -> Text("TODO: questionNo"), 
+               "computerAnswerFromSource" -> Text(sesCoordLR.si.answerComputerNL)
             )
       answer
    }

@@ -1,13 +1,16 @@
-package org.ocbkc.swift.reas
+package org.ocbkc.swift.reas.folnuminqua
 {
+import org.ocbkc.swift.reas._
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.ComparisonOperator._
 import org.ocbkc.swift.tpwrap._
 import query._
 import System.err.println
 import java.io._
+import org.ocbkc.swift.test.CLIwithFileInput
 
 /* Assumed is: args(0) = input file, where first line is list of space separated constantnames, the rest is the folminqua file */
 object TestTpFolnuminquaCLI extends CLIwithFileInput
@@ -30,7 +33,7 @@ object TestTpFolnuminquaCLI extends CLIwithFileInput
          ret += "Query = " + query.toString + "\n"
 
 
-         ret += "Answer = " + Folnuminqua.query(query, ft)
+         ret += "Answer = " + Prover.query(query, ft)
 
          ret
       }
@@ -38,7 +41,7 @@ object TestTpFolnuminquaCLI extends CLIwithFileInput
    }
 }
 
-object Folnuminqua
+object Prover
 {  
 /*
 - rewrite the equal statements such that the equal statements are eliminated in the following way:
@@ -101,7 +104,7 @@ Running example:
          val pred = Predicate("introduceconstants", c.length) // create and add introduceconstants statement
          ft_EqInEqIntroConsStats.removeStats( { case stat:Equal => false; case stat:Unequal => false; case _ => true } )
          println("   create a statement to introduce all constants from C and transform to TPTP fof")
-         ft_EqInEqIntroConsStats.addStat(PredApp(pred, c))
+         ft_EqInEqIntroConsStats.addStat(PredApp_FOL(pred, c))
          println("      first drop everything but (in)equality stats:")
          println("      ft_EqInEqIntroConsStats =  " + ft_EqInEqIntroConsStats)
          println("      applying EqualityEliminitor:")

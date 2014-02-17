@@ -71,7 +71,7 @@ class Boot {
     // where to search snippet
     LiftRules.addToPackages("org.ocbkc.swift")
 
-    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
 
     // Build SiteMap
     /* originally generated code:
@@ -256,7 +256,7 @@ class Boot {
     }
   */  
     //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
-    if(TestSettings.AUTOLOGIN) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn("1") ) }
+    if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
 
     // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
     Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
@@ -380,7 +380,7 @@ class Boot {
    {  TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <_&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>[A &y2013.04.15.19:57:38& this has been done in another branch, merge it]
 
-      PlayingSimulator.start(45000);
+      PlayingSimulator.start(45000)
       TestSettings.SIMULATECLOCK = false
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
 

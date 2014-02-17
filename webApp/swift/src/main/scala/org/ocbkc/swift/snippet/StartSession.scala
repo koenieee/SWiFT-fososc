@@ -14,15 +14,16 @@ import org.ocbkc.swift.coord._
 import org.ocbkc.swift.model._
 import System.err.println
 import net.liftweb.json._
-import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.ComparisonOperator._
+import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 
 import net.liftweb.json._
 import net.liftweb.json.ext._
 
 // TODO &y2013.01.28.20:38:57& move to more general place
-object sesCoord extends SessionVar(new ses.Core(/* User, null, Round.NotStarted*/))
+object sesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
 
 class StartSession
 {  val sesCoordLR = sesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
@@ -90,9 +91,9 @@ class StartSession
          */
          implicit val formats = Serialization.formats(NoTypeHints)
          
-         //var testSer:String = Serialization.write(cc)
+         //var testSer:String = Serialization.write(si)
          //err.println("  sesHis serialised to: " + testSer)
-         //val testDeSer:CoreContent = Serialization.read[CoreContent](testSer)
+         //val testDeSer:SessionInfo = Serialization.read[SessionInfo](testSer)
          
          val testSer:String = Serialization.write(new TestPersistency())
          println("  Test1 = " + testSer)

@@ -2,7 +2,7 @@ package org.ocbkc.swift.OCBKC
 {
 import _root_.scala.xml._
 import System._
-import org.ocbkc.swift.cores.{TraitGameCore, NotUna}
+import org.ocbkc.swift.cores.{TraitGameCore}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.Logging._
@@ -692,7 +692,7 @@ object Constitution
    def createConstiAlphaIfDoesntExist =
    {  if(constis == Nil)
       {  log("There are no constitutions yet, so adding constitution alpha to constitution-population.")
-         val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTiALPHaINIT).mkString
+         val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTI_ALPHA_INIT).mkString
          val adminId = GlobalConstant.adminOpt.get.id.is
          val constiAlpha = Constitution.create(adminId)
          constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
@@ -732,8 +732,8 @@ object OCBKCinfoPlayer
      @ @todo move to gamecore library, because this is not a OCBKC specific method.
      */
    def numberOfSessionsPlayedBy(p:Player) =
-   {  val ccs:List[CoreContent] = PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! )
-      ccs.size
+   {  val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! )
+      sis.size
    }
    
    /**
@@ -769,15 +769,15 @@ object PlayerScores
    def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
    {  log("percentageCorrect called")
 
-      val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
 
 
-      //val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
-      val numberCorrect = ccs.count( cc => cc.answerPlayerCorrect )
-      val totalNumber = ccs.length
+      //val correctCcs = sis.filter( si => si.answerPlayerCorrect )
+      val numberCorrect = sis.count( si => si.answerPlayerCorrect )
+      val totalNumber = sis.length
 
       log("   Number of sessions taken into consideration: " + totalNumber)
-      log("   Datetimes of sessions taken into consideration: " + ccs.map(cc => cc.startTime.get))
+      log("   Datetimes of sessions taken into consideration: " + sis.map(si => si.startTime.get))
 
       val percCorrect = if( totalNumber != 0) Some(numberCorrect.toDouble/totalNumber.toDouble * 100.0) else None
       Result_percentageCorrect(percCorrect, totalNumber)
@@ -795,10 +795,10 @@ object PlayerScores
   */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
    {  log("PlayerScores.averageDurationTranslation called")
-      val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
+      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
       
-      val correctCcs = ccs.filter( cc => cc.answerPlayerCorrect )
-      val durationsCorrectTranslations = correctCcs.map(cc => cc.durationTranslation.get)
+      val correctCcs = sis.filter( si => si.answerPlayerCorrect )
+      val durationsCorrectTranslations = correctCcs.map(si => si.durationTranslation.get)
       val numberCorrect = correctCcs.length
       log("   numberCorrect = " + numberCorrect )
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None

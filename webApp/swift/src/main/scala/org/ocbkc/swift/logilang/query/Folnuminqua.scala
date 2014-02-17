@@ -1,10 +1,10 @@
-package org.ocbkc.swift.logilang.query
+package org.ocbkc.swift.logilang.query.folnuminqua
 {
 import System._
 import java.io._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
-import org.ocbkc.swift.parser.CLIwithFileInput
+import org.ocbkc.swift.test.CLIwithFileInput
 import net.liftweb.json._
 import net.liftweb.json.ext.EnumSerializer
 // import scala.util.parsing.combinator.Parsers._
@@ -38,7 +38,7 @@ object TestFolnuminquaCLI extends CLIwithFileInput
 // Questionlanguage: Folnuminqua
 
 // each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-case class FolnuminquaQuery
+case class FolnuminquaQuery // <&y2013.11.23.22:32:46& rename to PlonumoPat, also see terminologyBaseDocument.tex>
 {  /*
    def serialize =
    {  // implicit val formats = Serialization.formats(NoTypeHints)
@@ -66,30 +66,11 @@ case class Sharpest(numrespat:NumResPat) extends FolnuminquaQuery // I don't ass
    }
 }
 
-object ComparisonOperator extends Enumeration
-{  type ComparisonOperator = Value
-   val Geq = Value
-}
 
 import ComparisonOperator._
 
 case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends FolnuminquaQuery
-case class PatVar(id:String)
-//case class Var(id:String)
-
-
-/*  <&y2012.04.23.17:01:11&For current increment, do not yet implement the following, but do it for a next:>
-class ComparisonOperator
-
-case class Eqt() extends ComparisonOperator
-case class Gt() extends ComparisonOperator
-case class Lt() extends ComparisonOperator
-case class Geq() extends ComparisonOperator
-case class Leq() extends ComparisonOperator
-*/
-// <&y2012.04.22.00:22:40& make use of Clean data structures I designed: copy the idea here.>
-}
 
 // Answer language:
 
-
+}

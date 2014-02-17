@@ -10,7 +10,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.model._
-import org.ocbkc.swift.coord.ses.Core
+import org.ocbkc.swift.coord.ses.EfeCore
 
 import Helpers._
 
@@ -32,10 +32,10 @@ class QuestionAttackRound
                   "continue"      -> SHtml.submit("Continue", processSubmission)
                )
       bind( "qar", boundForm, 
-            "questionNL" ->   Text(sesCoord.cc.questionNL),
-            "questionCTL" ->  Text(sesCoord.cc.questionCTLcomputer),
+            "questionNL" ->   Text(sesCoord.si.questionNL),
+            "questionCTL" ->  Text(sesCoord.si.questionCTLcomputer_rb.toString),
             //"questionNo" ->   Text("TODO: questionNo"),
-            "computerAnswerFromSource" -> Text(sesCoord.cc.answerComputerNL)
+            "computerAnswerFromSource" -> Text(sesCoord.si.answerComputerNL)
           )
    }
 }

@@ -15,33 +15,16 @@ import scala.util.parsing.combinator._
 import System._
 import java.io._
 import org.ocbkc.swift.logilang._
-// import org.ocbkc.swift.logilang.FOLutils // <&y2012.04.04.20:10:13& remove this line when debugging done>
-
-
-// <&y2012.04.13.09:46:33& move CLIwithFileInput to general purpose testing package>
-class CLIwithFileInput
-{  def applyFunctionToFile(function:String => String, filename:String) 
-   {  println("inputfilename: " + filename)
-      
-      //var inFile = new File(arg(0))
-      //val in:BufferedReader = new BufferedReader(new FileReader(inFile))
-      //var input:String
-      val source = scala.io.Source.fromFile(filename)
-      val lines = source.mkString // <&y2012.02.19.00:00:27& careful: this always adds a newline after each string in the source, even if it is a last line without a newline. Really so? Make SLI from this>
-      source.close()
-      println("inputfile: \n" + lines)
-      println( function(lines) )
-   }
-}
+import org.ocbkc.swift.test.CLIwithFileInput
 
 object Folminqua2FOLtheoryParserCLI extends CLIwithFileInput
-{  def main(args: Array[String]) =
+{  def main(args: Array[String])
    {  applyFunctionToFile(Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, _).toString, args(0))
    }
 }
 
 object ConstantSubtitutionCLI extends CLIwithFileInput
-{  def main(args: Array[String]) =
+{  def main(args: Array[String])
    {  def f(folminqua:String):String =
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminqua) match
          {  case Folminqua2FOLtheoryParser.Success(ftl,_)  => ftl
@@ -76,7 +59,7 @@ object ConstantSubtitutionCLI extends CLIwithFileInput
 }
 
 object FolminquaParserCLI extends CLIwithFileInput
-{  def main(args: Array[String]) =
+{  def main(args: Array[String])
    {  applyFunctionToFile(FolminquaParser.parseAll(FolminquaParser.folminquaTheory, _).toString, args(0))
       /*FolminquaParser.parseAll(FolminquaParser.folminquaTheory, lines)) match
       {  case s@Success(_) => println(s)
@@ -100,11 +83,14 @@ inequal(Akwasi, John)
 
 class SWiFTparser extends JavaTokenParsers
 {  def NL = "\r\n" | "\n"
+   def space = """[\t\s]""".r // <repace with general space match symbol>
+   def spaces = rep(space)
    override val skipWhitespace = false
 }
 
-// @BS: only functions which can be reused in other than folminqua parsers, such as the bridge parser. Parsers added to this class may not postprocess!
-class FolminquaRelatedParser extends SWiFTparser
+/** The superclass containing the sub-parsers which can be reused in all parsers which belong to the "Alpha Group" - this is the group of parsers developed for the first languages for the SWiFT game, such as Folnuminqua and EfeLang, and related parsers such as the bridge parsers belonging to one of these languages. Parsers added to this class may not postprocess!
+  */
+class AlphaGroupParser extends SWiFTparser
 {   def id: Parser[String]              = """[a-zA-Z][a-zA-Z0-9_\-]*""".r
 }
 
@@ -115,7 +101,10 @@ case class FolminquaParseResult(var bridgeInClean:String, var constants:List[Str
 
 case class ConstantList(list:List[String])
 
-class Folminqua extends FolminquaRelatedParser
+
+/** Deprecated: use Folminqua2FOLtheoryParser
+  */
+class Folminqua extends AlphaGroupParser
 {  import HelperFunctions._
  
    // For now: simplification of language because of incompleteness reasoner.
@@ -145,7 +134,7 @@ class Folminqua extends FolminquaRelatedParser
 
 
 // convert folminqua doc to FOLtheory datastructure
-class Folminqua2FOLtheoryParser extends FolminquaRelatedParser
+class Folminqua2FOLtheoryParser extends AlphaGroupParser
 {  import HelperFunctions._
    def folminquaTheory                 = 
       repsep(folminquaSentence, NL) <~ rep(NL) ^^ { case sentenceLists => // Be ware: folminquaSentence returns a list of FOLstat instances.
@@ -179,7 +168,7 @@ class Folminqua2FOLtheoryParser extends FolminquaRelatedParser
       {  val pred = Predicate(preId, 2)
          val constantsSet1 = set1.map(cname => Constant(cname))
          val constantsSet2 = set2.map(cname => Constant(cname))
-         FOLutils.pairsFrom2Lists(constantsSet1, constantsSet2).map(p => PredApp(pred, List(p._1, p._2)))
+         FOLutils.pairsFrom2Lists(constantsSet1, constantsSet2).map(p => PredApp_FOL(pred, List(p._1, p._2)))
       }
    }
 
@@ -206,7 +195,7 @@ entity(c1,Akwasi)
 
 */
 
-class HurelanBridge extends FolminquaRelatedParser
+class HurelanBridge extends AlphaGroupParser
 {  // <&y2012.02.17.10:00:54& eat superfluous enters, etc.>
    def bridge        = repsep(bridgeStat,NL) <~ rep(NL) ^^ (x => HelperFunctions.printList(x, "[", ",", "]")) // Example output before transformer is applied: List( ("hurelanstat(...)", List("a","b","c"), List("p","q")) )
    def bridgeStat    = hurelanStat | entityStat
