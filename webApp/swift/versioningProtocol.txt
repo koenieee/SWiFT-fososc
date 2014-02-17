@@ -1,7 +1,7 @@
 Versioning protocol
 
 - All new versions of SWiFT store a main version number in the source code. The main version number reflects the progress of the application:
-[major feature package].[minor feature package/noticable improvements exclusing bugfixes].[bugfixes + code improvements not noticeable to the user]
+[major feature package].[minor feature package/noticable improvements excluding bugfixes].[bugfixes + code improvements not noticeable to the user]
 0.3.2
 - The complete version is, by example:
 0.3.2/develop/2013.05.21.14.30.20

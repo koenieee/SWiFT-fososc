@@ -292,14 +292,13 @@ class Boot {
                val lrfs = sesCoordLR.latestRoundFluencySession
                log("   latestRoundFluencySession = " + lrfs)
                lrfs match
-               {  case NotInFluencySession =>
-                  {  S.redirectTo("fluencyGameSes/startSession")
-                  }
+               {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
                   case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
-                  case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
+                  case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
                   case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
                   case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
                   case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
+                  case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
                   case _                   => logAndThrow("implement the rest")
                } 
             }
