@@ -1,18 +1,11 @@
 <lift:surround with="default" at="content">
-		<script src="../javascript/jquery-1.9.1.js"></script>
-	<link rel="stylesheet" href="../javascript/jquery-ui.css" />
-	<script src="../javascript/jquery-ui.js"></script>
-		<script>
-  $(function() {
-    $( '#progressbar' ).progressbar({
-      value: 100
-    });
-  });
-  </script>
-<h1></h1>
-		<div id="progressbar"></div>
-<center><a href="startSession.html">Start</a> <b>-></b><a href="translationRound.html"> Translation </a><b>-></b> <a href="bridgeconstruction.html">Bridge Construction</a> <b>-></b> <a href="questionAttackRound.html">Question Attack</a> <b>-></b> <a href="algorithmicDefenceRound.html">Algorithmic Defence</a> <b>-></b> <a href="algorithmicDefenceRoundStage2.html">Algorithmic 2</a> <b>-></b> <B><a href="finaliseSession.html">End session</a></B></center>
+
+<lift:FinaliseSession form="POST">
+<center>
+	<lift:createProgress.text />
+</center>
 <Br/>
+
 <lift:InviteToConstitutionDesign>
 	<top:invitationtext>
 
@@ -21,12 +14,13 @@
 Dear player, a special moment has arrived. You have now played a certain number of sessions. This allows you to participate in yet another game: the constitutional evolution game. Please read on <a href="constitutionalEvolutionGame">here</a>.
    </top:invitationtext>
 </lift:InviteToConstitutionDesign>
-<lift:FinaliseSession form="POST">
 
 
 Thanks for playing this session, you played wonderfully!
-<form:playAgainBtn />
 
+<form:playAgainBtn />
+or
+<form:closeSession />
 </lift:FinaliseSession>
 
 <br /><br />

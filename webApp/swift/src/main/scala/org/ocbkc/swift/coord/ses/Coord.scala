@@ -12,6 +12,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.general._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.ScalaHelpers._
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
@@ -49,15 +50,43 @@ package ses
 {
 
 //import Round._
-
+// TODO perhaps refactor: shouldn't this conceptually be part of the model and not the coordinator (controller)?
 case class RoundFluencySession
+case object RoundStartSession extends RoundFluencySession
 case object RoundTranslation extends RoundFluencySession
 case object RoundBridgeConstruction extends RoundFluencySession
 case object RoundQuestionAttack extends RoundFluencySession
 case object RoundAlgorithmicDefenceStage1 extends RoundFluencySession
 // <&y2013.07.22.17:03:31& rename RoundAlgorithmicDefenceStage2 to ShowFinalResults. It is not a round.>
 case object RoundAlgorithmicDefenceStage2 extends RoundFluencySession
+case object RoundFinaliseSession extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
+
+object RoundFluencySessionInfo
+{  val roundsInOrder = List(RoundStartSession, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
+
+   case class EditBehaviour
+
+   def reviewable(rfs:RoundFluencySession):Boolean =
+   {  rfs match
+      {  case RoundStartSession    => false
+         case RoundFinaliseSession => true
+         case _                    => true
+      }
+   }
+
+   def reEditable(rfs:RoundFluencySession):Boolean =
+   {  rfs match
+      {  case RoundTranslation => false
+         case _ => true
+      }
+   }
+
+
+   // if reEditable then reviewable, build in consistency check.
+}
+
+import RoundFluencySessionInfo._
 
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
@@ -108,15 +137,19 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       Unit
    }
 
-   def URstartAlgorithmicDefenceStage1:QuerySent__TP = 
-   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+   def URstartAlgorithmicDefenceStage1:QuerySent__TP =
+   {  if( latestRoundFluencySession == RoundQuestionAttack )
+      {  latestRoundFluencySession = RoundAlgorithmicDefenceStage1
+      }
       gameCore.algorithmicDefenceGenerator
    }
 
    /** @todo &y2013.05.09.17:31:41& perhaps better move session storing to URstopTranslation.
      */
    def URstartAlgorithmicDefenceStage2:gameCore.AlgorithmicDefenceResult =
-   {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+   {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage1 )
+      {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+      }
       val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
@@ -138,7 +171,15 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    }
 
    def URfinaliseSession =
-   {  latestRoundFluencySession = NotInFluencySession 
+   {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage2 )
+      {  latestRoundFluencySession = RoundFinaliseSession
+      }
+   }
+
+   def closeSession =
+   {  log("closeSession")
+      if( latestRoundFluencySession == NotInFluencySession ) log("   session was already closed.")
+      latestRoundFluencySession = NotInFluencySession
    }
 
    protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
@@ -174,6 +215,15 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       {  MUnewFluencyScore(consti, ConstiScores.latestReleaseWithFluencyScore(consti.constiId).get)
       }
       // }
+   }
+
+   /** @todo refactor all round-snippets to call this method. Practically this is not necessary for rounds for which you know they are never or always editable, but "theoretically" it is more correct, because it allows for easy future changes if specifications of the rounds would change.
+   */
+   def editable(rfs:RoundFluencySession):Boolean =
+   {  log("ses.Core.editable called")
+      val ret = roundsInOrder.indexOf(rfs) >= roundsInOrder.indexOf(latestRoundFluencySession)
+      log("   round " + rfs + ": editable = " + ret)
+      ret
    }
 }
 
@@ -267,7 +317,11 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    }
 
    def URstartQuestionAttack:QuestionAndCorrectAnswer = 
-   {  latestRoundFluencySession = RoundQuestionAttack
+   {  latestRoundFluencySession match
+      {  case RoundBridgeConstruction  => { latestRoundFluencySession = RoundQuestionAttack; true}
+         case _                        => doNothing
+      }
+
       gameCore.generateQuestionAndCorrectAnswer
    }
 /*

@@ -1,26 +1,24 @@
 <top:progressbar>
 
    <progressbar:completedRound>
-   <completedRound:linkToRound />
-   <completedRound:separ/>
+   <completedRound:displayText /> <!-- depending on the properties of the round, this will be rendered as a link or not -->
    </progressbar:completedRound>
 
+   <progressbar:completedNonReviewableRound>
+   <completedNonReviewableRound:displayText />
+   </progressbar:completedNonReviewableRound>
 
    <progressbar:latestRoundReached>
-   <b><latestReachedRound:linkToRound /></b>
-   <latestReachedRound:separ/>
+   <b><latestReachedRound:displayText /></b>
    </progressbar:latestRoundReached>
 
+   <progressbar:seperator>
+   <b>&#x21E8;</b>
+   </progressbar:seperator>
 
-<progressbar:seperator>
-<b>-></b>
-</progressbar:seperator>
-
-
-<progressbar:roundToCome>
-<roundToCome:disabledRound />   
-<roundToCome:separ/>
-</progressbar:roundToCome>
+   <progressbar:roundToCome>
+   <roundToCome:displayText />
+   </progressbar:roundToCome>
 
 </top:progressbar>
 <!--   

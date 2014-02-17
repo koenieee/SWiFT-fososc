@@ -187,8 +187,8 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
@@ -283,10 +283,12 @@ class Boot {
                log("   latestRoundFluencySession = " + lrfs)
                lrfs match
                {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
-                  case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
-                  case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
+                  case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
+                  case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
+                  case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
                   case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
                   case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
+                  case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
                   case _                   => logAndThrow("implement the rest")
                } 
             }

@@ -16,7 +16,7 @@ import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
 import scala.util.parsing.combinator.Parsers //{Success, Failure}
-
+import org.ocbkc.swift.coord.ses._
 
 class TranslationRound
 {  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
@@ -79,15 +79,21 @@ class TranslationRound
       case class EmptyFile extends SWiFTParseResult
       case class FilledFile(ParseResult) extends SWiFTParseResult
       */
-   
+      val editable = sesCoordLR.editable(RoundTranslation)
+      val editableAttrib = if( !editable )
+      {  List("disabled" -> "disabled")
+      }else
+      {  List()
+      }
+
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
-            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, "rows" -> "10", "style" -> "width: 100%;"),
-            "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt),
+            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, ( List("rows" -> "10", "style" -> "width: 100%") ++ editableAttrib ):_*), // todo: how to make text area page width?
+            "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
-            "submitBt"        -> SHtml.submit("Submit", processSubmission),
-            "startTime"			-> Text(sesCoordLR.si.startTimeTranslation.is.toString())
-            //"test"            -> Text(test)
+            "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
+            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString())
+            //"test"          -> Text(test)
           )
       bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.si.textNL))
    }

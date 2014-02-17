@@ -1,20 +1,7 @@
 <lift:surround with="default" at="content">
-	<script src="../javascript/jquery-1.9.1.js"></script>
-	<link rel="stylesheet" href="../javascript/jquery-ui.css" />
-	<script src="../javascript/jquery-ui.js"></script>
-	<script>
-  $(function() {
-    $( '#progressbar' ).progressbar({
-      value: 0
-    });
-
-  </script>
-<h1>Start new Game Session</h1>
-<div id="progressbar"></div>
 	<center>
 	<lift:createProgress.text />
 </center>
-
 <Br/>
 
 <lift:StartSession form="POST">
