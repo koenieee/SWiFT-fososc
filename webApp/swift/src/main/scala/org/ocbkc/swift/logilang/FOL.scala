@@ -401,7 +401,13 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
          {  val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
-            "People and things which are " ++ predNL ++ " are the following: " ++ constantList.mkString(", ")  ++ "."
+            val andListEntitiesNL = constantList.map{ bs.constant2NLnoun(_).get }.mkString(", ")
+
+            constantList.size match
+            {  case 0 => "There are no fast people or things."
+               case 1 =>  andListEntitiesNL ++ " is " ++ predNL ++ "."
+               case _ => "People and things which are " ++ predNL ++ " are the following: " ++ constantList.map{ bs.constant2NLnoun(_).get }.mkString(", ")  ++ "."
+            }
          }
 //Forall(Var(name = x),PatVar(s),PredApp(Predicate(name = F, arity = 1),List(Var(name = x)))) (of class org.ocbkc.swift.logilang.query.plofofa.Forall)
          /* <&y2014.02.13.18:33:09& implement as soon as mostinfo is defined for fofa>

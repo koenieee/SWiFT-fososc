@@ -133,24 +133,24 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    {  log("randomGenerateCTLdocc started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
-
+   
       val generatedEfeDoc = new FOLtheory
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
       // first increment: create 1 sentence
       
-      val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg )
+      val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
 
       val randomPersonCTLname = "ctlName" + randomPersonNLname
       val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-      val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg )
-      val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname.get))
+      val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
+      val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
       bridgeDoc.bridgeSents ++= List(entityBridge)
 
-      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate.get, List(randomPersonConstant)))
+      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))
       
-      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate.get, List(Var("x"))))))
-      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate.get, List(Var("x"))))
+      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))
+      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
 
       logp( { edab:ComputerGeneratedRepresentations => "   Generated ComputerGeneratedRepresentations = " + edab } , ComputerGeneratedRepresentations(generatedEfeDoc, bridgeDoc, algoDef_rb, answerCTL))
    }
@@ -226,12 +226,16 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
 
+   /** @todo check answer correct with  BridgeBasedAutoFofaTranslator, instead of comparing the translations to natural language. The latter may be prone to errors, because different translations may exist for the same CTL sentence.
+     */
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
    {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
       si.answerPlayerCTL = Some(answerPlayerCTL)
       si.answerPlayerNL = TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer.get)
-      
-      AlgorithmicDefenceResult(true /* TODO */, si.answerPlayerNL, "", answerPlayerCTL)
+
+      si.answerPlayerCorrect(si.answerPlayerNL.equals(si.answerComputerNL)).save
+       
+      AlgorithmicDefenceResult(si.answerPlayerCorrect.is, si.answerPlayerNL, "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
