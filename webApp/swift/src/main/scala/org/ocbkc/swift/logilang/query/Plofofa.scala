@@ -58,6 +58,7 @@ object PlofofaRepresentationTransforms extends CTLrepresentationTransforms[Plofo
    }
 
    /** Translation Scala-format to pure-format
+     * @todo to be implemented by Mussie?
      */
    override def sf2pf(sf:PlofofaPat):String =
    {/*sf match

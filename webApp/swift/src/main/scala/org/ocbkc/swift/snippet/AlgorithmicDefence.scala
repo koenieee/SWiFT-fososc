@@ -30,8 +30,8 @@ class AlgorithmicDefenceRound
                "top", ns, 
                "startderivation"    -> SHtml.submit("Start Derivation!", processSubmission),
                "questionNL"         -> Text(sesCoordLR.si.questionNL), 
-               "algoDefPlayer"      -> Text(sesCoordLR.si.algoDefPlayer.toString),
-               //"questionNo"      -> Text("TODO: questionNo"), 
+               "algoDefPlayer"      -> Text(sesCoordLR.si.algoDefPlayer.get.sf.toString),
+               //"questionNo"       -> Text("TODO: questionNo"), 
                "computerAnswerFromSource" -> Text(sesCoordLR.si.answerComputerNL)
             )
       answer

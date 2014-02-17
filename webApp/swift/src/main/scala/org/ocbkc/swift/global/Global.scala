@@ -67,7 +67,7 @@ object GlobalConstant
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
-   val CONSTiALPHaINIT = INITIALISATIOnDATaDIR + "/constitutionAlpha_core"
+   val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
 
    // Scoring
 
@@ -145,8 +145,8 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  object AUTOLOGIN
-   {  val ON = true
-      val USER_ID = "2"
+   {  val ON      = false
+      val USER_ID = "1" // 1 is Admin
    }
    val AUTOTRANSLATION                 = false // true
    val CREATETESTUSERBASE              = true
