@@ -66,7 +66,8 @@ class BridgeConstruction
 // }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  sesCoordLR.URstartBridgeConstruction
+   {  log("BridgeConstruction.render (of Efe) called")
+      sesCoordLR.URstartBridgeConstruction
       
       def processSubmission() = 
       {  println("efe.BridgeConstruction.processSubmission called")
