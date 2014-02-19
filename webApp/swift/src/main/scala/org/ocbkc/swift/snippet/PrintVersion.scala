@@ -26,8 +26,8 @@ val lines = GlobalConstant.MAIN_VERSION
   def printing(xhtml: NodeSeq): NodeSeq = {
   {
 		<h4 class="alt">
-				  <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i></a> 
-					version {lines}
+				  <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i>
+					version {lines}</a>
 		</h4>
   }
   }

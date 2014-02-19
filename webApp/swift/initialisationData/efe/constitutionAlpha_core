@@ -1,4 +1,4 @@
-<H1>Constitution efeLang (Alpha version)</H1>
+<H1>Constitution EfeLang</H1>
 <P>Challenge: efe</P>
 <H2>1 Definition of the target language: efeLang</H2>
 <P>The target language efeLang is defined as follows. A document in
@@ -23,7 +23,7 @@ constants in efeLang are:</P>
 </UL>
 <P>Constants should always start with a lower case letter, while the
 rest may not contain anything other than digits (0, 1, 2, ...), lower
-and upper case letters (a,b, c, ..., A, B, C, …), and underscores
+and upper case letters (a,b, c, ..., A, B, C, ...), and underscores
 (_).</P>
 <P>You are free to choose any constant for a thing you want to refer
 to. You can choose the constant <B>obama</B> to represent the
@@ -46,14 +46,14 @@ something is big, and F that it is fast. Their usage is defined by
 example in the following:</P>
 <P><B>B(ob)</B></P>
 <P>Meaning: assume that the constant ob has been chosen to stand for
-“president Obama”, than this sentence means: President Obama is
+"president Obama", than this sentence means: President Obama is
 big.</P>
 <P><B>F(ob)</B></P>
 <P>Meaning: under the same assumption, this means President Obama is
 fast.</P>
 <P>Note that these statements can be made about anything, even if it
 doesn't make sense. Suppose that the constant mFC is chosen to mean
-“my favourite chair”, then the following is a statement you are
+"my favourite chair", then the following is a statement you are
 allowed to make:</P>
 <P><B>F(mFC)</B></P>
 <P>Meaning: my favourite chair is fast</P>
@@ -67,5 +67,3 @@ true. A document may consist of one or more sentences. For example:</P>
 <P>Meaning (using the earlier introduced
 meanings of the constants): Obama is big, Obama is fast and my
 favourite chair is fast.</P>
-<H3><BR /><BR />
-</H3>

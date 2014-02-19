@@ -3,8 +3,19 @@
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
-	<script src="javascript/ckeditor/ckeditor.js"></script>
-	   
+
+   <script src="javascript/ckeditor/ckeditor.js"></script>
+   <script>
+   CKEDITOR.replace( 'textarea_id',
+	{
+		contentsCss : 'assets/output_xhtml.css',
+
+		coreStyles_bold	: { element : 'span', attributes : {'class': 'Bold'} },
+		coreStyles_italic : { element : 'span', attributes : {'class': 'Italic'} },
+
+		// More definitions follow.
+	});
+   </script>
 
 <lift:ConstitutionSnippet form="POST">
 
@@ -231,6 +242,11 @@ If you are a follower of, and contributor to, this constitution, read these tips
 					]
 					
 				});
+               ckeditor.replace(  'textarea_id',
+	{
+		contentsCss : 'assets/output_xhtml.css',
+	});
+
 
 			</script>
 

@@ -206,10 +206,14 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       xml
    }
    
-   // <&y2012.07.30.18:48:44& refactor this: put in more general lib, howver, then also the lift:children should be replaced by some generic XML construct>
+   // <&y2012.07.30.18:48:44& refactor this: put in more general lib, however, then also the lift:children should be replaced by some generic XML construct>
    // <&y2012.07.30.20:06:22& optimse: use result of previous xml renderings if no updates where done, instead of doing XML.loadString again, and integrate this with other methods dealing with rendering XML if possible.>
    case class XMLandErr(val XML:Option[Elem], val exception:SAXParseException)
 
+   /** @todo Still some problems here, XML.loadString is very unforgiving. A solution could be:
+     * http://alvinalexander.com/scala/scala-html-parsing 
+     * http://stackoverflow.com/questions/20907861/scala-xml-parsing-with-real-world-html-with-unmatched-tag
+     */
    def checkCorrectnessXMLfragment(xmlStr:String):XMLandErr =
    {  val contentWrapped = "<lift:children>" + xmlStr + "</lift:children>"
       log("   contentWrapped:String = " + contentWrapped)

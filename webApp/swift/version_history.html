@@ -3,9 +3,9 @@
 <HEAD>
 	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=utf-8">
 	<TITLE></TITLE>
-	<META NAME="GENERATOR" CONTENT="LibreOffice 3.5  (Linux)">
-	<META NAME="CREATED" CONTENT="20130520;16053800">
-	<META NAME="CHANGED" CONTENT="20130808;20530800">
+	<META NAME="GENERATOR" CONTENT="LibreOffice 4.0.4.2 (Linux)">
+	<META NAME="CREATED" CONTENT="20140219;18005000">
+	<META NAME="CHANGED" CONTENT="0;0">
 	<STYLE TYPE="text/css">
 	<!--
 		H2.cjk { font-family: "WenQuanYi Zen Hei" }
@@ -20,13 +20,36 @@ version history</FONT></FONT></P>
 <H1>Version-to-come</H1>
 <P STYLE="margin-top: 0.17in"><FONT SIZE=4>The version-to-come may or
 will include:</FONT></P>
+<HR>
+<H1><A NAME="version0.5.0"></A>Version 0.5.0</H1>
 <H2 CLASS="western">4users</H2>
 <UL>
-	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Stopwatch running
-	during translation will also display shortest translation time of
-	the player, and of all players.</FONT></P>
+	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Most importantly: a
+	completely new challenge is integrated: efeLang!</FONT></P>
+	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>During the
+	translation round, the shortest translation times will be shown: the
+	personal record and the overall record. This is intended to further
+	motivate the player to be as quickly as possible.</FONT></P>
+	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>A progression bar is
+	shown, allowing the player to easily jump back to previous rounds
+	for review and/or corrections, and for an enhanced sense of overview
+	for the player. (However, the rounds do not yet automatically rewind
+	when a previous round is re-edited).</FONT></P>
 </UL>
 <H2 CLASS="western" STYLE="margin-top: 0.17in">4developers</H2>
+<UL>
+	<LI><P STYLE="margin-top: 0.17in">The introduction of efeLang is not
+	so easy as it may seem. The previous challenge was still depended on
+	some non-Scala code (Clean). EfeLang is completely written in Scala.
+	Moreover, this has been done in an abstract, generic way. The latter
+	allows other future challenges, with new CTL language and reasoning
+	problems, to be integrated far more easily (I hope).</P>
+	<LI><P STYLE="margin-top: 0.17in">Moreover, the code is already
+	partially prepared for allowing more than one challenge in the SWiFT
+	game. Considerable refactoring has taken place, among other things,
+	introducing some parameterized types to make it easier to add new
+	challenges with improved reuse.</P>
+</UL>
 <HR>
 <H1><A NAME="version0.4.0"></A>Version 0.4.0</H1>
 <P STYLE="margin-top: 0.17in"><FONT SIZE=4>August 8, 2013</FONT></P>
