@@ -20,12 +20,13 @@
 <center>
 <i>Total translation time </i><Br/></center>
 <div id="timeBox"></div>
-<div id="time" style="display:none;"><form:startTime /></div>
-
+<div id="timeStart" style="display:none;"><form:startTime /></div>
+<div id="timeEnd" style="display:none;"><form:endTime /></div>
 <script type="text/javascript">
 	//USING EPOCH TIME -- tested in CHROME and FIREFOX//
 
-    var prevTime = document.getElementById('time').innerHTML;
+    var prevTime = document.getElementById('timeStart').innerHTML;
+var endTime =  document.getElementById('timeEnd').innerHTML;
 	function countSecs() {
 		 //prevTime = curTime;
 		curTime = +new Date();
@@ -39,10 +40,19 @@ console.log(prevTime);
 		document.getElementById('timeBox').innerHTML = '<center> <h3> ' + seconds+ '.'+millis+'</h3></center>';
  		}
 
-
+if (document.referrer.search('startSession') != -1 || document.referrer.search('translationRound') != -1 )
+{
      window.setInterval(countSecs,100);
  
-
+}
+else
+{
+var deltaTime = endTime - prevTime;
+var seconds = deltaTime.toString().substring(0, deltaTime.toString().length-3);
+var millis = deltaTime.toString().substring(deltaTime.toString().length-3, deltaTime.toString().length-2);
+console.log(prevTime);
+		document.getElementById('timeBox').innerHTML = '<center> <h3> ' + seconds+ '.'+millis+'</h3></center>';
+}
 </script>
 
 <br />

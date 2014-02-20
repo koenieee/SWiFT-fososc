@@ -92,7 +92,8 @@ class TranslationRound
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
-            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString())
+            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString()),
+            "endTime"               -> Text(sesCoordLR.si.stopTimeTranslation.is.toString())
             //"test"          -> Text(test)
           )
       bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.si.textNL))
