@@ -139,8 +139,8 @@ object Types
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
 {  object AUTOLOGIN
-   {  val ON      = false
-      val USER_ID = "2" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
+   {  val ON      = true
+      val USER_ID = "1" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
    }
    val AUTOTRANSLATION                 = false // true
    val CREATETESTUSERBASE              = true // false
