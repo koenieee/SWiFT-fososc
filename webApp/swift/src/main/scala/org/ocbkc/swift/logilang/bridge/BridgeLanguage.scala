@@ -46,6 +46,12 @@ class BridgeDoc
 
    def predicateBridgeSents = bridgeSents.collect{ case bs:PredicateBridgeSent => bs.asInstanceOf[PredicateBridgeSent] }
 
+   /** @returns the NL names of all entities defined in this bridge
+     */
+   def entNLnames:List[String] =
+   {  entityBridgeSents.map{ case EntityBridgeSent(_, enn) => enn }
+   }
+
    override def toString = 
    {  "BridgeDoc(" + bridgeSents.map{ _.toString }.mkString(", ") + ")"
    }
@@ -57,8 +63,14 @@ class BridgeDoc
    {  entityBridgeSents.find{ case EntityBridgeSent(entCTLname, _) => entCTLname == c.name  }.collect{ case EntityBridgeSent(entCTLname, entNLname) => entNLname(0) }
    }
 
-   def predicate2NLAdjective(p:Predicate):Option[String] =
+   def pred2NLadjective(p:Predicate):Option[String] =
    {  predicateBridgeSents.find{ case PredicateBridgeSent(predCTLname,_) => predCTLname == p.name  }.collect{ case PredicateBridgeSent(predCTLname, predNLname) => predNLname(0) }
+   }
+
+   /** Only use this when you are certain that the predicate is in the bridge
+     */
+   def pred2NLadjectiveOrException(p:Predicate):String =
+   {  bs.predicate2NLAdjective(p).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
    }
 }
 

@@ -118,7 +118,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    var si:SessionInfo = null
    val playerId = playerIdInit
    
-   case class ComputerGeneratedRepresentations(doc:FOLtheory, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent)
+   case class TranslationProblem(textCTL:FOLtheory, textNL: String, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent)
 
    /** EfeLang is not equal to FOL, but FOL is just used, with some predefined predicates. The "right" solution would be to define a new language in a separate package. This is a quick solution. Just throw a FOLtheory through this method, and it will add the predefined predicates. Moreover it will return the BridgeDoc.
      */
@@ -132,14 +132,19 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       (bd, fastPredicate, bigPredicate)
    }
 
-   def randomGenerateCTLdoc:ComputerGeneratedRepresentations =
-   {  log("randomGenerateCTLdocc started")
+   def generateTranslationProblem:TranslationProblem =
+   {  log("generateTranslationProblem started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
    
       val generatedEfeDoc = new FOLtheory
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
-      // first increment: create 1 sentence
+
+      // in this increment: pick one random translation problem of efe (in future increment they will be combined into one document).
+
+      logAndThrow("TODO")
+
+      // create translation problem 1 predicate applied to 1 constant. @todo: &y2014.02.22.16:15:33& use the refactored methods
       
       val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
 
@@ -148,20 +153,30 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
       bridgeDoc.bridgeSents ++= List(entityBridge)
-
-      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))
+      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))      
       
       val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))
       val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
 
-      logp( { edab:ComputerGeneratedRepresentations => "   Generated ComputerGeneratedRepresentations = " + edab } , ComputerGeneratedRepresentations(generatedEfeDoc, bridgeDoc, algoDef_rb, answerCTL))
+      // generate translation problem 2 
+
+      val addedKR = addKR4distributedPredicateInNL(efeDoc, bridgeDoc)
+      val textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR, bridgeDoc)
+      WIW
+
+      logp( { edab:TranslationProblem => "   Generated TranslationProblem = " + edab } , TranslationProblem(generatedEfeDoc, textNL, bridgeDoc, algoDef_rb, answerCTL))
 
       def randomPredicate =
       {  pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
       }
-
+      
+      /** Generates and adds a contant to efeDoc which does not yet exist in efeDoc.
+        */
       def generateRandomEntity(efeDoc:EfeDoc, bridgeDoc:BridgeDoc):Constant =
-      {  val randomPersonNLname     = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
+      {  val randomPersonNLname     = pickRandomElementFromList( natlang.Info.properNamesForPersons diff bridgeDoc.entNLnames, rg ).get
+         // By Mussie?:
+         log("WARNING: exception can occur here when there are not sufficient properNamesForPersons left... Fix this.")
+
          val randomPersonCTLname    = "ctlName" + randomPersonNLname
          val randomPersonConstant   = efeDoc.gocConstant(randomPersonCTLname)
          val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
@@ -170,31 +185,36 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
          randomPersonConstant
       }
-
+   
+       /** Generates and adds contants to efeD  oc which does not yet exist in efeDoc.
+        */    
       def generateRandomEntityList(efeDoc:EfeDoc, bridgeDoc:BridgeDoc, n:Int):List[Constant] =
       {  List.fill(n, () => generateRandomEntity(efeDoc, bridgeDoc))
       }
 
-      /** Extends efeDoc with some constants and,
-          @returns natural language
+      /** Extends efeDoc with some constants and a predicate application, which allow translation into a NL with a ditributed NL-predicate.
+          @returns (the constants to which the predicate is applied, and the predicate itself)
+          Assumes the predicate to be one-place, otherwise a runtime error will occur. @todo could build in check against this.
         */
-      def generateNL_distributedPredicate(efeDoc:EfeDoc):String =
+      def addKR4distributedPredicateInNL(efeDoc:EfeDoc):(List[Constant], Predicate) =
       {  val minimalEntities = 3
          val maximumEntities = 5
          val numberOfEntities = RandomExtras.nextBetween(randomSeq, minimalEntities, maximumEntities)
+         val constants = generateRandomEntityList(efeDoc, numberOfEntities)
+         val ranPred = randomPredicate
 
-         val constants = generateRandomEntityList(numberOfEntities)
+         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(ranPred, List(_)) }
 
-         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(randomPredicate, ), WIW }
-         
-         NLgen.commaAndList(constants) ++ " are each " ++ 
+         (constants, ranPred)
+      }
+
       }
    }
 
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      val cg = randomGenerateCTLdoc // cg = computer generated
+      val cg = generateTranslationProblem // cg = computer generated
       si.textCTLbyComputer = Some(cg.doc)
       si.textNL = Translation.FOltheory2NL_straight(cg.doc, cg.bridge)(0)
       si.questionCTLcomputer_rb = Some(cg.algoDef_rb)
