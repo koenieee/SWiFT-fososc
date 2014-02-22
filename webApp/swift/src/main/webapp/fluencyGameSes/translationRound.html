@@ -40,7 +40,7 @@ console.log(prevTime);
 		document.getElementById('timeBox').innerHTML = '<center> <h3> ' + seconds+ '.'+millis+'</h3></center>';
  		}
 
-if (document.referrer.search('startSession') != -1 || document.referrer.search('translationRound') != -1 )
+if (endTime == 0 )
 {
      window.setInterval(countSecs,100);
  
