@@ -145,7 +145,6 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
       val randomPersonCTLname = "ctlName" + randomPersonNLname
       val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-      val randomPredicate = pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
       val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
       bridgeDoc.bridgeSents ++= List(entityBridge)
@@ -156,7 +155,42 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
 
       logp( { edab:ComputerGeneratedRepresentations => "   Generated ComputerGeneratedRepresentations = " + edab } , ComputerGeneratedRepresentations(generatedEfeDoc, bridgeDoc, algoDef_rb, answerCTL))
+
+      def randomPredicate =
+      {  pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
+      }
+
+      def generateRandomEntity(efeDoc:EfeDoc, bridgeDoc:BridgeDoc):Constant =
+      {  val randomPersonNLname     = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
+         val randomPersonCTLname    = "ctlName" + randomPersonNLname
+         val randomPersonConstant   = efeDoc.gocConstant(randomPersonCTLname)
+         val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
+
+         bridgeDoc.bridgeSents ++= List(entityBridge)
+
+         randomPersonConstant
+      }
+
+      def generateRandomEntityList(efeDoc:EfeDoc, bridgeDoc:BridgeDoc, n:Int):List[Constant] =
+      {  List.fill(n, () => generateRandomEntity(efeDoc, bridgeDoc))
+      }
+
+      /** Extends efeDoc with some constants and,
+          @returns natural language
+        */
+      def generateNL_distributedPredicate(efeDoc:EfeDoc):String =
+      {  val minimalEntities = 3
+         val maximumEntities = 5
+         val numberOfEntities = RandomExtras.nextBetween(randomSeq, minimalEntities, maximumEntities)
+
+         val constants = generateRandomEntityList(numberOfEntities)
+
+         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(randomPredicate, ), WIW }
+         
+         NLgen.commaAndList(constants) ++ " are each " ++ 
+      }
    }
+
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
