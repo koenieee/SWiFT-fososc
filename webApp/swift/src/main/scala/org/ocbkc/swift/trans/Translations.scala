@@ -15,7 +15,8 @@ import org.ocbkc.swift.global.Logging._
   */
 
 /** Notations:
-    _
+  * _
+  */
 object TranslateFOLtheory2NL// @todo extends translation to NL
 {  /**   Straight, because it tries to keep the original organisation of the CTL sentences in tact. E.g.
      *

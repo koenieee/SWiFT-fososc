@@ -136,35 +136,37 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    {  log("generateTranslationProblem started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
-   
       val generatedEfeDoc = new FOLtheory
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
 
-      // in this increment: pick one random translation problem of efe (in future increment they will be combined into one document).
+      // in this increment: pick one random translation problem of efe (in future increment they will be combined into one TextNL document).
 
-      logAndThrow("TODO")
+      val numberOfSubTranslationProblems = 2 // &y2014.02.23.12:56:50& Note: not needed in future increment with more questions in one algorithmic defence. Then SWiFT will work with an enumeration like datatype to indicate these.
 
-      // create translation problem 1 predicate applied to 1 constant. @todo: &y2014.02.22.16:15:33& use the refactored methods
-      
-      val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
+      rg.nextInt(2) match
+      {  case 0 =>
+         {  // create translation problem 1 predicate applied to 1 constant. @todo: &y2014.02.22.16:15:33& use the refactored methods
+     
+            // @todo shoulddo: refactor using the new "outfactored" methods
+            val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
 
-      val randomPersonCTLname = "ctlName" + randomPersonNLname
-      val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-      val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
+            val randomPersonCTLname = "ctlName" + randomPersonNLname
+            val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
+            val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
-      bridgeDoc.bridgeSents ++= List(entityBridge)
-      generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))      
-      
-      val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))
-      val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
-
+            bridgeDoc.bridgeSents ++= List(entityBridge)
+            generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))      
+            
+            val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))
+            val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
+         }
       // generate translation problem 2 
+         case 1 =>
+         {  val addedKR = addKR4distributedPredicateInNL(efeDoc, bridgeDoc)
+            val textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR._1, addedKR._2, bridgeDoc)
+         }
+      }
 
-      val addedKR = addKR4distributedPredicateInNL(efeDoc, bridgeDoc)
-      val textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR, bridgeDoc)
-      WIW
-
-      logp( { edab:TranslationProblem => "   Generated TranslationProblem = " + edab } , TranslationProblem(generatedEfeDoc, textNL, bridgeDoc, algoDef_rb, answerCTL))
 
       def randomPredicate =
       {  pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
@@ -172,7 +174,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       
       /** Generates and adds a contant to efeDoc which does not yet exist in efeDoc.
         */
-      def generateRandomEntity(efeDoc:EfeDoc, bridgeDoc:BridgeDoc):Constant =
+      def generateRandomEntity(efeDoc:EfeKRdoc, bridgeDoc:BridgeDoc):Constant =
       {  val randomPersonNLname     = pickRandomElementFromList( natlang.Info.properNamesForPersons diff bridgeDoc.entNLnames, rg ).get
          // By Mussie?:
          log("WARNING: exception can occur here when there are not sufficient properNamesForPersons left... Fix this.")
@@ -188,7 +190,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    
        /** Generates and adds contants to efeD  oc which does not yet exist in efeDoc.
         */    
-      def generateRandomEntityList(efeDoc:EfeDoc, bridgeDoc:BridgeDoc, n:Int):List[Constant] =
+      def generateRandomEntityList(efeDoc:EfeKRdoc, bridgeDoc:BridgeDoc, n:Int):List[Constant] =
       {  List.fill(n, () => generateRandomEntity(efeDoc, bridgeDoc))
       }
 
@@ -196,21 +198,20 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
           @returns (the constants to which the predicate is applied, and the predicate itself)
           Assumes the predicate to be one-place, otherwise a runtime error will occur. @todo could build in check against this.
         */
-      def addKR4distributedPredicateInNL(efeDoc:EfeDoc):(List[Constant], Predicate) =
+      def addKR4distributedPredicateInNL(efeDoc:EfeKRdoc):(List[Constant], Predicate) =
       {  val minimalEntities = 3
          val maximumEntities = 5
-         val numberOfEntities = RandomExtras.nextBetween(randomSeq, minimalEntities, maximumEntities)
+         val numberOfEntities = RandomExtras.nextBetween(rg, minimalEntities, maximumEntities)
          val constants = generateRandomEntityList(efeDoc, numberOfEntities)
          val ranPred = randomPredicate
 
-         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(ranPred, List(_)) }
+         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(ranPred, List(_))) }
 
          (constants, ranPred)
       }
 
-      }
+   logp( { edab:TranslationProblem => "   Generated TranslationProblem = " + edab } , TranslationProblem(generatedEfeDoc, textNL, bridgeDoc, algoDef_rb, answerCTL))
    }
-
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
