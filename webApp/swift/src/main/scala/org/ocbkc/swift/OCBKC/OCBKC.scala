@@ -795,68 +795,30 @@ object PlayerScores
      */
    def coreContentObjectsWhichCount(p:Player):List[CoreContent] =
    {  log("coreContentObjectsWhichCount called")
-
-      val all = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == false).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, OneToStartWith.minSessionsB4access2allConstis)  //testing: false. Must BE TRUE!!
-
+      val all = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).filter( cc => cc.answerPlayerCorrect == true).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, OneToStartWith.minSessionsB4access2allConstis)  //testing: false. Must BE TRUE!!
       all
-     /* Hints
-    C- (study lift Mapper framework)     C
-    C- study the doc of CoreContent       C
-   C - use the integer OneToStartWith.minSessionsB4access2allConstis as the threshold for sessions which count. Read the documentation in this object.
-   C - Look at the class percentageCorrect to see an example of how to retrieve core content objects of a certain player.
-   */
-
-      // <-- to be replaced
    }
 
    /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
     */
    def shortestTranslation(p: Player):List[CoreContent] =
    {  log("shortestTranslation called")
-      /* Hints:
-         - IMPORTANT: ----> use coreContentObjectsWhichCount <-----
-         - partly imitate what happens in class SessionHistory to calculate shortest durations.
-      */
-
-        val coretent = coreContentObjectsWhichCount(p)
-            //      println(coretent)
-        val fastest:List[CoreContent] = coretent.sortBy(_.durationTranslation) //first one is the fastest.
-
-
-        fastest
-
+      val coretent = coreContentObjectsWhichCount(p)
+      val fastest:List[CoreContent] = coretent.sortBy(_.durationTranslation) //first one is the fastest.
+      fastest
    }
 
    /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
      */
    def overallShortestTranslation():Option[CoreContent] =
    {  log("overallShortestTranslation called")
-    //  println()
-     val all_players = Player.findAll
-      // CoreContent(a,b,c,d,e,f)
-   //  println(shortestTranslation(all_players(0)))
-    val ls:List[Option[CoreContent]] = all_players.map{
-     ply  =>  shortestTranslation(ply).headOption
+
+      val all_players = Player.findAll
+      val ls:List[Option[CoreContent]] = all_players.map{
+        ply  =>  shortestTranslation(ply).headOption
       }
-  //  ls.sortBy(x=>x.get.durationTranslation)
-    val sorted_fastest = ls.flatten.sortBy(_.durationTranslation)
-     sorted_fastest.headOption
-
-
-  //   }
-    // PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).map(_.startTime.is)
-
-   //  println(ls);
-              //TODO: Get MIN of LIST(Map), and select the CoreContent from that player
-     //shortestTranslation()
-      /* Hints:
-         - IMPORTANT ---> iterate over all Players, and use shortestTranslation <----
-      */
-
-
-      //val ccs:List[CoreContent] = takeNumOrAll(PlayerCoreContent_join.findAll( By(PlayerCoreContent_join.player, p) ).map( join => join.coreContent.obj.open_! ).sortWith{ (cc1, cc2)  => cc1.startTime.get < cc2.startTime.get }, numOfSessions)
-      //todo by koen
-     // null // <-- to be replaced by the correct result
+      val sorted_fastest = ls.flatten.sortBy(_.durationTranslation)
+      sorted_fastest.headOption
    }
 
    /*
