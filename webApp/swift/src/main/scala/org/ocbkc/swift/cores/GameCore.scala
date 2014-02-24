@@ -166,7 +166,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
             
             algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x")))))))
             answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x")))))
-            textNL = Translation.FOltheory2NL_straight(generatedEfeDoc, bridgeDoc)(0)
+            textNL = TranslateFOLtheory2NL.NLstyleStraight(generatedEfeDoc, bridgeDoc)(0)
          }
       // generate translation subproblem 1
          case 1 =>
