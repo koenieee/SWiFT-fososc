@@ -9,6 +9,7 @@ package org.ocbkc.swift.logilang.bridge.brone
 
 import org.ocbkc.swift.logilang._
 import scala.collection.mutable.ListBuffer
+import org.ocbkc.swift.global.Logging._
 
 // <&y2013.12.22.12:36:19& give this bridge language a good name, for now I called it brone (bridge langauge one)
 
@@ -49,7 +50,7 @@ class BridgeDoc
    /** @returns the NL names of all entities defined in this bridge
      */
    def entNLnames:List[String] =
-   {  entityBridgeSents.map{ case EntityBridgeSent(_, enn) => enn }
+   {  entityBridgeSents.map{ case EntityBridgeSent(_, enn) => enn }.flatten.toSet.toList //toSet.toList to remove duplicate elements.
    }
 
    override def toString = 
@@ -70,7 +71,7 @@ class BridgeDoc
    /** Only use this when you are certain that the predicate is in the bridge
      */
    def pred2NLadjectiveOrException(p:Predicate):String =
-   {  bs.predicate2NLAdjective(p).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
+   {  pred2NLadjective(p).getOrElse(logAndThrow("No bridgesentence for predicate " + p))
    }
 }
 

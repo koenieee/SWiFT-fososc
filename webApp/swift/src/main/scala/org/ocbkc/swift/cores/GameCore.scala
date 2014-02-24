@@ -39,12 +39,12 @@ import org.ocbkc.swift.logilang.bridge.brone.translators._
 
 
 /* Conventions:
-- Names of classes correspond with design $JN/...
+   - Names of classes correspond with design $JN/...
 
-BS:
-- Inforepresentations which form part of the *state* of the gamecore, are stored as property (and not passed as arguments to methods who are using them).
-- For convenience, however, methods do return the requested inforeps, even if they can also be read from the gamecore state. 
-*/
+   BS:
+   - Inforepresentations which form part of the *state* of the gamecore, are stored as property (and not passed as arguments to methods who are using them).
+   - For convenience, however, methods do return the requested inforeps, even if they can also be read from the gamecore state. 
+ */
 
 import Round._
 
@@ -58,53 +58,53 @@ import gameCoreHelperTypes._
 trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
    val gameCoreName:String
-   val playerId:Long
-   var si:SessionInfo
-   var parseWarningMsgTxtCTLplayer:String = ""
+      val playerId:Long
+      var si:SessionInfo
+      var parseWarningMsgTxtCTLplayer:String = ""
 
-   var parseErrorMsgTextCTLplayer:String = ""
+      var parseErrorMsgTextCTLplayer:String = ""
 
-   def initialiseSessionInfo:SessionInfo = // <does this really belong here?>
-   {  si = new SessionInfo
-      si.gameCoreName(gameCoreName).save
-      si.userId(playerId).save
-      si
-   }
+      def initialiseSessionInfo:SessionInfo = // <does this really belong here?>
+      {  si = new SessionInfo
+         si.gameCoreName(gameCoreName).save
+            si.userId(playerId).save
+            si
+      }
    def generateText:String
-   def algorithmicDefenceGenerator:QuerySent__TP
-   def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
-   
+      def algorithmicDefenceGenerator:QuerySent__TP
+      def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
+
    case class AlgorithmicDefenceResult(answerCorrect:Boolean, answerPlayerNL:String, reasonerComment:String, answerPlayerCTL:AnswerLangSent__TP)
-   def doAlgorithmicDefence:AlgorithmicDefenceResult
-   // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
+                                                     def doAlgorithmicDefence:AlgorithmicDefenceResult
+                                                        // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 }
 
 /*
-<&y2011.12.12.16:16:58& refactor: either work with:
-- providing input info by setting properties of the gamecore class, and then calling the methodwhich uses them
-- provide all inputs through the parameters of the method...
-Don't mix, that is confusing.
-Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-confusing way.
->
-*/
+   <&y2011.12.12.16:16:58& refactor: either work with:
+   - providing input info by setting properties of the gamecore class, and then calling the methodwhich uses them
+   - provide all inputs through the parameters of the method...
+   Don't mix, that is confusing.
+   Or perhaps: find out a "design rule of thumb" which allows mixing them in a non-confusing way.
+   >
+ */
 
 /** Naming conventions:
-  * These aliases are intended to make the code more readable by providing the role the type plays in this challenge. E.g. the query language sentence of the Efe challenge is PlofofaPat.
-  */
+ * These aliases are intended to make the code more readable by providing the role the type plays in this challenge. E.g. the query language sentence of the Efe challenge is PlofofaPat.
+ */
 object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
    type EfeQuerySent_rb    = PlofofaPat_rb
-   val EfeQuerySent_rb     = PlofofaPat_rb
-   type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
-   type EfeKRdoc           = FOLtheory
-   type EfeKRdoc_rb        = EfeDoc_rb
-   val EfeKRdoc_rb         = EfeDoc_rb
+      val EfeQuerySent_rb     = PlofofaPat_rb
+      type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
+      type EfeKRdoc           = FOLtheory
+      type EfeKRdoc_rb        = EfeDoc_rb
+      val EfeKRdoc_rb         = EfeDoc_rb
 }
 
 
 // helper class for return type of generateQuestionAndCorrectAnswer
 /** Specifications can be found in the following documents in the same git repository:
-  * TODOdefaultCommandForOpening ./specs/NotUna_FluencyGame_TODO_SCAN.pdf 
+ * TODOdefaultCommandForOpening ./specs/NotUna_FluencyGame_TODO_SCAN.pdf 
   */
 
 import EfeChallengeTypes._
@@ -137,6 +137,13 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
       val generatedEfeDoc = new FOLtheory
+   // { refactor the following not using vars
+ 
+      var textNL:String = ""  // refactor not using vars
+      var algoDef_rb_option:Option[EfeQuerySent_rb] = None
+      var answerCTL_option:Option[EfeAnswerLangSent] = None
+      
+   // }
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
 
       // in this increment: pick one random translation problem of efe (in future increment they will be combined into one TextNL document).
@@ -148,7 +155,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          {  // create translation problem 1 predicate applied to 1 constant. @todo: &y2014.02.22.16:15:33& use the refactored methods
      
             // @todo shoulddo: refactor using the new "outfactored" methods
-            val randomPersonNLname = pickRandomElementFromList( natlang.Info.properNamesForPersons, rg ).get
+            val randomPersonNLname = pickRandomElementFromList( natlang.info.Info.properNamesForPersons, rg ).get
 
             val randomPersonCTLname = "ctlName" + randomPersonNLname
             val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
@@ -157,16 +164,18 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
             bridgeDoc.bridgeSents ++= List(entityBridge)
             generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))      
             
-            val algoDef_rb = EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))
-            val answerCTL = fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x"))))
+            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x")))))))
+            answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x")))))
+            textNL = Translation.FOltheory2NL_straight(generatedEfeDoc, bridgeDoc)(0)
          }
-      // generate translation problem 2 
+      // generate translation subproblem 1
          case 1 =>
-         {  val addedKR = addKR4distributedPredicateInNL(efeDoc, bridgeDoc)
-            val textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR._1, addedKR._2, bridgeDoc)
+         {  val addedKR = addKR4distributedPredicateInNL(generatedEfeDoc, bridgeDoc)
+            textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR._1, addedKR._2, bridgeDoc)
+            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))); log("[MUSTDO] dummy algoDef_rb for translation problem 1: replace!")
+            answerCTL_option = Some(fofa.Forall(Var("x"), addedKR._1, PredApp_Fofa(randomPredicate, List(Var("x"))))); log("[MUSTDO] dummy algoDef_rb for translation problem 1: replace!")
          }
       }
-
 
       def randomPredicate =
       {  pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
@@ -175,7 +184,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       /** Generates and adds a contant to efeDoc which does not yet exist in efeDoc.
         */
       def generateRandomEntity(efeDoc:EfeKRdoc, bridgeDoc:BridgeDoc):Constant =
-      {  val randomPersonNLname     = pickRandomElementFromList( natlang.Info.properNamesForPersons diff bridgeDoc.entNLnames, rg ).get
+      {  val randomPersonNLname     = pickRandomElementFromList( natlang.info.Info.properNamesForPersons diff bridgeDoc.entNLnames, rg ).get
          // By Mussie?:
          log("WARNING: exception can occur here when there are not sufficient properNamesForPersons left... Fix this.")
 
@@ -191,49 +200,50 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
        /** Generates and adds contants to efeD  oc which does not yet exist in efeDoc.
         */    
       def generateRandomEntityList(efeDoc:EfeKRdoc, bridgeDoc:BridgeDoc, n:Int):List[Constant] =
-      {  List.fill(n, () => generateRandomEntity(efeDoc, bridgeDoc))
+      {  List.tabulate(n)(n => generateRandomEntity(efeDoc, bridgeDoc))
       }
 
       /** Extends efeDoc with some constants and a predicate application, which allow translation into a NL with a ditributed NL-predicate.
           @returns (the constants to which the predicate is applied, and the predicate itself)
           Assumes the predicate to be one-place, otherwise a runtime error will occur. @todo could build in check against this.
         */
-      def addKR4distributedPredicateInNL(efeDoc:EfeKRdoc):(List[Constant], Predicate) =
+      def addKR4distributedPredicateInNL(efeDoc:EfeKRdoc, bridgeDoc:BridgeDoc):(List[Constant], Predicate) =
       {  val minimalEntities = 3
          val maximumEntities = 5
          val numberOfEntities = RandomExtras.nextBetween(rg, minimalEntities, maximumEntities)
-         val constants = generateRandomEntityList(efeDoc, numberOfEntities)
+         val constants = generateRandomEntityList(efeDoc, bridgeDoc, numberOfEntities)
          val ranPred = randomPredicate
 
-         constants.foreach{ efeDoc.addPredApp(PredApp_FOL(ranPred, List(_))) }
+         constants.foreach{ c:Constant => efeDoc.addPredApp(PredApp_FOL(ranPred, List(c))) }
 
          (constants, ranPred)
       }
 
-   logp( { edab:TranslationProblem => "   Generated TranslationProblem = " + edab } , TranslationProblem(generatedEfeDoc, textNL, bridgeDoc, algoDef_rb, answerCTL))
+   logp( { edab:TranslationProblem => "   Generated TranslationProblem = " + edab } , TranslationProblem(generatedEfeDoc, textNL, bridgeDoc, algoDef_rb_option.get, answerCTL_option.get))
    }
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      val cg = generateTranslationProblem // cg = computer generated
-      si.textCTLbyComputer = Some(cg.doc)
-      si.textNL = Translation.FOltheory2NL_straight(cg.doc, cg.bridge)(0)
-      si.questionCTLcomputer_rb = Some(cg.algoDef_rb)
-      si.questionNL = TranslatePlofofaSentToNL(cg.algoDef_rb, cg.bridge)
+      val tp = generateTranslationProblem
+      si.textCTLbyComputer = Some(tp.textCTL)
+      si.textNL = tp.textNL
+      // move to generateTranslationProblem si.textNL = Translation.FOltheory2NL_straight(tp.textCTL, tp.bridge)(0)
+      si.questionCTLcomputer_rb = Some(tp.algoDef_rb)
+      si.questionNL = TranslatePlofofaSentToNL(tp.algoDef_rb, tp.bridge)
                                           /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
       si.algoDefComputer_rb = si.questionCTLcomputer_rb
-      si.answerComputerCTL = Some(cg.answerCTL)
+      si.answerComputerCTL = Some(tp.answerCTL)
 /*       - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */
 
-      si.answerComputerNL = TranslateFofaSentToNL(cg.answerCTL, cg.bridge)
+      si.answerComputerNL = TranslateFofaSentToNL(tp.answerCTL, tp.bridge)
       si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
       si.subjectNL = "subjectNL" // <still applicable?>
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = Some(cg.bridge)
+      si.bridgeCTL2NLcomputer = Some(tp.bridge)
       si
    }
 

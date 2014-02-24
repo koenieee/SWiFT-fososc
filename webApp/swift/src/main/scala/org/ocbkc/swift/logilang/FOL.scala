@@ -386,9 +386,10 @@ case class PredApp_Fofa(override val p:Predicate, override val terms:List[Simple
 package translator
 {  
 import org.ocbkc.swift.logilang.translations._
-
+import org.ocbkc.swift.natlang.generation._
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.global.Logging._
+
 /** 
   * 
   */
@@ -400,13 +401,13 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
    private def translate(fs: FofaSent, bs: BridgeDoc):String =
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
-         {  val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
-            val andListEntitiesNL = constantList.map{ bs.constant2NLnoun(_).get }.mkString(", ")
+         {  val predNL = bs.pred2NLadjectiveOrException(pred)
+            val andListEntitiesNL = NLgen.commaAndList(constantList.map{ bs.constant2NLnoun(_).get })
 
             constantList.size match
             {  case 0 => "There are no fast people or things."
                case 1 =>  andListEntitiesNL ++ " is " ++ predNL ++ "."
-               case _ => "People and things which are " ++ predNL ++ " are the following: " ++ constantList.map{ bs.constant2NLnoun(_).get }.mkString(", ")  ++ "."
+               case _ => "People and things which are " ++ predNL ++ " are the following: " ++ andListEntitiesNL  ++ "."
             }
          }
 //Forall(Var(name = x),PatVar(s),PredApp(Predicate(name = F, arity = 1),List(Var(name = x)))) (of class org.ocbkc.swift.logilang.query.plofofa.Forall)

@@ -5,6 +5,7 @@ package org.ocbkc.swift.trans
 import org.ocbkc.swift.logilang.bridge.brone._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.natlang.generation._
 
 /**
   * @todo: provide a method which produces different alternative translations into NL, for example 
@@ -34,10 +35,9 @@ object TranslateFOLtheory2NL// @todo extends translation to NL
    */
    def NLstyleStraight(ft:FOLtheory, bs:BridgeDoc) =
    {  ft.stats.map
-      {  predicateApp2NL(_, bs)
+      {  predApp(_, bs)
       }.collect{ case(Some(nlSent)) => nlSent }
    }
-
 
    def predApp(folStat:FOLstatement, bs:BridgeDoc):Option[String] =
    {  folStat match
@@ -58,10 +58,11 @@ object TranslateFOLtheory2NL// @todo extends translation to NL
    }
 
    /** The same as distributePredicate, but assumes that p is applied to all constants in the associated KRdoc (FOLtheory). So, be careful! Call this method directly if you dispose over the list of constants and the predicates (then it is more efficient to do so).
+       @throws Size constants should be at least 2, otherwise an error will be produced (in the logfile).
+       @throws Assumes that all constants are in the bridgeDoc, otherwise will throw exception
      */
-   def NLstyleDistributePredicateUnchecked(constants:List[Constant], p:Predicate, bs: BridgeDoc):String =
-   {   NLgen.commaAndList(constants) ++ " are each " ++ p
+   def NLstyleDistributePredicateUnchecked(constants:List[Constant], pred:Predicate, bridgeDoc: BridgeDoc):String =
+   {  if(constants.size < 2) logAndThrow("[ERROR] number of constants should be 2 or greater")
+      NLgen.commaAndList(constants.map{ c => bridgeDoc.constant2NLnoun(c).get }) ++ " are each " ++ bridgeDoc.pred2NLadjectiveOrException(pred) ++ "."
    }
-
-   
 }
