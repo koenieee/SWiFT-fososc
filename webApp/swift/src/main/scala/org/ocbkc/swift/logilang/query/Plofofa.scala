@@ -59,6 +59,9 @@ object PlofofaRepresentationTransforms extends CTLrepresentationTransforms[Plofo
 
    /** Translation Scala-format to pure-format
      * @todo to be implemented by Mussie?
+     * Example:
+     * in:  MostInfo(PatVar("s"), Forall(Var("x"), PatVar("s"), PredApp_Plofofa(Predicate("B",1), List(Var("x")))))
+     * out: "mostInfo(s_, forall x from s_.B(x))"
      */
    override def sf2pf(sf:PlofofaPat):String =
    {/*sf match
@@ -67,8 +70,7 @@ object PlofofaRepresentationTransforms extends CTLrepresentationTransforms[Plofo
       "TODO"
    }
 }
-/** Example in pure format: mostInfo(s_, forall x from s_.P(c_2, x))
-  */
+/**   */
 case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I don't assume nesting of quantifiers is allowed, so I don't have to indicate WHICH number variable I want to have the most informative (MostInfo) value of.
 {  def serialize =
    {  /* <? &y2012.05.18.15:40:46& the following gives an error because + cannot be used to add Formats. How can this be accomplished? Or isn't it possible, and if not, why not?>/(   relatedTo = {[lift-json]}
