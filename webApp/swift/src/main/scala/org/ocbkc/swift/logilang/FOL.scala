@@ -420,19 +420,18 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
       }
    }
 }
-/* <&y2014.02.13.18:52:16& in progress>
- *
- *object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent]
- *{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc):String =
- *   {  fs match
- *      {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
- *         {  val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
- *            "People and things which are " ++ predNL ++ " are the following: " ++ constantList.mkString(", ")  ++ "."
- *         }
- *      }
- *   }
- *}
- */
+ <&y2014.02.13.18:52:16& in progress>
+
+object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent]
+{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc):String =
+   {  fs match
+      {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
+         {  
+            val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
+         }
+      }
+   }
+}
 }
 
 }

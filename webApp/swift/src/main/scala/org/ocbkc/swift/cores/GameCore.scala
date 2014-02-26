@@ -157,23 +157,24 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
             // @todo shoulddo: refactor using the new "outfactored" methods
             val randomPersonNLname = pickRandomElementFromList( natlang.info.Info.properNamesForPersons, rg ).get
 
+            val pred = randomPredicate
             val randomPersonCTLname = "ctlName" + randomPersonNLname
             val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
             val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
             bridgeDoc.bridgeSents ++= List(entityBridge)
-            generatedEfeDoc.addPredApp(PredApp_FOL(randomPredicate, List(randomPersonConstant)))      
+            generatedEfeDoc.addPredApp(PredApp_FOL(pred, List(randomPersonConstant)))      
             
-            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x")))))))
-            answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(randomPredicate, List(Var("x")))))
+            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
+            answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(pred, List(Var("x")))))
             textNL = TranslateFOLtheory2NL.NLstyleStraight(generatedEfeDoc, bridgeDoc)(0)
          }
       // generate translation subproblem 1
          case 1 =>
-         {  val addedKR = addKR4distributedPredicateInNL(generatedEfeDoc, bridgeDoc)
-            textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(addedKR._1, addedKR._2, bridgeDoc)
-            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x"))))))); log("[MUSTDO] dummy algoDef_rb for translation problem 1: replace!")
-            answerCTL_option = Some(fofa.Forall(Var("x"), addedKR._1, PredApp_Fofa(randomPredicate, List(Var("x"))))); log("[MUSTDO] dummy algoDef_rb for translation problem 1: replace!")
+         {  val (constants, pred) = addKR4distributedPredicateInNL(generatedEfeDoc, bridgeDoc)
+            textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(constants, pred, bridgeDoc)
+            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
+            answerCTL_option = Some(fofa.Forall(Var("x"), constants, PredApp_Fofa(pred, List(Var("x")))))
          }
       }
 
@@ -284,7 +285,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
    def generateText = "todo"
 
-   /** @todo (mustdo): 
+   /**
      */
    def algorithmicDefenceGenerator:EfeQuerySent_rb =
    {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get, si.bridgeCTL2NLcomputer.get, si.bridgeCTL2NLplayer.get)
@@ -294,7 +295,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
    def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer = null // <TODO>
 
-   /** @todo check answer correct with  BridgeBasedAutoFofaTranslator, instead of comparing the translations to natural language. The latter may be prone to errors, because different translations may exist for the same CTL sentence.
+   /** @todo check answer correct with  BridgeBasedAutoFofaTranslator, instead of comparing the translations to natural language. The latter may be prone to errors, because different translations may exist for the same CTL sentence. And do exist already: the order of the names of persons may be different.
      */
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
    {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
