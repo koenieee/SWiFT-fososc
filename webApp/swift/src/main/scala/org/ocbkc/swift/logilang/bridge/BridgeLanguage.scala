@@ -36,7 +36,11 @@ so in this case:
   */
 case class PredicateBridgeSent(predCTLname: String, predNLname: List[String]) extends BroneSent
 
-case class EntityBridgeSent(entCTLname: String, entNLname: List[String]) extends BroneSent
+/** Assumptions: each entNLname refers unambiguously to an entity. So that means that all entNLnames in the List refer to the same entity. Moreover, it is assumed that the bridge is complete: a counter-example, if ("c", List("Aardvark Jumbo", "The sleeper") occurs, and ("d", List("The sleeper")), then the second is not complete: "Aardvark Jumbo" is another name for the same entity, so should also occur in the second list.
+@todo &y2014.02.27.19:32:33& perhaps refactoring would be handy: introduce the notion of a NLentityGroup or so, in which all NLnames for a specirfic entity are collected. Then you can reuse the same group for more constants.
+@todo &y2014.02.27.19:57:39& perhaps it is better to use Constant instead of the String identifier of a Constant for entCTL...
+  */
+case class EntityBridgeSent(entCTLname: String, entNLnames: List[String]) extends BroneSent
 {  // <&y2014.01.03.09:44:35& apply method which check whether there is at least one element. TODO by Mussie...
 }
 
@@ -60,8 +64,13 @@ class BridgeDoc
    /** @returns the first natural language noun which occurs in the bridge for the given constant. 
        @todo for making the right translation, also must be checked some properties of the natural language word in the bridge, does it allow the given construction? Information needs to be added to natlang.Info for this purpose. <& Is this indeed so?>
      */
-   def constant2NLnoun(c:Constant):Option[String] =
-   {  entityBridgeSents.find{ case EntityBridgeSent(entCTLname, _) => entCTLname == c.name  }.collect{ case EntityBridgeSent(entCTLname, entNLname) => entNLname(0) }
+   def constant2entNLname(c:Constant):Option[String] =
+   {  entityBridgeSents.find{ case EntityBridgeSent(entCTLname, _) => entCTLname == c.name  }.collect{ case EntityBridgeSent(_, entNLname) => entNLname(0) }
+   }
+
+
+   def entNLname2entCTLname(entNLname:String):Option[String] =
+   {  entityBridgeSents.find{ case EntityBridgeSent(_, entNLnames) => entNLnames.contains(entNLname) }.collect{ case EntityBridgeSent(entCTLname, _) => entCTLname }
    }
 
    def pred2NLadjective(p:Predicate):Option[String] =
@@ -82,10 +91,26 @@ package translators
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query.plofofa._
 
+
 /** Translators which translate between the same CTL, used with different bridges.
   */
 trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent]
-{  def apply(ctlsent: CTLsent__TP, bsSource: BridgeDoc, bsTarget: BridgeDoc):CTLsent__TP
+{ 
+   def apply(ctlsent: CTLsent__TP, bsSource: BridgeDoc, bsTarget: BridgeDoc):CTLsent__TP
+
+   /** @returns Map[String, String], where both Strings represent constant identifiers. TODO finish.
+     */
+   def constantMapping(bsSource: BridgeDoc, bsTarget: BridgeDoc):Map[String, String] =
+   {  bsSource.entityBridgeSents.map
+      {  case EntityBridgeSent(entCTLname, firstEntNLname::_) =>
+         {  (  entCTLname,
+               {  WIW &y2014.02.27.20:12:28& [MUSTDO] deal with the case there is NO target contant for this source constant"
+                  bsTarget.entNLname2entCTLname(firstEntNLname).get
+               }
+            )
+         }
+      }.toMap
+   }
 }
 
 object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb]

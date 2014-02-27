@@ -388,6 +388,7 @@ package translator
 import org.ocbkc.swift.logilang.translations._
 import org.ocbkc.swift.natlang.generation._
 import org.ocbkc.swift.logilang.bridge.brone._
+import org.ocbkc.swift.logilang.bridge.brone.translators._
 import org.ocbkc.swift.global.Logging._
 
 /** 
@@ -402,7 +403,7 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
          {  val predNL = bs.pred2NLadjectiveOrException(pred)
-            val andListEntitiesNL = NLgen.commaAndList(constantList.map{ bs.constant2NLnoun(_).get })
+            val andListEntitiesNL = NLgen.commaAndList(constantList.map{ bs.constant2entNLname(_).get })
 
             constantList.size match
             {  case 0 => "There are no fast people or things."
@@ -420,16 +421,15 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
       }
    }
 }
- <&y2014.02.13.18:52:16& in progress>
 
 object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent]
 {  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc):String =
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
-         {  
-            val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
+         {  // TODO val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
          }
       }
+      "" // todo
    }
 }
 }
