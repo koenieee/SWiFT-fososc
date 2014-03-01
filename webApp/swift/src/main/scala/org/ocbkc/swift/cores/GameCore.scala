@@ -94,11 +94,11 @@ trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, Answe
 object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
    type EfeQuerySent_rb    = PlofofaPat_rb
-      val EfeQuerySent_rb     = PlofofaPat_rb
-      type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
-      type EfeKRdoc           = FOLtheory
-      type EfeKRdoc_rb        = EfeDoc_rb
-      val EfeKRdoc_rb         = EfeDoc_rb
+   val EfeQuerySent_rb     = PlofofaPat_rb
+   type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
+   type EfeKRdoc           = FOLtheory
+   type EfeKRdoc_rb        = EfeDoc_rb
+   val EfeKRdoc_rb         = EfeDoc_rb
 }
 
 
@@ -288,7 +288,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /**
      */
    def algorithmicDefenceGenerator:EfeQuerySent_rb =
-   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get, si.bridgeCTL2NLcomputer.get, si.bridgeCTL2NLplayer.get)
+   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get, si.bridgeCTL2NLcomputer.get, si.bridgeCTL2NLplayer.get, null).get
       si.algoDefPlayer = Some(ret)
       ret
    }

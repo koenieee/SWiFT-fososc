@@ -43,7 +43,7 @@ object TranslateFOLtheory2NL// @todo extends translation to NL
    {  folStat match
       {  case PredApp_FOL(pred, List(constant:Constant)) =>
          {  if(pred.arity == 1)
-            {  Some(bs.constant2NLnoun(constant).getOrElse(logAndThrow("No bridgesentence for constant " + constant))+ " is " + bs.pred2NLadjectiveOrException(pred) + ".")
+            {  Some(bs.constant2entNLname(constant).getOrElse(logAndThrow("No bridgesentence for constant " + constant))+ " is " + bs.pred2NLadjectiveOrException(pred) + ".")
             }
             else
                None
@@ -63,6 +63,6 @@ object TranslateFOLtheory2NL// @todo extends translation to NL
      */
    def NLstyleDistributePredicateUnchecked(constants:List[Constant], pred:Predicate, bridgeDoc: BridgeDoc):String =
    {  if(constants.size < 2) logAndThrow("[ERROR] number of constants should be 2 or greater")
-      NLgen.commaAndList(constants.map{ c => bridgeDoc.constant2NLnoun(c).get }) ++ " are each " ++ bridgeDoc.pred2NLadjectiveOrException(pred) ++ "."
+      NLgen.commaAndList(constants.map{ c => bridgeDoc.constant2entNLname(c).get }) ++ " are each " ++ bridgeDoc.pred2NLadjectiveOrException(pred) ++ "."
    }
 }

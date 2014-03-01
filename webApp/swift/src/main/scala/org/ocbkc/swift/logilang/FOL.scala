@@ -14,9 +14,9 @@ Abbreviation for constitution: consti (const is to much similar to constant).
 // not complete FOL yet
 // < therefore place rename to FOLminqua for example. If you extend it, simply create another language next to it which is the extension... >
 
-// each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are part
+// each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are part.
 
-/** @todo don't know whether tying the language to the theory is the best idea. Sometimes you want to share predicates between theories.
+/** @todo Chide: For now FOLtheory is needed, to retrieve the constants and predicates. However, I think it is more elegant to differentiate between a theory and a language (as normally done in logic). This will also allow you to more naturally deal with Constants (they can be made an inner class to a language) and Predicates. The language will then contain the methods to retrieve and create predicates and constants, and they will be unique to that langauge. For example, it is then impossible that you have 2 predicates with the same name, but with a different arity. Read the book Logic & Structure of van Dalen again for inspiration. A disadvantage is that you cannot share predicates and constants between languages. Sometimes this can be handy, for example in EfeLang: they all share the big and fast predicate, while the constants may be different. Perhaps it is possible to build this in as an additional feature, that languages may share some constants or predicates. Another question is: should the bridge language be connected to the theory or to the language? I would say the latter.
   */
 class FOLtheory extends FOLutils with CTLbase
 {  // <&y2012.04.03.22:31:27& constants and predicates could also be represented as hashmaps for more efficiency>
@@ -301,7 +301,6 @@ class SimpleTermSerializer extends CustomSerializer[SimpleTerm](format => (
        ))
 */
 // <&y2012.04.10.19:18:02& make the constructor of class Cons private if possible>
-// <&y2012.04.24.09:52:25& why not use a case class?>
 case class Constant(name:String) extends SimpleTerm
 {  override def toString =
    {  "Constant(name = " + name + ")"
@@ -343,11 +342,15 @@ class Predicate(val name:String, val arity:Long) // <&y2012.04.05.00:32:52& how 
 }
 
 /** Predicate factory, keeps track of all predicates, only creates a new one when it is a new (name, arity) combination, otherwise it will return existing predicate symbol. Factory contains all predicates used by all theories (and also allows usage in solist "theory-less" statements).
-   @todo isn't this exactly the same behaviour as a normal case class, with the automatically generated companion object?
+   @todo Refactor this, this is doing unnessarily complicated. Among others: isn't this exactly the same behaviour as a normal case class, with the automatically generated companion object? Don't change this class, but simply work with the new 
  */
 object Predicate
 {  var predicates:List[Predicate] = Nil
-
+   
+   def find(name:String, arity:Long):Option[Predicate] =
+   {  predicates.find{ p => ( p.name == name && p.arity == arity ) }
+   }
+      
    def apply(name:String, arity:Long):Predicate =
    {  predicates.find( p => p.name.equals(name) && p.arity == arity ) match
       {  case Some(p) => p
@@ -421,15 +424,38 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
       }
    }
 }
-
-object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent]
-{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc):String =
+/** 
+  */
+object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent, FOLtheory]
+{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc, ftTarget: FOLtheory):Option[FofaSent] =
    {  fs match
-      {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
-         {  // TODO val predNL = bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred))
+      {  // TODO case MostInfo
+         case Forall(vr, constantList, predapp@PredApp_Fofa(pred,  terms)) =>
+         {  val (translatedConstantNamesOption, errorOption) = translateConstants(constantList.map{ _.name }, bsSource, bsTarget)
+            if( errorOption == None)
+            {  val translatedConstantNames = translatedConstantNamesOption.get // get is ok, because there is no error
+               
+               if( terms.find{ t => !t.isInstanceOf[Var] } != None )
+                  logAndThrow("Not yet implemented, dealing with terms other than variables.")
+
+               /*
+               if( terms.find{ t => !t.instanceof[Constant] } != None )
+                  logAndThrow("Not yet implemented, dealing with variables (these should remain untranslated.")
+               */
+
+               // because there was no error determining translatedConstantNames, this one will also be without error.
+               // @todo establishing that this way is not elegant by the way. coulddo: refactor.
+
+               //val (translatedTermNamesOption, _) = translateConstants( terms.map{ t => t.asInstanceOf[Constant] }, bsSource, bsTarget)
+               //val translatedTermNames = translatedTermNamesOption.get // get is ok, because there is no error.
+               
+               val translatedConstants = translatedConstantNames.map{ n => ftTarget.getConstant(n).get }
+
+               Some(Forall(vr, translatedConstants, predapp))
+            }
+            else None
          }
       }
-      "" // todo
    }
 }
 }
@@ -467,7 +493,7 @@ object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory
                                                                   ParseResult[FOLtheory](None, failMsg.toString, parseWarningMsg)
                                                                }
          }
-   }
+    }
 
    override def sf2pf(sf:FOLtheory) = logAndThrow("TODO")
 }

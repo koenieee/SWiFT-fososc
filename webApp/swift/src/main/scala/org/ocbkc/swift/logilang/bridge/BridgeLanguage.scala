@@ -93,29 +93,61 @@ import org.ocbkc.swift.logilang.query.plofofa._
 
 
 /** Translators which translate between the same CTL, used with different bridges.
+  * @todo coulddo, after major refactoring of FOL (see todo's there) - replace constant-names (strings) with Constant objects
+  * @todo after major refactoring of FOL, put type bounds on TargetLang__TP
   */
-trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent]
+trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent, TargetLang__TP]
 { 
-   def apply(ctlsent: CTLsent__TP, bsSource: BridgeDoc, bsTarget: BridgeDoc):CTLsent__TP
-
-   /** @returns Map[String, String], where both Strings represent constant identifiers. TODO finish.
+   def apply(ctlsent: CTLsent__TP, bsSource: BridgeDoc, bsTarget: BridgeDoc, targetLang: TargetLang__TP ):Option[CTLsent__TP]
+   
+   /** @returns Map[String, Option[String]], where both Strings represent constant identifiers. For example (("c1", Some("joke"))) states that constant c1 refers to the same entity as the constant joke in the representation with bsTarget. (("c1", None)) states that there is no constant in the representation with bsTarget which represents constant 1. This is all assumes that the bridgedocs provide complete information  (all constants are mapped to natural language nouns).
      */
-   def constantMapping(bsSource: BridgeDoc, bsTarget: BridgeDoc):Map[String, String] =
+   def generateConstantMap(bsSource: BridgeDoc, bsTarget: BridgeDoc):Map[String, Option[String]] =
    {  bsSource.entityBridgeSents.map
       {  case EntityBridgeSent(entCTLname, firstEntNLname::_) =>
          {  (  entCTLname,
-               {  WIW &y2014.02.27.20:12:28& [MUSTDO] deal with the case there is NO target contant for this source constant"
-                  bsTarget.entNLname2entCTLname(firstEntNLname).get
+               {  bsTarget.entNLname2entCTLname(firstEntNLname)
                }
             )
          }
       }.toMap
    }
+
+   
+   def generatePredMap(bsSource: BridgeDoc, bsTarget: BridgeDoc):Map[String, Option[String]] =
+   {  logAndThrow("not yet implemented")
+/* { unfinished
+      bsSource.predicateBridgeSents.map
+      {  case PredicateBridgeSent(predCTLname, firstPredNLname::_) =>
+         {  (  predCTLname,
+               {  bsTarget.WIW entNLname2entCTLname(firstEntNLname)
+               }
+            )
+         }
+      }.toMap
+*/
+// }
+   }
+
+   abstract class ConstantTranslationError
+   case class SomeConstantsUntranslatable extends ConstantTranslationError
+
+   /** @returns (None, FINISH...
+     */
+   def translateConstants(constantNames:List[String], bsSource:BridgeDoc, bsTarget:BridgeDoc):(Option[List[String]], Option[ConstantTranslationError]) =
+   {  val constantMap = generateConstantMap(bsSource, bsTarget)
+
+      val constantNamesTranslated = constantNames.map{ constantMap(_) }
+      if(constantNamesTranslated.contains(None))
+         (None, Some(SomeConstantsUntranslatable()))
+      else
+         (Some(constantNamesTranslated.map{ case Some(cn) => cn }), None)
+   }
 }
 
-object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb]
-{  override def apply(prb: PlofofaPat_rb, bsSource: BridgeDoc, bsTarget: BridgeDoc):PlofofaPat_rb =
-   {  prb // the same! There are no constants in the (current version of the) Plofofa language 
+object BridgeBasedAutoPlofafaTranslator extends BridgeBasedAutoCTLtranslator[PlofofaPat_rb, FOLtheory]
+{  override def apply(prb: PlofofaPat_rb, bsSource: BridgeDoc, bsTarget: BridgeDoc, targetLang: FOLtheory):Option[PlofofaPat_rb] =
+   {  Some(prb) // the same! There are no constants in the (current version of the) Plofofa language 
    
    
 /* For the future:
