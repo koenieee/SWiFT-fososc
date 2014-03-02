@@ -302,6 +302,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       si.answerPlayerCTL = Some(answerPlayerCTL)
       si.answerPlayerNL = TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer.get)
 
+      val answerPlayerCTLtranslated2answerLangComputer = BridgeBasedAutoFofaTranslator(answerPlayerCTL, si.bridgeCTL2NLplayer, si.bridgeCTL2NLcomputer, si.textCTLbyComputer)
+ 
       si.answerPlayerCorrect(si.answerPlayerNL.equals(si.answerComputerNL)).save
        
       AlgorithmicDefenceResult(si.answerPlayerCorrect.is, si.answerPlayerNL, "", answerPlayerCTL)

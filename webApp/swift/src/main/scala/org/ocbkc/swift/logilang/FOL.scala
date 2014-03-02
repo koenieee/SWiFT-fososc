@@ -380,7 +380,21 @@ import org.ocbkc.swift.logilang._
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
   */
 sealed trait FofaSent extends CTLsent
+{  def equalsModuloOrders(fs:FofaSent)
+   {  logAndThrow("Not yet implemented for the given case")
+   }
+}
 case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent
+{  override def equalsModuloOrders(otherStat: Forall):Boolean =
+   {  otherStat match
+      {  case Forall(otherVr:Var, otherConstantList:List[Constant], otherPredApp:PredApp_Fofa) =>
+         {  def constantComparison(c1,c2) = c1.name < c2.name
+            constantList.sort{ constantComparison } == otherConstantList.sort{ constantComparison }
+            if(predApp WIW
+         }
+      }
+   }
+}
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
