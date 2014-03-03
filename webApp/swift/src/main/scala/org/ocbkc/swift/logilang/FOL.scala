@@ -279,13 +279,24 @@ class SimpleTerm(val name:String)
    }
 }
 */
+
+
+case class TermSubstitution(term1:SimpleTerm, term2:SimpleTerm)
+case class VarSubstitution(var1:Var, var2:Var)
+
 /** SimpleTerm represents a term which consists of a variable or a constant (and NOT a function).
     @BS: do not change the classes which extend this SimpleTerm, as this would change the definition of the language which use SimpleTerm. That why it is "Sealed". If you need an extension of the term (with functions), define a new Term-class and make it extend this class and, additionally, function applications.
   */
 
 sealed trait SimpleTerm
 {  val name:String
+   /** substitute vr with the given substitution-rule of vr1 with vr2.
+     */
+   def substituteTerm(ts:TermSubstitution):SimpleTerm =
+   {  if(this == ts.term1) ts.term2 else this
+   }
 }
+
 
 /*
 class SimpleTermSerializer extends CustomSerializer[SimpleTerm](format => (
@@ -314,6 +325,12 @@ case class Var(name:String) extends SimpleTerm
 {  override def toString =
    {  //"Constant(name = " + name + ")"
       "Var(name = " + name + ")" // , id = " + hashCode + ")"
+   }
+
+   /** Identical to (inherited) substituteTerms, but then restricted to Vars. Prevents you from having to do typecasts.
+     */
+   def substituteVar(vs:VarSubstitution):Var =
+   {  substituteTerm( TermSubstitution(vs.var1, vs.var2) ).asInstanceOf[Var]
    }
 }
 
@@ -376,21 +393,53 @@ package org.ocbkc.swift.logilang.fofa
 {
 
 import org.ocbkc.swift.logilang._
+import org.ocbkc.swift.global.Logging._
 
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
+   @param FofaSentType__TP: if you extend this trait in a class C, choose FofaSentType__TP equal to C.
   */
-sealed trait FofaSent extends CTLsent
-{  def equalsModuloOrders(fs:FofaSent)
+sealed trait FofaSent[+FofaSentType__TP <: FofaSent[Any]] extends CTLsent
+{  def equalsModuloVarNames(otherStat:FofaSent[Any]):Boolean =
    {  logAndThrow("Not yet implemented for the given case")
    }
+
+   def substituteVar(vs:VarSubstitution):FofaSentType__TP =
+   {  logAndThrow("Not yet implemented for the given case.")
+   }   
 }
-case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent
-{  override def equalsModuloOrders(otherStat: Forall):Boolean =
-   {  otherStat match
-      {  case Forall(otherVr:Var, otherConstantList:List[Constant], otherPredApp:PredApp_Fofa) =>
-         {  def constantComparison(c1,c2) = c1.name < c2.name
-            constantList.sort{ constantComparison } == otherConstantList.sort{ constantComparison }
-            if(predApp WIW
+
+/** @todo perhaps better make constantList a Set (easier for comparisons, order is not important
+  * Ax from {a,b,c} P(x,c) == Ay from {c,b,a} P(y,c)
+  * Ax from {a,b} P(x,c) != A.x from {a,b} P(c,x)
+  * @todo move to equality in FOL (not applicable here:)Ax Ay P(x,y) != Ay Ax P(x,y)
+  * 
+  */
+case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent[Forall]
+{  override def equalsModuloVarNames(otherStat: FofaSent[Any]):Boolean =
+   {  if(otherStat.isInstanceOf[Forall])
+      {  val otherForallStat = otherStat.asInstanceOf[Forall]
+         val otherForallStatAfterVarSubstitution = otherForallStat.asInstanceOf[Forall].substituteVar(VarSubstitution(otherForallStat.vr, this.vr))
+   
+         otherForallStatAfterVarSubstitution match
+         {  case Forall(otherVr, otherConstantList, otherPredApp@PredApp_Fofa(otherPred,  otherTerms)) =>
+            {  otherVr     == this.vr  &&
+               otherConstantList.toSet == this.constantList.toSet &&
+               otherPred   == this.predApp.p &&
+               otherTerms  == this.predApp.terms
+            }
+            case _ => { log("[POTENTIAL_BUG] This cannot happen."); false }
+         }
+      }else
+      {  false
+      }
+   }
+   
+   /** @todo In future can perhaps be integrated with a more general substituteTerm
+     */
+   override def substituteVar(vs:VarSubstitution):Forall =
+   {  this match
+      {  case Forall(vr, constantList, predapp@PredApp_Fofa(pred,  terms)) =>
+         {  Forall(vr.substituteVar(vs), constantList, PredApp_Fofa(pred, terms.map{ case t:Var => t.substituteVar(vs); case otherTerm => otherTerm }))
          }
       }
    }
@@ -398,7 +447,7 @@ case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) ext
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
-case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent
+case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent[PredApp_Fofa]
 
 package translator
 {  
@@ -411,12 +460,12 @@ import org.ocbkc.swift.global.Logging._
 /** 
   * 
   */
-object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb if that comes available
-{  override def apply(fs: FofaSent, bs: BridgeDoc):String =
+object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent[Any]] // change to _rb if that comes available
+{  override def apply(fs: FofaSent[Any], bs: BridgeDoc):String =
    {  translate(fs, bs)
    }
 
-   private def translate(fs: FofaSent, bs: BridgeDoc):String =
+   private def translate(fs: FofaSent[Any], bs: BridgeDoc):String =
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
          {  val predNL = bs.pred2NLadjectiveOrException(pred)
@@ -440,8 +489,8 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
 }
 /** 
   */
-object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent, FOLtheory]
-{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc, ftTarget: FOLtheory):Option[FofaSent] =
+object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent[Any], FOLtheory]
+{  def apply(fs: FofaSent[Any], bsSource: BridgeDoc, bsTarget: BridgeDoc, ftTarget: FOLtheory):Option[FofaSent[Any]] =
    {  fs match
       {  // TODO case MostInfo
          case Forall(vr, constantList, predapp@PredApp_Fofa(pred,  terms)) =>
