@@ -44,10 +44,12 @@ class BridgeConstruction
    def processMenu4EntityBridgeSelect(constant:Constant, entNLname:String) =
    {  sesCoordLR.addToPlayerBridge(constant, entNLname)
    }
-   
+  
+   /** @todo Mussie? If someone selected a constant, than make these disappear in the other drop down boxes. Wait, or is it allowed to have 2 constants refer to the same NL entity.
+     */
    def generateMenus4EntityBridge(ns:NodeSeq):NodeSeq =
    {  val constants = sesCoordLR.constantsByPlayer
-      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLname(0) }
+      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLnames(0) }
       constants.flatMap
       {  constant =>
          {

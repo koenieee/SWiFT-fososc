@@ -1,4 +1,4 @@
-package org.ocbkc.swift.natlang
+package org.ocbkc.swift.natlang.info
 
 object Info
 {  val properNamesForPersons = List("Akwasi", "Ebere", "Marijke", "Christopher", "Gabriel", "Chide", "John", "Jules", "Gerard", "Sirtaki", "Bonjordoki", "Ivana", "Daniel", "Kevin", "Pondiwu", "HenkJan", "Anastasia", "Alexia", "Ronald", "Frank", "Crista", "Sybren", "Eva", "Jan", "Alex", "Quintus", "Quadario", "Rapunzel", "Pjoipjoibyroi", "Selinde", "Jesse", "Laura", "Geoff", "Szymon", "Sjaak", "Bo", "Michilio", "Michiel", "Gaston", "Jasm", "Joko", "Mikel", "Marion", "Karin", "Luc", "Hannah", "Alexandra", "Ramon", "Laurens", "David", "Cindy", "Louk", "Loes", "Floor", "Esha", "Chantal", "Aimee", "Klaas", "Hans", "Zojowojo", "Rapunzel") 

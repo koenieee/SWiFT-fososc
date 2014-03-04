@@ -228,11 +228,12 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 }
 
 import org.ocbkc.swift.cores.EfeChallengeTypes._
+import org.ocbkc.swift.logilang.fofa._
 
 class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 /* {  override val gameCore = new EfeLang(currentPlayer.id.get)
 } with */ CoreTrait[EfeQuerySent_rb, EfeAnswerLangSent]
-{  println("ses.Core.constructor called")
+{  log("ses.Core.constructor called")
    override val gameCore = new EfeLang(currentPlayer.id.get)
   
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */

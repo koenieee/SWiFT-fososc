@@ -111,7 +111,7 @@ object TranslatePlofofaSentToNL extends TranslateCTL2NL[PlofofaPat_rb]
    private def translate(p: PlofofaPat, bs: BridgeDoc):String =
    {  p match
       {  case Forall(vr, setPatVar, PredApp_Plofofa(pred, _)) =>
-         {  "Mention people or things which are " ++  bs.predicate2NLAdjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred)) ++ "."
+         {  "Mention people or things which are " ++  bs.pred2NLadjective(pred).getOrElse(logAndThrow("No bridgesentence for predicate " + pred)) ++ "."
          }
 //Forall(Var(name = x),PatVar(s),PredApp(Predicate(name = F, arity = 1),List(Var(name = x)))) (of class org.ocbkc.swift.logilang.query.plofofa.Forall)
          case MostInfo(patVar, forallPat) =>
