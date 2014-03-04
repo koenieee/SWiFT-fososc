@@ -5,31 +5,27 @@
 	<TITLE></TITLE>
 	<META NAME="GENERATOR" CONTENT="LibreOffice 4.0.4.2 (Linux)">
 	<META NAME="CREATED" CONTENT="20140219;20201700">
-	<META NAME="CHANGED" CONTENT="0;0">
+	<META NAME="CHANGED" CONTENT="20140305;101400">
 	<STYLE TYPE="text/css">
 	<!--
-		H2.cjk { font-family: "WenQuanYi Zen Hei" ;}
+		H2.cjk { font-family: "WenQuanYi Zen Hei" }
 		H2.ctl { font-family: "Lohit Hindi" }
 	-->
 	</STYLE>
 </HEAD>
 <BODY LANG="en-US" DIR="LTR">
-<P ALIGN=CENTER STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT FACE="Albany, sans-serif"><FONT SIZE=4><font color="maroon">SWIFT
-version history</font></FONT></FONT></P>
+<P ALIGN=CENTER STYLE="margin-top: 0.17in; page-break-after: avoid"><FONT COLOR="#800000"><FONT FACE="Albany, sans-serif"><FONT SIZE=4>SWIFT
+version history</FONT></FONT></FONT></P>
 <HR>
-<H1><font color="teal">Version-to-come</font></H1>
+<H1><FONT COLOR="#008080">Version-to-come</FONT></H1>
 <P STYLE="margin-top: 0.17in"><FONT SIZE=4>The version-to-come may or
 will include:</FONT></P>
-<p>
-<H2 CLASS="western"><font color="olive">4users</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
 <UL>
 	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Multiple questions in
 	question attack</FONT></P>
 	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>efeLang challenge set
-	improved (first version only creates texts with the form “Akwasi
-	is big.”, and not for example “Akwasi, Jojo and Wizo are each
-	big, and Wizo is also fast.”, this version also contains these
-	things.)</FONT></P>
+	extended even more.</FONT></P>
 	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Constigame players:
 	constitutional branching support.</FONT></P>
 	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>During the
@@ -37,13 +33,45 @@ will include:</FONT></P>
 	personal record and the overall record. This is intended to further
 	motivate the player to be as quickly as possible.</FONT></P>
 </UL>
-<H2 CLASS="western">4developers</H2>
-<P STYLE="margin-top: 0.17in"><BR><BR>
-</P>
+<H2 CLASS="western" STYLE="margin-top: 0.17in"><FONT COLOR="#808000">4developers</FONT></H2>
 <HR>
-<H1><A NAME="version0.5.0"></A>Version 0.5.0</H1>
+<H1><A NAME="version0.6.0"></A><FONT COLOR="#008080">Version 0.6.0</FONT></H1>
+<P><FONT COLOR="#008080">March 5, 2014</FONT></P>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
+<UL>
+	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>efeLang challenge set
+	extended:  distributed natural language predicates, such as “Akwasi,
+	Jojo and Wizo are each big.”, included. This extension makes it
+	really non-trivial for many players, as appeared to be the case
+	during a preliminary “pencil and paper” experiment among
+	test-players.</FONT></P>
+	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Better rendering of
+	NL sentences: and comma lists for example. Not “... Pete, Akwasi,
+	Siriwasi.” but “... Pete, Akwasi and Siriwasi.”</FONT></P>
+</UL>
+<H2 CLASS="western" STYLE="margin-top: 0.17in"><BR><BR>
+</H2>
+<H2 CLASS="western" STYLE="margin-top: 0.17in"><FONT COLOR="#808000">4developers</FONT></H2>
+<UL>
+	<LI><P STYLE="margin-top: 0.17in">[CTLcompare] Comparing answer of
+	computer and player is now done by showing equality between the CTL
+	answers of both (previously: the translations into natural language
+	were compared, but this is problematic, for example orders may be
+	different.) Note: the CTL answer language fort the efeLang-challenge
+	is Fofa (see documentation).</P>
+	<LI><P STYLE="margin-top: 0.17in">Added CTL manipulations (generally
+	applicable, but developed to realise [CTLcompare]):<BR>-
+	Specifically for the Fofa language (Fofa: see the documentation):
+	equality modulo variable names; bridge based auto translation
+	between Fofa sentences (so, sentences using a different constant
+	name for the same entity can be translated back and forth). Not yet
+	everything is covered, but sufficient for the Efe challenge so
+	far.<BR>- General (FOL): bridge based term translators added.</P>
+</UL>
+<HR>
+<H1><A NAME="version0.5.0"></A><FONT COLOR="#008080">Version 0.5.0</FONT></H1>
 <P>February 19, 2014</P>
-<H2 CLASS="western">4users</H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
 <UL>
 	<LI><P STYLE="margin-top: 0.17in"><FONT SIZE=3>Most important
 	change: a completely new challenge is integrated: efeLang! The
@@ -56,7 +84,7 @@ will include:</FONT></P>
 	for the player. (However, the rounds do not yet automatically rewind
 	when a previous round is re-edited).</FONT></P>
 </UL>
-<H2 CLASS="western" STYLE="margin-top: 0.17in"><font color="olive">4developers</font></H2>
+<H2 CLASS="western" STYLE="margin-top: 0.17in"><FONT COLOR="#808000">4developers</FONT></H2>
 <UL>
 	<LI><P STYLE="margin-top: 0.17in">The introduction of efeLang is not
 	so easy as it may seem. The previous challenge was still depended on
@@ -72,9 +100,9 @@ will include:</FONT></P>
 	challenges with improved reuse.</P>
 </UL>
 <HR>
-<H1><font color="teal"><A NAME="version0.4.0"></A>Version 0.4.0</font></H1>
+<H1><A NAME="version0.4.0"></A><FONT COLOR="#008080">Version 0.4.0</FONT></H1>
 <P STYLE="margin-top: 0.17in"><FONT SIZE=4>August 8, 2013</FONT></P>
-<H2 CLASS="western"><font color="olive">4users</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
 <UL>
 	<LI><P>Stopwatch running during translation round to stimulate
 	making the duration as short as possible.</P>
@@ -85,7 +113,7 @@ will include:</FONT></P>
 	constitution being studied if a player returns to the study consti
 	page.</P>
 </UL>
-<H2 CLASS="western"><font color="olive">4developers</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4developers</FONT></H2>
 <UL>
 	<LI><P>Version number displayed in running SWiFT application in
 	default.html now read from central location.</P>
@@ -96,22 +124,22 @@ will include:</FONT></P>
 	<LI><P>Added new documentation of source code</P>
 </UL>
 <HR>
-<H1><font color="teal"><A NAME="version0.3.2"></A>Version 0.3.2</font></H1>
+<H1><A NAME="version0.3.2"></A><FONT COLOR="#008080">Version 0.3.2</FONT></H1>
 <P>June 9, 2013</P>
-<H2 CLASS="western"><font color="olive">4users</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
 <UL>
 	<LI><P>Correct version number now also shows in web application.</P>
 	<LI><P>Bugfix fluency game: names with hyphens and special
 	characters are removed (these will lead to problems if they occur in
 	the natural language text to translate).</P>
 </UL>
-<H2 CLASS="western"><font color="olive">4developers</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4developers</FONT></H2>
 <UL>
 	<LI><P>H2 database is made accessible through Web interface.</P>
 </UL>
 <HR>
-<H1><font color="teal">Version 0.3.1</font></H1>
-<H2 CLASS="western"><font color="olive">4users</font></H2>
+<H1><FONT COLOR="#008080">Version 0.3.1</FONT></H1>
+<H2 CLASS="western"><FONT COLOR="#808000">4users</FONT></H2>
 <UL>
 	<LI><P>Secure connection (https). (Certificate might be missing).</P>
 	<LI><P>The player can continue the fluency session by clicking on
@@ -119,16 +147,16 @@ will include:</FONT></P>
 	<LI><P>Html blank-out when studying constitution if not holding a
 	key, which allows for accurate study-time registration.</P>
 </UL>
-<H2 CLASS="western"><font color="olive">4developers</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4developers</FONT></H2>
 <UL>
 	<LI><P>Full date printed on each line in the Lift logfile. This
 	makes it easier to read the logfile.</P>
 </UL>
 <HR>
-<H1><font color="teal">Version 0.3.0.1</font></H1>
+<H1><FONT COLOR="#008080">Version 0.3.0.1</FONT></H1>
 <P>(Deviation from version naming protocol used in SWiFT here: the
 4th number should not be used.)</P>
-<H2 CLASS="western"><font color="olive">4developers</font></H2>
+<H2 CLASS="western"><FONT COLOR="#808000">4developers</FONT></H2>
 <UL>
 	<LI><P>PersistentDatastructureUpgrader added. This piece of code
 	applies the right upgrades to the persistently stored data, if a
