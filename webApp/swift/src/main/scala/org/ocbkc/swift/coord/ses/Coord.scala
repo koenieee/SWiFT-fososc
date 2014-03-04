@@ -232,7 +232,7 @@ import org.ocbkc.swift.logilang.fofa._
 
 class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 /* {  override val gameCore = new EfeLang(currentPlayer.id.get)
-} with */ CoreTrait[EfeQuerySent_rb, FofaSent[FofaSent[FofaSent]]]
+} with */ CoreTrait[EfeQuerySent_rb, EfeAnswerLangSent]
 {  log("ses.Core.constructor called")
    override val gameCore = new EfeLang(currentPlayer.id.get)
   
@@ -398,7 +398,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
   * @todo may need some refactoring: also need a simulated gameCore, now it is tied to one specific game core. After that you can also replace the type parameter with CoreTrait[DummyQuerySent, DummyAnswerLangSent]
   */
 
-class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent_rb, EfeAnswerLangSent[Any]]
+class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent_rb, EfeAnswerLangSent]
 {  override def currentPlayer = currentPlayerVal
    val gameCore = new EfeLang(currentPlayer.id.get)
 

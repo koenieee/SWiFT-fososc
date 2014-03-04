@@ -92,11 +92,11 @@ object Prover extends reas.ProverTrait
 {  /** This method represents a 
      * @todo shoulddo: change FOLtheory to FOLtheory_rb
      */
-   def query(queryParam:PlofofaPat_rb, ft:FOLtheory):FofaSent[Any] =
+   def query(queryParam:PlofofaPat_rb, ft:FOLtheory):FofaSent =
    {  this.query(queryParam.sf, ft)
    }
 
-   def query(queryParam:PlofofaPat, ft:FOLtheory):FofaSent[Any] =
+   def query(queryParam:PlofofaPat, ft:FOLtheory):FofaSent =
    {  log("reas.plofofa.Prover called")
       log("   query = " + queryParam)
 

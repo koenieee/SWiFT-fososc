@@ -95,7 +95,7 @@ object EfeChallengeTypes
 {  type EfeQuerySent       = PlofofaPat
    type EfeQuerySent_rb    = PlofofaPat_rb
    val EfeQuerySent_rb     = PlofofaPat_rb
-   type EfeAnswerLangSent[FofaSentType__TP <: FofaSent[Any]]  = FofaSent[FofaSentType__TP] // change to _rb version as soon as implemented.
+   type EfeAnswerLangSent  = FofaSent // change to _rb version as soon as implemented.
    type EfeKRdoc           = FOLtheory
    type EfeKRdoc_rb        = EfeDoc_rb
    val EfeKRdoc_rb         = EfeDoc_rb
@@ -112,13 +112,13 @@ import EfeChallengeTypes._
 /** @todo &y2014.02.01.18:22:29& why not make EfeLang a singleton object?
   */
 
-class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeAnswerLangSent[Any]/* change to _rb when available */]
+class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeAnswerLangSent/* change to _rb when available */]
 {  log("Constructor EfeLang called")
    val gameCoreName = "efe"
    var si:SessionInfo = null
    val playerId = playerIdInit
    
-   case class TranslationProblem(textCTL:FOLtheory, textNL: String, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent[Any])
+   case class TranslationProblem(textCTL:FOLtheory, textNL: String, bridge:BridgeDoc, algoDef_rb:EfeQuerySent_rb, answerCTL:EfeAnswerLangSent)
 
    /** EfeLang is not equal to FOL, but FOL is just used, with some predefined predicates. The "right" solution would be to define a new language in a separate package. This is a quick solution. Just throw a FOLtheory through this method, and it will add the predefined predicates. Moreover it will return the BridgeDoc.
      */
@@ -141,7 +141,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
  
       var textNL:String = ""  // refactor not using vars
       var algoDef_rb_option:Option[EfeQuerySent_rb] = None
-      var answerCTL_option:Option[EfeAnswerLangSent[Any]] = None
+      var answerCTL_option:Option[EfeAnswerLangSent] = None
       
    // }
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
@@ -303,9 +303,13 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       si.answerPlayerNL = TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer.get)
 
       val answerPlayerCTLtranslated2answerLangComputer = BridgeBasedAutoFofaTranslator(answerPlayerCTL, si.bridgeCTL2NLplayer.get, si.bridgeCTL2NLcomputer.get, si.textCTLbyComputer.get)
- 
-      si.answerPlayerCorrect(si.answerPlayerNL.equals(si.answerComputerNL)).save
-       
+      match
+      {  case Some(answerPlayerCTLtranslated2answerLangComputer) =>
+         {  si.answerPlayerCorrect( si.answerComputerCTL.get.equalsModuloVarNames(answerPlayerCTLtranslated2answerLangComputer) ).save
+         }
+         case None => si.answerPlayerCorrect( false ).save
+      }
+
       AlgorithmicDefenceResult(si.answerPlayerCorrect.is, si.answerPlayerNL, "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>

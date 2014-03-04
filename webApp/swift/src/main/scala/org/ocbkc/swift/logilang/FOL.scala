@@ -396,14 +396,13 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.global.Logging._
 
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
-   @param FofaSentType__TP: if you extend this trait in a class C, choose FofaSentType__TP equal to C.
   */
-sealed trait FofaSent[+FofaSentType__TP <: FofaSent[Any]] extends CTLsent
-{  def equalsModuloVarNames(otherStat:FofaSent[Any]):Boolean =
+sealed trait FofaSent extends CTLsent
+{  def equalsModuloVarNames(otherStat:FofaSent):Boolean =
    {  logAndThrow("Not yet implemented for the given case")
    }
 
-   def substituteVar(vs:VarSubstitution):FofaSentType__TP =
+   def substituteVar(vs:VarSubstitution):FofaSent =
    {  logAndThrow("Not yet implemented for the given case.")
    }   
 }
@@ -414,9 +413,16 @@ sealed trait FofaSent[+FofaSentType__TP <: FofaSent[Any]] extends CTLsent
   * @todo move to equality in FOL (not applicable here:)Ax Ay P(x,y) != Ay Ax P(x,y)
   * 
   */
-case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent[Forall]
-{  override def equalsModuloVarNames(otherStat: FofaSent[Any]):Boolean =
-   {  if(otherStat.isInstanceOf[Forall])
+case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) extends FofaSent
+{  override def equalsModuloVarNames(otherStat: FofaSent):Boolean =
+   {  log("equalsModuloVarNames called")
+
+      log("   this = " + this.toString)
+      log("   otherStat = " + otherStat.toString)
+
+      logp(
+      { returnVal:Boolean => { "   return: " + returnVal } },
+      if(otherStat.isInstanceOf[Forall])
       {  val otherForallStat = otherStat.asInstanceOf[Forall]
          val otherForallStatAfterVarSubstitution = otherForallStat.asInstanceOf[Forall].substituteVar(VarSubstitution(otherForallStat.vr, this.vr))
    
@@ -432,22 +438,28 @@ case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) ext
       }else
       {  false
       }
+      )
    }
    
    /** @todo In future can perhaps be integrated with a more general substituteTerm
      */
    override def substituteVar(vs:VarSubstitution):Forall =
-   {  this match
+   {  log("Forall.substituteVar called")
+      
+      logp(
+      { "return: " + (_:Forall).toString },
+      this match
       {  case Forall(vr, constantList, predapp@PredApp_Fofa(pred,  terms)) =>
          {  Forall(vr.substituteVar(vs), constantList, PredApp_Fofa(pred, terms.map{ case t:Var => t.substituteVar(vs); case otherTerm => otherTerm }))
          }
       }
+      )
    }
 }
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
-case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent[PredApp_Fofa]
+case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent
 
 package translator
 {  
@@ -460,12 +472,12 @@ import org.ocbkc.swift.global.Logging._
 /** 
   * 
   */
-object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent[Any]] // change to _rb if that comes available
-{  override def apply(fs: FofaSent[Any], bs: BridgeDoc):String =
+object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb if that comes available
+{  override def apply(fs: FofaSent, bs: BridgeDoc):String =
    {  translate(fs, bs)
    }
 
-   private def translate(fs: FofaSent[Any], bs: BridgeDoc):String =
+   private def translate(fs: FofaSent, bs: BridgeDoc):String =
    {  fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
          {  val predNL = bs.pred2NLadjectiveOrException(pred)
@@ -489,9 +501,17 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent[Any]] // change to
 }
 /** 
   */
-object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent[Any], FOLtheory]
-{  def apply(fs: FofaSent[Any], bsSource: BridgeDoc, bsTarget: BridgeDoc, ftTarget: FOLtheory):Option[FofaSent[Any]] =
-   {  fs match
+object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSent, FOLtheory]
+{  def apply(fs: FofaSent, bsSource: BridgeDoc, bsTarget: BridgeDoc, ftTarget: FOLtheory):Option[FofaSent] =
+   {  log("BridgeBasedAutoFofaTranslator called")
+      log("parameters include:")
+      log("{")
+      log("   fs: " + fs.toString)
+      log("}")
+
+      logp(
+      { "   ret: " + (_:Option[FofaSent]).toString },
+      fs match
       {  // TODO case MostInfo
          case Forall(vr, constantList, predapp@PredApp_Fofa(pred,  terms)) =>
          {  val (translatedConstantNamesOption, errorOption) = translateConstants(constantList.map{ _.name }, bsSource, bsTarget)
@@ -518,7 +538,9 @@ object BridgeBasedAutoFofaTranslator extends BridgeBasedAutoCTLtranslator[FofaSe
             }
             else None
          }
+         case other => logAndThrow("not yet implemented")
       }
+      )
    }
 }
 }

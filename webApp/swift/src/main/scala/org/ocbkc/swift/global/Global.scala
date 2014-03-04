@@ -153,7 +153,7 @@ object TestSettings
    // { never change the following manually, they are used by other parts of the program
    var SIMULATEPLAYINGWITHJARARUNNING  = false // simulation process is currently running
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
-   var SIMULATEPLAYINGWITHJARA = false
+   var SIMULATEPLAYINGWITHJARA         = false
    // }
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
