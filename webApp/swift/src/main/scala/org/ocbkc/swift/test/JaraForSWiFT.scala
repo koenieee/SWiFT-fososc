@@ -384,7 +384,8 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
       
-      sesCoord.URstartTranslation
+      sesCoord.URtryStartTranslation
+      log("[POTENTIAL_BUG] Jara is not yet prepared for dealing with URtryStartTranslation (instead of the previous URstartTranslation)")
       sesCoord.URstopTranslation
       sesCoord.URalgorithmicDefenceSimplified(winSession, duration)
    }

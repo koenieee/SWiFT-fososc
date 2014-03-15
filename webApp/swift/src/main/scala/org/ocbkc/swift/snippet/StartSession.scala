@@ -22,6 +22,8 @@ import org.ocbkc.swift.logilang._
 import net.liftweb.json._
 import net.liftweb.json.ext._
 
+import org.ocbkc.swift.global.Logging._
+
 // TODO &y2013.01.28.20:38:57& move to more general place
 object sesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
 
@@ -75,12 +77,21 @@ class StartSession
       // End serialization test
 
       def processSubmission() = 
-      {  println("processSubmission called")
+      {  log("processSubmission called")
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
-         sesCoordLR.URstartTranslation
-
-         // test json serialization
+         
+         sesCoordLR.URtryStartTranslation match
+         {  case None => // player may not start
+            {  log("[MUSTDO]")
+               S.redirectTo("todo.html")
+            }
+            case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
+            {  S.redirectTo("translationRound.html") 
+            }
+         }
+         
+         // test json serialization. PARK THIS IN A GIT-BRANCH.
          case class TestPersistency(var val1:String)
          {  def this() = this("no constructors")
          }
@@ -96,10 +107,8 @@ class StartSession
          //val testDeSer:SessionInfo = Serialization.read[SessionInfo](testSer)
          
          val testSer:String = Serialization.write(new TestPersistency())
-         println("  Test1 = " + testSer)
+         log("  Test1 = " + testSer)
          // end test
-
-         S.redirectTo("translationRound.html") 
       }  
 
       bind( "form", ns, 

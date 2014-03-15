@@ -112,23 +112,41 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 
    /** Set last version of consti with id constiId.
      * @param on, if true it switches on the ReleaseCandidate state for the latest version, otherwise it is switched off.
+     * @returns if on = true: true: release candidate was set, false: release candidate wasn't set, because this version may not be released yet out of a lack of fresh fluency players.
+               if on = false: always returns true.
      */
-   def URsetReleaseCandidate(consti:Constitution, on:Boolean) =
+   def URsetReleaseCandidate(consti:Constitution, on:Boolean):Boolean =
    {  if(on)
-      {  consti.makeLatestVersionReleaseCandidateIfPossible
+      {  if(Constitution.allLatestReleasesOfAllConstisEvaluated)
+         {  log("allLatestReleasesOfAllConstisEvaluated = true, so this version may be released.")   
+            consti.makeLatestVersionReleaseCandidateIfPossible
+            true
+         } else
+         {  log("allLatestReleasesOfAllConstisEvaluated = false, so this version may not be released.")
+            false
+         }
       } else
       {  consti.unmakeCurrentPotentialRelease
+         true
       }
    }
 
-   def URstartTranslation:String =  
-   {  log("URstartTranslation")
-      latestRoundFluencySession = RoundTranslation
-      log("   gameCore == null " + (gameCore == null) )
-      si = gameCore.initialiseSessionInfo
-      si.startTime(SystemWithTesting.currentTimeMillis).save
-      si.startTimeTranslation(si.startTime.is).save
-      si.textNL
+
+   /** @returns None: the translation may not be started because there aren't releases available which are not yet completely evaluated. The player is put on hold.
+     */
+   def URtryStartTranslation:Option[String] =
+   {  log("URtryStartTranslation")
+      if( Constitution.allLatestReleasesOfAllConstisEvaluated )
+      {  None
+      }
+      {  latestRoundFluencySession = RoundTranslation
+         log("   gameCore == null " + (gameCore == null) )
+         si = gameCore.initialiseSessionInfo
+         si.startTime(SystemWithTesting.currentTimeMillis).save
+         si.startTimeTranslation(si.startTime.is).save
+         log("[MUSTDO] choose a release for this player")
+         Some(si.textNL)
+      }
    }
 
    def URstopTranslation =
@@ -209,11 +227,14 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       // in case no new versions occurred after the latest release, this publication may immediately become the next release.
       // {
       // <&y2013.02.10.17:13:40& COULDO optimisation here: the check is only necessary if the previous version (version prior to this publication) is a release.>
-      val sufficientForNextRelease = consti.publish(text, description, currentPlayerId.toString)
-     
+      consti.publish(text, description, currentPlayerId.toString)
+
+      log("[SHOULDDO] currently not used MUnewFluencyScore, use it!")               
+      /*
       if( sufficientForNextRelease )
       {  MUnewFluencyScore(consti, ConstiScores.latestReleaseWithFluencyScore(consti.constiId).get)
       }
+      */
       // }
    }
 

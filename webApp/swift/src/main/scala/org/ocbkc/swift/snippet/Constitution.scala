@@ -6,6 +6,7 @@ import _root_.scala.xml._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
 import _root_.net.liftweb.common._
+import _root_.net.liftweb.http.js._ 
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
@@ -187,9 +188,17 @@ class ConstitutionSnippet
       }
 
       def processReleaseCandidateCb(checked:Boolean) =
-      {  log("processReleaseCandidateCb called")
+      {  log("processReleaseCandidateCb called.")
          val constLoc = const.get
-         sesCoordLR.URsetReleaseCandidate(constLoc, checked)
+         if(!sesCoordLR.URsetReleaseCandidate(constLoc, checked))
+         {  log("Uncheck the checkbox, [SHOULDDO:] and give a warning.")
+
+            // documentation on html checkbox:
+            // http://www.w3.org/TR/html-markup/input.checkbox.html 
+            JsCmds.SetElemById("releaseCandidateCb", JsExp.strToJsExp(""), "checked") & JsCmds.Alert("I'm afraid setting release candidate is forbidden... (TODO improve this message).")
+         } else
+         {  JsCmds.Noop
+         }
       }
 
       def processFollowCheckbox(checked:Boolean) =
@@ -233,7 +242,7 @@ class ConstitutionSnippet
  
       lazy val constitutionEditor = SHtml.textarea( { errorsLR match
                                                       {  case List() => constLoc.plainContent
-                                                         case _      => { println("   error in html, so prefill constitution editor with text before reload"); contentB4ReloadOpt.get.constitutionTAcontent } // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
+                                                         case _      => { log("   error in html, so prefill constitution editor with text before reload"); contentB4ReloadOpt.get.constitutionTAcontent } // if there is an error, then there is always a contentB4Reload, so you can do the get without problem.
                                                       }
                                                     }, processConstitutionTA, "rows" -> "10", "style" -> "width: 99%;", "id" -> "edit" 
                                                   )
@@ -304,7 +313,7 @@ class ConstitutionSnippet
                                                          }
                                                       }
 
-                                                      SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), selected => processReleaseCandidateCb(selected), accessToReleaseCandidateCb:_*)
+                                                      SHtml.ajaxCheckbox(constLoc.releaseStatusLastVersion == Some(ReleaseCandidate), checked => processReleaseCandidateCb(checked), ("id" -> "releaseCandidateCb" ) :: accessToReleaseCandidateCb:_*)
                                                    }
                                                 )
 
