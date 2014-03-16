@@ -72,11 +72,11 @@ class StartSession
       val testb = TestBDummy(TestBCaseClass1("c1"))
       println("   serialized " + testb + " to:" + write(testb))
       */
-      println("### end serialization test")
+      log("### end serialization test")
 
       // End serialization test
 
-      def processSubmission() = 
+      def processSubmission():JsCmd = 
       {  log("processSubmission called")
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
@@ -88,6 +88,7 @@ class StartSession
             }
             case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
             {  S.redirectTo("translationRound.html") 
+               JsCmd
             }
          }
          
@@ -112,7 +113,7 @@ class StartSession
       }  
 
       bind( "form", ns, 
-         "startBtn"      -> SHtml.submit("I'm ready!", processSubmission)
+         "startBtn"      -> SHtml.submitAjaxForm("I'm ready!", processSubmission)
       )
    }
 }
