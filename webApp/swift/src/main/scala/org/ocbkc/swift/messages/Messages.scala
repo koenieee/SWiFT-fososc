@@ -13,6 +13,9 @@ import org.ocbkc.swift.global._
 
 case class Mail(to: Option[String], subject:String, body:String)
 
+/** All messages sent within the application must be defined in this class.
+  */
+
 object MailMessage
 {  /** Try to use the auxiliary methods (mailAllFollowersUpdate, etc.) instead of this one when possible.
      */
