@@ -22,6 +22,8 @@ import org.ocbkc.swift.cores.{TraitGameCore, EfeLang}
 import org.ocbkc.swift.cores.gameCoreHelperTypes._
 import net.liftweb.json._
 import java.io._
+import scala.util.Random
+import org.ocbkc.generic.random._
 
 import org.ocbkc.swift.messages._
 import org.ocbkc.swift.messages.MailMessage._
@@ -107,7 +109,9 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    }
 
    def URchooseFirstConstitution(player:Player, constiId:ConstiId):Unit =
-   {  player.firstChosenConstitution(constiId).save // note: apply of firstChosenConstitution has been overridden with an apply which does everything needed.
+   {  log("URchooseFirstConstitution")
+      log("   constiId = " + constiId)
+      player.firstChosenConstitution(constiId).save // note: apply of firstChosenConstitution has been overridden with an apply which does everything needed.
    }
 
    /** Set last version of consti with id constiId.
@@ -144,7 +148,10 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          si = gameCore.initialiseSessionInfo
          si.startTime(SystemWithTesting.currentTimeMillis).save
          si.startTimeTranslation(si.startTime.is).save
-         log("[MUSTDO] choose a release for this player")
+         log("Choose a random release for this player")
+         val randomSeq = new Random()
+         URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithUncompletelyEvaluatedReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+
          Some(si.textNL)
       }
    }

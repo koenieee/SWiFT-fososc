@@ -21,6 +21,7 @@ import org.ocbkc.swift.logilang._
 
 import net.liftweb.json._
 import net.liftweb.json.ext._
+import _root_.net.liftweb.http.js._ 
 
 import org.ocbkc.swift.global.Logging._
 
@@ -82,38 +83,21 @@ class StartSession
          // <&y2011.10.24.17:27:52&>
          
          sesCoordLR.URtryStartTranslation match
-         {  case None => // player may not start
-            {  log("[MUSTDO]")
-               S.redirectTo("todo.html")
+         {  case None  => // player may not start
+            {  //log("[MUSTDO] change back to None.")
+               log("[BUG] Somehow, the follow doesn't work (it doesn't show an alert). Why? Perhaps ask in lift community.")
+               JsCmds.Alert("Currently, there are no fresh constitutions available. You will be automatically notified if one comes available.") 
+               log("[COULDDO] alternative solution is to redirect to page with  the message.")
             }
             case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
             {  S.redirectTo("translationRound.html") 
-               JsCmd
+               JsCmds.Noop
             }
          }
-         
-         // test json serialization. PARK THIS IN A GIT-BRANCH.
-         case class TestPersistency(var val1:String)
-         {  def this() = this("no constructors")
-         }
-         /*
-         case class TestPersistency(val1:String)
-         {  val val2: String = "with hurry try to find out why you do that"
-         }
-         */
-         implicit val formats = Serialization.formats(NoTypeHints)
-         
-         //var testSer:String = Serialization.write(si)
-         //err.println("  sesHis serialised to: " + testSer)
-         //val testDeSer:SessionInfo = Serialization.read[SessionInfo](testSer)
-         
-         val testSer:String = Serialization.write(new TestPersistency())
-         log("  Test1 = " + testSer)
-         // end test
       }  
 
       bind( "form", ns, 
-         "startBtn"      -> SHtml.submitAjaxForm("I'm ready!", processSubmission)
+         "startBtn"      -> SHtml.ajaxSubmit("I'm ready!", () => processSubmission)
       )
    }
 }

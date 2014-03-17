@@ -162,7 +162,7 @@ class Boot {
                val player = sesCoordLR.currentPlayer
                playerIsAdmin(player) ||
                   {  player.constiSelectionProcedure match
-                     {  case OneToStartWith =>
+                     {  case OneToStartWith | RandomOneToStartWith =>
                         {  playedSessions >= OneToStartWith.minSessionsB4access2allConstis
                         }
                         case NoProc => true
@@ -187,7 +187,7 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession", { if( currentPlayer.constiSelectionProcedure == OneToStartWith ) "constiTrainingDecision" else "startSession" } :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
       Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
@@ -279,34 +279,44 @@ class Boot {
             }
             else
             {  log("   player has already selected a constitution in the past, so redirect to start/continue the session!")
-               val lrfs = sesCoordLR.latestRoundFluencySession
-               log("   latestRoundFluencySession = " + lrfs)
-               lrfs match
-               {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
-                  case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
-                  case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
-                  case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
-                  case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
-                  case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
-                  case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
-                  case _                   => logAndThrow("implement the rest")
-               } 
+               log("[SHOULDDO] refactor the dispatching (= continuing session) in this case, this is needed more often..")
+               continueOrStartFluencySession
             }
-         case NoProc          => S.redirectTo("fluencyGameSes/startSession")
-         case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; log("  " + msg); throw new RuntimeException(msg) }
+         case _ => 
+         {  log("[BUG] this method should only be called iff OneToStartWith is the case.");
+            S.redirectTo("fluencyGameSes/startSession")
+         }
       }
    }
-   
+  
+   def continueOrStartFluencySession =
+   {  val lrfs = sesCoordLR.latestRoundFluencySession
+      log("   latestRoundFluencySession = " + lrfs)
+      lrfs match
+      {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
+         case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
+         case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
+         case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
+         case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
+         case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
+         case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
+         case _                   => log("[BUG] implement the rest")
+      }
+   }
+
    val lvd = LiftRules.viewDispatch
 
-   lvd.append
-   {  // This is an explicit dispatch to a particular method based on the path
-      case List("constiTrainingDecision") =>
-         Left(() => Full( dispatch4ConstiTrainingDecision ))
+   if( player.constiSelectionProcedure == OneToStartWith )
+   {  lvd.append
+      {  // This is an explicit dispatch to a particular method based on the path
+         case List("constiTrainingDecision") =>
+            Left(() => Full( dispatch4ConstiTrainingDecision ))
+      }
    }
+
    lvd.append
    {  case List("continueFluencySession") =>
-         Left(() => Full( dispatch4ConstiTrainingDecision ))
+         Left(() => Full( continueOrStartFluencySession ))
    }
 
    log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")

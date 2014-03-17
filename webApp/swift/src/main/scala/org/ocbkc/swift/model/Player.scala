@@ -27,12 +27,12 @@ object Player extends Player with MetaMegaProtoUser[Player] {
 
    override def create:Player =
    {  println("   Player.create called") 
-      val p = super.create.constiSelectionProcedureInner(CSP2int(OneToStartWith)).firstChosenConstitution(-1)
+      val p = super.create. constiSelectionProcedureInner(CSP2int(RandomOneToStartWith)).firstChosenConstitution(-1)
       p.save
       p
    }
 
-   val int2CSP = Map(0->NoProc, 1->OneToStartWith)
+   val int2CSP = Map(0->NoProc, 1->OneToStartWith, 2->RandomOneToStartWith)
    val CSP2int = int2CSP.map(_.swap)
 }
 
@@ -53,6 +53,8 @@ class Player extends MegaProtoUser[Player] {
    }
 
    // because I don't know how to make a MappedField referring to singleton objects, work with integers and a Map (see object Player) to connect them to the singleton objects, which is used by a wrapper method constiSelectionProcedure.
+   /** Why is this defined on the level of the player, shouldn't it be a global setting?
+     */
    def constiSelectionProcedure =
    {  Player.int2CSP(constiSelectionProcedureInner)
    }

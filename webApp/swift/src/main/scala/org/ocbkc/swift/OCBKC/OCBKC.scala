@@ -1099,7 +1099,17 @@ abstract class ScorePerSession // TODO extends ( TODOin => TODOout )
 
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
+
+/** Player selects one to start with (and doesn't get access to any other consti as long as the required minSesionsB4access2allConstis have bnot been reached)
+  */
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
 }
+
+/** Same as OneToStartWith, but now the computer randomly selects a consti.
+  */
+case object RandomOneToStartWith extends ConstiSelectionProcedure
+{  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
+}
+
 }
