@@ -81,7 +81,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long], // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
                         var leadersUserIDs:List[Long],
-                        var releaseStatusLastVersion:Option[ReleaseStatus],
+                        var releaseStatusLastVersion:Option[ReleaseStatus], // This is the release status of the last version (including the value None: the latest version has no release status at all), i.e. the latest version with a ReleaseStatus doesn't have to be this version. So, note, if someone creates a publication of a new version after a release-candidate, this variable will contain None again.
                         var _commitIdPotentialRelease: Option[VersionId], // use commitIdPotentialRelease instead of this one
                         var releaseStatusPotentialRelease:Option[PotentialRelease]
                        )// extends LongKeyedMapper[Constitution] with IdPK
@@ -92,7 +92,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    
-   var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions. WARNING: from newest to oldest. Newest this is first in list.
+   var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions (does not include release candidates, nor release virgins!). WARNING: from newest to oldest. Newest this is first in list.
 
    def commitIdPotentialRelease_=(commitId:Option[VersionId])
    {  log("commitIdPotentialRelease_= called")
@@ -133,6 +133,12 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       {  case Nil          => None
          case newest::tail => Some(newest)
       }
+   }
+   
+   /** In the current (and most probable all future) design(s) a synonym for latestReleaseHasSufficientSampleSize.
+     */ 
+   def latestReleaseIsEvaluated:Boolean =
+   {  latestReleaseHasSufficientSampleSize
    }
 
    def lastReleaseVersionInfo:Option[ConstiVersionInfo] =
@@ -244,8 +250,11 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       "not implemented yet"
    }
    
-   // Adds and commits constitutionText using jgit
-   def publish(constitutionText:String, commitMsg:String, userId:String):Boolean =
+   /** Adds and commits constitutionText using jgit
+     * @returns VersionId of the new version (in case you want to do additional processing on the version you just created)
+     * 
+     */
+   def publish(constitutionText:String, commitMsg:String, userId:String):VersionId =
    {  log("Constitution.publish called")
       save(constitutionText)
 
@@ -287,16 +296,17 @@ getHistory.length, commitIdsReleases.length, isRelease
       log("   commitIdsReleases.length = " + commitIdsReleases.length)
       releaseStatusLastVersion = None
       log("[POTENTIAL_BUG] this method returned a boolean in the previous version, is this still needed?")
-      false
+      revcom.name
    }
 
 
    /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
+     * @todo optimize? (memoization?)
      *
      */
    def latestReleaseHasSufficientSampleSize:Boolean =
    {  // Determine whether sample size on the latest release without a fluency score is high enough
-
+      
       ConstiScores.sampleSizeSufficient4FluencyScore(constiId).getOrElse(logAndThrow("[POTENTIAL_BUG]: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future."))
    }
 
@@ -529,18 +539,22 @@ getHistory.length, commitIdsReleases.length, isRelease
       log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
       if( releaseStatusPotentialRelease == Some(ReleaseVirgin) )
       {  log("   last version is ReleaseVirgin, so turning into Release.")
-
-         val ci = commitIdPotentialRelease.get
-
          // remove virgin state
          delTagReleaseVirgin
          commitIdPotentialRelease = None
          releaseStatusPotentialRelease = None
-
-         // add release state
-         tagRelease(ci) // this one before adding it to commitIdsReleases, otherwise index naming will go wrong.
-         commitIdsReleases ::= ci
+         releaseVersion(commitIdPotentialRelease.get)
       }
+   }
+
+   /** This method may ONLY be called for constitution alpha, or when it is certain that the last release is a virgin release (currently, only method chosenAsFirstConsti is doing this).
+     */
+   def releaseVersion(versionId:VersionId)
+   {  log("releaseVersion called")
+
+      // add release state
+      tagRelease(versionId) // this one before adding it to commitIdsReleases, otherwise index naming will go wrong.
+      commitIdsReleases ::= versionId
    }
 }
 
@@ -685,6 +699,12 @@ object Constitution
       }
    }   
 
+   /** @returns List with releases which are either (1) not yet completely evaluated, or (2) release virgins. I.e. "playable" releases.
+     */
+   def constisWithPlayableReleases:List[Constitution] =
+   {  constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+   }
+
    def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
    {  constis.filter
       {  c => 
@@ -699,9 +719,15 @@ object Constitution
          val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTI_ALPHA_INIT).mkString
          val adminId = GlobalConstant.adminOpt.get.id.is
          val constiAlpha = Constitution.create(adminId)
-         constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
-         constiAlpha.makeLatestVersionReleaseCandidateIfPossible
+         val id = constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
+         constiAlpha.releaseVersion(id)
       }
+   }
+
+   /** If this returns true, it is identical to all releases are evaluated, because a release may only be evaluated after the previous release is evaluated.
+     */
+   def allLatestReleasesOfAllConstisEvaluated:Boolean =
+   {  constis.forall{ c => c.latestReleaseIsEvaluated }
    }
 }
 
@@ -1038,7 +1064,7 @@ object ConstiScores
 
    /** Determine whether sample size of latest release is sufficient for scoring
       * @todo &y2013.01.23.13:59:27& investigate whether this is really optimal in this way. Isn't this function called too often? (I don't think so, but I'm not sure).
-        @return None, if there is no release yet of this constitution
+        @return None, if there is no release yet of this constitution, or 
      */
    def sampleSizeSufficient4FluencyScore(constiId:ConstiId):Option[Boolean] =
    {  // the sample size is sufficiently large, if the fluency score exists.
@@ -1073,7 +1099,17 @@ abstract class ScorePerSession // TODO extends ( TODOin => TODOout )
 
 abstract class ConstiSelectionProcedure
 case object NoProc extends ConstiSelectionProcedure
+
+/** Player selects one to start with (and doesn't get access to any other consti as long as the required minSesionsB4access2allConstis have bnot been reached)
+  */
 case object OneToStartWith extends ConstiSelectionProcedure
 {  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
 }
+
+/** Same as OneToStartWith, but now the computer randomly selects a consti.
+  */
+case object RandomOneToStartWith extends ConstiSelectionProcedure
+{  val minSessionsB4access2allConstis = GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS
+}
+
 }

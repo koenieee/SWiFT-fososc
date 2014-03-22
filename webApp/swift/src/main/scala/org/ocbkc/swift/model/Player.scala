@@ -4,6 +4,9 @@ package model {
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
+import _root_.net.liftweb.http._
+
+import bootstrap.liftweb.BootHelpers
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.snippet.sesCoord
@@ -25,14 +28,25 @@ object Player extends Player with MetaMegaProtoUser[Player] {
    // comment this line out to require email validations
    override def skipEmailValidation = true
 
+   override def login =
+   {  if( constiSelectionProcedure == OneToStartWith )
+      {  LiftRules.viewDispatch.append
+         {  // This is an explicit dispatch to a particular method based on the path
+            case List("constiTrainingDecision") =>
+               Left(() => Full( BootHelpers.dispatch4ConstiTrainingDecision ))
+         }
+      }
+      super.login
+   }
+
    override def create:Player =
    {  println("   Player.create called") 
-      val p = super.create.constiSelectionProcedureInner(CSP2int(OneToStartWith)).firstChosenConstitution(-1)
+      val p = super.create. constiSelectionProcedureInner(CSP2int(RandomOneToStartWith)).firstChosenConstitution(-1)
       p.save
       p
    }
 
-   val int2CSP = Map(0->NoProc, 1->OneToStartWith)
+   val int2CSP = Map(0->NoProc, 1->OneToStartWith, 2->RandomOneToStartWith)
    val CSP2int = int2CSP.map(_.swap)
 }
 
@@ -53,6 +67,8 @@ class Player extends MegaProtoUser[Player] {
    }
 
    // because I don't know how to make a MappedField referring to singleton objects, work with integers and a Map (see object Player) to connect them to the singleton objects, which is used by a wrapper method constiSelectionProcedure.
+   /** Why is this defined on the level of the player, shouldn't it be a global setting?
+     */
    def constiSelectionProcedure =
    {  Player.int2CSP(constiSelectionProcedureInner)
    }

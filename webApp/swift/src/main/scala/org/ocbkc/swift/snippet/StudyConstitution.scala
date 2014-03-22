@@ -14,18 +14,17 @@ import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
-
+import org.ocbkc.swift.global.Logging._
 
 class StudyConstitution
-{  println("StudyConstitution constructor called")
+{  log("StudyConstitution constructor called")
    val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
    // <&y2012.08.11.12:10:18& better get right constitution from Player info, not from URL id. Or no, that is difficult when someone has access to more than one constitution to study. Just do a check here whether he or she may see the constitution here!>
 
    val player = sesCoordLR.currentPlayer
    val consti:Constitution = 
-      if( player.constiSelectionProcedure == OneToStartWith )
-      {  println("   constiSelectionProcedure == OneToStartWith")
-         Constitution.getById(player.firstChosenConstitution.is).get // should always be there, because if no constitution has been chosen this page should be hidden.
+      if( player.constiSelectionProcedure == OneToStartWith || player.constiSelectionProcedure == RandomOneToStartWith )
+      {  Constitution.getById(player.firstChosenConstitution.is).get // should always be there, because if no constitution has been chosen this page should be hidden.
       }
       else
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")
@@ -33,7 +32,7 @@ class StudyConstitution
 
    if( !consti.firstReleaseExists )
    {  val errmsg = " BUG: there doesn't exist a release of this constitution"
-      println(errmsg)
+      log(errmsg)
       throw new RuntimeException(errmsg)
    }
 /* <&y2012.08.11.12:36:47& framework for future processing, the next is currenlty not used.>

@@ -1,5 +1,6 @@
 package bootstrap.liftweb
 
+import scala.xml._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 import _root_.net.liftweb.http._
@@ -37,9 +38,6 @@ import net.liftmodules.JQueryModule
  */
 class Boot {
   def boot {
-	  
-
-
 	JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
 	JQueryModule.init()
    log("Boot.boot called")
@@ -162,7 +160,7 @@ class Boot {
                val player = sesCoordLR.currentPlayer
                playerIsAdmin(player) ||
                   {  player.constiSelectionProcedure match
-                     {  case OneToStartWith =>
+                     {  case OneToStartWith | RandomOneToStartWith =>
                         {  playedSessions >= OneToStartWith.minSessionsB4access2allConstis
                         }
                         case NoProc => true
@@ -187,9 +185,10 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession4OneToStartWith", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure == OneToStartWith ) && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSessionOtherwise", "fluencyGameSes" :: "startSession" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure != OneToStartWith ) && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
       Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
@@ -266,47 +265,13 @@ class Boot {
 
  // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 
-   def dispatch4ConstiTrainingDecision = 
-   {  log("dispatch4ConstiTrainingDecision called")
-      val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
-      val player = sesCoordLR.currentPlayer
 
-      player.constiSelectionProcedure match
-      {  case OneToStartWith  =>
-            if( player.firstChosenConstitution.is == -1 )
-            {  log("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
-               S.redirectTo("fluencyGameSes/selectConstitution")
-            }
-            else
-            {  log("   player has already selected a constitution in the past, so redirect to start/continue the session!")
-               val lrfs = sesCoordLR.latestRoundFluencySession
-               log("   latestRoundFluencySession = " + lrfs)
-               lrfs match
-               {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
-                  case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
-                  case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
-                  case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
-                  case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
-                  case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
-                  case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
-                  case _                   => logAndThrow("implement the rest")
-               } 
-            }
-         case NoProc          => S.redirectTo("fluencyGameSes/startSession")
-         case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; log("  " + msg); throw new RuntimeException(msg) }
-      }
-   }
-   
+
    val lvd = LiftRules.viewDispatch
 
    lvd.append
-   {  // This is an explicit dispatch to a particular method based on the path
-      case List("constiTrainingDecision") =>
-         Left(() => Full( dispatch4ConstiTrainingDecision ))
-   }
-   lvd.append
    {  case List("continueFluencySession") =>
-         Left(() => Full( dispatch4ConstiTrainingDecision ))
+         Left(() => Full( BootHelpers.continueOrStartFluencySession ))
    }
 
    log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
@@ -470,7 +435,7 @@ class Boot {
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
       {  val winSession = randomSeq.nextBoolean
          List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URstartTranslation ),
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartTranslation ),
             (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
             (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )
@@ -532,7 +497,6 @@ class Boot {
    }
 
       log("Boot.boot finished")
-   
   }
 
 
@@ -542,5 +506,49 @@ class Boot {
   private def makeUtf8(req: HTTPRequest) {
     req.setCharacterEncoding("UTF-8")
   }
+}
 
+/** Added for SWiFT
+  */
+
+object BootHelpers
+{  def dispatch4ConstiTrainingDecision = 
+   {  log("dispatch4ConstiTrainingDecision called")
+      val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
+      val player = sesCoordLR.currentPlayer
+
+      player.constiSelectionProcedure match
+      {  case OneToStartWith  =>
+            if( player.firstChosenConstitution.is == -1 )
+            {  log("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
+               S.redirectTo("fluencyGameSes/selectConstitution")
+            }
+            else
+            {  log("   player has already selected a constitution in the past, so redirect to start/continue the session!")
+               log("[SHOULDDO] refactor the dispatching (= continuing session) in this case, this is needed more often..")
+               continueOrStartFluencySession
+            }
+         case _ => 
+         {  log("[BUG] this method should only be called iff OneToStartWith is the case.");
+            S.redirectTo("fluencyGameSes/startSession")
+         }
+      }
+      NodeSeq.Empty // this will never be reached because of the redirects.
+   }
+  
+   def continueOrStartFluencySession =
+   {  val lrfs = sesCoord.is.latestRoundFluencySession
+      log("   latestRoundFluencySession = " + lrfs)
+      lrfs match
+      {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
+         case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
+         case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
+         case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
+         case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
+         case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
+         case RoundAlgorithmicDefenceStage2 => S.redirectTo("fluencyGameSes/algorithmicDefenceRoundStage2")
+         case _                   => log("[BUG] implement the rest")
+      }
+      NodeSeq.Empty
+   }
 }

@@ -16,7 +16,7 @@ import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.global._
-
+import org.ocbkc.swift.global.Logging._
 
 class SelectConstitution
 {  println("Constructor SelectConstitution called")
@@ -28,7 +28,7 @@ class SelectConstitution
    {  case Full(idLoc)  => {  println("   URL parameter id = " + idLoc)
                               val consti = Constitution.getById(idLoc.toInt) 
                               consti match
-                              { case Some(constLoc)   => {  println("   Found constitution with this id" )
+                              { case Some(constLoc)   => {  log("   Found constitution with this id" )
                                                             sesCoordLR.URchooseFirstConstitution(constLoc.constiId)
                                                             println("   now redirecting player to studyConstitution")
                                                             S.redirectTo("/studyConstitution")
