@@ -4,6 +4,9 @@ package model {
 import _root_.net.liftweb.mapper._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
+import _root_.net.liftweb.http._
+
+import bootstrap.liftweb.BootHelpers
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import org.ocbkc.swift.snippet.sesCoord
@@ -24,6 +27,17 @@ object Player extends Player with MetaMegaProtoUser[Player] {
 
    // comment this line out to require email validations
    override def skipEmailValidation = true
+
+   override def login =
+   {  if( constiSelectionProcedure == OneToStartWith )
+      {  LiftRules.viewDispatch.append
+         {  // This is an explicit dispatch to a particular method based on the path
+            case List("constiTrainingDecision") =>
+               Left(() => Full( BootHelpers.dispatch4ConstiTrainingDecision ))
+         }
+      }
+      super.login
+   }
 
    override def create:Player =
    {  println("   Player.create called") 

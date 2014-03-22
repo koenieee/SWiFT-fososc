@@ -4,6 +4,7 @@
 */
 package org.ocbkc.swift.coord
 {  
+import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.plofofa._
 import org.ocbkc.swift.logilang.query._
@@ -150,7 +151,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          si.startTimeTranslation(si.startTime.is).save
          log("Choose a random release for this player")
          val randomSeq = new Random()
-         URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithUncompletelyEvaluatedReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+         URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
 
          Some(si.textNL)
       }

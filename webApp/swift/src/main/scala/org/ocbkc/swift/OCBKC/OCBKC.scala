@@ -81,7 +81,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
                         val predecessorId:Option[ConstiId],
                         var followers:List[Long], // followers are users following this constitution. This includes optional features such as receiving emails when an update is made to that constitution etc. /* TODO &y2013.01.29.10:27:4 better to change into direct Player-objects */
                         var leadersUserIDs:List[Long],
-                        var releaseStatusLastVersion:Option[ReleaseStatus],
+                        var releaseStatusLastVersion:Option[ReleaseStatus], // This is the release status of the last version (including the value None: the latest version has no release status at all), i.e. the latest version with a ReleaseStatus doesn't have to be this version. So, note, if someone creates a publication of a new version after a release-candidate, this variable will contain None again.
                         var _commitIdPotentialRelease: Option[VersionId], // use commitIdPotentialRelease instead of this one
                         var releaseStatusPotentialRelease:Option[PotentialRelease]
                        )// extends LongKeyedMapper[Constitution] with IdPK
@@ -92,7 +92,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    //def getSingleton = ConstitutionMetaMapperObj
    val htmlFileName = "constitution" + constiId + ".html"
    
-   var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions (does not include release candidates!). WARNING: from newest to oldest. Newest this is first in list.
+   var commitIdsReleases:List[String] = Nil // a list of commit id's constituting the released versions (does not include release candidates, nor release virgins!). WARNING: from newest to oldest. Newest this is first in list.
 
    def commitIdPotentialRelease_=(commitId:Option[VersionId])
    {  log("commitIdPotentialRelease_= called")
@@ -252,6 +252,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    
    /** Adds and commits constitutionText using jgit
      * @returns VersionId of the new version (in case you want to do additional processing on the version you just created)
+     * 
      */
    def publish(constitutionText:String, commitMsg:String, userId:String):VersionId =
    {  log("Constitution.publish called")
@@ -698,9 +699,10 @@ object Constitution
       }
    }   
 
-   def constisWithUncompletelyEvaluatedReleases:List[Constitution] =
-   {  log("[MUSTDO]")
-      null
+   /** @returns List with releases which are either (1) not yet completely evaluated, or (2) release virgins. I.e. "playable" releases.
+     */
+   def constisWithPlayableReleases:List[Constitution] =
+   {  constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
    }
 
    def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
@@ -710,8 +712,6 @@ object Constitution
          }
       }
    }
-
-
 
    def createConstiAlphaIfDoesntExist =
    {  if(constis == Nil)
