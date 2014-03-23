@@ -15,15 +15,22 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.global.Logging._
-import org.ocbkc.swift.embeddedsnippet._
 
 /** Almost the same as StudyConstitution, but now integrated as a separate round in the first session of the fresh player.
   */
 class StudyConstiRound
 {  log("StudyConstiRound constructor called")
 
+   def processSubmission() = 
+   {  log("processSubmission called")
+      S.redirectTo("translationRound.html") 
+   }
+
    def render(ns: NodeSeq): NodeSeq =
-   {  ns // corrently this snippet does nothing
+   {  bind(  
+         "top", ns,
+         "continue"              -> SHtml.submit("Continue", processSubmission)
+      )
    }
 }
 
