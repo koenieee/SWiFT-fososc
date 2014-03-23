@@ -24,8 +24,8 @@ class createProgress {
   def text: NodeSeq = {
     println("createprogressbar is called");
     val x = S.attr("w_page") openOr "geen param :("
-    val lrfs = sesCoord.is.latestRoundFluencySession
-    //println(sesCoord.is.latest);
+    val lrfs = SesCoord.is.latestRoundFluencySession
+    //println(SesCoord.is.latest);
 
     println("   latestRoundFluencySession = " + lrfs)
     //TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
@@ -43,11 +43,11 @@ class createProgress {
     val percentageBindTempl =  chooseTemplate("progressbar", "upper", graphProgress)
     
     
-    val mapRound2DisplayName = Map(RoundStartSession -> "Start", RoundTranslation -> "Translation", RoundBridgeConstruction -> "Bridge", RoundQuestionAttack -> "Question Attack", RoundAlgorithmicDefenceStage1 -> "Defence 1", RoundAlgorithmicDefenceStage2 -> "Defence 2", RoundFinaliseSession -> "End Session")
+    val mapRound2DisplayName = Map(RoundStartSession -> "Start", RoundConstiStudy -> "Consti Study", RoundTranslation -> "Translation", RoundBridgeConstruction -> "Bridge", RoundQuestionAttack -> "Question Attack", RoundAlgorithmicDefenceStage1 -> "Defence 1", RoundAlgorithmicDefenceStage2 -> "Defence 2", RoundFinaliseSession -> "End Session")
 
-    val mapRound2DisplayLinks = Map(RoundStartSession -> "startSession.html", RoundTranslation -> "translationRound.html", RoundBridgeConstruction -> "bridgeconstruction_efe.html", RoundQuestionAttack -> "questionAttackRound.html", RoundAlgorithmicDefenceStage1 -> "algorithmicDefenceRound.html", RoundAlgorithmicDefenceStage2 -> "algorithmicDefenceRoundStage2.html", RoundFinaliseSession -> "finaliseSession.html")
+    val mapRound2DisplayLinks = Map(RoundStartSession -> "startSession.html", RoundConstiStudy -> "studyConstiRound.html", RoundTranslation -> "translationRound.html", RoundBridgeConstruction -> "bridgeconstruction_efe.html", RoundQuestionAttack -> "questionAttackRound.html", RoundAlgorithmicDefenceStage1 -> "algorithmicDefenceRound.html", RoundAlgorithmicDefenceStage2 -> "algorithmicDefenceRoundStage2.html", RoundFinaliseSession -> "finaliseSession.html")
 
-    val mapRound2DisplayPerc = Map(NotInFluencySession -> "0", RoundTranslation -> "16", RoundBridgeConstruction -> "32", RoundQuestionAttack -> "48", RoundAlgorithmicDefenceStage1 -> "64", RoundAlgorithmicDefenceStage2 -> "80", RoundFinaliseSession -> "100")
+    val mapRound2DisplayPerc = Map(NotInFluencySession -> "0", RoundConstiStudy -> "8", RoundTranslation -> "16", RoundBridgeConstruction -> "32", RoundQuestionAttack -> "48", RoundAlgorithmicDefenceStage1 -> "64", RoundAlgorithmicDefenceStage2 -> "80", RoundFinaliseSession -> "100")
 
     import RoundFluencySessionInfo._
     val indexLatestRound = roundsInOrder.indexOf(lrfs)

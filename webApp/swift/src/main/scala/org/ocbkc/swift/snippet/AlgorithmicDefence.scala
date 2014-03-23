@@ -13,7 +13,7 @@ import Helpers._
 import System.err.println
 
 class AlgorithmicDefenceRound
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
 
    def render(ns: NodeSeq): NodeSeq =
    {  def processSubmission() = 

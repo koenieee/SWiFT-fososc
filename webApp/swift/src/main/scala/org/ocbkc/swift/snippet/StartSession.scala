@@ -26,10 +26,10 @@ import _root_.net.liftweb.http.js._
 import org.ocbkc.swift.global.Logging._
 
 // TODO &y2013.01.28.20:38:57& move to more general place
-object sesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
+object SesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
 
 class StartSession
-{  val sesCoordLR = sesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
+{  val sesCoordLR = SesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
 
    def render(ns: NodeSeq): NodeSeq =
    {  //var playerAnswerTF = ""

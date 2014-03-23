@@ -19,7 +19,7 @@ import scala.util.parsing.combinator.Parsers //{Success, Failure}
 import org.ocbkc.swift.coord.ses._
 
 class TranslationRound
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
@@ -40,7 +40,7 @@ class TranslationRound
          // <&y2011.10.23.17:49:39&>
          println("TranslationRound.processSubmission: translation = " + sesCoordLR.si.textCTLbyPlayer)
          
-         sesCoord.URstopTranslation
+         SesCoord.URstopTranslation
          
          if(transCorrect) 
          {  S.redirectTo("bridgeconstruction_efe.html") 

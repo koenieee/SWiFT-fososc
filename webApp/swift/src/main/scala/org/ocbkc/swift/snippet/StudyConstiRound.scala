@@ -17,12 +17,16 @@ import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.embeddedsnippet._
 
-class StudyConstitution
-{  def render(ns: NodeSeq): NodeSeq =
-   {  log("StudyConstitution.render")
+/** Almost the same as StudyConstitution, but now integrated as a separate round in the first session of the fresh player.
+  */
+class StudyConstiRound
+{  log("StudyConstiRound constructor called")
 
-      val answer   = bind( "top", ns,
-                           "studyConsti"     -> StudyConsti__ESnip.render
+   def render(ns: NodeSeq): NodeSeq =
+   {
+       val answer   = bind( "top", ns,
+                            "studyConsti"     -> StudyConsti__ESnip.render
+                            
                      )
       answer
    }
