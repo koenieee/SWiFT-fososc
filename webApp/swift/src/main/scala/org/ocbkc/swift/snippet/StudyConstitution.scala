@@ -15,19 +15,12 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.global.Logging._
-import org.ocbkc.swift.embeddedsnippet._
 
 class StudyConstitution
 {  def render(ns: NodeSeq): NodeSeq =
-   {  log("StudyConstitution.render")
-
-      val answer   = bind( "top", ns,
-                           "studyConsti"     -> StudyConsti__ESnip.render
-                     )
-      answer
+   {  ns // does nothing currently
    }
 }
-
 
 }
 }

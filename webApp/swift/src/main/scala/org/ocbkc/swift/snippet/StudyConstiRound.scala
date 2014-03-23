@@ -23,12 +23,7 @@ class StudyConstiRound
 {  log("StudyConstiRound constructor called")
 
    def render(ns: NodeSeq): NodeSeq =
-   {
-       val answer   = bind( "top", ns,
-                            "studyConsti"     -> StudyConsti__ESnip.render
-                            
-                     )
-      answer
+   {  ns // corrently this snippet does nothing
    }
 }
 
