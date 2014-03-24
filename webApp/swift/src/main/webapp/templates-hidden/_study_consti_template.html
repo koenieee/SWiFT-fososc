@@ -1,25 +1,19 @@
-<lift:StudyConsti__EMBED form="POST">
+<lift:StudyConsti__EMBED>
 
 <style type="text/css">
-table#text
-{
-    visibility:hidden;
+div#consti_text
+{   visibility:hidden;
     width: 600px;
 }
 </style>
 <script type="text/javascript" src="/javascript/blaat.js"></script>
 <script>
 
-
 if( getURLParameter('false') == 'true')
-{
-$('div.column.span-6.colborder.sidebar').css('display', 'none');
-$('body').css('margin-left', 'auto').css('margin-right', 'auto');
-
+{  $('div.column.span-6.colborder.sidebar').css('display', 'none');
+   $('body').css('margin-left', 'auto').css('margin-right', 'auto');
 }
 </script>
-
-
 
 <h1>Study Constitution <top:constitutionId /></h1>
 
@@ -42,15 +36,19 @@ Study the constitution below by pressing and holding 'g'. You need to do this to
 <p id="blank">
 If you want to read on, please <b>hold the 'g' key.</b>
 </p>
-
-<table  id="text">
+<div id="consti_text">
+<table>
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
-<script type="text/javascript">
+</div>
 
-  
+<script type="text/javascript">  
+// Problem here: using visibility = hidden, will not stop the element from taking up its space. This is problematic, when other elements are shown after the element which you do not want to display.
+// A solution is using display = none or block, however then returning to the original scroll-location will not work anymore. However, I'm not sure... Perhaps the isolated constitution (not embedded in a round) will work.
+
+
 $(document).ready(function(){
     	    function setCookie(c_name,value,exdays)
 {
@@ -110,7 +108,7 @@ return c_value;
    		 $(window).scrollTop(getCookie('last_pos'));
 		scrolled = true;
    		} 
-   		 $('#text').css('visibility', 'visible');
+   		 $('#consti_text').css('visibility', 'visible');
    		 $('#blank').css('visibility', 'hidden');
 
    		// scroll_last_position = $(window).scrollTop();
@@ -120,16 +118,12 @@ return c_value;
 }
 
     ).bind('keyup',function()
-    {
-   	 
-   	  console.log (scroll_last_position);
+    {	 console.log (scroll_last_position);
    	 scrolled = false;
    	 $('#blank').css('visibility', 'visible');
-   	 $('#text').css('visibility', 'hidden');
+   	 $('#consti_text').css('visibility', 'hidden');
 
-   	 
    	 scroll(0,0);
-   	 
     });
 
 });
