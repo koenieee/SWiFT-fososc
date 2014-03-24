@@ -433,9 +433,11 @@ class Boot {
       }
 
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
-      {  val winSession = randomSeq.nextBoolean
+      {  log("simulatePlayingSession called")
+         log("[MUSTDO] Jara simulation needsrefactoring because of added round StudyConstiRound")
+         val winSession = randomSeq.nextBoolean
          List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartTranslation ),
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartSession ),
             (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
             (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )

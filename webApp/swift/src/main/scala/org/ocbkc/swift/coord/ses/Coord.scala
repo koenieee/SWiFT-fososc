@@ -136,26 +136,48 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          true
       }
    }
-
+   def URconstiStudy =
+   {  log("URconstiStudy called")
+      if( latestRoundFluencySession == RoundStartSession )
+         latestRoundFluencySession = RoundConstiStudy
+   }
 
    /** @returns None: the translation may not be started because there aren't releases available which are not yet completely evaluated. The player is put on hold.
      */
-   def URtryStartTranslation:Option[String] =
-   {  log("URtryStartTranslation")
-      if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-      {  None
+   def URtryStartSession:Option[String] =
+   {  log("URtryStartSession")
+      if( latestRoundFluencySession == NotInFluencySession )
+      {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
+         {  None
+         }
+         else
+         {  si = gameCore.initialiseSessionInfo
+
+            log("Choose a random release for this player, if there was none chose yet (= it is the first session).")
+
+            {  if(currentPlayer.firstChosenConstitution.is == -1) 
+               {  val randomSeq = new Random()
+                  URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+               }
+            }
+
+            latestRoundFluencySession = RoundStartSession
+            Some(si.textNL)
+         }
+      } else
+      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page.")
+         None
       }
-      {  latestRoundFluencySession = RoundTranslation
-         log("   gameCore == null " + (gameCore == null) )
-         si = gameCore.initialiseSessionInfo
+   }
+
+   def URstartTranslation =
+   {  if( latestRoundFluencySession == RoundConstiStudy)
+      {  log("   gameCore == null " + (gameCore == null) )
          si.startTime(SystemWithTesting.currentTimeMillis).save
          si.startTimeTranslation(si.startTime.is).save
-         log("Choose a random release for this player")
-         val randomSeq = new Random()
-         URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
-
-         Some(si.textNL)
+         latestRoundFluencySession = RoundTranslation
       }
+      Unit
    }
 
    def URstopTranslation =

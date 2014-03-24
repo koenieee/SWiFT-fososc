@@ -82,7 +82,7 @@ class StartSession
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
          
-         sesCoordLR.URtryStartTranslation match
+         sesCoordLR.URtryStartSession match
          {  case None  => // player may not start
             {  //log("[MUSTDO] change back to None.")
                log("[BUG] Somehow, the follow doesn't work (it doesn't show an alert). Why? Perhaps ask in lift community.")
@@ -90,7 +90,7 @@ class StartSession
                log("[COULDDO] alternative solution is to redirect to page with  the message.")
             }
             case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
-            {  S.redirectTo("translationRound.html") 
+            {  S.redirectTo("studyConstiRound.html") 
                JsCmds.Noop
             }
          }

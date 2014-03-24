@@ -27,7 +27,8 @@ class StudyConstiRound
    }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  bind(  
+   {  SesCoord.is.URconstiStudy
+      bind(  
          "top", ns,
          "continue"              -> SHtml.submit("Continue", processSubmission)
       )
