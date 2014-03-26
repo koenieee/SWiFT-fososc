@@ -11,15 +11,20 @@ import _root_.net.liftweb.common._
 import System.err.println
 import org.ocbkc.swift.global._
 
+/** Mail represents a mail-message. It is used in various methods that can send mails, such us MailMessage.mailUpdate
+  */
 case class Mail(to: Option[String], subject:String, body:String)
 
-/** All messages sent within the application must be defined in this class.
+/** All messages sent within the application, and the mechanisms to actually send the messages, are defined in this object.
   */
-
 object MailMessage
-{  /** Try to use the auxiliary methods (mailAllFollowersUpdate, etc.) instead of this one when possible.
+{   /** Mails a mail to players.
+     * @param mail the mail to be sent
+     * @param players the players to which the mail should be sent
+     * Try to use the auxiliary methods (mailAllFollowersUpdate, etc.) instead of this one when possible.
+     * 
      */
-   def mailUpdate(const: Constitution, mail:Mail, players:List[Player]) =
+   def mailUpdate(mail:Mail, players:List[Player]) =
    {  def sendupdatemail(follower:Player) =
       {  println("sendupdatemail called")
          println("   follower email = " + follower.email.get)
@@ -30,16 +35,22 @@ object MailMessage
       players.foreach( sendupdatemail )
    }
   
+   /** Given a follower of constitution const, mail the other followers of that same constitution the given mail
+     */
    def mailOtherFollowersUpdate(const: Constitution, mail:Mail, thisFollower: Player ) =
-   {  mailUpdate(const, mail, const.followersAsPlayerObjs.filterNot(_ == thisFollower) )
+   {  mailUpdate(mail, const.followersAsPlayerObjs.filterNot(_ == thisFollower) )
    }
 
+   /** Mail all followers of constitution const the given mail
+     */
    def mailAllFollowersUpdate(const: Constitution, mail:Mail) =
-   {  mailUpdate(const, mail, const.followersAsPlayerObjs )
+   {  mailUpdate(mail, const.followersAsPlayerObjs )
    }
 
    private def sentenceOpening(const:Constitution) = "Constitution " + const.constiId
 
+   /** Prefabricated mail message: the message to be sent to all followers when a constitution has been updated (new publication).
+     */
    def newPublication(const:Constitution):Mail =
 Mail(
 None,
@@ -51,6 +62,8 @@ sentenceOpening(const) + " has been edited by someone else...",
 """ + how2unfollow
 )
 
+   /** Prefabricated mail message: the message to be sent when a consti has a new follower.
+     */
    def newfollower(const:Constitution) =
 Mail(
 None,
@@ -92,4 +105,6 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
 """
    private def link2consti(const:Constitution) = GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId
 }
+
+
 
