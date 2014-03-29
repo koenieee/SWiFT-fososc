@@ -105,6 +105,3 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
 """
    private def link2consti(const:Constitution) = GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId
 }
-
-
-
