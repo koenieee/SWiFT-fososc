@@ -83,10 +83,12 @@ class StartSession
          // <&y2011.10.24.17:27:52&>
          
          sesCoordLR.URtryStartSession match
-         {  case None  => // player may not start
+         {  case None  => 
             {  //log("[MUSTDO] change back to None.")
+               log("   player may not start fluency session.")
                log("[BUG] Somehow, the follow doesn't work (it doesn't show an alert). Why? Perhaps ask in lift community.")
                JsCmds.Alert("Currently, there are no fresh constitutions available. You will be automatically notified if one comes available.") 
+
                log("[COULDDO] alternative solution is to redirect to page with  the message.")
             }
             case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>

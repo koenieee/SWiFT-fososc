@@ -148,7 +148,8 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    {  log("URtryStartSession")
       if( latestRoundFluencySession == NotInFluencySession )
       {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-         {  None
+         {  log("   allLatestReleasesOfAllConstisEvaluated, so session may not start.")   
+            None
          }
          else
          {  si = gameCore.initialiseSessionInfo

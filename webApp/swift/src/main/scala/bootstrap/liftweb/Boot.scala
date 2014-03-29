@@ -543,6 +543,7 @@ object BootHelpers
       log("   latestRoundFluencySession = " + lrfs)
       lrfs match
       {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
+         case RoundConstiStudy => S.redirectTo("fluencyGameSes/studyConstiRound")  
          case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
          case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
          case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")
