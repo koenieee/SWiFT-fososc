@@ -86,11 +86,11 @@ class Boot
          "studyConstitution?id=" + 
          {  Player.currentUser match 
             {  case Full(player) =>
-                player.firstChosenConstitution match
-                {  case Some(const) => const.id.toString
-                   case _           => log("   BUG: no first chosen constition found"); "BugNoFirstChosenConstitutionFound"
-                }
-             case _              => log("   BUG: no player found"); "BugNoPlayerFound" // or is this no bug? Perhaps lift always renders the menu item, even if it is not displayed.
+               player.firstChosenConstitution match
+               {  case Some(const) => const.id.toString
+                  case _           => log("   BUG: no first chosen constition found"); "BugNoFirstChosenConstitutionFound"
+               }
+               case _              => log("   BUG: no player found"); "BugNoPlayerFound" // or is this no bug? Perhaps lift always renders the menu item, even if it is not displayed.
             }
          } :: Nil
       }
@@ -307,13 +307,13 @@ class Boot
          log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
          val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
          {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
-                                 player 
+                                    player 
                                  } // do nothing, player exists.
             case _            => {  log("   Doesn't exist: creating it...")
-                                 val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
-                                 p.save
-                                 p
-                                }
+                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                                    p.save
+                                    p
+                                 }
 
          }
 
@@ -348,23 +348,22 @@ class Boot
             }
       
 
-            val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
-            log("randomConstiCreationList =")
-            log(randomConstiCreationList.toString)
-            randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
+      val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
+      log("randomConstiCreationList =")
+      log(randomConstiCreationList.toString)
+      randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
 
-            def generateConstiHis(creator: Player, sizeHis:Int) =
-            {  val consti = Constitution.create(creator.id.is)
-               consti.initialiseNew
-               val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
-               randomHisCreationList.map(
-               {  case (idx, publisher) =>            
-                  consti.publish(
-                  """<h2>Article 1</h2><p>publication """ + idx + """</p>
-                  """, "publication " + idx, publisher.id.toString)
-               }
-            )
-            Unit
+      def generateConstiHis(creator: Player, sizeHis:Int) =
+      {  val consti = Constitution.create(creator.id.is)
+         consti.initialiseNew
+         val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
+         randomHisCreationList.map(
+            { case (idx, publisher) =>            
+               consti.publish(
+"""<h2>Article 1</h2>
+
+<p>publication """ + idx + """</p>
+""", "publication " + idx, publisher.id.toString)
             }
          }
 
@@ -463,9 +462,9 @@ class Boot
          def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
          {  val winSession = randomSeq.nextBoolean
             List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URstartTranslation ),
-            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
-            (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
+               (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URstartTranslation ),
+               (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
+               (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )
          }
 
@@ -523,8 +522,9 @@ class Boot
       {  log("   make it possible to inspect lift database by going to server-address/console")
          LiftRules.liftRequest.append({case r if (r.path.partPath match 
          {  case "console" :: _ => true
-            case _ => false}
-            ) => false})
+            case _ => false
+         }
+         ) => false})
       }
 
       log("Boot.boot finished")
@@ -538,5 +538,4 @@ class Boot
    private def makeUtf8(req: HTTPRequest) 
    {  req.setCharacterEncoding("UTF-8")
    }
-
 }

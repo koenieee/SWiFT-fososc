@@ -35,10 +35,10 @@ object PlayingSimulator
       val adminId = GlobalConstant.adminOpt.get.id.is
       val constiAlpha = Constitution.create(adminId)
       constiAlpha.publish(
-      """<h2>Article 1</h2>
+"""<h2>Article 1</h2>
 
-      <p>publication 1</p>
-      """, "publication 1", adminId.toString
+<p>publication 1</p>
+""", "publication 1", adminId.toString
       )
 
       new SimSubscriptions()
@@ -46,10 +46,7 @@ object PlayingSimulator
       SimGod.run
       { case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) 
       }
-      
-
-
-   }
+      }
 }
 
 /** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.
