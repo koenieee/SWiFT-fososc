@@ -36,7 +36,7 @@ class BridgeConstructionSessionInfo
 class BridgeConstruction
 {  val sesBricoLR = sesBriCo.is
 
-   val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+   val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
@@ -80,7 +80,7 @@ class BridgeConstruction
 
          println("   bridge = " + sesCoordLR.si.bridgeCTL2NLplayer)
          
-         sesCoord.URstopBridgeConstruction
+         SesCoord.URstopBridgeConstruction
          
          S.redirectTo("questionAttackRound.html")
       }

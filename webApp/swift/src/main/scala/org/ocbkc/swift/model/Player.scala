@@ -9,7 +9,7 @@ import _root_.net.liftweb.http._
 import bootstrap.liftweb.BootHelpers
 import org.ocbkc.swift.OCBKC._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
-import org.ocbkc.swift.snippet.sesCoord
+import org.ocbkc.swift.snippet.SesCoord
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.test._
 import org.ocbkc.swift.global.Logging._

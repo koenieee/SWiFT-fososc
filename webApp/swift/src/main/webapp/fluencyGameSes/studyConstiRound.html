@@ -1,7 +1,18 @@
 <lift:surround with="default" at="content">
+<br/>
 <h1>Study Constitution <top:constitutionId /></h1>
+<lift:StudyConstiRound form="POST">
+<center>
+   <lift:createProgress.text />
+</center>
+<Br/>
+
 <span class="lift:embed?what=_study_consti_template">
    replaced with embedded content
 </span>
+
+<top:continue />
+
+</lift:StudyConstiRound>
 
 </lift:surround>

@@ -19,7 +19,7 @@ import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.global._
 
 class ConstiGameTable
-{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
 
 // <&y2012.11.19.22:33:08& refactor: make one buildConstiTable for different snippets (constitutions.html, selectConstitution.html etc.)>
 

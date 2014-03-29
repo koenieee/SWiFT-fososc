@@ -241,7 +241,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val MAX_NO_CONSTI:Option[Int] = Some(3) // Set to None for unlimited. Default = None.
 
    // Some state information outside the jara simulation system
-   var sesCoord:CoreSimu = null
+   var SesCoord:CoreSimu = null
    val playerId = liftPlayer.id.get
    println("   liftPlayer = " + liftPlayer )
    var startTimeSession:Option[POSIXtime] = None
@@ -315,7 +315,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    /** Just assume that player plays in one LOOOOONG session, instead of logging in and out again sometimes.
      */
    def procCreateSession(d: DurationInMillis) =
-   {  sesCoord = new CoreSimu(liftPlayer)
+   {  SesCoord = new CoreSimu(liftPlayer)
       startTimeSession = Some(SystemWithTesting.currentTimeMillis)
    }
 
@@ -325,7 +325,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       if(ccount < 1) throw new RuntimeException("No constitutions created yet")
       val randomConstiId = 1 + SharedRandom.get.nextInt(ccount)
       val consti = Constitution.getById(randomConstiId).get
-      sesCoord.URpublishConsti(consti,
+      SesCoord.URpublishConsti(consti,
 """<h2>Article 1</h2>
 
 <p>""" + SharedRandom.get.nextString(20) + """</p>
@@ -339,7 +339,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
       pickRandomElementFromList(cwtv_ls, SharedRandom.get) match
       {  case Some(cwtv_l) =>
-         {  sesCoord.URsetReleaseCandidate(cwtv_l, true)
+         {  SesCoord.URsetReleaseCandidate(cwtv_l, true)
          }
          case None =>
          {  log("   No constisWithTrailingVersionsWithoutReleaseStatus for which player " + + playerId + " is leader. (I would have bowed for you your Highness the Player, but you ain't leader for any Consti with this property.)")
@@ -373,7 +373,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
       pickRandomElementFromList(Constitution.constisWithAReleaseOrVirginRelease, SharedRandom.get) match
       {  case Some(randomConsti) =>
-         {  sesCoord.URchooseFirstConstitution(randomConsti.constiId)
+         {  SesCoord.URchooseFirstConstitution(randomConsti.constiId)
          }
          case None               =>
          {  throw new RuntimeException("No consti available to choose from! (There should be at least one with a released version).")
@@ -384,10 +384,10 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
       
-      sesCoord.URtryStartTranslation
-      log("[POTENTIAL_BUG] Jara is not yet prepared for dealing with URtryStartTranslation (instead of the previous URstartTranslation)")
-      sesCoord.URstopTranslation
-      sesCoord.URalgorithmicDefenceSimplified(winSession, duration)
+      SesCoord.URtryStartSession
+      logAndThrow("[BUG] Jara is not yet prepared for dealing with URtryStartTranslation and the new round StudyConstiRound(instead of the previous URstartTranslation)")
+      SesCoord.URstopTranslation
+      SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
    }
 
    override def updateTransitionModel =

@@ -21,7 +21,7 @@ import org.ocbkc.swift.global.LiftHelpers._
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
 class History
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
    var checkedCommits:List[RevCommit] = Nil
 
    val const:Constitution = S.param("id") match

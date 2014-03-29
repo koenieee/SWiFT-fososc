@@ -56,6 +56,7 @@ package ses
 // TODO perhaps refactor: shouldn't this conceptually be part of the model and not the coordinator (controller)?
 case class RoundFluencySession
 case object RoundStartSession extends RoundFluencySession
+case object RoundConstiStudy extends RoundFluencySession // only in first session
 case object RoundTranslation extends RoundFluencySession
 case object RoundBridgeConstruction extends RoundFluencySession
 case object RoundQuestionAttack extends RoundFluencySession
@@ -66,7 +67,7 @@ case object RoundFinaliseSession extends RoundFluencySession
 case object NotInFluencySession extends RoundFluencySession
 
 object RoundFluencySessionInfo
-{  val roundsInOrder = List(RoundStartSession, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
+{  val roundsInOrder = List(RoundStartSession, RoundConstiStudy, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
 
    case class EditBehaviour
 
@@ -135,26 +136,49 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          true
       }
    }
-
+   def URconstiStudy =
+   {  log("URconstiStudy called")
+      if( latestRoundFluencySession == RoundStartSession )
+         latestRoundFluencySession = RoundConstiStudy
+   }
 
    /** @returns None: the translation may not be started because there aren't releases available which are not yet completely evaluated. The player is put on hold.
      */
-   def URtryStartTranslation:Option[String] =
-   {  log("URtryStartTranslation")
-      if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-      {  None
+   def URtryStartSession:Option[String] =
+   {  log("URtryStartSession")
+      if( latestRoundFluencySession == NotInFluencySession )
+      {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
+         {  log("   allLatestReleasesOfAllConstisEvaluated, so session may not start.")   
+            None
+         }
+         else
+         {  si = gameCore.initialiseSessionInfo
+
+            log("Choose a random release for this player, if there was none chose yet (= it is the first session).")
+
+            {  if(currentPlayer.firstChosenConstitution.is == -1) 
+               {  val randomSeq = new Random()
+                  URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+               }
+            }
+
+            latestRoundFluencySession = RoundStartSession
+            Some(si.textNL)
+         }
+      } else
+      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page.")
+         None
       }
-      {  latestRoundFluencySession = RoundTranslation
-         log("   gameCore == null " + (gameCore == null) )
-         si = gameCore.initialiseSessionInfo
+   }
+
+   def URstartTranslation =
+   {  if( latestRoundFluencySession == RoundConstiStudy)
+      {  log("   gameCore == null " + (gameCore == null) )
          si.startTime(SystemWithTesting.currentTimeMillis).save
          si.startTimeTranslation(si.startTime.is).save
-         log("Choose a random release for this player")
-         val randomSeq = new Random()
-         URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
-
-         Some(si.textNL)
+         latestRoundFluencySession = RoundTranslation
       }
+      Unit
    }
 
    def URstopTranslation =

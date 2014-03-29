@@ -17,15 +17,17 @@ import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
 import scala.util.parsing.combinator.Parsers //{Success, Failure}
 import org.ocbkc.swift.coord.ses._
+import org.ocbkc.swift.global.Logging._
 
 class TranslationRound
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
 
    def render(ns: NodeSeq): NodeSeq =
-   {  def processSubmission() = 
-      {  println("processSubmission called")
+   {  sesCoordLR.URstartTranslation
+      def processSubmission() = 
+      {  log("processSubmission called")
 
          // check errors on submission here
          
@@ -40,7 +42,7 @@ class TranslationRound
          // <&y2011.10.23.17:49:39&>
          println("TranslationRound.processSubmission: translation = " + sesCoordLR.si.textCTLbyPlayer)
          
-         sesCoord.URstopTranslation
+         SesCoord.URstopTranslation
          
          if(transCorrect) 
          {  S.redirectTo("bridgeconstruction_efe.html") 

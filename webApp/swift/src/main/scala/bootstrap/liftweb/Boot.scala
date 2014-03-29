@@ -19,7 +19,7 @@ import org.ocbkc.swift.global.Logging._
 import org.ocbkc.persist.PersDataUpgrader4SWiFT
 import org.ocbkc.swift.jgit.InitialiseJgit
 import java.io._
-import org.ocbkc.swift.snippet.sesCoord
+import org.ocbkc.swift.snippet.SesCoord
 import scala.util.Random
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
 import org.ocbkc.swift.test._
@@ -105,7 +105,7 @@ class Boot {
    }
 
    // returns also false when no player is logged in.
-   // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
+   // this method ALWAYS returns None, it seems SesCoord.set_? is always false when this method is called (suggesting that SesCoord has not been created yet). Only fix this bug when I still use SesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
    def playerLoggedInAndChoseFirstConstitution:Boolean =
    {  log("Boot.playerLoggedInAndChoseFirstConstitution called")
       val r =  playerIsLoggedIn &&
@@ -131,7 +131,7 @@ class Boot {
   // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
    def playedSessions:Long = 
     { val r = if(playerIsLoggedIn)
-      {  val sesCoordLR = sesCoord.is
+      {  val sesCoordLR = SesCoord.is
          sesCoordLR.sesHis.totalNumber
       }
       else
@@ -156,7 +156,7 @@ class Boot {
          If(() =>
          {  log("Loc(Constitutions) called")
             if(playerIsLoggedIn)
-            {  val sesCoordLR = sesCoord.is
+            {  val sesCoordLR = SesCoord.is
                val player = sesCoordLR.currentPlayer
                playerIsAdmin(player) ||
                   {  player.constiSelectionProcedure match
@@ -185,9 +185,9 @@ class Boot {
                   },
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-      Menu(Loc("startSession4OneToStartWith", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure == OneToStartWith ) && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-      Menu(Loc("startSessionOtherwise", "fluencyGameSes" :: "startSession" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure != OneToStartWith ) && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSession4OneToStartWith", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure == OneToStartWith ) && (SesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("startSessionOtherwise", "fluencyGameSes" :: "startSession" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure != OneToStartWith ) && (SesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
+      Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (SesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
@@ -433,9 +433,11 @@ class Boot {
       }
 
       def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
-      {  val winSession = randomSeq.nextBoolean
+      {  log("simulatePlayingSession called")
+         log("[MUSTDO] Jara simulation needsrefactoring because of added round StudyConstiRound")
+         val winSession = randomSeq.nextBoolean
          List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartTranslation ),
+            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartSession ),
             (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
             (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
          )
@@ -514,7 +516,7 @@ class Boot {
 object BootHelpers
 {  def dispatch4ConstiTrainingDecision = 
    {  log("dispatch4ConstiTrainingDecision called")
-      val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
+      val sesCoordLR = SesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
       val player = sesCoordLR.currentPlayer
 
       player.constiSelectionProcedure match
@@ -537,10 +539,11 @@ object BootHelpers
    }
   
    def continueOrStartFluencySession =
-   {  val lrfs = sesCoord.is.latestRoundFluencySession
+   {  val lrfs = SesCoord.is.latestRoundFluencySession
       log("   latestRoundFluencySession = " + lrfs)
       lrfs match
       {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
+         case RoundConstiStudy => S.redirectTo("fluencyGameSes/studyConstiRound")  
          case RoundFinaliseSession => S.redirectTo("fluencyGameSes/finaliseSession")
          case RoundTranslation => S.redirectTo("fluencyGameSes/translationRound")
          case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction_efe")

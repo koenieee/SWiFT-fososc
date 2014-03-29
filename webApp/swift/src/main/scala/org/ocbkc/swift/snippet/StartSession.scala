@@ -26,10 +26,10 @@ import _root_.net.liftweb.http.js._
 import org.ocbkc.swift.global.Logging._
 
 // TODO &y2013.01.28.20:38:57& move to more general place
-object sesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
+object SesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
 
 class StartSession
-{  val sesCoordLR = sesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
+{  val sesCoordLR = SesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
 
    def render(ns: NodeSeq): NodeSeq =
    {  //var playerAnswerTF = ""
@@ -82,15 +82,17 @@ class StartSession
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
          
-         sesCoordLR.URtryStartTranslation match
-         {  case None  => // player may not start
+         sesCoordLR.URtryStartSession match
+         {  case None  => 
             {  //log("[MUSTDO] change back to None.")
+               log("   player may not start fluency session.")
                log("[BUG] Somehow, the follow doesn't work (it doesn't show an alert). Why? Perhaps ask in lift community.")
                JsCmds.Alert("Currently, there are no fresh constitutions available. You will be automatically notified if one comes available.") 
+
                log("[COULDDO] alternative solution is to redirect to page with  the message.")
             }
             case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
-            {  S.redirectTo("translationRound.html") 
+            {  S.redirectTo("studyConstiRound.html") 
                JsCmds.Noop
             }
          }

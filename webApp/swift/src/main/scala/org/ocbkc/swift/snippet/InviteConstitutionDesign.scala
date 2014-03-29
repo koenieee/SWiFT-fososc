@@ -16,7 +16,7 @@ import org.ocbkc.swift.model._
 import System.err.println
 
 class InviteToConstitutionDesign
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
 
    def render(ns: NodeSeq): NodeSeq =
    {  object IncludeInvitationText extends RewriteRule {

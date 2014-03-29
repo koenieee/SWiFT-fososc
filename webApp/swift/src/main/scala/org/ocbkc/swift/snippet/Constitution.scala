@@ -41,7 +41,7 @@ case class ContentB4Reload(val constitutionTAcontent:String, val descriptionTFco
 
 class ConstitutionSnippet
 {  println("ConstitutionSnippet constructor called")
-   val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
    var constitutionTAcontent:String = ""
    var descriptionTFcontent:String = ""
    var publishDescriptionTAcontent:String = ""
@@ -171,7 +171,7 @@ class ConstitutionSnippet
             {  // first check for syntactic correctness of html file
                constLoc.checkCorrectnessXMLfragment(constitutionTAcontent) match
                {  case constLoc.XMLandErr(Some(xml), _) =>
-                  {  sesCoord.URpublishConsti(constLoc, constitutionTAcontent, publishDescriptionTAcontent)
+                  {  SesCoord.URpublishConsti(constLoc, constitutionTAcontent, publishDescriptionTAcontent)
                   }
                   case constLoc.XMLandErr(None, saxParseExeception)  => { println("   Error in html: " + saxParseExeception.getMessage); errors = ErrorInHtml(saxParseExeception) :: errors }
                }

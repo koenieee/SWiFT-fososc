@@ -18,7 +18,7 @@ import org.ocbkc.swift.coord.ses._
 
 class ConstitutionHistoric
 {  println("ConstitutionHistoric constructor called")
-   val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
 
    val const:Constitution = S.param("constid") match
    {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
