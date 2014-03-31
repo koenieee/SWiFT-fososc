@@ -104,7 +104,6 @@ class Boot
       {  Player.currentUser.get
       }
 
-<<<<<<< HEAD
       // returns also false when no player is logged in.
       // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
       def playerLoggedInAndChoseFirstConstitution:Boolean =
@@ -114,16 +113,6 @@ class Boot
                      {  case Full(player) => player.firstChosenConstitution != -1 // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set? Now doing it with the protocol that -1 means not defined.>
                         case _            => throw new RuntimeException("   no player found.") // This cannot happen.
                      }
-=======
-   // returns also false when no player is logged in.
-   // this method ALWAYS returns None, it seems SesCoord.set_? is always false when this method is called (suggesting that SesCoord has not been created yet). Only fix this bug when I still use SesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
-   def playerLoggedInAndChoseFirstConstitution:Boolean =
-   {  log("Boot.playerLoggedInAndChoseFirstConstitution called")
-      val r =  playerIsLoggedIn &&
-               {  Player.currentUser match
-                  {  case Full(player) => player.firstChosenConstitution != -1 // <&y2012.09.04.19:16:22& how to check that this MappedInt is indeed set? Now doing it with the protocol that -1 means not defined.>
-                     case _            => throw new RuntimeException("   no player found.") // This cannot happen.
->>>>>>> develop
                   }
          log("   return value = " + r)
          r
@@ -133,18 +122,10 @@ class Boot
       {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
       }
 
-<<<<<<< HEAD
       // assumes playerIsLoggedIn
       def loggedInPlayerIsAdmin:Boolean =
       {  playerIsAdmin(Player.currentUser.open_!)
-=======
-  // returns -1 when no player is logged in
-  // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
-   def playedSessions:Long = 
-    { val r = if(playerIsLoggedIn)
-      {  val sesCoordLR = SesCoord.is
-         sesCoordLR.sesHis.totalNumber
->>>>>>> develop
+
       }
 
       // returns -1 when no player is logged in
@@ -179,18 +160,6 @@ class Boot
             {  val sesCoordLR = SesCoord.is
                val player = sesCoordLR.currentPlayer
                playerIsAdmin(player) ||
-<<<<<<< HEAD
-               {  player.constiSelectionProcedure match
-                  {  case OneToStartWith =>
-                     {  playedSessions >= OneToStartWith.minSessionsB4access2allConstis
-                     }
-                     case NoProc => true
-                     case proc   =>
-                     {  val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."
-                        log("  " + msg)
-                        throw new RuntimeException(msg)
-                        false // will not be reached but for type correctness?
-=======
                   {  player.constiSelectionProcedure match
                      {  case OneToStartWith | RandomOneToStartWith =>
                         {  playedSessions >= OneToStartWith.minSessionsB4access2allConstis
@@ -202,31 +171,19 @@ class Boot
                            throw new RuntimeException(msg)
                            false // will not be reached but for type correctness?
                         }
->>>>>>> develop
                      }
                   }
-               }
             }
-            else
-               false            
+         else
+            false            
          },
          () => RedirectResponse("/index")) ) ), // <&y2012.08.11.19:22:55& TODO change, now I assume always the same constiSelectionProcedure>
-         Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
+      Menu(Loc("Study Constitution", "studyConstitution" :: Nil, "Study Chosen Constitution",
          If(() => {  val r = ( playerLoggedInAndChoseFirstConstitution &&
                      ( playedSessions < OneToStartWith.minSessionsB4access2allConstis ) )
                      log(" Loc(Study Constitution) access = " + r)
                      r 
                   },
-<<<<<<< HEAD
-         () => RedirectResponse("/index")
-         ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
-         Menu(Loc("startSession", "constiTrainingDecision" :: Nil, "Start Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && (sesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
-         Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Game", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (sesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-         Menu(Loc("playConstiGame", "constiGame" :: Nil, "Start ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-         Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
-         Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
-         Menu(
-=======
             () => RedirectResponse("/index")
            ))), // <&y2012.08.11.19:23& TODO change, now I assume always the same constiSelectionProcedure>
       Menu(Loc("startSession4OneToStartWith", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure == OneToStartWith ) && (SesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
@@ -236,122 +193,34 @@ class Boot
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
->>>>>>> develop
          Loc(
             "constitution",
             "constitution" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || playerIsAdmin(currentPlayer) )) , () => RedirectResponse("/index"))
-               )
             )
-         ),
-         Menu(
+         )
+      ),
+      Menu(
          Loc(
             "history",
             "history" :: Nil,
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && ( playerHasAccessToAllConstis(currentPlayer) || loggedInPlayerIsAdmin ) ), () => RedirectResponse("/index"))
-               )
             )
-         ),
-         Menu(
+         )
+      ),
+      Menu(
          Loc(
             "fluencyGameSes",
             new Link("fluencyGameSes" :: Nil, true),
             "If you see this, something is wrong: should be hidden",
             List( Hidden,
                If( () => ( playerIsLoggedIn && !playerIsAdmin(currentPlayer) ), () => RedirectResponse("/index"))
-               )
             )
          )
-<<<<<<< HEAD
-         ,
-         Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
-         )
-
-         LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
-
-         /*
-         * Show the spinny image when an Ajax call starts
-         */
-         LiftRules.ajaxStart =
-         Full(() => LiftRules.jsArtifacts.show("ajax-loader").cmd)
-
-         /*
-         * Make the spinny image go away when it ends
-         */
-         LiftRules.ajaxEnd =
-         Full(() => LiftRules.jsArtifacts.hide("ajax-loader").cmd)
-
-         LiftRules.early.append(makeUtf8)
-
-         LiftRules.loggedInTest = Full(() => Player.loggedIn_?)
-
-         S.addAround(DB.buildLoanWrapper)
-         /*   
-         def loadSesHisPlayer(l: LiftSession, r: Req) = 
-         { 
-         }
-         */
-	 /*
-         def autoLoginTestUser(l:LiftSession, r: Req) =
-         {  Player.logUserIdIn("1")
-         }
-         */  
-         //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
-         if(TestSettings.AUTOLOGIN) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn("1") ) }
-
-    	 // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
-    	 Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
-    	 LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
-
-   	 InitialiseJgit()
-
- 	 // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
-
-         def dispatch4ConstiTrainingDecision = 
-         {  log("dispatch4ConstiTrainingDecision called")
-            val sesCoordLR = sesCoord.is // extract session coordinator object from session variable. <&y2012.08.04.20:20:42& MUSTDO if none exists, there is no player logged in, handle this case also>
-            val player = sesCoordLR.currentPlayer
-
-      	    player.constiSelectionProcedure match
-            {  case OneToStartWith  =>
-               if( player.firstChosenConstitution.is == -1 )
-               {  log("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
-                  S.redirectTo("fluencyGameSes/selectConstitution")
-               }
-               else
-               {  log("   player has already selected a constitution in the past, so redirect to start/continue the session!")
-                  val lrfs = sesCoordLR.latestRoundFluencySession
-                  log("   latestRoundFluencySession = " + lrfs)
-                  lrfs match
-                  {  case NotInFluencySession => S.redirectTo("fluencyGameSes/startSession")
-                     case RoundTranslation    => S.redirectTo("fluencyGameSes/translationRound")
-                     case RoundBridgeConstruction => S.redirectTo("fluencyGameSes/bridgeconstruction")
-                     case RoundQuestionAttack => S.redirectTo("fluencyGameSes/questionAttackRound")
-                     case RoundAlgorithmicDefenceStage1 => S.redirectTo("fluencyGameSes/algorithmicDefenceRound")
-                     case _                   => logAndThrow("implement the rest")
-                  } 
-               }
-               case NoProc          => S.redirectTo("fluencyGameSes/startSession")
-               case proc            => { val msg = "constiSelectionProcedure " + proc.toString + " not yet implemented."; log("  " + msg); throw new RuntimeException(msg) }
-            }
-         }
-   
-         val lvd = LiftRules.viewDispatch
-
-         lvd.append
-         {  // This is an explicit dispatch to a particular method based on the path
-            case List("constiTrainingDecision") =>
-            Left(() => Full( dispatch4ConstiTrainingDecision ))
-         }
-         lvd.append
-         {  case List("continueFluencySession") =>
-            Left(() => Full( dispatch4ConstiTrainingDecision ))
-         }
-=======
       )
    ,
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
@@ -386,26 +255,23 @@ class Boot
     { Player.logUserIdIn("1")
     }
   */  
-    //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
-    if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
+         //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
+         if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
 
-    // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
-    Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
-    LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
+         // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
+         Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
+         LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
 
-   InitialiseJgit()
+         InitialiseJgit()
 
- // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
+         // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 
+         val lvd = LiftRules.viewDispatch
 
-
-   val lvd = LiftRules.viewDispatch
-
-   lvd.append
-   {  case List("continueFluencySession") =>
-         Left(() => Full( BootHelpers.continueOrStartFluencySession ))
-   }
->>>>>>> develop
+         lvd.append
+         {  case List("continueFluencySession") =>
+               Left(() => Full( BootHelpers.continueOrStartFluencySession ))
+         }
 
          log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
          val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
@@ -451,22 +317,25 @@ class Boot
             }
       
 
-      val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
-      log("randomConstiCreationList =")
-      log(randomConstiCreationList.toString)
-      randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
+            val randomConstiCreationList = List.fill(numconstis)((randomPlayer, randomSizeHis))
+            log("randomConstiCreationList =")
+            log(randomConstiCreationList.toString)
+            randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
 
-      def generateConstiHis(creator: Player, sizeHis:Int) =
-      {  val consti = Constitution.create(creator.id.is)
-         consti.initialiseNew
-         val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
-         randomHisCreationList.map(
-            { case (idx, publisher) =>            
-               consti.publish(
+            def generateConstiHis(creator: Player, sizeHis:Int) =
+            {  val consti = Constitution.create(creator.id.is)
+               consti.initialiseNew
+               val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
+               randomHisCreationList.map(
+                  { case (idx, publisher) =>            
+                     consti.publish(
 """<h2>Article 1</h2>
 
 <p>publication """ + idx + """</p>
 """, "publication " + idx, publisher.id.toString)
+                  }
+               )
+               Unit
             }
          }
 
@@ -477,16 +346,9 @@ class Boot
          {  TestSettings.SIMULATECLOCK = true
             TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true // <_&y2013.02.11.12:15:09& refactor: better put this (also) in PlayingSimulator.start? This is  bug prone - if you forget to set it, same holds for SIMULATECLOCK.>[A &y2013.04.15.19:57:38& this has been done in another branch, merge it]
 
-<<<<<<< HEAD
-            PlayingSimulator.start(45000);
-      	    TestSettings.SIMULATECLOCK = false
+            PlayingSimulator.start(45000)
+            TestSettings.SIMULATECLOCK = false
             TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
-=======
-      PlayingSimulator.start(45000)
-      TestSettings.SIMULATECLOCK = false
-      TestSettings.SIMULATEPLAYINGWITHJARARUNNING = false
->>>>>>> develop
-
          }
 
          if(TestSettings.SIMULATEPLAYINGWITHFIRSTSIMSYSTEM)
@@ -568,24 +430,15 @@ class Boot
             ret
          }
 
-<<<<<<< HEAD
          def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
-         {  val winSession = randomSeq.nextBoolean
+         {  log("simulatePlayingSession called")
+            log("[MUSTDO] Jara simulation needsrefactoring because of added round StudyConstiRound")
+            val winSession = randomSeq.nextBoolean
             List( 
-               (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URstartTranslation ),
+               (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartSession ),
                (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
                (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
-=======
-      def simulatePlayingSession(p:Player, startAfter:Long, sesCoordLR:ses.CoreSimu):List[DelayedSimulatedEvent]  =
-      {  log("simulatePlayingSession called")
-         log("[MUSTDO] Jara simulation needsrefactoring because of added round StudyConstiRound")
-         val winSession = randomSeq.nextBoolean
-         List( 
-            (randomPause(minTimeBetweenSessions, maxTimeBetweenSessions, randomSeq), () => sesCoordLR.URtryStartSession ),
-            (randomPause(minDurationTranslation, maxDurationTranslation, randomSeq), () => sesCoordLR.URstopTranslation ),
-            (randomPause(minDurationAlgoDef, maxDurationAlgoDef, randomSeq), () => sesCoordLR.URalgorithmicDefenceSimplified(winSession,25*1000))
->>>>>>> develop
-         )
+            )
          }
 
          // <<< configuration of test
@@ -648,26 +501,15 @@ class Boot
       }
 
       log("Boot.boot finished")
-<<<<<<< HEAD
-   
    }
 
 
    /**
-    * Force the request to be UTF-8
-    */
-   private def makeUtf8(req: HTTPRequest) 
-   {  req.setCharacterEncoding("UTF-8")
-=======
-  }
-
-
-  /**
    * Force the request to be UTF-8
    */
-  private def makeUtf8(req: HTTPRequest) {
-    req.setCharacterEncoding("UTF-8")
-  }
+   private def makeUtf8(req: HTTPRequest)
+   {  req.setCharacterEncoding("UTF-8")
+   }
 }
 
 /** Added for SWiFT
@@ -713,6 +555,5 @@ object BootHelpers
          case _                   => log("[BUG] implement the rest")
       }
       NodeSeq.Empty
->>>>>>> develop
    }
 }
