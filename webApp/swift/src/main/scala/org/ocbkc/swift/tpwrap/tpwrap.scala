@@ -8,7 +8,7 @@ import org.ocbkc.swift.global.GlobalConstant._
 import System._
 import scala.sys.process._
 import java.io._
-import org.ocbkc.swift.parser.CLIwithFileInput
+import org.ocbkc.swift.test.CLIwithFileInput
 //import org.ocbkc.swift.
 import scala.util.matching._
 import scala.util.matching.Regex._

@@ -18,17 +18,17 @@ import org.ocbkc.swift.general.GUIdisplayHelpers._
 
 
 class PlayerStats
-{  val sesCoordLR = sesCoord.is // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
 
    def render(ns: NodeSeq): NodeSeq =
    {  println("Playerstats.render called")
       val player = sesCoordLR.currentPlayer
       implicit val displayAsNoneAs = "not applicable"
       bind( "top", ns, 
-            "shortestTransTime" -> Text("" + optionToUI(sesCoord.sesHis.shortestTranslationTime)),
-            "sessionsPlayed"    -> Text("" + sesCoord.sesHis.totalNumber),
-            "numberCorrect"     -> Text("" + sesCoord.sesHis.numberCorrect),
-            "percentageCorrect" -> Text("" + optionToUI(sesCoord.sesHis.percentageCorrect))
+            "shortestTransTime" -> Text("" + optionToUI(SesCoord.sesHis.shortestTranslationTime)),
+            "sessionsPlayed"    -> Text("" + SesCoord.sesHis.totalNumber),
+            "numberCorrect"     -> Text("" + SesCoord.sesHis.numberCorrect),
+            "percentageCorrect" -> Text("" + optionToUI(SesCoord.sesHis.percentageCorrect))
           )
    }
 }

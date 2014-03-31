@@ -25,9 +25,9 @@ class Version_swift
    def printing(xhtml: NodeSeq): NodeSeq = 
    {  
       {  <h4 class="alt">
-        <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i></a> 
-        version {lines}
-        </h4>
+            <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i></a> 
+            version {lines}
+         </h4>
       }
    }
 }

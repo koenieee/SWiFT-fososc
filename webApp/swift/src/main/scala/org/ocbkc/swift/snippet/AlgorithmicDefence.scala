@@ -13,7 +13,7 @@ import Helpers._
 import System.err.println
 
 class AlgorithmicDefenceRound
-{  val sesCoordLR = sesCoord.is; // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
 
    def render(ns: NodeSeq): NodeSeq =
    {  def processSubmission() = 
@@ -29,10 +29,10 @@ class AlgorithmicDefenceRound
       val answer   = bind(  
                "top", ns, 
                "startderivation"    -> SHtml.submit("Start Derivation!", processSubmission),
-               "questionNL"         -> Text(sesCoordLR.cc.questionNL), 
-               "algoDefPlayer"      -> Text(sesCoordLR.cc.algoDefPlayer.toString),
-               //"questionNo"      -> Text("TODO: questionNo"), 
-               "computerAnswerFromSource" -> Text(sesCoordLR.cc.answerComputerNL)
+               "questionNL"         -> Text(sesCoordLR.si.questionNL), 
+               "algoDefPlayer"      -> Text(sesCoordLR.si.algoDefPlayer.get.sf.toString),
+               //"questionNo"       -> Text("TODO: questionNo"), 
+               "computerAnswerFromSource" -> Text(sesCoordLR.si.answerComputerNL)
             )
       answer
    }

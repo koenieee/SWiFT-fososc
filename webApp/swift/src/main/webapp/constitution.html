@@ -3,8 +3,9 @@
    <style type="text/css">
     td, th {border: 1px solid black;}
    </style>
-	<script src="javascript/ckeditor/ckeditor.js"></script>
-	   
+
+   <script src="javascript/ckeditor/ckeditor.js"></script>
+
 
 <lift:ConstitutionSnippet form="POST">
 
@@ -97,21 +98,20 @@ If you are a follower of, and contributor to, this constitution, read these tips
 					 * Core styles.
 					 */
 					coreStyles_bold: {
-						element: 'span',
-						attributes: { 'class': 'Bold' }
+						element: 'b'
+						
 					},
 					coreStyles_italic: {
-						element: 'span',
-						attributes: { 'class': 'Italic' }
+						element: 'i'
+						
 					},
 					coreStyles_underline: {
-						element: 'span',
-						attributes: { 'class': 'Underline' }
+						element: 'u'
+						
 					},
 					coreStyles_strike: {
-						element: 'span',
-						attributes: { 'class': 'StrikeThrough' },
-						overrides: 'strike'
+						element: 'del'
+						
 					},
 					coreStyles_subscript: {
 						element: 'span',
@@ -231,6 +231,10 @@ If you are a follower of, and contributor to, this constitution, read these tips
 					]
 					
 				});
+               
+	
+		
+
 
 			</script>
 

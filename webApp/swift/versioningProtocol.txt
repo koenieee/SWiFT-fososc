@@ -1,7 +1,7 @@
 Versioning protocol
 
 - All new versions of SWiFT store a main version number in the source code. The main version number reflects the progress of the application:
-[major feature package].[minor feature package/noticable improvements exclusing bugfixes].[bugfixes + code improvements not noticeable to the user]
+[major feature package].[minor feature package/noticable improvements excluding bugfixes].[bugfixes + code improvements not noticeable to the user]
 0.3.2
 - The complete version is, by example:
 0.3.2/develop/2013.05.21.14.30.20
@@ -19,7 +19,7 @@ which is:
    -  4user: changes which will change the experience of the user in some way (also for example includes improvements in speed of program executions which may be noticable to the user)
    - 4develop: all other changes.
 
-- Don't ever add new feature to a version which has been documented in version_history.html/the version has been changed in GlobalConstant.MAIN_VERSION.
+- Don't ever add new features to a version which has been documented in version_history.html/the version has been changed in GlobalConstant.MAIN_VERSION.
 - To prevent introducing a new version for each small change, wait until there are a sufficient amount of changes. If you want to you can already place them in version_history.html on top in: in coming version
 - *Each* new version is merged into the branch with the name release
 - The commits which coincide with a version, carry a tag with the version number in it, in the following form: 

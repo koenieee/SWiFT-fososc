@@ -1,0 +1,69 @@
+<H1>Constitution EfeLang</H1>
+<P>Challenge: efe</P>
+<H2>1 Definition of the target language: efeLang</H2>
+<P>The target language efeLang is defined as follows. A document in
+efeLang consists of a sequence of sentences, and sentences of a
+sequence of words and auxiliary symbols. Lets first explain the
+words, then the sentences and after that the documents. Note that no
+other language construct than as defined exactly in this document is
+allowed.</P>
+<H3>1.1 Words</H3>
+<P>The words in efeLang come in two flavours: constants and (the B
+and F) predicates.</P>
+<H4>1.1.1 Constants</H4>
+<P>A constant is a word that stands for a certain entity (which could
+be a person, a table, an armadillo, you name it). Examples of
+constants in efeLang are:</P>
+<UL>
+	<li><P><B>c</B></P></li>
+	<li><P><B>c1</B></P></li>
+	<li><P><B>obama</B></P></li>
+	<li><P><B>oeir33u_ij</B></P></li>
+	<li><P><B>president_HuJintao</B></P></li>
+</UL>
+<P>Constants should always start with a lower case letter, while the
+rest may not contain anything other than digits (0, 1, 2, ...), lower
+and upper case letters (a,b, c, ..., A, B, C, ...), and underscores
+(_).</P>
+<P>You are free to choose any constant for a thing you want to refer
+to. You can choose the constant <B>obama</B> to represent the
+president Obama, but you could just as well have chosen <B>c1</B>.
+Although you are free to choose any constant to refer to the entity
+you have in mind, you must stick to your choice throughout the
+document. Each new occurrence of the same constant in the document,
+thus, refers to the same entity. On the other hand, you are free to
+choose different constants to refer to the same entity.</P>
+<H4>1.1.2 The B and the F predicate</H4>
+<P>You can make two types of statements about the constants you
+introduced, by using the so-called <I>predicates</I> B or F. B
+expresses that something is big, and F that it is fast. Section 2
+explains how you can use them create sentences.</P>
+<P><B>1.2 Sentences</B></P>
+<P>(Reminder: are you indeed <A HREF="#timing">timing your studying
+time</A>?) You can make two types of statements about the constants
+you introduced, by using the predicates B or F. B expresses that
+something is big, and F that it is fast. Their usage is defined by
+example in the following:</P>
+<P><B>B(ob)</B></P>
+<P>Meaning: assume that the constant ob has been chosen to stand for
+"president Obama", than this sentence means: President Obama is
+big.</P>
+<P><B>F(ob)</B></P>
+<P>Meaning: under the same assumption, this means President Obama is
+fast.</P>
+<P>Note that these statements can be made about anything, even if it
+doesn't make sense. Suppose that the constant mFC is chosen to mean
+"my favourite chair", then the following is a statement you are
+allowed to make:</P>
+<P><B>F(mFC)</B></P>
+<P>Meaning: my favourite chair is fast</P>
+<P><B>1.3 Documents</B></P>
+<P>A document is a sequence of sentences separated by newlines. The
+meaning of a document is that all the sentences are supposed to hold
+true. A document may consist of one or more sentences. For example:</P>
+<P><B>B(ob)</B></P>
+<P><B>F(ob)</B></P>
+<P><B>F(mFC)</B></P>
+<P>Meaning (using the earlier introduced
+meanings of the constants): Obama is big, Obama is fast and my
+favourite chair is fast.</P>

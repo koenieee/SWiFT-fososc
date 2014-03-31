@@ -1,0 +1,36 @@
+<lift:surround with="default" at="content">
+
+<lift:efe.BridgeConstruction.render form="POST">
+
+<h1>Bridge Construction Round</h1>
+
+<center>
+   <lift:createProgress.text />
+</center>
+<br />
+
+<h3>Source</h3>
+<top:sourceText /><br /><br />
+<hr /><br />
+<h3>Translation</h3>
+<top:translation /><br />
+<br />
+<br />
+<hr />
+
+<top:entBridgeConstructionMenus /> 
+
+<top:entBridgeConstructionTemplate> <!-- abbrev.: entCTLbridgeConstructionTemplate = ebct -->
+To which person, being or thing in natural language does the constant<br />
+<b><ebct:constantName /></b><br />
+refer?<br />
+Please select one of:
+<ebct:entNLselectBox />
+<br />
+<br />
+</top:entBridgeConstructionTemplate>
+<hr />
+<top:submitBt />
+</lift:efe.BridgeConstruction.render>
+
+</lift:surround>

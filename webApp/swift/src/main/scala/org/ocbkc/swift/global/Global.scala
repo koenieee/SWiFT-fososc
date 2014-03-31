@@ -15,15 +15,21 @@ import org.eclipse.jgit.storage.file._
 import java.io._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
+import org.ocbkc.swift.global.Logging._
 
 object GlobalConstant
-{  
- 
-
-   val TEST = true
+{  val TEST = true
    val NEWLINE = System.getProperty("line.separator")
+   val WEBAPP_BASE_DIR =
+   {  val  SWiFTpomDirProp = System.getProperty("SWiFTpom.dir")
+      if(SWiFTpomDirProp != null)
+         SWiFTpomDirProp
+      else
+         System.getProperty("user.dir")
+   }
 
-   val WEBAPP_BASE_DIR = System.getProperty("user.dir") 
+   log("   WEBAPP_BASE_DIR = " + WEBAPP_BASE_DIR)
+
    val OS = System.getProperty("os.name").toLowerCase
 
    
@@ -51,7 +57,7 @@ object GlobalConstant
    val CONSTITUTIONHTMLDIR = "src/main/webapp/constitutions/"
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
-   val CORECONTENTOBJECTDIR = PERSISTDIR + "/corecontentobjs"
+   val SESSIONINFOOBJECTDIR = PERSISTDIR + "/sessionInfoobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
    
@@ -63,7 +69,7 @@ object GlobalConstant
    val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
-   val CONSTiALPHaINIT = INITIALISATIOnDATaDIR + "/constitutionAlpha_core"
+   val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
 
    // Scoring
 
@@ -96,7 +102,7 @@ object GlobalConstant
    // create paths
    createDirIfNotExists(CONSTITUTIONOBJECTDIR)
    createDirIfNotExists(CONSTITUTIONHTMLDIR)
-   createDirIfNotExists(CORECONTENTOBJECTDIR)
+   createDirIfNotExists(SESSIONINFOOBJECTDIR)
    createDirIfNotExists(INITIALISATIOnDATaDIR)
 
 /** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>
@@ -109,7 +115,7 @@ object GlobalConstant
       if( !outFile.exists )
       {  println("   path " + pathname + " (this is a path to Pure Wisdom) doesn't exist yet")
          val mkdirSuccess = outFile.mkdirs
-         println("   so creating...  succesful: " + { if(mkdirSuccess) "of course, as always, success is my middle name..." else "Fuck it, no... This is ruining my good humour." } )
+         println("   so creating...  succesful: " + { if(mkdirSuccess) "of course, as always, success is my middle name..." else "No... this is ruining my good humour." } )
          mkdirSuccess
       } else
       {  println("   path already exists, dude, you woke me for nothin'... That means free time for me, humble method, I'm gonna continue my dreamy nap...")
@@ -125,16 +131,19 @@ object ScalaHelpers
 /** @todo &y2013.01.20.18:12:52& move this one to a more general place
   */
 object Types
-{  type POSIXtime = Long
-   type DurationInMillis = Long
-   type TimeInMillis = Long
+{  type POSIXtime          = Long
+   type DurationInMillis   = Long
+   type TimeInMillis       = Long
 }
 
 // <&y2012.10.29.17:00:46& improve this, some tests dependent on other ones, now manually selected - should be done automatically>
 object TestSettings
-{  val AUTOLOGIN                       = false
+{  object AUTOLOGIN
+   {  val ON      = true
+      val USER_ID = "2" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
+   }
    val AUTOTRANSLATION                 = false // true
-   val CREATETESTUSERBASE              = false // true
+   val CREATETESTUSERBASE              = true // false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
    val CREATEDUMMYCONSTITUTIONS        = false // true // creates a number of constitutions with several updates and releases, but also some users.
    val STARTJARASIMULATIONDURINGBOOT   = false // Simulate playing with Jara during Boot. After boot normal playing (by real persons) can be continued from there.
@@ -144,7 +153,7 @@ object TestSettings
    // { never change the following manually, they are used by other parts of the program
    var SIMULATEPLAYINGWITHJARARUNNING  = false // simulation process is currently running
    var SIMULATECLOCK                   = false // false, always on when doing tests. <&y2012.12.12.23:32:04& automatically switch this on when needed>
-   var SIMULATEPLAYINGWITHJARA = false
+   var SIMULATEPLAYINGWITHJARA         = false
    // }
    if( CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK ) throw new RuntimeException("CREATEDUMMYCONSTITUTIONS && SIMULATECLOCK are mutually exclusive")
    // vim swap false true: s/false \/\/ true/true \/\/ false/gc
@@ -161,6 +170,13 @@ object Logging
 
    def log(msg:String) =
    {  println(msg)
+   }
+
+   /** Log and pass
+     */
+   def logp[T](msg: T => String, obj:T):T =
+   {  println(msg(obj))
+      obj
    }
 }
 

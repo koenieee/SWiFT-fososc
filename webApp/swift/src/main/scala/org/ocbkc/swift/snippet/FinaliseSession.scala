@@ -15,7 +15,7 @@ import org.ocbkc.swift.model._
 import System.err.println
 
 class FinaliseSession
-{  val sesCoordLR = sesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
+{  val sesCoordLR = SesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
 
    def render(ns: NodeSeq): NodeSeq =
    {  //var playerAnswerTF = ""
@@ -25,11 +25,18 @@ class FinaliseSession
       {  println("processSubmission called")
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
+         sesCoordLR.closeSession
          S.redirectTo("startSession.html")
-      }  
+      }
+
+      def processCloseSession() =
+      {  sesCoordLR.closeSession
+         S.redirectTo("/index.html")
+      }
 
       bind( "form", ns, 
-         "playAgainBtn"      -> SHtml.submit("Play again", processSubmission)
+         "playAgainBtn"      -> SHtml.button("Play again", processSubmission),
+         "closeSession"      -> SHtml.submit("Close session", processCloseSession)
       )
    }
 }

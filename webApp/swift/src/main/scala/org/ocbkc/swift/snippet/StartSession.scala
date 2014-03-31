@@ -14,18 +14,22 @@ import org.ocbkc.swift.coord._
 import org.ocbkc.swift.model._
 import System.err.println
 import net.liftweb.json._
-import org.ocbkc.swift.logilang.query._
+import org.ocbkc.swift.logilang.query.folnuminqua._
 import org.ocbkc.swift.logilang.query.ComparisonOperator._
+import org.ocbkc.swift.logilang.query._
 import org.ocbkc.swift.logilang._
 
 import net.liftweb.json._
 import net.liftweb.json.ext._
+import _root_.net.liftweb.http.js._ 
+
+import org.ocbkc.swift.global.Logging._
 
 // TODO &y2013.01.28.20:38:57& move to more general place
-object sesCoord extends SessionVar(new ses.Core(/* User, null, Round.NotStarted*/))
+object SesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStarted*/))
 
 class StartSession
-{  val sesCoordLR = sesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
+{  val sesCoordLR = SesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
 
    def render(ns: NodeSeq): NodeSeq =
    {  //var playerAnswerTF = ""
@@ -70,40 +74,33 @@ class StartSession
       val testb = TestBDummy(TestBCaseClass1("c1"))
       println("   serialized " + testb + " to:" + write(testb))
       */
-      println("### end serialization test")
+      log("### end serialization test")
 
       // End serialization test
 
-      def processSubmission() = 
-      {  println("processSubmission called")
+      def processSubmission():JsCmd = 
+      {  log("processSubmission called")
          // check errors on submission here
          // <&y2011.10.24.17:27:52&>
-         sesCoordLR.URstartTranslation
-
-         // test json serialization
-         case class TestPersistency(var val1:String)
-         {  def this() = this("no constructors")
-         }
-         /*
-         case class TestPersistency(val1:String)
-         {  val val2: String = "with hurry try to find out why you do that"
-         }
-         */
-         implicit val formats = Serialization.formats(NoTypeHints)
          
-         //var testSer:String = Serialization.write(cc)
-         //err.println("  sesHis serialised to: " + testSer)
-         //val testDeSer:CoreContent = Serialization.read[CoreContent](testSer)
-         
-         val testSer:String = Serialization.write(new TestPersistency())
-         println("  Test1 = " + testSer)
-         // end test
+         sesCoordLR.URtryStartSession match
+         {  case None  => 
+            {  //log("[MUSTDO] change back to None.")
+               log("   player may not start fluency session.")
+               log("[BUG] Somehow, the follow doesn't work (it doesn't show an alert). Why? Perhaps ask in lift community.")
+               JsCmds.Alert("Currently, there are no fresh constitutions available. You will be automatically notified if one comes available.") 
 
-         S.redirectTo("translationRound.html") 
+               log("[COULDDO] alternative solution is to redirect to page with  the message.")
+            }
+            case Some(textNL) => // <&y2014.03.12.16:10:46& hmm, textNL not needed, refactor URtryStartTranslation?>
+            {  S.redirectTo("studyConstiRound.html") 
+               JsCmds.Noop
+            }
+         }
       }  
 
       bind( "form", ns, 
-         "startBtn"      -> SHtml.submit("I'm ready!", processSubmission)
+         "startBtn"      -> SHtml.ajaxSubmit("I'm ready!", () => processSubmission)
       )
    }
 }
