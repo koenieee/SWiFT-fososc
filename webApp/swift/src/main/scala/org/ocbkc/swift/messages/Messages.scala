@@ -11,43 +11,52 @@ import _root_.net.liftweb.common._
 import System.err.println
 import org.ocbkc.swift.global._
 
-/** Mail represents a mail-message. It is used in various methods that can send mails, such us MailMessage.mailUpdate
+/** Mail represents a mail-message. It is used in various methods that can send mails, such us MailUtils.sendMail
   */
 case class Mail(to: Option[String], subject:String, body:String)
 
-/** All messages sent within the application, and the mechanisms to actually send the messages, are defined in this object.
+/** utilities to send mails to players of the game. Actual message-content is not defined in this object, but in MailMessages
   */
-object MailMessage
-{   /** Mails a mail to players.
+object MailUtils
+{   /** Mails a mail to multiple or one player(s).
      * @param mail the mail to be sent
-     * @param players the players to which the mail should be sent
-     * Try to use the auxiliary methods (mailAllFollowersUpdate, etc.) instead of this one when possible.
+     * @param players the players to which the mail will be sent
+     * This is the basic mail method - try to use the auxiliary methods (mailAllFollowersUpdate, etc.) instead of this one when possible.
      * 
      */
-   def mailUpdate(mail:Mail, players:List[Player]) =
-   {  def sendupdatemail(follower:Player) =
-      {  println("sendupdatemail called")
-         println("   follower email = " + follower.email.get)
-         Mailer.sendMail(From("cg@xs4all.nl"), Subject(mail.subject), To(follower.email.get), new PlainMailBodyType(mail.body))
-         println("   mail sent!")
-      }
-
-      players.foreach( sendupdatemail )
+   def sendMail(mail:Mail, players:List[Player])
+   {  players.foreach{ p => sendMail(mail, p) }
+      Unit
    }
-  
+
+   /** Same as sendMail, but now to only one player
+     */
+   def sendMail(mail:Mail, player:Player)
+   {  println("sendupdatemail called")
+      println("   player email = " + player.email.get)
+      Mailer.sendMail(From("cg@xs4all.nl"), Subject(mail.subject), To(player.email.get), new PlainMailBodyType(mail.body))
+      println("   mail sent!")
+      Unit
+   }
+
    /** Given a follower of constitution const, mail the other followers of that same constitution the given mail
      */
-   def mailOtherFollowersUpdate(const: Constitution, mail:Mail, thisFollower: Player ) =
-   {  mailUpdate(mail, const.followersAsPlayerObjs.filterNot(_ == thisFollower) )
+   def sendOtherFollowersUpdateMail(const: Constitution, mail:Mail, thisFollower: Player ) =
+   {  sendMail(mail, const.followersAsPlayerObjs.filterNot(_ == thisFollower) )
    }
 
    /** Mail all followers of constitution const the given mail
      */
-   def mailAllFollowersUpdate(const: Constitution, mail:Mail) =
-   {  mailUpdate(mail, const.followersAsPlayerObjs )
+   def sendAllFollowersUpdateMail(const: Constitution, mail:Mail) =
+   {  sendMail(mail, const.followersAsPlayerObjs )
    }
+}
 
-   private def sentenceOpening(const:Constitution) = "Constitution " + const.constiId
+
+/** This object contains (building blocks for, and complete) prefabricated mail messages.
+  */
+object MailMessages
+{  private def sentenceOpening(const:Constitution) = "Constitution " + const.constiId
 
    /** Prefabricated mail message: the message to be sent to all followers when a constitution has been updated (new publication).
      */
@@ -105,3 +114,4 @@ sentenceOpening(const) + """ lost a follower. Visit the following link to see al
 """
    private def link2consti(const:Constitution) = GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId
 }
+
