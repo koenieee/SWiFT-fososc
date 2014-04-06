@@ -69,7 +69,7 @@ class Boot
       // where to search snippet
       LiftRules.addToPackages("org.ocbkc.swift")
 
-      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerCoreContent_join, CoreContentMetaMapperObj, FollowerConsti_join)
+      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
 
       // Build SiteMap
       /* originally generated code:
@@ -105,7 +105,7 @@ class Boot
       }
 
       // returns also false when no player is logged in.
-      // this method ALWAYS returns None, it seems sesCoord.set_? is always false when this method is called (suggesting that sesCoord has not been created yet). Only fix this bug when I still use sesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
+      // this method ALWAYS returns None, it seems SesCoord.set_? is always false when this method is called (suggesting that SesCoord has not been created yet). Only fix this bug when I still use SesCoord (I'm planning to move to the Mapper framework for persistency), otherwise dissmiss it.
       def playerLoggedInAndChoseFirstConstitution:Boolean =
       {  log("Boot.playerLoggedInAndChoseFirstConstitution called")
          val r =  playerIsLoggedIn &&
@@ -132,7 +132,7 @@ class Boot
       // <&y2012.08.29.23:09:13& optimisation possible here (and in other parts of code), now the check "playerIsLoggedIn" is done over and over. Do it only once. E.g. by assuming in this and other methods that the player is already logged in.>
       def playedSessions:Long = 
       {  val r = if(playerIsLoggedIn)
-         {  val sesCoordLR = sesCoord.is
+         {  val sesCoordLR = SesCoord.is
             sesCoordLR.sesHis.totalNumber
          }
          else
