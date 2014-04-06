@@ -89,13 +89,10 @@ return c_value;
     var keyisdown = false;
     var scroll_last_position = 0;
        	 var keycode = 86; //alt key
-   	 var keycode2 = 71; //o key
+   	 var keycode2 = 71; //g key
    	 //alert(e.which);
    	 var scrolled = false;
    	pressedKeys = [];
-    
-    
-    
     
     $('body').bind('keydown',function(e)
     {
@@ -112,7 +109,7 @@ return c_value;
    		 $('#blank').css('visibility', 'hidden');
 
    		// scroll_last_position = $(window).scrollTop();
-   		 setCookie('last_pos', $(window).scrollTop(),365);
+   		 setCookie('last_pos', $(window).scrollTop(), 365);
    //	 }
    }
 }
