@@ -7,79 +7,79 @@ import _root_.scala.xml.XML
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
 
-object AppTest {
-  def suite: Test = {
-    val suite = new TestSuite(classOf[AppTest])
-    suite
-  }
+object AppTest 
+{  def suite: Test = 
+   {  val suite = new TestSuite(classOf[AppTest])
+      suite
+   }
 
-  def main(args : Array[String]) {
-    _root_.junit.textui.TestRunner.run(suite)
-  }
+   def main(args : Array[String]) 
+   {  _root_.junit.textui.TestRunner.run(suite)
+   }
 }
 
 /**
  * Unit test for simple App.
  */
-class AppTest extends TestCase("app") {
-
-  /**
+class AppTest extends TestCase("app") 
+{
+   /**
    * Rigourous Tests :-)
    */
-  def testOK() = assertTrue(true)
-  // def testKO() = assertTrue(false);
+   def testOK() = assertTrue(true)
+   // def testKO() = assertTrue(false);
 
-  /**
+   /**
    * Tests to make sure the project's XML files are well-formed.
    *
    * Finds every *.html and *.xml file in src/main/webapp (and its
    * subdirectories) and tests to make sure they are well-formed.
    */
-  def testXml() = {
-    var failed: List[File] = Nil
+   def testXml() = 
+   {  var failed: List[File] = Nil
 
-    def handledXml(file: String) =
+      def handledXml(file: String) =
       file.endsWith(".xml")
 
-    def handledXHtml(file: String) =
+      def handledXHtml(file: String) =
       file.endsWith(".html") || file.endsWith(".htm") || file.endsWith(".xhtml")
 
-    def wellFormed(file: File) {
-      if (file.isDirectory)
-        for (f <- file.listFiles) wellFormed(f)
+      def wellFormed(file: File) 
+      {  if (file.isDirectory)
+         for (f <- file.listFiles) wellFormed(f)
 
-      /*
-      if (file.isFile && file.exists && handledXml(file.getName)) {
-        try {
-          import java.io.FileInputStream
-          val fis = new FileInputStream(file)
-          try {
-            XML.load(fis)
-          } finally {
-            fis.close()
-          }
-        } catch {
-          case e: _root_.org.xml.sax.SAXParseException => failed = file :: failed
-        }
+         /*
+         if (file.isFile && file.exists && handledXml(file.getName)) 
+         {  try
+            {  import java.io.FileInputStream
+               val fis = new FileInputStream(file)
+               try 
+	       {  XML.load(fis)
+               } finally 
+		 {  fis.close()
+                 }
+            }catch
+	    {  case e: _root_.org.xml.sax.SAXParseException => failed = file :: failed
+            }
+         }
+         */
+
+         if (file.isFile && file.exists && handledXHtml(file.getName)) 
+         {  PCDataXmlParser(new _root_.java.io.FileInputStream(file.getAbsolutePath)) match 
+	    {  case Full(_) => // file is ok
+             case _ => failed = file :: failed
+            }
+         }
       }
-      */
 
-      if (file.isFile && file.exists && handledXHtml(file.getName)) {
-        PCDataXmlParser(new _root_.java.io.FileInputStream(file.getAbsolutePath)) match {
-          case Full(_) => // file is ok
-          case _ => failed = file :: failed
-        }
+      wellFormed(new File("src/main/webapp"))
+
+      val numFails = failed.size
+      if (numFails > 0) 
+      {  val fileStr = if (numFails == 1) "file" else "files"
+         val msg = "Malformed XML in " + numFails + " " + fileStr + ": " + failed.mkString(", ")
+         println(msg)
+         fail(msg)
       }
-    }
-
-    wellFormed(new File("src/main/webapp"))
-
-    val numFails = failed.size
-    if (numFails > 0) {
-      val fileStr = if (numFails == 1) "file" else "files"
-      val msg = "Malformed XML in " + numFails + " " + fileStr + ": " + failed.mkString(", ")
-      println(msg)
-      fail(msg)
-    }
-  }
+   }
 }

@@ -43,11 +43,10 @@ object PlayingSimulator
 
       new SimSubscriptions()
       val startTimeSim = SystemWithTesting.currentTimeMillis
-      SimGod.run{ case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) }
-      
-
-
-}
+      SimGod.run
+      { case (_, timeInMillis) => ( timeInMillis < startTimeSim + durationSimulation ) 
+      }
+      }
 }
 
 /** Wrapper for random object with fixed seed. A fixed seed makes it easy to recreate found bugs, by using the same seed.
@@ -106,11 +105,11 @@ object SimpleDelayFunctionGenerator extends DelayFunctionGenerator
          delayCatchAct = 
          durTerminLastExe2Now = durTotSinceStartRatDesReq - durStartRatDesReq2TerminLastExe
          delayCatchActAfterNow = max(0, delayCatchAct - durTerminLastExe2Now)
-      */
+         */
 
-/** @todo give a better name
-  * @todo would be nice to pass the durationfunction to the generate method, to prevent possible errors. However, that requires refactoring of this function (it has to become an object).
-  */
+         /** @todo give a better name
+         * @todo would be nice to pass the durationfunction to the generate method, to prevent possible errors. However, that requires refactoring of this function (it has to become an object).
+        */
 object DelayFunctionType1Generator extends DelayFunctionGenerator
 {  /** @param randomDelayRatio the allowed deviation around the expected value of the expected value of the delay. (Note that the delay is calculated by the generated function, it doesn't (and shouldn't) have to be provided.) It will use a random distribution between [delay - (delay * randomDelayRatio), delay + (delay * randomDelayRatio)]. E.g. if the expected delay is 18 minutes, and randomDelayRatio = 0.5, then the delay will be randomly drawn from [ 18-9 = 9, 18+9 = 27]
      * @param name name used for debugging purposes. Convention: proc + name of proces. E.g. procStartGame
@@ -146,7 +145,8 @@ object DelayFunctionType1Generator extends DelayFunctionGenerator
          }
 
          if(debug)
-         {  def isRatio(r:Double) = { r >= 0 && r <= 1 }
+         {  def isRatio(r:Double) = { r >= 0 && r <= 1 
+				    }
             if( !isRatio(ratDes) ) throw new RuntimeException("   ratDes should be in [0,1]")
             if(catchUpTime < 0) throw new  RuntimeException("   catchupTime should be positive")
             if(dSRDR2TLE < 0) throw new  RuntimeException("   durStartRatDesReq2TerminLastExe should be positive")

@@ -47,8 +47,8 @@ class StartSession
       //implicit def formats = DefaultFormats
       implicit val formats = DefaultFormats
       // A: with trait [&y2012.05.18.11:19:45& tested: this works, all info. is expressed in the serialization!]
-      sealed trait Trait1 {
-        val name:String
+      sealed trait Trait1 
+      {  val name:String
       }
 
       case class CaseClass1(name:String) extends Trait1
@@ -63,7 +63,8 @@ class StartSession
       println("   deserialized again to " + deserializedTestA)
 
       // Test B with superclass // <&y2012.05.18.11:19:09& ask on lift forum why this doesn't work (the name of the caseclasses is not expressed)>
-      sealed class TestBSuperClass(val name:String) {
+      sealed class TestBSuperClass(val name:String) 
+      {
       }
 
       case class TestBCaseClass1(nameLoc:String) extends TestBSuperClass(nameLoc)

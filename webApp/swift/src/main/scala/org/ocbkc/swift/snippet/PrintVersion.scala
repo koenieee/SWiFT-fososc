@@ -17,20 +17,18 @@ import org.ocbkc.swift.global._
 
 
 class Version_swift
-{
-  /*<-- Koen: I think :), one day you are using a file to set the version number, so I keep this piece of code:
-  val source = scala.io.Source.fromFile(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME)
-	  val lines = source.mkString
-source.close()*/
-val lines = GlobalConstant.MAIN_VERSION
-  def printing(xhtml: NodeSeq): NodeSeq = {
-  {
-		<h4 class="alt">
-				  <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i>
-					version {lines}</a>
-		</h4>
-  }
-  }
-  
+{  /*<-- Koen: I think :), one day you are using a file to set the version number, so I keep this piece of code:
+   val source = scala.io.Source.fromFile(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME)
+   val lines = source.mkString
+   source.close()*/
+   val lines = GlobalConstant.MAIN_VERSION
+   def printing(xhtml: NodeSeq): NodeSeq = 
+   {  
+      {  <h4 class="alt">
+            <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i></a> 
+            version {lines}
+         </h4>
+      }
+   }
 }
 

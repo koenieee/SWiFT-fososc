@@ -33,7 +33,8 @@ class SelectConstitution
                                                             println("   now redirecting player to studyConstitution")
                                                             S.redirectTo("/studyConstitution")
                                                          }
-                                case None             => { S.redirectTo("notfound") }
+                                case None             => { S.redirectTo("notfound") 
+							 }
                               }
                            }
       case _            => Unit // = do nothing, and just continue running the constructor of SelectConstitution
@@ -68,8 +69,25 @@ class SelectConstitution
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
                TopScope,  
                <thead><tr><th>id</th><th>description</th><th>fluency</th><th>APC</th><th>ADT</th><th>Creation date</th></tr></thead>,
-               <tbody>{ Constitution.constisWithAReleaseOrVirginRelease.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
-                           c => <tr><td><a href={ "selectConstitution?id=" + c.constiId  }>{ c.constiId }</a></td><td>{ displayNoneIfEmpty(c.shortDescription) }</td><td>{ optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect{ case afs:(VersionId,Double) => afs._2 } ) }</td><td>{ optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) }</td><td>{ df.format(c.creationTime).toString }</td></tr>)
+               <tbody>
+	       {  Constitution.constisWithAReleaseOrVirginRelease.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(
+                  c => <tr><td><a href=
+		  {  "selectConstitution?id=" + c.constiId  
+		  }  >
+		     {  c.constiId 
+		     }  </a></td><td>
+			{  displayNoneIfEmpty(c.shortDescription) 
+			}  </td><td>
+			   {  optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect
+			     {  case afs:(VersionId,Double) => afs._2 
+			     } ) 
+			   }  </td><td>
+			      {  optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)) 
+			      }  </td><td>
+				 {  optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)) 
+				 }  </td><td>
+				    {  df.format(c.creationTime).toString 
+			 	    }  </td></tr>)
                }
                </tbody>
             )

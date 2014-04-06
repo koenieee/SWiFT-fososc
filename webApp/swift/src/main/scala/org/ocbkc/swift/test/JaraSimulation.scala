@@ -91,8 +91,12 @@ object SimGod
          println("  unoccupiedEntitiesWithProposedActivities = " + unoccupiedEntitiesWithProposedActivities)
          println("  occupiedEntities_Jn_Start_Stop = " + occupiedEntities_Jn_Start_Stop) // WIW rename occupiedEntitiesWithFirstStopTime to occupiedEntities_Jn_Start_Stop, only in this init of the itteration! &y2012.12.29.01:09:32&
          if(debug)
-         {  val  occupiedEntities = occupiedEntities_Jn_Start_Stop.map{ case (u,_) => u }
-            val unoccupiedEntitiesWithProposedActivitiesStripped = unoccupiedEntitiesWithProposedActivities.map{ case (u,_) => u }
+         {  val  occupiedEntities = occupiedEntities_Jn_Start_Stop.map
+	    {  case (u,_) => u 
+	    }
+            val unoccupiedEntitiesWithProposedActivitiesStripped = unoccupiedEntitiesWithProposedActivities.map
+	    {  case (u,_) => u 
+	    }
 
             if( occupiedEntities.intersect( unoccupiedEntitiesWithProposedActivitiesStripped ) != Nil )
             {  throw new RuntimeException("occupiedEntities and unoccupiedEntitiesWithProposedActivities are not disjoint") 
@@ -100,11 +104,15 @@ object SimGod
             {  println("occupiedEntities and unoccupiedEntitiesWithProposedActivities are disjoint")
             }
 
-            if( unoccupiedEntitiesWithProposedActivitiesStripped.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+            if( unoccupiedEntitiesWithProposedActivitiesStripped.intersect
+	    {  unoccupiedEntitiesWithoutProposedActivities 
+	    } != Nil )
             {  throw new RuntimeException("unoccupiedEntitiesWithProposedActivities and unoccupiedEntitiesWithoutProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
             }
 
-            if( occupiedEntities.intersect{ unoccupiedEntitiesWithoutProposedActivities } != Nil )
+            if( occupiedEntities.intersect
+	    {  unoccupiedEntitiesWithoutProposedActivities 
+	    } != Nil )
             {  throw new RuntimeException("occupiedEntities and unoccupiedEntitiesWithProposedActivities are not disjoint, that just feels SO wrong... Hmm, it even IS wrong!")
             }
 
@@ -115,7 +123,9 @@ object SimGod
 
          // 1. If there are unoccupied entities without proposed future activities, first ask them to propose these.
          if( unoccupiedEntitiesWithoutProposedActivities != Nil )
-         {  unoccupiedEntitiesWithProposedActivities = sortByStart( unoccupiedEntitiesWithProposedActivities ++ unoccupiedEntitiesWithoutProposedActivities.map{ se => (se, se.proposeTransition.toJn_Start_Stop) } )
+         {  unoccupiedEntitiesWithProposedActivities = sortByStart( unoccupiedEntitiesWithProposedActivities ++ unoccupiedEntitiesWithoutProposedActivities.map
+	    { se => (se, se.proposeTransition.toJn_Start_Stop) 
+	    } )
             unoccupiedEntitiesWithoutProposedActivities = Nil
          }
 
@@ -135,11 +145,11 @@ object SimGod
                                           startUnoccupiedEntitiesWithFirstStartTime(fSTUE)
                                           // [B]
 
-                                       } else if( fSTUE == fSTOE )
+                                       }  else if( fSTUE == fSTOE )
                                        {  SystemWithTesting.currentTimeMillis = fSTUE
                                           startUnoccupiedEntitiesWithFirstStartTime(fSTUE)
                                           stopOccupiedEntitiesWithFirstStopTime(fSTUE)
-                                       } else // fSTUE > fSTOE
+                                       }  else // fSTUE > fSTOE
                                        {  SystemWithTesting.currentTimeMillis = fSTOE
                                           stopOccupiedEntitiesWithFirstStopTime(fSTOE)
                                        }
@@ -172,8 +182,12 @@ object SimGod
          }
 
          def stopOccupiedEntitiesWithFirstStopTime(firstStopTimeOccupiedEntities:POSIXtime) =
-         {  val occupiedEntitiesWithFirstStopTime = occupiedEntities_Jn_Start_Stop.takeWhile{ case (_, Jn_Start_Stop(_,stop)) => (stop == firstStopTimeOccupiedEntities) }
-            occupiedEntitiesWithFirstStopTime.foreach{ case (se, _) => se.finishProcess }
+         {  val occupiedEntitiesWithFirstStopTime = occupiedEntities_Jn_Start_Stop.takeWhile
+	    { case (_, Jn_Start_Stop(_,stop)) => (stop == firstStopTimeOccupiedEntities) 
+	    }
+            occupiedEntitiesWithFirstStopTime.foreach
+	    {  case (se, _) => se.finishProcess 
+	    }
 
             unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ occupiedEntitiesWithFirstStopTime.map{ case (o,_) => o }
             occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop -- occupiedEntitiesWithFirstStopTime
@@ -182,7 +196,9 @@ object SimGod
 
          // 3. If in step 2 an occupied entity reached completion, the proposed activities of unoccupied entities must be erased (because the occupied entity which just finished may change the system state and thus the decisions of these unoccupied entities about future activities).
          if( environmentChange )
-         {  unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ unoccupiedEntitiesWithProposedActivities.map{case (u,_) => u }
+         {  unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ unoccupiedEntitiesWithProposedActivities.map
+	    {  case (u,_) => u 
+	    }
             unoccupiedEntitiesWithProposedActivities = Nil
          }
       }
@@ -260,7 +276,8 @@ trait SimEntity
    {  println(this + ".proposeTransition called")
       val timeAfterCompletionCurrentState = timeAtBeginningCurrentState + current_Jn_Jn_State_Delay_OptJn_SimProc_Duration.duration
       if( timeAtBeginningCurrentState + timeAfterCompletionCurrentState < SystemWithTesting.currentTimeMillis ) // extra check, to see whether previous process has ended. Just in case SimGod is not infallible..
-      {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") }
+      {  throw new RuntimeException("   New proposal for transition requested, but I'm not even ready with the previous one!") 
+      }
 
       proposedTransitionTo = Some(TransitionUtils. getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(
                                                       applyTimingFunctions(
@@ -275,7 +292,9 @@ trait SimEntity
    
    def applyTimingFunctions(states:List[State]) =
    {  println(this + ".applyDelayFuctions called")
-      val result = states.map{ s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen }
+      val result = states.map
+      { s => Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen.find(s).gen 
+      }
       println("   delayedStates after applying delay functions:" + result)
       result
    }
@@ -386,7 +405,9 @@ trait SimEntity
 
 object TransitionUtils
 {  def getFirst_Jn_Jn_State_Delay_OptJn_SimProc_Duration(jns_Jn_State_Delay_OptJn_SimProc_Duration: List[Jn_Jn_State_Delay_OptJn_SimProc_Duration] ):Jn_Jn_State_Delay_OptJn_SimProc_Duration =
-   {  jns_Jn_State_Delay_OptJn_SimProc_Duration.sortWith{ case (jn_Jn_State_Delay_OptJn_SimProc_Duration1, jn_Jn_State_Delay_OptJn_SimProc_Duration2) => ( jn_Jn_State_Delay_OptJn_SimProc_Duration1.jn_State_Delay.delay < jn_Jn_State_Delay_OptJn_SimProc_Duration2.jn_State_Delay.delay ) }(0)
+   {  jns_Jn_State_Delay_OptJn_SimProc_Duration.sortWith
+      {  case (jn_Jn_State_Delay_OptJn_SimProc_Duration1, jn_Jn_State_Delay_OptJn_SimProc_Duration2) => ( jn_Jn_State_Delay_OptJn_SimProc_Duration1.jn_State_Delay.delay < jn_Jn_State_Delay_OptJn_SimProc_Duration2.jn_State_Delay.delay ) 
+      }  (0)
    }
 }
 
@@ -439,9 +460,9 @@ case class Jn_Jn_State_Delay_OptJn_SimProc_Duration(val jn_State_Delay:Jn_State_
 
    def duration:Long =
    {  optJn_SimProc_Duration match
-         {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.duration
-            case None => 0L
-         }
+      {  case Some(jn_SimProc_Duration) => jn_SimProc_Duration.duration
+         case None => 0L
+      }
    }
 
    def simProc =
