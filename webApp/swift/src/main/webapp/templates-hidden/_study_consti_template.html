@@ -36,13 +36,15 @@ Study the constitution below by holding the 'g' key down on your keyboard.
 <p id="blank">
 If you want to read on, please <b>hold the 'g' key.</b>
 </p>
-<div id="consti_text">
+
+<div id="consti_text" >
 <table>
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
 </div>
+
 
 <script type="text/javascript">  
 // Problem here: using visibility = hidden, will not stop the element from taking up its space. This is problematic, when other elements are shown after the element which you do not want to display.
@@ -94,7 +96,7 @@ return c_value;
    	 //alert(e.which);
    	 var scrolled = false;
    	pressedKeys = [];
-    
+    var ajaxSend = false;
     
     
     
@@ -110,7 +112,11 @@ return c_value;
 		scrolled = true;
    		} 
    		 $('#consti_text').css('visibility', 'visible');
-   		 $('#blank').css('visibility', 'hidden');
+   		 if(ajaxSend==false)
+   		 {
+   		gAction('pressed')
+   		 ajaxSend = true;
+   		 }$('#blank').css('visibility', 'hidden');
 
    		// scroll_last_position = $(window).scrollTop();
    		 setCookie('last_pos', $(window).scrollTop(),365);
@@ -123,7 +129,11 @@ return c_value;
    	 scrolled = false;
    	 $('#blank').css('visibility', 'visible');
    	 $('#consti_text').css('visibility', 'hidden');
-
+if(ajaxSend==true)
+   		 {
+   	    gAction('released')
+   		 ajaxSend = false;
+   		 }
    	 scroll(0,0);
     });
 
