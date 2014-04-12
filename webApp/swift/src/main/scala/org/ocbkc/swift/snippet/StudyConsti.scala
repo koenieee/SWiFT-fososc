@@ -18,6 +18,7 @@ import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.snippet.SesCoord
 
 
+
 class StudyConsti__EMBED
 {  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
    // <&y2012.08.11.12:10:18& better get right constitution from Player info, not from URL id. Or no, that is difficult when someone has access to more than one constitution to study. Just do a check here whether he or she may see the constitution here!>
@@ -73,7 +74,8 @@ class StudyConsti__EMBED
                                        {  case Full(player)  => player.swiftDisplayName
                                           case _             => { log("    [BUG] Player with id " + consti.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." }
                                        }
-                                                       )
+                           )
+
 
                      )
       answer

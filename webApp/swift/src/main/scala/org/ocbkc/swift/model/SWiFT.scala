@@ -114,8 +114,10 @@ case class SessionInfo( var textNL: String,
                         var questionRelatedBridgeStats: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
-                        var subjectNL:String
-                      ) extends LongKeyedMapper[SessionInfo] with IdPK
+                        var subjectNL:String,
+                        var studyStartConstiTime: Option[Long],
+                        var studyStopConstiTime: Option[Long]
+                        ) extends LongKeyedMapper[SessionInfo] with IdPK
 {  def getSingleton = SessionInfoMetaMapperObj
    // object player extends MappedLongForeignKey(this, Player)
    object gameCoreName extends MappedString(this, 100)
@@ -126,7 +128,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","")
+   def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","", None, None)
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 
@@ -241,6 +243,9 @@ case class SessionInfo( var textNL: String,
       this.hurelanRole1NL = si.hurelanRole1NL
       this.hurelanRole2NL = si.hurelanRole2NL
       this.subjectNL = si.subjectNL
+      this.studyStartConstiTime = si.studyStartConstiTime
+     this.studyStopConstiTime = si.studyStopConstiTime
+
    }
 }
 /** @todo Move this one to a general lib

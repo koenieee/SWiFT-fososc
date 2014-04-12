@@ -23,14 +23,23 @@ class StudyConstiRound
 
    def processSubmission() = 
    {  log("processSubmission called")
-      S.redirectTo("translationRound.html") 
+
+     SesCoord.si.studyStopConstiTime = Some(System.currentTimeMillis)
+     log("studyConstiTime: "+ (SesCoord.si.studyStopConstiTime.get - SesCoord.si.studyStartConstiTime.get).toString)
+      S.redirectTo("translationRound.html")
    }
 
+  if(SesCoord.si.studyStartConstiTime == None)
+  {
+    SesCoord.si.studyStartConstiTime = Some(System.currentTimeMillis)
+
+  }
    def render(ns: NodeSeq): NodeSeq =
    {  SesCoord.is.URconstiStudy
       bind(  
          "top", ns,
-         "continue"              -> SHtml.submit("Continue", processSubmission)
+         "continue"              -> SHtml.submit("Continue", processSubmission),
+         "startTimeConsti" -> Text(SesCoord.si.studyStartConstiTime.get.toString)
       )
    }
 }
