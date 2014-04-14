@@ -26,8 +26,8 @@ import java.io._
 import scala.util.Random
 import org.ocbkc.generic.random._
 
-import org.ocbkc.swift.messages._
-import org.ocbkc.swift.messages.MailMessage._
+import org.ocbkc.swift.messages.MailMessages._
+import org.ocbkc.swift.messages.MailUtils._
 import net.liftweb.util.Mailer
 import net.liftweb.util.Mailer._
 
@@ -212,7 +212,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       val fCC = Constitution.getById(currentPlayer.firstChosenConstitution.get).get
       val rOFCC = currentPlayer.releaseOfFirstChosenConstitution.get
       if(accessToConstiGame && ConstiScores.sampleSizeSufficient4FluencyScore(rOFCC)) // note: after accessToConstiGame, the players new sessions are disregarded for calculating the score of the consti release he learned playing the game with, and before it, are all sessions disregarged.
-      {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
+      {  sendAllFollowersUpdateMail(fCC, newFluencyScore(fCC, rOFCC))
       }
 
       turnReleaseCandidateIntoVirginIfPossible
@@ -250,11 +250,11 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    }
 
    def MUnewFluencyScore(consti:Constitution, releaseId:String) =
-   {  mailAllFollowersUpdate(consti, newFluencyScore(consti, releaseId))
+   {  sendAllFollowersUpdateMail(consti, newFluencyScore(consti, releaseId))
    }
 
    def URpublishConsti(consti:Constitution, text:String, description:String) =
-   {  mailOtherFollowersUpdate(consti, MailMessage.newPublication(consti), currentPlayer)
+   {  sendOtherFollowersUpdateMail(consti, newPublication(consti), currentPlayer)
 
       // in case no new versions occurred after the latest release, this publication may immediately become the next release.
       // {
@@ -418,7 +418,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =
-   {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
+   {  sendAllFollowersUpdateMail(consti, newFluencyScore(consti))
    }
 */
 
