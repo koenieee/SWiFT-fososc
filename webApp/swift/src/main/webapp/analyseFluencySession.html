@@ -1,0 +1,22 @@
+<lift:surround with="default" at="content">
+<lift:AnalyseFluencySession form="POST">
+<h1>Analyse Fluency Sessions of Player <top:player></h1>
+Constituton: <top:constName /> 
+Release: <top:release />
+Study time of constitution: <top:constiStudyTime />
+<hr />
+<table id="SessionTable">
+<top:sessionTable>
+   <top:row>
+   <tr>
+      <td><top:date />              </td>
+      <td><top:fluency />           </td>
+      <td><top:translationTime />   </td>
+   </tr>
+   </top:row>
+</top:sessionTable>
+</table>
+
+</lift:AnalyseFluencySession>
+
+</lift:surround>

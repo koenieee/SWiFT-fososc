@@ -762,8 +762,12 @@ object OCBKCinfoPlayer
      @ @todo move to gamecore library, because this is not a OCBKC specific method.
      */
    def numberOfSessionsPlayedBy(p:Player) =
+   {  sessionsPlayedBy(p).size
+   }
+
+   def sessionsPlayedBy(p:Player):List[SessionInfo] =
    {  val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! )
-      sis.size
+      sis
    }
    
    /**
