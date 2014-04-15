@@ -221,8 +221,16 @@ class Boot
                If( () => ( playerIsLoggedIn && !playerIsAdmin(currentPlayer) ), () => RedirectResponse("/index"))
             )
          )
-      )
-   ,
+      ),
+      // this one only for constigame_exp_1
+      Menu(
+         Loc(
+            "constigame_exp_1",
+            new Link("constigame_exp_1" :: Nil, true),
+            "If you see this, something is wrong: should be hidden",
+            List( Hidden )
+            )
+      ),
       Menu(Loc("all", Nil -> true, "If you see this, something is wrong: should be hidden", Hidden))
     )
 
