@@ -23,7 +23,17 @@ class StudyConstiRound
 
    def processSubmission() = 
    {  log("processSubmission called")
-      S.redirectTo("translationRound.html") 
+     log(SesCoord.is.timeFirstChosenConstitution.toString)
+     log(SesCoord.is.isFirstTimePlayer.toString)
+     if(SesCoord.is.timeFirstChosenConstitution == None)
+     {
+       S.redirectTo("studyHelpFile.html")
+     }
+     else
+     {
+       S.redirectTo("translationRound.html")
+     }
+
    }
 
    def render(ns: NodeSeq): NodeSeq =
