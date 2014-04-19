@@ -62,7 +62,7 @@ object GlobalConstant
    val ADMINFIRSTNAME = "Admin"
    
    var adminOpt:Option[Player] = None
-   def adminGitUserId = {  println("retrieving adminGitUserId...")
+   def adminGitUserId = {  log("retrieving adminGitUserId...")
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
                         }.get // convention is that this method may only be called when an admin account exists, so .get is possible
 

@@ -22,7 +22,12 @@ import org.ocbkc.swift.global.LiftHelpers._
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
 class AnalyseFluencySession
-{  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
+{  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
+      
+   class URLparamExtractionResult
+   case class PlayerParamMissing extends ParamExtra
+   case class WIW perhaps even better to do this for each (potential) parameter in a list
+   or perhaps it is better to just move this (the S.param) to the render function...
 
    val playerOption:Option[Player] = S.param("player_id") match
    {  case Full(player_id)  =>
@@ -34,43 +39,45 @@ class AnalyseFluencySession
                                  } // do nothing, player exists.
             case _            =>
             {  log("   " + msgStart + " not found... Me not happy. But ain't a bug I guess.")
-               None
+               PlayerParamMissing
             }
          }
+      }
+      case _ =>
+      {  log("Parameter player_id missing in URL.")
+         None
       }
    }
 
 
-   def sessionTableRows(ns:NodeSeq, p:Player):NodeSeq =
+   def sessionTableRows(ns:NodeSeq, player:Player):NodeSeq =
    {  log("sessionTableRows called")
       
-      case Some(player) =>
-      {  TableSorter("#SessionTable")
+      TableSorter("#SessionTable")
          
-         implicit val displayIfNone = "-"
+      implicit val displayIfNone = "-"
 
-         // create headers
-         val header = bind(
-               "top", chooseTemplate("top", "row", ns),
-               "date"               -> <b>Creation date</b>,
-               "fluency"            -> <b>Fluency</b>,
-               "translationTime"    -> <b>Translation Time</b>
-               )
-      
-         // create data rows
-         header ++
-         sesCoordLR.sessionsPlayedBy(player).flatMap(
-         session =>
-         {  val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
-
-            bind( "top", chooseTemplate("top", "row", ns),
-               "date"               -> Text("todo"),
-               "fluency"            -> { Text("todo") },
-               "translationTime"    -> { Text("todo") }
+      // create headers
+      val header = bind(
+            "top", chooseTemplate("top", "row", ns),
+            "date"               -> <b>Creation date</b>,
+            "fluency"            -> <b>Fluency</b>,
+            "translationTime"    -> <b>Translation Time</b>
             )
-         }
+   
+      // create data rows
+      header ++
+      sesCoordLR.sessionsPlayedBy(player).flatMap(
+      session =>
+      {  val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+
+         bind( "top", chooseTemplate("top", "row", ns),
+            "date"               -> { Text("todo") },
+            "fluency"            -> { Text("todo") },
+            "translationTime"    -> { Text("todo") }
          )
       }
+      )
    }
 
    def render(ns: NodeSeq): NodeSeq =
@@ -78,30 +85,44 @@ class AnalyseFluencySession
       {  case Some(player) => // bind player related fields
          {  val playerBindResult =
                bind( "top", ns,
-                  TODO         
+                     "player"       -> Text(player.id.asString)
                )
  
-            val constiOption = playerOption.collect{ p => Constitution.getById(p.firstChosenConstitution.is) }
+            val constiOption:Option[Constitution] =
+               playerOption match
+               {  case Some(p) =>
+                  {  Constitution.getById(p.firstChosenConstitution.is)
+                  }
+                  case None => None
+               }
 
             constiOption match
             {  case Some(consti) => // bind consti related fields
                {  bind( "top", playerBindResult,
-                     "constName"    -> Text(consti.constiId.toString)
-                     "player"       -> Text("TODO player id"),
+                     "constName"    -> Text(consti.constiId.toString),
                      "release"      -> Text("TODO release id"),
-                     "sessionTable" -> sessionTableRows(ns, player),
+                     "sessionTable" -> sessionTableRows(ns, player)
                    )
                }
                case None =>
-               {  bind( "top", playerBindResult,
-                     TODO
+               {  log("[SHOULDDO] simply do not show any consti related info in this case, but notify the constigame player that the player did not yet chose a consti")
+                  bind( "top", playerBindResult,
+                     "constName"    -> Text("No constitution chosen by this player yet"),
+                     "release"      -> Text("-"),
+                     "sessionTable" -> NodeSeq.Empty
                   )
                }
             }
          }
          case None =>
-         {  bind( "top", ns, 
+         {  log("[SHOULDDO] simply do not show any consti related info in this case, but notify the constigame player that the player did not yet chose a consti")
+            bind( "top", ns,
+                  "constName"    -> Text("No constitution chosen by this player yet"),
+                  "release"      -> Text("-"),
+                  "sessionTable" -> NodeSeq.Empty 
+            )
          }
+      }
    }
 }
 

@@ -278,10 +278,6 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       log("   round " + rfs + ": editable = " + ret)
       ret
    }
-
-   def sessionsPlayedBy(p: Player) =
-   {  OCBKCinfoPlayer.sessionsPlayedBy(p)
-   }
 }
 
 import org.ocbkc.swift.cores.EfeChallengeTypes._
@@ -452,8 +448,6 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    def sessionsPlayedBy(p:Player):List[SessionInfo] =
    {  OCBKCinfoPlayer.sessionsPlayedBy(p)
    }
-
-   
 }
 
 
