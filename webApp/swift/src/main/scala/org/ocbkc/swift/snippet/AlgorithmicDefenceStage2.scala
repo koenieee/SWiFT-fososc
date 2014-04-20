@@ -9,6 +9,7 @@ import _root_.net.liftweb.http._
 import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
+import org.ocbkc.swift.snippet.StudyConstiRound
 import Helpers._
 import System.err.println
 
@@ -17,6 +18,10 @@ class AlgorithmicDefenceRoundStage2
    def render(ns: NodeSeq): NodeSeq =
    {  def processSubmission() = 
       {  println("processSubmission called")
+        //Finalise Session, so Count all the times from studyConstiTimerTogether..
+
+          new StudyConstiRound().savesTimesTogether(); //keep everything in one class about the constiTimer
+
          // check errors on submission here
          // <&y2011.10.23.17:49:39&>
          S.redirectTo("finaliseSession.html") 

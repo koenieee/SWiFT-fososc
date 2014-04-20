@@ -25,6 +25,23 @@ import net.liftweb.http.js.JE._
 class StudyConstiRound
 {  log("StudyConstiRound constructor called")
 
+  //handy to keep everything in one file about the time etc..?
+  def savesTimesTogether()
+  {
+    if(SesCoord.is.latestRoundFluencySession == RoundAlgorithmicDefenceStage2) //latest round -> so ended
+    {
+      log("StudyConstiRound, saveTimesTogether called")
+      val startTimes = SesCoord.si.studyStartConstiTime
+      val stopTimes = SesCoord.si.studyStopConstiTime
+      val durationList:List[Long] = (stopTimes zip startTimes).map(times=>  times._1 - times._2 )
+
+      val totalDurationStudyTime = durationList.foldLeft(0)(_.toInt + _.toInt)
+      log("Total Constitution Study Duration Time: " + totalDurationStudyTime.toString)
+    }
+  }
+
+
+
    def processSubmission() = 
    {
 
@@ -74,13 +91,19 @@ def render =
 }
 
   def gPressed(){
+    if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
+    {
 println("G is pressed")
     SesCoord.si.studyStartConstiTime ::= System.currentTimeMillis
   }
+  }
 
   def gReleased(){
+    if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
+    {
 println("G is released")
     SesCoord.si.studyStopConstiTime ::= System.currentTimeMillis
+  }
   }
 
 
