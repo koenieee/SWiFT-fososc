@@ -55,36 +55,29 @@ class AnalyseFluencySession
    }
 
    def render(ns: NodeSeq): NodeSeq =
-   {  def renderWhenPlayerExists(p:Player) =
-      {           {  val playerBindResult =
-               bind( "top", ns,
-                     "player"       -> Text(player.id.asString)
-               )
+   {  def renderWhenPlayerExists(player:Player) =
+      {  val playerBindResult =
+            bind( "top", ns,
+                  "player"       -> Text(player.id.asString)
+            )
  
-            val constiOption:Option[Constitution] =
-               playerOption match
-               {  case Some(p) =>
-                  {  Constitution.getById(p.firstChosenConstitution.is)
-                  }
-                  case None => None
-               }
+         val constiOption:Option[Constitution] = Constitution.getById(player.firstChosenConstitution.is)
 
-            constiOption match // is there a first chosen consti for this player?
-            {  case Some(consti) => // bind consti related fields
-               {  bind( "top", playerBindResult,
-                     "constName"    -> Text(consti.constiId.toString),
-                     "release"      -> Text("TODO release id"),
-                     "sessionTable" -> sessionTableRows(ns, player)
-                   )
-               }
-               case None =>
-               {  log("[SHOULDDO] simply do not show any consti related info in this case, but notify the constigame player that the player did not yet chose a consti")
-                  bind( "top", playerBindResult,
-                     "constName"    -> Text("No constitution chosen by this player yet"),
-                     "release"      -> Text("-"),
-                     "sessionTable" -> NodeSeq.Empty
-                  )
-               }
+         constiOption match // is there a first chosen consti for this player?
+         {  case Some(consti) => // bind consti related fields
+            {  bind( "top", playerBindResult,
+                  "constName"    -> Text(consti.constiId.toString),
+                  "release"      -> Text("TODO release id"),
+                  "sessionTable" -> sessionTableRows(ns, player)
+                )
+            }
+            case None =>
+            {  log("[SHOULDDO] simply do not show any consti related info in this case, but notify the constigame player that the player did not yet chose a consti")
+               bind( "top", playerBindResult,
+                  "constName"    -> Text("No constitution chosen by this player yet"),
+                  "release"      -> Text("-"),
+                  "sessionTable" -> NodeSeq.Empty
+               )
             }
          }
       }
