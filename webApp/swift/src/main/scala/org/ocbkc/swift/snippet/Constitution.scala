@@ -25,6 +25,7 @@ import org.xml.sax.SAXParseException
 import org.ocbkc.swift.model.Player
 
 import org.ocbkc.swift.messages._
+import org.ocbkc.swift.messages.MailUtils._
 import org.ocbkc.swift.messages.MailMessages._
 
 abstract class Error
@@ -206,7 +207,7 @@ class ConstitutionSnippet
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.addFollower(sesCoordLR.currentPlayer, constLoc)
-               mailOtherFollowersUpdate(constLoc, MailMessage.newfollower(constLoc), sesCoordLR.currentPlayer)
+               sendOtherFollowersUpdateMail(constLoc, MailMessages.newfollower(constLoc), sesCoordLR.currentPlayer)
             } else if( !checked && constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.removeFollower(sesCoordLR.currentPlayer, constLoc )
                // <&y2012.06.27.14:00:21& send mail to unfollower to confirm.>
