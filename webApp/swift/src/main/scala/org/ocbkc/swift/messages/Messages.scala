@@ -32,7 +32,7 @@ object MailUtils
    /** Same as sendMail, but now to only one player
      */
    def sendMail(mail:Mail, player:Player)
-   {  println("sendupdatemail called")
+   {  println("sendMail called")
       println("   player email = " + player.email.get)
       Mailer.sendMail(From("cg@xs4all.nl"), Subject(mail.subject), To(player.email.get), new PlainMailBodyType(mail.body))
       println("   mail sent!")
