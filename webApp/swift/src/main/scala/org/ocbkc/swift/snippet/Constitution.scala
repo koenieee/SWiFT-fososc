@@ -25,7 +25,7 @@ import org.xml.sax.SAXParseException
 import org.ocbkc.swift.model.Player
 
 import org.ocbkc.swift.messages._
-import org.ocbkc.swift.messages.MailMessage._
+import org.ocbkc.swift.messages.MailMessages._
 
 abstract class Error
 
