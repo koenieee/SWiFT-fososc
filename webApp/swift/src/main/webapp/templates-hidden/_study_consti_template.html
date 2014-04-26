@@ -2,7 +2,7 @@
 
 <style type="text/css">
 div#consti_text
-{   visibility:hidden;
+{   display:none;
     width: 600px;
 }
 </style>
@@ -14,8 +14,6 @@ if( getURLParameter('false') == 'true')
    $('body').css('margin-left', 'auto').css('margin-right', 'auto');
 }
 </script>
-
-
 
 Study the constitution below by holding the 'g' key down on your keyboard.
 
@@ -36,7 +34,8 @@ Study the constitution below by holding the 'g' key down on your keyboard.
 <p id="blank">
 If you want to read on, please <b>hold the 'g' key.</b>
 </p>
-<div id="consti_text">
+
+<div id="consti_text" >
 <table>
    <tr><td colspan="2"><hr />                             </td></tr>
    <tr><td colspan="2"><top:constitutionText /></td>           </tr>
@@ -44,13 +43,10 @@ If you want to read on, please <b>hold the 'g' key.</b>
 </table>
 </div>
 
+
 <script type="text/javascript">  
-// Problem here: using visibility = hidden, will not stop the element from taking up its space. This is problematic, when other elements are shown after the element which you do not want to display.
-// A solution is using display = none or block, however then returning to the original scroll-location will not work anymore. However, I'm not sure... Perhaps the isolated constitution (not embedded in a round) will work.
 
-
-$(document).ready(function(){
-    	    function setCookie(c_name,value,exdays)
+function setCookie(c_name,value,exdays)
 {
 var exdate=new Date();
 exdate.setDate(exdate.getDate() + exdays);
@@ -83,43 +79,62 @@ c_value = unescape(c_value.substring(c_start,c_end));
 return c_value;
 }
 
-  
-    
-   // scroll(0,0);
-    var keyisdown = false;
-    var scroll_last_position = 0;
-       	 var keycode = 86; //alt key
-   	 var keycode2 = 71; //g key
+
+$(document).ready(function(){
+ 
+        var scroll_last_position = 0;
+   	 var keycode2 = 71; //o key
    	 //alert(e.which);
    	 var scrolled = false;
-   	pressedKeys = [];
+
+   // $(document).scrollTop(getCookie('last_pos'));
+    
     
     $('body').bind('keydown',function(e)
     {
    	// if (e.altKey == true ) {
    	 if( e.keyCode == keycode2)
    	{
-		
+
 		if(scrolled == false)
 		{
-   		 $(window).scrollTop(getCookie('last_pos'));
+
+	//	console.log('scroll to last position: ' + getCookie('last_pos'));
+		$('#blank').hide();		
+		$('#consti_text').show();  
+		if(window.location.href.indexOf('fluencyGameSes') != -1) {
+
+		$(document).scrollTop(getCookie('last_posInRound'));
+		}
+		else
+		{
+		$(document).scrollTop(getCookie('last_pos'));
+		} 		
+ 		
 		scrolled = true;
    		} 
-   		 $('#consti_text').css('visibility', 'visible');
-   		 $('#blank').css('visibility', 'hidden');
+   		 
 
-   		// scroll_last_position = $(window).scrollTop();
-   		 setCookie('last_pos', $(window).scrollTop(), 365);
+if(window.location.href.indexOf('fluencyGameSes') != -1) {
+   		 setCookie('last_posInRound', $(window).scrollTop(),365);
+}
+else
+{
+setCookie('last_pos', $(window).scrollTop(),365);
+
+}
+
    //	 }
    }
 }
 
     ).bind('keyup',function()
-    {	 console.log (scroll_last_position);
-   	 scrolled = false;
-   	 $('#blank').css('visibility', 'visible');
-   	 $('#consti_text').css('visibility', 'hidden');
+    {	// console.log (scroll_last_position);
 
+		$('#consti_text').hide();   	
+ 	$('#blank').show();
+   	 
+	scrolled=false;
    	 scroll(0,0);
     });
 
