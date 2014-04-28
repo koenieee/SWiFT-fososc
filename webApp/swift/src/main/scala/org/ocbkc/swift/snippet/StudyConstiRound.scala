@@ -24,92 +24,73 @@ import net.liftweb.http.js.JE._
   */
 class StudyConstiRound
 {  log("StudyConstiRound constructor called")
-
+  val sessionInfo = SesCoord.si
+  var startTime:Long = 0;
   //handy to keep everything in one file about the time etc..?
   def savesTimesTogether()
   {
     if(SesCoord.is.latestRoundFluencySession == RoundAlgorithmicDefenceStage2) //latest round -> so ended
-    {
-      log("StudyConstiRound, saveTimesTogether called")
-      val startTimes = SesCoord.si.studyStartConstiTime
-      val stopTimes = SesCoord.si.studyStopConstiTime
-      val durationList:List[Long] = (stopTimes zip startTimes).map(times=>  times._1 - times._2 )
-
+    { log("StudyConstiRound, saveTimesTogether called")
+      val durationList = sessionInfo.constiStudyIntervals
       val totalDurationStudyTime = durationList.foldLeft(0)(_.toInt + _.toInt)
-      log("Total Constitution Study Duration Time: " + totalDurationStudyTime.toString)
+      sessionInfo.constiStudyTotalDuration = Some(totalDurationStudyTime)
+      log("Total Constitution Study Duration Time: " + sessionInfo.constiStudyTotalDuration .get)
     }
   }
 
 
 
    def processSubmission() = 
-   {
-
-     log(SesCoord.si.studyStopConstiTime.toString)
-
-
-    log(SesCoord.si.studyStartConstiTime.toString)
-
-     log("processSubmission called")
-
-    // SesCoord.si.studyStopConstiTime = Some(System.currentTimeMillis)
-  //   log("studyConstiTime: "+ (.get - SesCoord.si.studyStartConstiTime.get).toString)
+   {  log(sessionInfo.constiStudyIntervals.toString)
+      log("processSubmission called")
       S.redirectTo("translationRound.html")
    }
-/*
-  if(SesCoord.si.studyStartConstiTime == None)
-  {
-    SesCoord.si.studyStartConstiTime = Some(System.currentTimeMillis)
+
+  def render =
+  {  SesCoord.is.URconstiStudy
+    "#continue"   #> SHtml.submit("Continue", processSubmission) &
+    "#liftGen" #> Script(JsRaw(
+      "function gAction(action){" +
+      SHtml.jsonCall(JsRaw("action"),(key:Any)=>
+      { if(key == "pressed")
+        {
+          gPressed()
+        }
+        else
+        {
+          gReleased()
+        }
+        Noop
+        })._2.toJsCmd
+      + "}"
+    ))
+
+
 
   }
-*/
 
-def render =
-   {  SesCoord.is.URconstiStudy
+  def gPressed()
+  { if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
+    { println("G is pressed")
+      startTime = System.currentTimeMillis
+    }
+  }
 
+  def gReleased()
+  {  if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
+     { val stopTime = System.currentTimeMillis
+       println("previous startTime: " + startTime)
+       println("G is released on time: " + stopTime)
+       sessionInfo.constiStudyIntervals ::= (stopTime - startTime)
 
-       "#continue"   #> SHtml.submit("Continue", processSubmission) &
-      // "startTimeConsti" #> Text(SesCoord.si.studyStartConstiTime.get.toString)
-        "#liftGen" #> Script(JsRaw(
-       "function gAction(action){" +
-         SHtml.jsonCall(JsRaw("action"),(a:Any)=>{
-           if(a == "pressed")
-           {
-             gPressed()
-           }
-           else
-           {
-             gReleased()
-           }
-           Noop
-         })._2.toJsCmd
-         + "}"
-     ))
-
-
-
+    }
+  }
 }
-
-  def gPressed(){
-    if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
-    {
-println("G is pressed")
-    SesCoord.si.studyStartConstiTime ::= System.currentTimeMillis
-  }
-  }
-
-  def gReleased(){
-    if (SesCoord.is.latestRoundFluencySession != RoundTranslation)
-    {
-println("G is released")
-    SesCoord.si.studyStopConstiTime ::= System.currentTimeMillis
-  }
-  }
 
 
 
 
 
 }
-}
+
 }

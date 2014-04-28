@@ -6,6 +6,7 @@ lift_proto.db.lock.db
 .project
 ft_noEqStats.fof
 ft_onlyInEqIntroConsStats.fof
+ft.fof
 binaries/
 target/
 users/
