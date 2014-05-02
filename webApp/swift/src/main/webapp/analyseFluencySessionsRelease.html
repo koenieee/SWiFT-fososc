@@ -1,0 +1,24 @@
+<lift:surround with="default" at="content">
+<lift:AnalyseFluencySessionRelease form="POST">
+<h1>Analyse Fluency Sessions of Consti <top:constName />, Release <top:release />.</h1>
+TODO here scoring info of the release
+<hr />
+<table id="PlayerTable">
+<top:playerTable>
+   <top:row>
+   <!-- information limited to sessionsPlayedB4accessToAllConstis,  sessions after it are ignored -->
+   <tr>
+      <td><top:playerId />          </td>
+      <td><top:fluency />           </td>
+      <td><top:pastChallenge />     </td>
+      <td><top:averageTranslationTime />   </td>
+      <td><top:shortestTransTime /> </td>
+      <td><top:sessionsPlayedB4accessToAllConstis /> </td>
+   </tr>
+   </top:row>
+</top:playerTable>
+</table>
+
+</lift:AnalyseFluencySessionsRelease>
+
+</lift:surround>

@@ -1,3 +1,8 @@
+/**
+  * Overall design conditions:
+  * - connection to the git database is localised as much as possible. So do not try to access the git database directly, but use the interface, which currently consists of: initialisation (during reading from the database); TODO finish.
+  */
+
 package org.ocbkc.swift.OCBKC
 {
 import _root_.scala.xml._
@@ -578,11 +583,13 @@ object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil)
 
 /** 
   * @param constiId constitution id, must be a number between 1 and this.count. Constitutions started being numbered from id = 1, and then without skipping any natural number up to the highestId.
-
+  * @param commitIdsReleases contains the commitIds of all releases of all contis.
+  *
   */
 object Constitution
 {  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
+   var commitIdsReleases:List[VersionId] = Nil
    /*
    def create():Constitution =
    {  // if no user is given assume 'master' user, TODO <&y2012.05.24.20:44:12& determine fixed number for this, for now I used ID 0>
@@ -623,6 +630,7 @@ object Constitution
             
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
             const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.get.peel(tag).getPeeledObjectId.name ).reverse.toList
+            Constitution.commitIdsReleases ++= const.commitIdsReleases
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             log("   commitIdsReleases just read from git repo:")
             const.commitIdsReleases.map( log(_) )
@@ -729,6 +737,16 @@ object Constitution
    def allLatestReleasesOfAllConstisEvaluated:Boolean =
    {  constis.forall{ c => c.latestReleaseIsEvaluated }
    }
+
+   def playersWithRelease(releaseId:VersionId):List[Player] =
+   {  Player.findAll.filter(
+         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
+      )
+   }
+
+   def releaseExists(releaseId:VersionId):Boolean =
+   {  !commitIdsReleases.find(_.equals(releaseId)).isEmpty
+   }
 }
 
 class StudyHistory
@@ -817,6 +835,17 @@ object PlayerScores
       Result_percentageCorrect(percCorrect, totalNumber)
    }
 
+   /** Only counts correct sessions
+     */
+   def fluency(p:Player, numOfSessions:Int):Option[Double] =
+   {  averageDurationTranslation(p, numOfSessions) match
+      {  case Result_averageDurationTranslation(Some(adt), ss) =>
+         {  (ss.toDouble/numOfSessions.toDouble)*k_TODO/adt
+         }
+         case _ => None
+      }
+   }
+
    case class Result_averageDurationTranslation(val averageDurationTranslation:Option[Double], val sampleSize: Int)
 /** @return only includes time of correct translations
   */
@@ -825,7 +854,7 @@ object PlayerScores
    }
 
 /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
-  * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
+  * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions. sampleSize is equal to the number of correct translations within the investigated sessions.
   */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
    {  log("PlayerScores.averageDurationTranslation called")
@@ -869,16 +898,14 @@ object ConstiScores
    }
 
 /**
-  * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
+  * @return The average percentage correct for release with id releaseId of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] =
    {  log("averagePercentageCorrect called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
-      val playersWithThisRelease:List[Player] = players.filter(
-         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
-      )
+      val playersWithThisRelease:List[Player] = Constitution.playersWithRelease(releaseId)
 
       log("   playersWithThisRelease:" + playersWithThisRelease)
       
@@ -933,11 +960,8 @@ object ConstiScores
    def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
    {  log("ConstiScores.averageDurationTranslation called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
-      val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
-      val playersWithThisRelease:List[Player] = players.filter(
-         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
-      )
+      val playersWithThisRelease:List[Player] = Constitution.playersWithRelease( releaseId )
 
       log("   playersWithThisRelease:" + playersWithThisRelease)
       
