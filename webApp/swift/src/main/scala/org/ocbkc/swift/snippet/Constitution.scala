@@ -259,11 +259,7 @@ class ConstitutionSnippet
      
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       implicit val displayIfNone = "-"
-      val fluencyScoreOpt = ConstiScores.averageFluencyLatestReleaseWithScore(
-                              GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, 
-                              constLoc.constiId,
-                              GlobalConstant.AverageFluency.fluencyConstantK
-                           )
+      val fluencyScoreOpt = ConstiScores.averageFluencyLatestReleaseWithScore( constLoc.constiId )
       val latestReleaseIdOpt = fluencyScoreOpt.collect{ case (id,_) => id }
       println("CURRENTUSERID::");
 	println(constLoc.followers.contains(currentUserId));

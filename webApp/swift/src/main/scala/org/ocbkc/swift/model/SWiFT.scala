@@ -129,13 +129,7 @@ case class SessionInfo( var textNL: String,
    def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
-   def fluency:Option[Double] =
-   {  if(answerPlayerCorrect.is)
-      {  
-      }
-      else
-         None
-   }
+
    def durationTranslation:Option[Long] = // <&y2012.10.28.19:58:50& TODO: refactor with checking if startTimeTranslation is defined?>
    {  println("   durationTranslation called")
       println("   startTimeTranslation.is == " + startTimeTranslation.is)

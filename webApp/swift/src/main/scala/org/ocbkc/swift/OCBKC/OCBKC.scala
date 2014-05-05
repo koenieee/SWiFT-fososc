@@ -1084,8 +1084,8 @@ object ConstiScores
    {  log("ConstiScores.averageFluency called") 
       val playersWithThisRelease:List[Player] = logp("   playersWithThisRelease = " + (_:List[Player]).mkString(", "), Constitution.playersWithRelease( releaseId ) )
 
-      logp(
-      { (r:Option[Double]) => "   ret = " + r.toString },
+      //logp(
+      //{ (r:Option[Double]) => "   ret = " + r.toString },
       if( playersWithThisRelease.size >= AverageFluency.minimalSampleSizePerConsti )
       {  val samples = playersWithThisRelease.map{ p => PlayerScores.fluencyScoreSample(p) }.filter{ fss => fss.size >= AverageFluency.minimalSampleSizePerPlayer }.map{ ffs => takeNumOrAll(ffs, GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS) }
          
@@ -1097,6 +1097,8 @@ object ConstiScores
                }
             }.fold(0d)(_+_)/
                samples.size
+
+            Some(averageFluency)
          } else
          {  None
          }
@@ -1109,7 +1111,7 @@ object ConstiScores
       val apc = averagePercentageCorrect(minimalSampleSize, releaseId)
       applyWhenBothDefined( (_:Double)/(_:Double)*k, apc, adt)
       */
-      )
+      //)
    }
 
    // perhaps not needed anymore, found an "absolute" score for fluency
@@ -1155,8 +1157,7 @@ object ConstiScores
 
    def sampleSizeSufficient4FluencyScore(releaseId:String):Boolean =
    {  // the sample size is sufficiently large, if the fluency score exists.
-      val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, releaseId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
-      isSuf
+      logp( { (b:Boolean) => "   sampleSizeSufficient4FluencyScore of release " + releaseId + ": " + b.toString }, averageFluency(releaseId).isDefined )
    }
 
    /** Determine whether sample size of latest release is sufficient for scoring
