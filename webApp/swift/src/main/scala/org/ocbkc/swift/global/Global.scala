@@ -83,8 +83,11 @@ object GlobalConstant
    {  val minimalNumberOfSessionsPerPlayer = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
    }
 
+   /** @param minimalSampleSizePerConsti given a consti C, the minimal number of fluency players who used consti C and have a valid fluency score that are required to assign a fluency score to the consti.
+     */
    object AverageFluency extends ScoringConstants
    {  val minimalSampleSizePerPlayer   = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
+      val minimalSampleSizePerConsti   = 2
       val fluencyConstantK             = 1000000
    }
 
