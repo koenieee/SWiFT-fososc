@@ -76,8 +76,6 @@ class AdminPage
 
                InitialiseJgit()
 
-               Constitution.createConstiAlphaIfDoesntExist
-
  	       log("Calling Jara")	          
                PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
 		

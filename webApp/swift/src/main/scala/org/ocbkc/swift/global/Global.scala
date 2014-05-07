@@ -140,8 +140,9 @@ object Types
 object TestSettings
 {  object AUTOLOGIN
    {  val ON      = true
-      val USER_ID = "2" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
+      val USER_ID = "1" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
    }
+
    val AUTOTRANSLATION                 = false // true
    val CREATETESTUSERBASE              = true // false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */

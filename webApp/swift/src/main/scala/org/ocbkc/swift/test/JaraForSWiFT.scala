@@ -32,14 +32,7 @@ object PlayingSimulator
       TestSettings.SIMULATECLOCK = true
       TestSettings.SIMULATEPLAYINGWITHJARARUNNING = true
 
-      val adminId = GlobalConstant.adminOpt.get.id.is
-      val constiAlpha = Constitution.create(adminId)
-      constiAlpha.publish(
-"""<h2>Article 1</h2>
-
-<p>publication 1</p>
-""", "publication 1", adminId.toString
-      )
+      Constitution.createConstiAlphaIfDoesntExist
 
       new SimSubscriptions()
       val startTimeSim = SystemWithTesting.currentTimeMillis
@@ -370,7 +363,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    def procChooseFirstConsti(d: DurationInMillis) =
    {  println("procChooseFirstConsti called")
-
+      log("[BUG] &y2014.05.08.00:23:23& Must be updated to the newest version of game flow: call URtryStartSession.")
       pickRandomElementFromList(Constitution.constisWithAReleaseOrVirginRelease, SharedRandom.get) match
       {  case Some(randomConsti) =>
          {  SesCoord.URchooseFirstConstitution(randomConsti.constiId)
@@ -384,10 +377,16 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
       
-      SesCoord.URtryStartSession
-      logAndThrow("[BUG] Jara is not yet prepared for dealing with URtryStartTranslation and the new round StudyConstiRound(instead of the previous URstartTranslation)")
-      SesCoord.URstopTranslation
-      SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
+      SesCoord.URtryStartSession match
+      {  case None      =>
+         {  log("   player may not yet start... *Walks away disappointed :-(*")
+         }
+         case Some(_)   =>
+         {  SesCoord.URstopTranslation
+            SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
+         }
+      }
+   
    }
 
    override def updateTransitionModel =
