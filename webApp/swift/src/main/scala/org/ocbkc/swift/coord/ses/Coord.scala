@@ -146,24 +146,29 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
      */
    def URtryStartSession:Option[String] =
    {  log("URtryStartSession")
+
+      def startSessionPreps =
+      {  gameCore.initialiseSessionInfo
+         latestRoundFluencySession = RoundStartSession
+         Some(si.textNL)
+      }
+
       if( latestRoundFluencySession == NotInFluencySession )
-      {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-         {  log("   allLatestReleasesOfAllConstisEvaluated, so session may not start.")   
-            None
+      {  if(currentPlayer.firstChosenConstitution.is == -1)
+         {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
+            {  log("   allLatestReleasesOfAllConstisEvaluated, and this player still has no first chosen consti, so session may not start.")   
+               None
+            }
+            else
+            {  log("Choose a random release for this player, it is the first session for the dudicon!")
+               val randomSeq = new Random()
+               URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+                           
+               startSessionPreps
+            }
          }
          else
-         {  si = gameCore.initialiseSessionInfo
-
-            log("Choose a random release for this player, if there was none chose yet (= it is the first session).")
-
-            {  if(currentPlayer.firstChosenConstitution.is == -1) 
-               {  val randomSeq = new Random()
-                  URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
-               }
-            }
-
-            latestRoundFluencySession = RoundStartSession
-            Some(si.textNL)
+         {  startSessionPreps
          }
       } else
       {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page.")

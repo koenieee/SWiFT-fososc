@@ -242,7 +242,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    // create additional states
    val qPlayTranslationSession = State("qPlayTranslationSession")
    val qCreateSession = State("qCreateSession")
-   val qChooseFirstConsti = State("qChooseFirstConsti")
+   val qTryStartSession = State("qTryStartSession")
    val qCreateNewConsti = State("qCreateNewConsti")
    val qEditExistingConsti = State("qEditExistingConsti")
    val qChooseReleaseCandidate = State("qChooseReleaseCandidate")
@@ -250,16 +250,16 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    
    initialisationAfterStateDefs
 
+   val durationTryStartSessionExp         = 2 * 1000
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
-   val durationChooseFirstConstiExp       = 1 * 60 * 1000
    val durationChooseReleaseCandidateExp  = 1 * 60 * 1000
    val durationCreateNewConstiExp         = 1 * 60 * 1000 // nonsensical duration for qCreateNewConsti, but done just to make it work.
    // &y2013.01.10& Is not elegant and is confusing: startTimeSession and lastFinishTimeStateMap should come from the same source.
 
+   val delayTryStartSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qTryStartSession, startTimeSession.get), durationTryStartSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qTryStartSession), ran, "delayTryStartSession" )
    val delayPlayTranslationSession = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qPlayTranslationSession, startTimeSession.get), durationPlayTranslationSessionExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qPlayTranslationSession), ran, "delayPlayTranslationSession" )
    val delayEditExistingConsti = DelayFunctionType1Generator.generate( 0.01, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qEditExistingConsti, startTimeSession.get), durationEditExistingConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qEditExistingConsti), ran, "delayEditExistingConsti" )
-   val delayChooseFirstConsti = DelayFunctionType1Generator.generate( 0.1, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseFirstConsti, startTimeSession.get), durationChooseFirstConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseFirstConsti), ran, "delayChooseFirstConsti" )
    val delayChooseReleaseCandidate = DelayFunctionType1Generator.generate( 0.3, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseReleaseCandidate, startTimeSession.get), durationChooseReleaseCandidateExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseReleaseCandidate), ran, "delayChooseReleaseCandidate" )
 
    //For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
@@ -274,18 +274,17 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    {  (90*1000 + SharedRandom.get.nextInt(20*1000)).toLong
    }
 
+   val durationTryStartSession = DurationFunctionType1Generator.generate("durationTryStartSession", durationTryStartSessionExp, 0.25, ran)
    val durationPlayTranslationSession = DurationFunctionType1Generator.generate("durationPlayTranslationSession", durationPlayTranslationSessionExp, 0.25, ran)
    val durationEditExistingConsti = DurationFunctionType1Generator.generate("durationEditExistingConsti", durationEditExistingConstiExp, 0.25, ran)
-   val durationChooseFirstConsti = DurationFunctionType1Generator.generate("durationChooseFirstConsti", durationChooseFirstConstiExp, 0.25, ran)
    val durationChooseReleaseCandidate = DurationFunctionType1Generator.generate("durationChooseReleaseCandidate", durationChooseReleaseCandidateExp, 0.25, ran)
    val durationCreateNewConsti = DurationFunctionType1Generator.generate("durationCreateNewConsti", durationCreateNewConstiExp, 0.25, ran)
 
    transitions =
    Map(
-      qStart -> List(qCreateSession),
-      qCreateSession -> List(qChooseFirstConsti),
-      qChooseFirstConsti -> List(qPlayTranslationSession),
-      qPlayTranslationSession -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
+      qStart               -> List(qCreateSession),
+      qTryStartSession     -> List(qTryStartSession), // qTryStartSession will adapt this transition when it succeeds (this is a work-around for the fact the Jara model does not (yet) have conditional transitions.
+      qPlayTranslationSession -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
       qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
       qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
       qChooseReleaseCandidate -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
@@ -295,9 +294,9 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateSession, () => 0), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateSession", procCreateSession(_)), () => 0)) )
 
-   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qChooseFirstConsti, delayChooseFirstConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procChooseFirstConsti", procChooseFirstConsti(_)), durationChooseFirstConsti)))
-
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qCreateNewConsti, delayCreateNewConsti), Some(new Jn_SimProc_DurationGen(new SimProc("procCreateNewConsti", procCreateNewConsti(_)), durationCreateNewConsti)))
+
+   Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qTryStartSession, delayTryStartSession), Some(new Jn_SimProc_DurationGen(new SimProc("procTryStartSession", procTryStartSession(_)), durationTryStartSession)))
 
    Jn_Jn_State_DelayGen_OptJn_SimProc_DurationGen( Jn_State_DelayGen(qPlayTranslationSession, delayPlayTranslationSession), Some(new Jn_SimProc_DurationGen(new SimProc("procPlayTranslationSession", procPlayTranslationSession(_)), durationPlayTranslationSession)))
 
@@ -361,32 +360,23 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    }
 
 
-   def procChooseFirstConsti(d: DurationInMillis) =
-   {  println("procChooseFirstConsti called")
-      log("[BUG] &y2014.05.08.00:23:23& Must be updated to the newest version of game flow: call URtryStartSession.")
-      pickRandomElementFromList(Constitution.constisWithAReleaseOrVirginRelease, SharedRandom.get) match
-      {  case Some(randomConsti) =>
-         {  SesCoord.URchooseFirstConstitution(randomConsti.constiId)
+   def procTryStartSession(d: DurationInMillis) =
+   {  log("procTryStartSession called")
+
+      SesCoord.URtryStartSession match 
+      {  case None      =>
+         {  log("   player may not yet start... *Walks away disappointed :-(*")
          }
-         case None               =>
-         {  throw new RuntimeException("No consti available to choose from! (There should be at least one with a released version).")
+         case Some(_)   =>
+         {  transitions = transitions + (qTryStartSession -> List(qTryStartSession, qPlayTranslationSession)) // from now on, transition to qPlayTranslationSession is possible. <perhaps move this to updateTransitionModel for clarity>
          }
       }
    }
 
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
-      
-      SesCoord.URtryStartSession match
-      {  case None      =>
-         {  log("   player may not yet start... *Walks away disappointed :-(*")
-         }
-         case Some(_)   =>
-         {  SesCoord.URstopTranslation
-            SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
-         }
-      }
-   
+      SesCoord.URstopTranslation
+      SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
    }
 
    override def updateTransitionModel =

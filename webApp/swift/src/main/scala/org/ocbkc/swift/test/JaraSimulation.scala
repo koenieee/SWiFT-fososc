@@ -12,6 +12,10 @@ Convention:
 SimGod never notifies entities that another entity has started a state, while this might seem useful in some cases. However, SimGod assumes you to break a state into smaller states if you want to "notify" other entities that a certain entity started to get involved in a certain process. The philosophy is that this approaches reality in which it also may take some time before another entity notices changes in the other entities states.
 
 
+TODO
+
+The implementation needs to be simplified considerably. I (Chide) experimented with some alternative ideas to implement programming ideas, but some of these have made the implementation too complicated.
+
 
 */
 
