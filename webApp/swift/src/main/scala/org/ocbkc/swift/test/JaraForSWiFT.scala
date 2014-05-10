@@ -283,6 +283,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    transitions =
    Map(
       qStart               -> List(qCreateSession),
+      qCreateSession       -> List(qTryStartSession),
       qTryStartSession     -> List(qTryStartSession), // qTryStartSession will adapt this transition when it succeeds (this is a work-around for the fact the Jara model does not (yet) have conditional transitions.
       qPlayTranslationSession -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
       qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
