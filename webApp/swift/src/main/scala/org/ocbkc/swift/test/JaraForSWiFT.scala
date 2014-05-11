@@ -370,6 +370,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
          }
          case Some(_)   =>
          {  transitions = transitions + (qTryStartSession -> List(qTryStartSession, qPlayTranslationSession)) // from now on, transition to qPlayTranslationSession is possible. <perhaps move this to updateTransitionModel for clarity>
+            // COULDDO optimise by only adding the new transition the first time.
          }
       }
    }

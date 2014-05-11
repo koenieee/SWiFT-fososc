@@ -148,7 +148,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    {  log("URtryStartSession")
 
       def startSessionPreps =
-      {  gameCore.initialiseSessionInfo
+      {  si = gameCore.initialiseSessionInfo
          latestRoundFluencySession = RoundStartSession
          Some(si.textNL)
       }
@@ -162,7 +162,11 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
             else
             {  log("Choose a random release for this player, it is the first session for the dudicon!")
                val randomSeq = new Random()
-               URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+               URchooseFirstConstitution(
+                  logp( 
+                  "   picked consti = " + (_:Int), 
+                  RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId)
+                  )
                            
                startSessionPreps
             }

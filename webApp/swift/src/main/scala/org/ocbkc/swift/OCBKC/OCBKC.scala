@@ -702,7 +702,10 @@ object Constitution
    /** @returns List with releases which are either (1) not yet completely evaluated, or (2) release virgins. I.e. "playable" releases.
      */
    def constisWithPlayableReleases:List[Constitution] =
-   {  constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+   {  logp( 
+      { (cl:List[Constitution]) => "   constisWithPlayableReleases = " + (cl.map{ _.constiId }.mkString(", ")) },
+      constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+      )
    }
 
    def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
