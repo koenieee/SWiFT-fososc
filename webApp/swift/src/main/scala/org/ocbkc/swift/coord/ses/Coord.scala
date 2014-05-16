@@ -1,3 +1,8 @@
+/**
+  * @todo COULDDO: automatically generate log-error message of which the following is an example:
+  *               "[POTENTIAL_BUG] cannot go to state RoundConstiStudy, because player is not in state RoundStartSession."
+  */
+
 /* <&y2012.04.09.13:58:55& for all scala code: change appending to Lists, because this is highly inefficient (use a ListBuffer instead)>/
 (  importance = 9
 )
@@ -123,23 +128,36 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
      */
    def URsetReleaseCandidate(consti:Constitution, on:Boolean):Boolean =
    {  if(on)
-      {  if(Constitution.allLatestReleasesOfAllConstisEvaluated)
-         {  log("allLatestReleasesOfAllConstisEvaluated = true, so this version may be released.")   
-            consti.makeLatestVersionReleaseCandidateIfPossible
-            true
-         } else
-         {  log("allLatestReleasesOfAllConstisEvaluated = false, so this version may not be released.")
-            false
+      {  val allowed = consti.lastReleaseCommitId match
+         {  case None =>
+            {  true
+            }
+            case Some(lrci) =>
+            {  if(ConstiScores.sampleSizeSufficient4FluencyScore(lrci))
+               {  log("latestReleaseIsEvaluated = true, so this version may be released.")
+                  true
+               }
+               else
+               {  log("latestReleaseIsEvaluated = false, so this version may not be released.")
+                  false
+               }
+            }
          }
+         if(allowed) consti.makeLatestVersionReleaseCandidateIfPossible
+         allowed
       } else
       {  consti.unmakeCurrentPotentialRelease
          true
       }
    }
+
    def URconstiStudy =
    {  log("URconstiStudy called")
       if( latestRoundFluencySession == RoundStartSession )
          latestRoundFluencySession = RoundConstiStudy
+      else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundConstiStudy, because player is not in state RoundStartSession.")
+      }
    }
 
    /** @returns None: the translation may not be started because there aren't releases available which are not yet completely evaluated. The player is put on hold.
@@ -155,27 +173,29 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 
       if( latestRoundFluencySession == NotInFluencySession )
       {  if(currentPlayer.firstChosenConstitution.is == -1)
-         {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-            {  log("   allLatestReleasesOfAllConstisEvaluated, and this player still has no first chosen consti, so session may not start.")   
-               None
-            }
-            else
-            {  log("Choose a random release for this player, it is the first session for the dudicon!")
-               val randomSeq = new Random()
-               URchooseFirstConstitution(
+         {  Constitution.constisWithPlayableReleases match
+            {  case Nil =>
+               {  log("   there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
+                  None
+               }
+               case cwpr =>
+               {  log("Choose a random release for this player, it is the first session for the dudicon!")
+                  val randomSeq = new Random()
+                  URchooseFirstConstitution(
                   logp( 
                   "   picked consti = " + (_:Int), 
-                  RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId)
+                  RandomExtras.pickRandomElementFromList(cwpr, randomSeq).get.constiId)
                   )
                            
-               startSessionPreps
+                  startSessionPreps
+               }
             }
          }
          else
          {  startSessionPreps
          }
       } else
-      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page.")
+      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page. The player is now in round: " + latestRoundFluencySession)
          None
       }
    }
@@ -186,6 +206,8 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          si.startTime(SystemWithTesting.currentTimeMillis).save
          si.startTimeTranslation(si.startTime.is).save
          latestRoundFluencySession = RoundTranslation
+      } else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundTranslation, because player is not in state RoundConstiStudy")
       }
       Unit
    }
@@ -209,6 +231,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage1 )
       {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
       }
+      log("[POTENTIAL_BUG] code must only run when latestRoundFluencySession == RoundAlgorithmicDefenceStage1? Or not?")
       val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
@@ -232,9 +255,12 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    def URfinaliseSession =
    {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage2 )
       {  latestRoundFluencySession = RoundFinaliseSession
+      } else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundFinaliseSession, because player is not in state RoundAlgorithmicDefenceStage2.")
       }
    }
 
+   // rename to URcloseSession
    def closeSession =
    {  log("closeSession")
       if( latestRoundFluencySession == NotInFluencySession ) log("   session was already closed.")
@@ -479,6 +505,7 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent_rb, E
       sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
 
       turnReleaseCandidateIntoVirginIfPossible
+      latestRoundFluencySession = RoundAlgorithmicDefenceStage2
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =

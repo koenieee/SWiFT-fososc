@@ -1,5 +1,9 @@
 /** Simulates players playing the SWiFT game. Intended for testing purposes.
   *
+  * Handy greps/search patterns for investigating Jara log:
+  * see the sequence of states of a given player 
+  * grep -iA 2 "simplayer.*[(part of) player id here].*doprop" logmsg_jetty
+  * 
   */
 package ocbkc.swift.test.simulation.jara
 {
@@ -250,7 +254,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    
    initialisationAfterStateDefs
 
-   val durationTryStartSessionExp         = 2 * 1000
+   val durationTryStartSessionExp         = 2 * 60 * 1000
    val durationPlayTranslationSessionExp  = 2 * 60 * 1000
    val durationEditExistingConstiExp      = 5 * 60 * 1000
    val durationChooseReleaseCandidateExp  = 1 * 60 * 1000
@@ -263,7 +267,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    val delayChooseReleaseCandidate = DelayFunctionType1Generator.generate( 0.3, 60 * 60 * 1000, () => durStartRatDesReq2TerminLastExe(qChooseReleaseCandidate, startTimeSession.get), durationChooseReleaseCandidateExp, 0.25, () => (SystemWithTesting.currentTimeMillis - startTimeSession.get),() => totalDurations(qChooseReleaseCandidate), ran, "delayChooseReleaseCandidate" )
 
    //For qCreateNewConsti don't look at the last the player created a constitution, but the last time ANY player created a constitution.
-   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.003, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
+   val delayCreateNewConsti = DelayFunctionType1Generator.generate( 0.009, 60 * 60 * 1000, () => durStartRatDesReq2OverallTerminLastExe(qCreateNewConsti, SimGod.startTimeCurrentRun.get), durationCreateNewConstiExp, 0.25, () => (SystemWithTesting.currentTimeMillis - SimGod.startTimeCurrentRun.get),() => SimPlayer.overallDuration(qCreateNewConsti), ran, "delayCreateNewConsti" )
 
 /*
    /** @todo &y2013.01.02.13:39:24& Refactor: put this way of calculating delayFunctions into the generic Jara lib. E.g. in a class
@@ -284,7 +288,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
    Map(
       qStart               -> List(qCreateSession),
       qCreateSession       -> List(qTryStartSession),
-      qTryStartSession     -> List(qTryStartSession), // qTryStartSession will adapt this transition when it succeeds (this is a work-around for the fact the Jara model does not (yet) have conditional transitions.
+      qTryStartSession     -> List(qTryStartSession), // qTryStartSession will adapt this transition to go to qPlayTranslationSession when it succeeds (this is a work-around for the fact the Jara model does not (yet) have conditional transitions.
       qPlayTranslationSession -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
       qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
       qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
@@ -369,16 +373,20 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
          {  log("   player may not yet start... *Walks away disappointed :-(*")
          }
          case Some(_)   =>
-         {  transitions = transitions + (qTryStartSession -> List(qTryStartSession, qPlayTranslationSession)) // from now on, transition to qPlayTranslationSession is possible. <perhaps move this to updateTransitionModel for clarity>
-            // COULDDO optimise by only adding the new transition the first time.
+         {  transitions += (qTryStartSession -> List(qPlayTranslationSession)) // from now on, transition to qPlayTranslationSession is possible. <perhaps move this to updateTransitionModel for clarity>
+            log("   transitions: " + transitions)
          }
       }
    }
 
    def procPlayTranslationSession(duration: DurationInMillis) =
    {  val winSession = ran.nextBoolean
-      SesCoord.URstopTranslation
-      SesCoord.URalgorithmicDefenceSimplified(winSession, duration)
+      SesCoord.URconstiStudy
+      SesCoord.URstartTranslation // Don't think this one is needed, it already covered by URalgorithmicDefenceSimplified. Note: in the previous version of SWiFT this was already carried out (with a working jaraforswift simulation).
+      //SesCoord.URstopTranslation
+      SesCoord.URalgorithmicDefenceSimplified(winSession, duration) // @shoulddo rename, so that it is clear that it also covers the other rounds, or also add these other rounds in a simplified way.
+      SesCoord.URfinaliseSession
+      SesCoord.closeSession
    }
 
    override def updateTransitionModel =

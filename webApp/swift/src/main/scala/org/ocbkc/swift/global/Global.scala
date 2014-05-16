@@ -66,14 +66,16 @@ object GlobalConstant
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
                         }.get // convention is that this method may only be called when an admin account exists, so .get is possible
 
-   val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
+   val MINsESSIONSb4ACCESS2ALLcONSTIS = 2
+   log("[POTENTIAL_BUG]  <&y2014.05.12.14:56:26& shouldn't MINsESSIONSb4ACCESS2ALLcONSTIS be equal to minimalNumberOfSessionsPerPlayer>")
+
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
    val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
 
    // Scoring
 
-   abstract class ScoringConstants // purely intended for commentary purposes.
+   abstract class ScoringConstants // abstract class purely intended for commentary purposes.
 
    object AveragePercentageCorrect extends ScoringConstants
    {  val minimalNumberOfSessionsPerPlayer = 2
