@@ -752,6 +752,7 @@ object Constitution
          }
       }
    }
+*/
 
    def playersWithRelease(releaseId:VersionId):List[Player] =
    {  Player.findAll.filter(
