@@ -22,7 +22,7 @@ import org.eclipse.jgit.lib.ObjectId
 import org.ocbkc.swift.global.LiftHelpers._
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
 
-class AnalyseFluencySessionOfRelease
+class AnalyseFluencySessionsOfRelease
 {  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
 
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
@@ -65,15 +65,15 @@ class AnalyseFluencySessionOfRelease
    def render(ns: NodeSeq): NodeSeq =
    {  S.param("release_id") match
       {  case Full(release_id) =>
-         {  val msgStart = "   Release with id "
+         {  val msgStart = "   Release with id " + release_id
 
             if( Constitution.releaseExists(release_id) )
-            {  log( msgStart + "found!")
+            {  log( msgStart + " found!")
                bind( "top", ns,
                   "playerTable" -> playerTableRows(ns, release_id)
                )
             } else
-            {  log( "[POTENTIAL_BUG] " + msgStart + "not found... Me not happy. Perhaps the player used an old link to a release which has been deleted in the meanwhile.")
+            {  log( "[POTENTIAL_BUG] " + msgStart + " not found... Me not happy. Perhaps the player used an old link to a release which has been deleted in the meanwhile.")
                S.redirectTo("index")
             }
          }
