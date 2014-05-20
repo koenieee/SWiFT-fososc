@@ -1,4 +1,11 @@
 // <&y2012.12.17.12:53:50& move the traits etc. to general library, apart from SWiFT, this is so general.>
+
+/** Jara Simulation Engine
+  * Jara is a framework to create a simulation of a group of entities who sequentially have a choice (and choose) to perform certain actions. Moreover, depending on their state, different follow-up actions are possible. It is intended for testing purposes (for example large scale user interaction over longer time spans, which can be modelled as such: depending on the state of the process they are in, users can perform certain actions; e.g. for a mail client: basic interface: choose to read a mail, or write a mail. Then if you have chosen to write a mail, write it and ). The basic approach is that each entity has a certain percentage of time he or she is going to spent on a given activity A (coined the desired ratio). Jara then simulates an entity which stochasticly chooses follow-up events and delays, but within such boundaries that the expected value of ratio is equal to the desired ratio, and additionally converges "sufficiently" quickly to that desired ratio. The rate of convergence can be configured, by defining "catch up times": if too few time has been spent on a certain action, the stochasticity will become more and more deterministic to realise the desired ratio within (or as quickly as possible after) the defined "catch up time" for that action.
+  * Jara can be regarded as an Finite State Machine, with stochastic transitions, which are stochastic in two senses: the choice of a certain transition is stochastic, and moreover, there is a stochastic delay before the chosen transition is made.
+  * If you calculate the new expected delay of a process, make use of the last time the process finished. Calculate the desired expected duration as you are used to: so by using a catch-up time. But then add this duration not to the current time, but to the last time the termination moment of the last process execution. In this way, the distances between two process executions are guaranteed to become of approximately the same size (or even smaller if the process is behind on schedule). Processes with higher general priorities (e.g. a higher desired ratio = the percentage of the total time spent on them) now can't always "beat" the processes with lower priorities. If the time between the last execution of the process grows too large, the priority for the process will immediately become extremely high! 
+  */
+
 /* Notations and conventions
 Jn_A_B: join of A and B (conceptually: a class which instances contain a reference to an A and a reference to a B. Join is always 2 place, so disambiguation takes place as follows (by example):
 
@@ -12,7 +19,15 @@ Convention:
 SimGod never notifies entities that another entity has started a state, while this might seem useful in some cases. However, SimGod assumes you to break a state into smaller states if you want to "notify" other entities that a certain entity started to get involved in a certain process. The philosophy is that this approaches reality in which it also may take some time before another entity notices changes in the other entities states.
 
 
+TODO
 
+The implementation needs to be simplified considerably. I (Chide) experimented with some alternative ideas to implement programming ideas, but some of these have made the implementation too complicated.
+
+&y2014.05.14.16:10:24& moreover, Jara should allow actions that do not consume time. The desired ratio cannot be used in that case (theoretically it could: setting a very short time, but that will lead to rounding errors), but it is better in that case to set the desired frequency rate (e.g. expected value must be 10 times every day).
+[&y2014.05.14.16:13:48& problem is that if the previous state only is arrived it in average once a day, you will never be able to catch up...]
+& &y2014.05.14.16:14:59& Isn't there a problem with the dependencies between states (transitions) and the desired ratio's as well? I.e. can there be a conflict between the demands of the transitions and the demands posed by the desired ratio's, leading to an unsatisfiable  system?
+&y2014.05.14.16:24:31& almost certainly yes, because the transition table defines restrictions on the ratio's of occurrence-frequencies between states.
+&y2014.05.14.16:30:11& SHOULDDO moreover, this is really a problem, because if there are more competing right hand side states, at the one with an "unsatifiable" ratio, will always have a very low delay.
 */
 
 import org.ocbkc.swift.test._
@@ -129,7 +144,7 @@ object SimGod
             unoccupiedEntitiesWithoutProposedActivities = Nil
          }
 
-         // 2. Determine the first coming event(s). These can be 2 things: completion of activity of one or more occupied entities, and/or the start of a proposed activity of an unoccupied entity. (Note: it is important to explicitly look at the list of UNoccupied entities, you don't want to start an entity which started during the last itteration to be started again!). [A] Move the clock to the time of the first coming event(s).  If these 2 things just mentioned coincide, do them both, in the following order: [B] first start the unoccupied entities and then "stop" the occupied entities (order because assumption is that system state changes by the first cannot influence the just occupied entities, because the time is to short (=0!). This is a random assumption, could also have decided the opposite, the point is that a choice must be made!). Completion of activity means moving the entity to the unoccupied entities list (without proposed future activities). Starting an unoccupied entity means calling its transition method, and then [MOV2OC] moving it to the list of occupied entities.
+         // 2. Determine the first coming event(s). These can be 2 things: completion of activity of one or more occupied entities, and/or the start of a proposed activity of an unoccupied entity. (Note: it is important to explicitly look at the list of UNoccupied entities, you don't want to start an entity which started during the last iteration to be started again!). [A] Move the clock to the time of the first coming event(s).  If these 2 things just mentioned coincide, do them both, in the following order: [B] first start the unoccupied entities and then "stop" the occupied entities (order because assumption is that system state changes by the first cannot influence the just occupied entities, because the time is to short (=0!). This is a random assumption, could also have decided the opposite, the point is that a choice must be made!). Completion of activity means moving the entity to the unoccupied entities list (without proposed future activities). Starting an unoccupied entity means calling its transition method, and then [MOV2OC] moving it to the list of occupied entities.
             
          val firstStartTimeUnoccupiedEntities:Option[POSIXtime] = if( unoccupiedEntitiesWithProposedActivities != Nil ) Some(unoccupiedEntitiesWithProposedActivities(0)._2.start) else None
          println("  firstStartTimeUnoccupiedEntities = " + firstStartTimeUnoccupiedEntities)

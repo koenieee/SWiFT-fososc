@@ -67,7 +67,7 @@ sentenceOpening(const) + " has been edited by someone else...",
 """Constitution """ + const.constiId + """ has been edited by someone else. If you want to review the changes please visit this link:
 
 """ + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
-
+s
 """ + how2unfollow
 )
 
