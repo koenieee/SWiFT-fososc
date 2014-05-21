@@ -560,6 +560,8 @@ getHistory.length, commitIdsReleases.length, isRelease
 
       // add release state
       tagRelease(versionId) // this one before adding it to commitIdsReleases, otherwise index naming will go wrong.
+
+      Constitution.commitIdsReleases ::= versionId
       commitIdsReleases ::= versionId
    }
 }
@@ -761,7 +763,9 @@ object Constitution
    }
 
    def releaseExists(releaseId:VersionId):Boolean =
-   {  !commitIdsReleases.find(_.equals(releaseId)).isEmpty
+   {  log("releasesExist called")
+      log("   commitIdsReleases " + commitIdsReleases.mkString(", "))
+      !commitIdsReleases.find(_.equals(releaseId)).isEmpty
    }
 
 }
