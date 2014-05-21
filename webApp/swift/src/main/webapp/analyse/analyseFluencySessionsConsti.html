@@ -1,0 +1,20 @@
+<lift:surround with="default" at="content">
+    <lift:AnalyseFluencySession form="POST">
+        <h1>All releases of Constitution:</h1>
+        Constituton: <top:constName /><br />
+        <hr />
+        <table id="SessionTable">
+            <top:sessionTable>
+                <top:row>
+                    <tr>
+                        <td><top:release />              </td>
+                        <td><top:currentVersionId />           </td>
+                        <td><top:creationDate />   </td>
+                    </tr>
+                </top:row>
+            </top:sessionTable>
+        </table>
+
+    </lift:AnalyseFluencySession>
+
+</lift:surround>

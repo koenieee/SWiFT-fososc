@@ -1,0 +1,23 @@
+<lift:surround with="default" at="content">
+    <lift:AnalyseFluencySession form="POST">
+        <h1>Fluency session of Release:</h1>
+        Constituton: <top:constName /><br />
+        Release: <top:release /><br />
+
+        <hr />
+        <table id="SessionTable">
+            <top:sessionTable>
+                <top:row>
+                    <tr>
+                        <td><top:player />              </td>
+                        <td><top:averageFluency />           </td>
+                        <td><top:totalConstiTime />   </td>
+                        <td><top:sessionLink />   </td>
+                    </tr>
+                </top:row>
+            </top:sessionTable>
+        </table>
+
+    </lift:AnalyseFluencySession>
+
+</lift:surround>
