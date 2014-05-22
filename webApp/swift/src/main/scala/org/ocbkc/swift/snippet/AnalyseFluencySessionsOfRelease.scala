@@ -28,7 +28,7 @@ class AnalyseFluencySessionsOfRelease
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
    {  log("sessionTableRows called")
       
-      TableSorter("#SessionTable")
+      TableSorter("#PlayerTable")
          
       implicit val displayIfNone = "-"
 
@@ -56,7 +56,7 @@ class AnalyseFluencySessionsOfRelease
                "masteredChallenge"        -> { Text("TODO") },
                "averageTranslationTime"   -> { Text("TODO") },
                "shortestTransTime"        -> { Text("TODO") },
-               "sessionsPlayedB4accessToAllConstis"   -> <b> Total valid sessions played </b>
+               "sessionsPlayedB4accessToAllConstis"   -> Text("TODO")
             )
          }
       }
@@ -70,7 +70,9 @@ class AnalyseFluencySessionsOfRelease
             if( Constitution.releaseExists(release_id) )
             {  log( msgStart + " found!")
                bind( "top", ns,
-                  "playerTable" -> playerTableRows(ns, release_id)
+                  "playerTable" -> playerTableRows(ns, release_id),
+               "constName" -> Text("TODO"),
+               "release" -> Text("release Name")
                )
             } else
             {  log( "[POTENTIAL_BUG] " + msgStart + " not found... Me not happy. Perhaps the player used an old link to a release which has been deleted in the meanwhile.")

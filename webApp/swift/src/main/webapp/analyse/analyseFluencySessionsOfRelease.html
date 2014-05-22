@@ -1,23 +1,24 @@
 <lift:surround with="default" at="content">
-    <lift:AnalyseFluencySession form="POST">
-        <h1>Fluency session of Release:</h1>
-        Constituton: <top:constName /><br />
-        Release: <top:release /><br />
-
+    <lift:AnalyseFluencySessionsOfRelease form="POST">
+        <h1>Analyse Fluency Sessions of Consti <top:constName />, Release <top:release />.</h1>
+        TODO here scoring info of the release
         <hr />
-        <table id="SessionTable">
-            <top:sessionTable>
+        <table id="PlayerTable">
+            <top:playerTable>
                 <top:row>
+                    <!-- information limited to sessionsPlayedB4accessToAllConstis,  sessions after it are ignored -->
                     <tr>
-                        <td><top:player />              </td>
-                        <td><top:averageFluency />           </td>
-                        <td><top:totalConstiTime />   </td>
-                        <td><top:sessionLink />   </td>
+                        <td><top:playerId />          </td>
+                        <td><top:fluency />           </td>
+                        <td><top:pastChallenge />     </td>
+                        <td><top:averageTranslationTime />   </td>
+                        <td><top:shortestTransTime /> </td>
+                        <td><top:sessionsPlayedB4accessToAllConstis /> </td>
                     </tr>
                 </top:row>
-            </top:sessionTable>
+            </top:playerTable>
         </table>
 
-    </lift:AnalyseFluencySession>
+    </lift:AnalyseFluencySessionsOfRelease>
 
 </lift:surround>
