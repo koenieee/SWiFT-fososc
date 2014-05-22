@@ -1,15 +1,15 @@
 <lift:surround with="default" at="content">
-    <lift:AnalyseFluencySession form="POST">
-        <h1>Details of Session: <top:player /></h1>
+    <lift:analyseFluencySessionDetails>
+        <h1>Details of Session: <top:sessionID /></h1>
         Constituton: <top:constName /><br />
         Release: <top:release /><br />
-        <top:sessionTable>
+        <top:detailsPage>
        Source Text: <top:sourceText/><br />
         Translation Time: <top:transTime /><br />
         Answer Correct: <top:answerCor /><br />
-        </top:sessionTable>
+        </top:detailsPage>
 
 
-    </lift:AnalyseFluencySession>
+    </lift:analyseFluencySessionDetails>
 
 </lift:surround>

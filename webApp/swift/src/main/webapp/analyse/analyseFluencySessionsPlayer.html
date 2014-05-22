@@ -1,11 +1,11 @@
 <lift:surround with="default" at="content">
-    <lift:AnalyseFluencySession form="POST">
+    <lift:analyseFluencySessionsPlayer form="GET">
         <h1>Analyse Fluency Sessions of Player <top:player /></h1>
         Constituton: <top:constName /><br />
         Release: <top:release /><br />
         <hr />
-        <table id="SessionTable">
-            <top:sessionTable>
+        <table id="analyseFluencySessionsPlayer">
+            <top:sessionPlayerTable>
                 <top:row>
                     <tr>
                         <td><top:session />              </td>
@@ -15,9 +15,9 @@
                         <td><top:detailsLink />   </td>
                     </tr>
                 </top:row>
-            </top:sessionTable>
+            </top:sessionPlayerTable>
         </table>
 
-    </lift:AnalyseFluencySession>
+    </lift:analyseFluencySessionsPlayer>
 
 </lift:surround>

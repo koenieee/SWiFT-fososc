@@ -28,7 +28,7 @@ class AnalyseFluencySessionsOfRelease
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
    {  log("sessionTableRows called")
       
-      TableSorter("#PlayerTable")
+      TableSorter("#sessionOfReleaseTable")
          
       implicit val displayIfNone = "-"
 
@@ -52,10 +52,10 @@ class AnalyseFluencySessionsOfRelease
 
             bind( "top", chooseTemplate("top", "row", ns),
                "playerId"        -> { Text(p.swiftDisplayName) },
-               "fluency"         -> { Text("TODO") },
+               "fluency"         -> { Text("TODO") }, // PlayerScores.fluencyScoreSample(p)
                "masteredChallenge"        -> { Text("TODO") },
-               "averageTranslationTime"   -> { Text("TODO") },
-               "shortestTransTime"        -> { Text("TODO") },
+               "averageTranslationTime"   -> { Text(PlayerScores.averageDurationTranslation(p).averageDurationTranslation.get.toString) },
+               "shortestTransTime"        -> { Text("TODO -> see showduration highscores") },
                "sessionsPlayedB4accessToAllConstis"   -> Text("TODO")
             )
          }
@@ -70,7 +70,7 @@ class AnalyseFluencySessionsOfRelease
             if( Constitution.releaseExists(release_id) )
             {  log( msgStart + " found!")
                bind( "top", ns,
-                  "playerTable" -> playerTableRows(ns, release_id),
+                  "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
                "constName" -> Text("TODO"),
                "release" -> Text("release Name")
                )
