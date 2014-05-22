@@ -69,7 +69,7 @@ class AnalyseFluencySession
                   "constName"    -> Text(consti.constiId.toString),
                   "release"      -> Text(consti.currentVersionId),
                   "sessionTable" -> sessionTableRows(ns, player)
-                )
+               )
             }
             case None =>
             {  log("[SHOULDDO] simply do not show any consti related info in this case, but notify the constigame player that the player did not yet chose a consti")

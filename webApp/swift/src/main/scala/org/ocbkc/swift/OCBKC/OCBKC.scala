@@ -1,3 +1,8 @@
+/**
+  * Overall design conditions:
+  * - connection to the git database is localised as much as possible. So do not try to access the git database directly, but use the interface, which currently consists of: initialisation (during reading from the database); TODO finish.
+  */
+
 package org.ocbkc.swift.OCBKC
 {
 import _root_.scala.xml._
@@ -31,6 +36,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.test.SystemWithTesting
 import org.ocbkc.swift.test.TestHelpers._
+import scoring._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -135,12 +141,6 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       }
    }
    
-   /** In the current (and most probable all future) design(s) a synonym for latestReleaseHasSufficientSampleSize.
-     */ 
-   def latestReleaseIsEvaluated:Boolean =
-   {  latestReleaseHasSufficientSampleSize
-   }
-
    def lastReleaseVersionInfo:Option[ConstiVersionInfo] =
    {  lastReleaseCommitId match
       {  case Some(commitid)     => getConstiVersionInfo(commitid)
@@ -300,16 +300,6 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
 
-   /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
-     * @todo optimize? (memoization?)
-     *
-     */
-   def latestReleaseHasSufficientSampleSize:Boolean =
-   {  // Determine whether sample size on the latest release without a fluency score is high enough
-      
-      ConstiScores.sampleSizeSufficient4FluencyScore(constiId).getOrElse(logAndThrow("[POTENTIAL_BUG]: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future."))
-   }
-
    def restore(commitId:String, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
    {  val revcom:RevCommit = JgitUtils.revComFromCommitId(commitId).getOrElse(throw new RuntimeException("this commit id doesn't exist, should be impossible, though, 'cause you restore is always called with an existing commitId... >:-("))
    
@@ -430,6 +420,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    {  jgit.get.tagDelete.setTags(RELEASE_VIRGIN_TAG_STRING).call
    }
    /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
+     * @todo change by removing ifpossible, it should always work, for example by demanding the version id as input parameter.
      */
    def makeLatestVersionReleaseCandidateIfPossible
    {  // make latest version the new release candidate
@@ -472,26 +463,38 @@ getHistory.length, commitIdsReleases.length, isRelease
    def turnReleaseCandidateIntoVirginIfPossible
    {  log("turnReleaseCandidateIntoVirginIfPossible called")
       log("   consti = " + constiId)
-      releaseStatusPotentialRelease match
-      {  case Some(ReleaseCandidate) => 
-         {  if( !releasesExist || latestReleaseHasSufficientSampleSize )
-            {  log("   Yes, my dear organic friend! Possible! Doing it...")
-               // remove release candidate status
-               delTagReleaseCandidate
 
-               //releaseStatusLastVersion = Some(ReleaseVirgin)
-               releaseStatusPotentialRelease = Some(ReleaseVirgin)
-               tagReleaseVirgin(commitIdPotentialRelease.get)
-               if( commitIdPotentialRelease.get == latestRevCommit.get.name )
-               {  log("   It is the latest version which has become ReleaseVirgin...")
-                  releaseStatusLastVersion = Some(ReleaseVirgin)
+      def turnIt =
+      {  log("   Yes, my dear organic friend! Possible! Doing it...")
+         // remove release candidate status
+         delTagReleaseCandidate
+
+         //releaseStatusLastVersion = Some(ReleaseVirgin)
+         releaseStatusPotentialRelease = Some(ReleaseVirgin)
+         tagReleaseVirgin(commitIdPotentialRelease.get)
+         if( commitIdPotentialRelease.get == latestRevCommit.get.name )
+         {  log("   It is the latest version which has become ReleaseVirgin...")
+            releaseStatusLastVersion = Some(ReleaseVirgin)
+         }
+      }
+
+      releaseStatusPotentialRelease match
+      {  case Some(ReleaseCandidate)   => 
+         {  lastReleaseCommitId match
+            {  case None => turnIt
+               case Some(lrci) =>
+               {  if(ConstiScores.releaseIsEvaluated(lrci)) turnIt
+                  else
+                  {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
+                     doNothing
+                  }
                }
             }
-            else
-            {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
-            }
          }
-         case _                     => { log("   There is no ReleaseCandidate, so not possible."); doNothing }
+         case _                        =>
+         {  log("   There is no ReleaseCandidate, so not possible.")
+            doNothing
+         }
       }
    }
 
@@ -539,11 +542,14 @@ getHistory.length, commitIdsReleases.length, isRelease
       log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
       if( releaseStatusPotentialRelease == Some(ReleaseVirgin) )
       {  log("   last version is ReleaseVirgin, so turning into Release.")
+
+         val ci = commitIdPotentialRelease.get
+
          // remove virgin state
          delTagReleaseVirgin
-         commitIdPotentialRelease = None
+         commitIdPotentialRelease      = None
          releaseStatusPotentialRelease = None
-         releaseVersion(commitIdPotentialRelease.get)
+         releaseVersion(ci)
       }
    }
 
@@ -554,6 +560,8 @@ getHistory.length, commitIdsReleases.length, isRelease
 
       // add release state
       tagRelease(versionId) // this one before adding it to commitIdsReleases, otherwise index naming will go wrong.
+
+      Constitution.commitIdsReleases ::= versionId
       commitIdsReleases ::= versionId
    }
 }
@@ -578,11 +586,13 @@ object ConstitutionMetaMapperObj extends Constitution(0, 0, 0, 0, "", None, Nil)
 
 /** 
   * @param constiId constitution id, must be a number between 1 and this.count. Constitutions started being numbered from id = 1, and then without skipping any natural number up to the highestId.
-
+  * @param commitIdsReleases contains the commitIds of all releases of all contis.
+  *
   */
 object Constitution
 {  var constis:List[Constitution] = Nil
    var highestId:Int = 0 // <&y2012.03.18.17:31:11& deserialise in future when starting session>
+   var commitIdsReleases:List[VersionId] = Nil
    /*
    def create():Constitution =
    {  // if no user is given assume 'master' user, TODO <&y2012.05.24.20:44:12& determine fixed number for this, for now I used ID 0>
@@ -623,6 +633,7 @@ object Constitution
             
             val tagsPointingToReleasesOfThisConsti = taglist.filter( tag => tagPointsToReleaseOf(tag, const) )
             const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => jgitRepo.get.peel(tag).getPeeledObjectId.name ).reverse.toList
+            Constitution.commitIdsReleases ++= const.commitIdsReleases
             //const.commitIdsReleases = tagsPointingToReleasesOfThisConsti.map( tag => tag.getTarget.getPeeledObjectId.name ).reverse.toList
             log("   commitIdsReleases just read from git repo:")
             const.commitIdsReleases.map( log(_) )
@@ -702,7 +713,10 @@ object Constitution
    /** @returns List with releases which are either (1) not yet completely evaluated, or (2) release virgins. I.e. "playable" releases.
      */
    def constisWithPlayableReleases:List[Constitution] =
-   {  constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+   {  logp( 
+      { (cl:List[Constitution]) => "   constisWithPlayableReleases = " + (cl.map{ _.constiId }.mkString(", ")) },
+      constis.filter{ c => ( c.lastReleaseCommitId.exists( !ConstiScores.releaseIsEvaluated(_:VersionId) ) || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+      )
    }
 
    def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
@@ -724,13 +738,37 @@ object Constitution
       }
    }
 
-   /** If this returns true, it is identical to all releases are evaluated, because a release may only be evaluated after the previous release is evaluated.
+/* Use constisWithPlayableReleases instead
+   /** @returns
      */
-   def allLatestReleasesOfAllConstisEvaluated:Boolean =
-   {  constis.forall{ c => c.latestReleaseIsEvaluated }
-   }
-}
+   def unevaluatedReleasesExist:Boolean =
+   {  log("unevaluatedReleasesExist called")
+      constis.exists
+      {  c =>
+         {  log("   checking consti " + consti.constiId)
 
+            c.lastReleaseCommitId match
+            {  case None         => false
+               case Some(lrci)   => !ConstiScores.sampleSizeSufficient4FluencyScore(lrci)
+            }
+         }
+      }
+   }
+*/
+
+   def playersWithRelease(releaseId:VersionId):List[Player] =
+   {  Player.findAll.filter(
+         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
+      )
+   }
+
+   def releaseExists(releaseId:VersionId):Boolean =
+   {  log("releasesExist called")
+      log("   commitIdsReleases " + commitIdsReleases.mkString(", "))
+      !commitIdsReleases.find(_.equals(releaseId)).isEmpty
+   }
+
+}
 class StudyHistory
 {  private var constitutionStudyHistories:List[ConstitutionStudyHistory] = Nil
 
@@ -780,25 +818,21 @@ object OCBKCinfoPlayer
 package scoring
 {
 import GlobalConstant.AverageFluency
+import org.ocbkc.generic.ListUtils._
 
 object PlayerScores
-{  // TODO: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
-   case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
+{  /** @todo &y2014.05.05.19:13:26&  currently I do not make a distinction between fluency sessions before a player got access to all constis and after. Given the fact I am planning to use (stochastic) sequential analysis in the future, there is not a fixed number per player any more. Therefore I should also store, for each player, which sessions are "valid" (count for determining the score), and which aren't. For example, by storing the index of the session (assuming time-ordered sequence of sessions), which marks the invalidaty in the data of each player.
+     * @todo: build in optimizations by caching calculation results in local variables of this object. But first find out whether the object is shared among user threads, otherwise these intermediate calculations cannot be shared among players. Perhaps better store them in the database instead of local variables?
+      */
 
-   // <&y2012.11.11.16:05:26& TODO: move to more general lib?>
-   def takeNumOrAll[A](list:List[A], num:Int) =
-   {  if( num > -1 )
-         list.take(num)
-      else
-         list
-   }
+   case class Result_percentageCorrect(val percentageCorrect:Option[Double], val totalNumberOfSessions:Int)
 
    def percentageCorrect(p:Player):Result_percentageCorrect = 
    {  percentageCorrect(p, -1)
    }
 
    /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
-     * 
+     * @todo deprecated, this is not ok: in the future each challenge-instance may also have a correctness which is between 0 and 1.
      */
    def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
    {  log("percentageCorrect called")
@@ -807,7 +841,7 @@ object PlayerScores
 
 
       //val correctCcs = sis.filter( si => si.answerPlayerCorrect )
-      val numberCorrect = sis.count( si => si.answerPlayerCorrect )
+      val numberCorrect = sis.count( si => si.answerPlayerCorrect.is )
       val totalNumber = sis.length
 
       log("   Number of sessions taken into consideration: " + totalNumber)
@@ -824,19 +858,44 @@ object PlayerScores
    {  averageDurationTranslation(p, -1)
    }
 
-/** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
-  * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
-  */
+   /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
+     * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
+     */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
    {  log("PlayerScores.averageDurationTranslation called")
       val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
       
-      val correctCcs = sis.filter( si => si.answerPlayerCorrect )
+      val correctCcs = sis.filter( si => si.answerPlayerCorrect.is )
       val durationsCorrectTranslations = correctCcs.map(si => si.durationTranslation.get)
       val numberCorrect = correctCcs.length
       log("   numberCorrect = " + numberCorrect )
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
+   }
+   
+   /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be included in the returned sample, they are sorted by time (from earlier to later). If -1 is provided, ALL sessions will be part of it.
+     * @return
+     * @todo <&y2014.05.05.19:10:48& Given some refactorings, is it still efficient/logical to do it like this: perhaps it is better to just return the complete sample, and then let the calling function select what it needs.>[A &y2014.05.05.19:10:52& I think not!]
+     */
+
+   def fluencyScoreSample(p:Player):List[FluencyScore] = 
+   {  log("PlayerScores.fluencyScoreSample")
+      val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }
+      
+      val ret = sis.map(
+         si =>
+         {  FluencyScore(               
+               if(si.answerPlayerCorrect.is) 1 else 0,
+               1,
+               si.durationTranslation.get
+            )
+         }
+      )
+      
+      logp(
+         { (lfs:List[FluencyScore]) => "   return value: " + lfs.mkString(", ") },
+         ret
+      )
    }
 
    /*
@@ -847,6 +906,35 @@ object PlayerScores
    */
 
 }
+
+/* future work
+case class StatSample[ObservedValue__TP](List[ObservedValue__TP])
+{  def average 
+   {  
+   }
+}
+*/
+
+case class FluencyScore(correctQuestions: Long, totalNumOfQuestions: Long, durationTranslation: Long)
+{  def toDouble:Double =
+   {  correctQuestions.toDouble / totalNumOfQuestions.toDouble * AverageFluency.fluencyConstantK
+   }
+}
+
+/** Sum Sample
+   @param cummulvalue contains the sum of the sample values.
+   @sampleSize contains the sample size
+
+   Use this to prevent rounding errors when you want to determine averages (so instead of returning cummulValue/sampleSize, which will often involve rounding errors.
+  */
+case class SumSample(sumValue:Long, sampleSize:Long)
+{  def average =
+   {  sumValue.toDouble / sampleSize.toDouble
+   }
+}
+
+// case class Fraction(numerator:Long, denominator: Long)
+
 /* In a separate object instead of as a methods of class Constitutions, because some scores might be relative (e.g. a ranking), this constitution is better than that one.
 */
 
@@ -869,16 +957,14 @@ object ConstiScores
    }
 
 /**
-  * @return The average percentage correct for the last release of this constitution (so not the average over all releases!).
+  * @return The average percentage correct for release with id releaseId of this constitution (so not the average over all releases!).
   */
    def averagePercentageCorrect(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] =
    {  log("averagePercentageCorrect called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
       val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
-      val playersWithThisRelease:List[Player] = players.filter(
-         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
-      )
+      val playersWithThisRelease:List[Player] = Constitution.playersWithRelease(releaseId)
 
       log("   playersWithThisRelease:" + playersWithThisRelease)
       
@@ -933,11 +1019,8 @@ object ConstiScores
    def averageDurationTranslation(minimalNumberOfSessionsPerPlayer:Int, releaseId:String):Option[Double] = 
    {  log("ConstiScores.averageDurationTranslation called")
       if(minimalNumberOfSessionsPerPlayer > OneToStartWith.minSessionsB4access2allConstis) throw new RuntimeException("   minimalNumberOfSessionsPerPlayer > OneToStartWith.minSesionsB4access2allConstis, condition can never be satisfied. If I were you, I would change either of two such that it CAN be satisfied, my friend")
-      val players = Player.findAll
       // choose player: with first chosen constitution = consti with constiId, however, you must also be certain that they didn't play SO long that influences of e.g. other constitutions started to play a role!
-      val playersWithThisRelease:List[Player] = players.filter(
-         p => ( p.releaseOfFirstChosenConstitution.get == releaseId )
-      )
+      val playersWithThisRelease:List[Player] = Constitution.playersWithRelease( releaseId )
 
       log("   playersWithThisRelease:" + playersWithThisRelease)
       
@@ -991,33 +1074,65 @@ object ConstiScores
    /* <&y2013.02.10.17:22:46& mustdo OPTIMISE by memoizatoin/caching>
    */
    def latestReleaseWithFluencyScore(constiId:ConstiId):Option[VersionId] = 
-   {  averageFluencyLatestReleaseWithScore(AverageFluency.minimalSampleSizePerPlayer, constiId, AverageFluency.fluencyConstantK).collect{ case v_f:(VersionId,Double) => v_f._1 }
+   {  averageFluencyLatestReleaseWithScore(constiId).collect{ case v_f:(VersionId,Double) => v_f._1 }
    }
 
-   /** @param constiId an id of an existing constitution. If it doesn't exist, this is considered a bug, and, moreover, an exception is thrown!
+   /** Players who did not play sufficient sessions are completely disregarded (don't influence the score).
+   
+     * @param constiId an id of an existing constitution. If it doesn't exist, this is considered a bug, and, moreover, an exception is thrown!
      * @return The fluency score of the latest release with a fluency score.
      * @todo &y2013.02.10.17:24:46& optimise (also see latestReleaseWithScore), suggestion: merge these two methods: the core being this method, the other calling this method, and retrieving a cached value.
      * @todo &y2013.02.10.18:51:54& get minimalSampleSize and k from global
+     * @todo <&y2014.05.05.18:23:00& in the future, players with an unsufficient amount of sessions should not just be disregarded: listen/read my logs from around this date. If they press the panic button (or something equivalent) - which yet has to be implemented, they should NOT be disregarded!>
+     * @todo <&y2014.05.03.22:25:02& problem is that it currenlty does not contain a minimal sample size requirement for the number of players (only for the number of sessions played BY each player>
      */
 
-   def averageFluencyLatestReleaseWithScore(minimalSampleSize: Int, constiId:ConstiId, k:Double):Option[(VersionId,Double)] =
+   def averageFluencyLatestReleaseWithScore(constiId:ConstiId):Option[(VersionId,Double)] =
    {  findAndApply( Constitution.getById(constiId).get.commitIdsReleases,
                     {   versionId:VersionId =>
-                        {  averageFluency(minimalSampleSize, versionId, k).collect{ case f => (versionId, f) }
+                        {  averageFluency(versionId).collect{ case f => (versionId, f) }
                         }
                     }
       )
    }
 
-   // SHOULDDO &y2013.01.21.19:23:39&: directly retrieve the values minimalSampleSize and k from Global. For this purpose write a wrapper aroudn this function, so that it can still be called if you want to locally apply a deviating calculation.
-   /** @todo  &y2013.01.07.13:20:00& is there a check whether releaseId is indeed a release (and not another version)?
+   /** @returns None if there are not sufficient players with this release with a valid fluency score.
+     * @todo  &y2013.01.07.13:20:00& is there a check whether releaseId is indeed a release (and not another version)?
+     * @todo <&y2014.05.03.21:58:22& currently algorithm is implemented without preventing rounding errors, change if necessary. See also thesis.>
      */
-   def averageFluency(minimalSampleSize: Int, releaseId:String, k:Double):Option[Double] =
-   {  val adt = averageDurationTranslation(minimalSampleSize, releaseId) 
+   def averageFluency(releaseId:String):Option[Double] =
+   {  log("ConstiScores.averageFluency called") 
+      val playersWithThisRelease:List[Player] = logp("   playersWithThisRelease = " + (_:List[Player]).mkString(", "), Constitution.playersWithRelease( releaseId ) )
+
+      //logp(
+      //{ (r:Option[Double]) => "   ret = " + r.toString },
+      if( playersWithThisRelease.size >= AverageFluency.minimalSampleSizePerConsti )
+      {  val samples = playersWithThisRelease.map{ p => PlayerScores.fluencyScoreSample(p) }.filter{ fss => fss.size >= AverageFluency.minimalSampleSizePerPlayer }.map{ ffs => takeNumOrAll(ffs, GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS) }
+         
+         if(samples.size >= AverageFluency.minimalSampleSizePerConsti)
+         {  val averageFluency = samples.map{ 
+               sample => 
+               {  (sample.map{ _.toDouble }.fold(0d)(_ + _))/
+                     sample.size
+               }
+            }.fold(0d)(_+_)/
+               samples.size
+
+            Some(averageFluency)
+         } else
+         {  None
+         }
+      } else
+      {  None
+      }
+   
+      /* old, marked for deletion
+      val adt = averageDurationTranslation(minimalSampleSize, releaseId) 
       val apc = averagePercentageCorrect(minimalSampleSize, releaseId)
       applyWhenBothDefined( (_:Double)/(_:Double)*k, apc, adt)
+      */
+      //)
    }
-
 
    // perhaps not needed anymore, found an "absolute" score for fluency
    def fluency1stGT2nd(releaseId1:String, releaseId2:String, minimalSampleSize: Int):Option[Boolean] =
@@ -1060,10 +1175,14 @@ object ConstiScores
    {  //TODO
    }
 
+   def releaseIsEvaluated(releaseId:String):Boolean =
+   {  sampleSizeSufficient4FluencyScore(releaseId)
+   }
+
+   //val releaseIsEvaluated = sampleSizeSufficient4FluencyScore:(VersionId => Boolean) // synonym
    def sampleSizeSufficient4FluencyScore(releaseId:String):Boolean =
    {  // the sample size is sufficiently large, if the fluency score exists.
-      val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, releaseId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
-      isSuf
+      logp( { (b:Boolean) => "   sampleSizeSufficient4FluencyScore of release " + releaseId + ": " + b.toString }, averageFluency(releaseId).isDefined )
    }
 
    /** Determine whether sample size of latest release is sufficient for scoring
