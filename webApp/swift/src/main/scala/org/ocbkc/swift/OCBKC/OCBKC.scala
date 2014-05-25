@@ -799,9 +799,10 @@ object PlayerScores
       all
    }
 
-   /** Determines the translation made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
+   /** Determines the translation(s) made by player p, with the shortest duration.  The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
+       @returns ([List of CoreContent-objects representing the fluency sessions with the shortest durations], [shortest duration])
     */
-   def shortestTranslation(p: Player):List[CoreContent] =
+   def shortestTranslation(p: Player):(List[CoreContent], Long) =
    {  log("shortestTranslation called")
       val coretent = coreContentObjectsWhichCount(p)
       val fastest:List[CoreContent] = coretent.sortBy(_.durationTranslation) //first one is the fastest.
