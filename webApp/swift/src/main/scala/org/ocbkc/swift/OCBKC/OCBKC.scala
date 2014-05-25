@@ -805,8 +805,9 @@ object PlayerScores
    def shortestTranslation(p: Player):(List[CoreContent], Long) =
    {  log("shortestTranslation called")
       val coretent = coreContentObjectsWhichCount(p)
-      val fastest:List[CoreContent] = coretent.sortBy(_.durationTranslation) //first one is the fastest.
-      fastest
+     val shortestDuration = coretent.map{ _.durationTranslation }.max
+     val sessionsWithShortestDuration = coretent.filter{ _.durationTranslation== shortestDuration }
+     (sessionsWithShortestDuration, shortestDuration.get) // return value, a tuple.
    }
 
    /** Determines the CoreContent-object which represents the fluency game session with the shortest overall translation duration. The translation additionally complies with the following conditions: 1) the translation is correct 2) the translation session took place BEFORE the player gained access to all constis.
@@ -815,11 +816,12 @@ object PlayerScores
    {  log("overallShortestTranslation called")
 
       val all_players = Player.findAll
-      val ls:List[Option[CoreContent]] = all_players.map{
-        ply  =>  shortestTranslation(ply).headOption
+      val ls:List[(List[CoreContent],Long)] = all_players.map{
+        ply  =>  shortestTranslation(ply)
       }
-      val sorted_fastest = ls.flatten.sortBy(_.durationTranslation)
-      sorted_fastest.headOption
+      val sorted_fastest = ls.map(_._2).min //sortby Long
+     val coreObjectFastest = ls.filter{ corrie => corrie._2 == sorted_fastest corrie._1 } //todo. Don't know how yet..
+      sorted_fastest
    }
 
    /*
