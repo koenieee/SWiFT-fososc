@@ -38,6 +38,7 @@ class AnalyseFluencySessionsOfRelease
             "top", chooseTemplate("top", "row", ns),
                "playerId"        -> <b>Player</b>,
                "fluency"         -> <b>Fluency</b>,
+               "averageFluency"       -> <b>Average Fluency</b>,
                "masteredChallenge"        -> <b>Mastered Challenge</b>,
                "averageTranslationTime"   -> <b>Average Translation Time </b>,
                "shortestTransTime"        -> <b> Shortest Translation Time </b>,
@@ -52,7 +53,7 @@ class AnalyseFluencySessionsOfRelease
 
             bind( "top", chooseTemplate("top", "row", ns),
                "playerId"        -> { Text(p.swiftDisplayName) },
-               "fluency"         -> { Text("TODO") },
+               "fluency"         -> { Text(optionToUI(PlayerScores.fluencyScore(p))) },
                "masteredChallenge"        -> { Text("not implemented yet") },
                "averageTranslationTime"   -> { Text("TODO") },
                "shortestTransTime"        -> { Text("TODO") },

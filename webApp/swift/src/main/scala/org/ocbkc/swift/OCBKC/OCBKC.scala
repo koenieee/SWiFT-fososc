@@ -860,6 +860,7 @@ object PlayerScores
 
    /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be part of the calculation. If -1 is provided, ALL sessions will be part of it.
      * @return only includes times of correct translations. Note that totalNumOfSessionsWithCorrectTranslations only counts the correct sessions within the numOfSessions first sessions.
+
      */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
    {  log("PlayerScores.averageDurationTranslation called")
@@ -872,8 +873,38 @@ object PlayerScores
       val averageDurationTranslation = if( numberCorrect > 0 ) Some(( durationsCorrectTranslations.fold(0L)(_ + _).toDouble )) else None
       Result_averageDurationTranslation(averageDurationTranslation, numberCorrect)
    }
-   
-   /** @param numOfSessions only the first numOfSessions of sessions played by the Player will be included in the returned sample, they are sorted by time (from earlier to later). If -1 is provided, ALL sessions will be part of it.
+ 
+   /**
+     * @returns the fluencyscore of this player: averagefluencyscore. It returns None if the sample size is not sufficiently large for a fluency score for this player. Moreover, additional session played after determination of the fluency score are disregarded.
+     */
+   def fluencyScore(p:Player):Option[Double] =
+   {  val fss = fluencyScoreSample(p)
+      if( fss.size < AverageFluency.minimalSampleSizePerPlayer)
+         None
+      else
+      {  val sample = fss.take( GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS )
+         val averageFluency = ( sample.map{ _.toDouble }.fold(0d)(_+_) )  /  sample.size
+         Some(averageFluency)
+      }
+   }
+
+   /** Only returns FluencyScore if the session has been completed.
+     */
+   def fluency(p:Player, session:SessionInfo):Option[FluencyScore] =
+   {  session.durationTranslation match
+      {  case None => None
+         case Some(dt) => Some(FluencyScore(session.answerPlayerCorrect.get.is, 1, dt_opt.get))
+      }
+   }
+
+   /** Average fluency of player p, given all available sessions. So even if there are not yet sufficient sessions played to assign a score, this function will return the average based on the sessions so far. Moreover, if there are more sessions played, so even after the player got access to all constis, these sessions are also used. This function is among others, complemented by fluencyScore.
+     */
+   def averageFluency(p:Player):Option[Double] =
+   {  //TODO
+      null
+   }
+
+   /** @param 
      * @return
      * @todo <&y2014.05.05.19:10:48& Given some refactorings, is it still efficient/logical to do it like this: perhaps it is better to just return the complete sample, and then let the calling function select what it needs.>[A &y2014.05.05.19:10:52& I think not!]
      */
@@ -915,6 +946,8 @@ case class StatSample[ObservedValue__TP](List[ObservedValue__TP])
 }
 */
 
+/** Represents fluency score for one single translation session
+  */
 case class FluencyScore(correctQuestions: Long, totalNumOfQuestions: Long, durationTranslation: Long)
 {  def toDouble:Double =
    {  correctQuestions.toDouble / totalNumOfQuestions.toDouble * AverageFluency.fluencyConstantK
