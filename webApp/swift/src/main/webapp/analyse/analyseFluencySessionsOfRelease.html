@@ -1,6 +1,7 @@
 <lift:surround with="default" at="content">
     <lift:AnalyseFluencySessionsOfRelease form="POST">
         <h1>Analyse Fluency Sessions of Consti <top:constName />, Release <top:release />.</h1>
+        <hr/>
         TODO here scoring info of the release
         <hr />
         <table id="sessionOfReleaseTable">
@@ -10,10 +11,11 @@
                     <tr>
                         <td><top:playerId />          </td>
                         <td><top:fluency />           </td>
-                        <td><top:pastChallenge />     </td>
+                        <td><top:masteredChallenge />     </td>
                         <td><top:averageTranslationTime />   </td>
                         <td><top:shortestTransTime /> </td>
                         <td><top:sessionsPlayedB4accessToAllConstis /> </td>
+                        <td><top:sessionLink /> </td>
                     </tr>
                 </top:row>
             </top:sessionOfReleaseTable>
