@@ -893,7 +893,7 @@ object PlayerScores
    def fluency(p:Player, session:SessionInfo):Option[FluencyScore] =
    {  session.durationTranslation match
       {  case None => None
-         case Some(dt) => Some(FluencyScore(session.answerPlayerCorrect.get.is, 1, dt_opt.get))
+         case Some(dt) => Some(FluencyScore(if(session.answerPlayerCorrect.get) 1 else 0, 1, dt))
       }
    }
 
@@ -901,7 +901,8 @@ object PlayerScores
      */
    def averageFluency(p:Player):Option[Double] =
    {  //TODO
-      null
+      log("[MUSTDO] write averageFluency")
+      None
    }
 
    /** @param 
