@@ -41,7 +41,8 @@ class ConstiGameTable
                "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(c.constiId).collect{ case afs:(VersionId,Double) => afs._2 }),
                "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
                "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
-               "creationDate" -> df.format(c.creationTime).toString
+               "creationDate" -> df.format(c.creationTime).toString,
+               "sessionConstiLink" -> SHtml.link("analyse/analyseFluencySessionsConsti.html?consti_id="+constiId,()=>(),Text("Session Consti"))
             )
          }
       }

@@ -31,8 +31,8 @@ class analyseFluencySessionDetails
           "constName"     -> Text(constiOption.get.constiId.toString),
           "release"       -> Text(constiOption.get.currentVersionId), //is this correct?
           "sourceText"    -> Text(sesCoordBySession.get.textNL), //W: what do I need to get here?
-          "transTime"     -> Text(sesCoordBySession.get.durationTranslation.toString),
-          "score "        -> Text("Todo"),
+          "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
+          "score"         -> Text("Todo"),
           "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"})
           )
         }

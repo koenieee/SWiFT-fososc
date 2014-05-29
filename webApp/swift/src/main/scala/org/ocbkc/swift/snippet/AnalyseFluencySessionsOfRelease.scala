@@ -12,7 +12,11 @@ import org.ocbkc.swift.OCBKC.scoring._
 import org.ocbkc.swift.OCBKC.ConstitutionTypes._
 import Helpers._
 import _root_.net.liftweb.widgets.tablesorter.TableSorter
+import org.ocbkc.swift.general.GUIdisplayHelpers._
 
+
+/** Given a release id, gives a summary for each player who played with this release. So, it does not show the separate sessions, but given each player, for example the average score etc.
+*/
 class AnalyseFluencySessionsOfRelease
 { val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
 
@@ -44,21 +48,19 @@ class AnalyseFluencySessionsOfRelease
 
         bind( "top", chooseTemplate("top", "row", ns),
         "playerId"                             -> { Text(p.swiftDisplayName) },
-        "fluency"                              -> { Text("Todo") }, // PlayerScores.fluencyScoreSample(p)
+        "fluency"                              -> { Text(optionToUI(PlayerScores.fluencyScore(p))) }, // PlayerScores.fluencyScoreSample(p)
         "masteredChallenge"                    -> { Text("TODO") },
-        "averageTranslationTime"               -> { Text(PlayerScores.averageDurationTranslation(p).averageDurationTranslation.get.toString) },
+        "averageTranslationTime"               -> { Text(optionToUI(PlayerScores.averageFluency(p))) },
         "shortestTransTime"                    -> { Text("TODO -> see showduration highscores") },
-        "sessionsPlayedB4accessToAllConstis"   -> Text("todo"),
+        "sessionsPlayedB4accessToAllConstis"   -> {Text("Todo")},
         "sessionLink"                          -> SHtml.link("analyseFluencySessionsPlayer.html?player_id="+p.id,()=>(),Text("Player Session"))
         )
-      }
+	    }
     }
   }
 
   def render(ns: NodeSeq): NodeSeq =
-  {
-
-    (S.param("release_id"), S.param("consti_id")) match
+  { (S.param("release_id"), S.param("consti_id")) match
     { case (Full(release_id),Full(consti_id)) =>
       { val msgStart = "   Release with id " + release_id
 
