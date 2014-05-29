@@ -878,7 +878,10 @@ object PlayerScores
      * @returns the fluencyscore of this player: averagefluencyscore. It returns None if the sample size is not sufficiently large for a fluency score for this player. Moreover, additional session played after determination of the fluency score are disregarded.
      */
    def fluencyScore(p:Player):Option[Double] =
-   {  val fss = fluencyScoreSample(p)
+   {  log("fluencyScore called")
+      val fss = fluencyScoreSample(p)
+
+      logp( "fluencyScore = " + (_:Option[Double]),
       if( fss.size < AverageFluency.minimalSampleSizePerPlayer)
          None
       else
@@ -886,6 +889,7 @@ object PlayerScores
          val averageFluency = ( sample.map{ _.toDouble }.fold(0d)(_+_) )  /  sample.size
          Some(averageFluency)
       }
+      )
    }
 
    /** Only returns FluencyScore if the session has been completed.
@@ -951,7 +955,11 @@ case class StatSample[ObservedValue__TP](List[ObservedValue__TP])
   */
 case class FluencyScore(correctQuestions: Long, totalNumOfQuestions: Long, durationTranslation: Long)
 {  def toDouble:Double =
-   {  correctQuestions.toDouble / totalNumOfQuestions.toDouble * AverageFluency.fluencyConstantK
+   {  AverageFluency.fluencyConstantK * ( correctQuestions.toDouble / ( totalNumOfQuestions.toDouble * durationTranslation.toDouble ) )
+   }
+
+   override def toString =
+   {  toDouble.toString
    }
 }
 

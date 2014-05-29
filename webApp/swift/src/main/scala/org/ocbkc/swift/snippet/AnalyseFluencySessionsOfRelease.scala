@@ -55,9 +55,9 @@ class AnalyseFluencySessionsOfRelease
          {  val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
             bind( "top", chooseTemplate("top", "row", ns),
-               "playerId"        -> { Text(p.swiftDisplayName) },
-               "fluencyScore"    -> { Text(optionToUI(PlayerScores.fluencyScore(p))) },
-               "averageFluency"    -> { Text(optionToUI(PlayerScores.averageFluency(p))) },
+               "playerId"                 -> { Text(p.swiftDisplayName) },
+               "fluencyScore"             -> { Text(optionToUI(PlayerScores.fluencyScore(p))) },
+               "averageFluency"           -> { Text(optionToUI(PlayerScores.averageFluency(p))) },
                "masteredChallenge"        -> { Text("not implemented yet") },
                "averageTranslationTime"   -> { Text("TODO") },
                "shortestTransTime"        -> { Text("TODO") },
