@@ -802,7 +802,17 @@ object OCBKCinfoPlayer
    def numberOfSessionsPlayedBy(p:Player) =
    {  sessionsPlayedBy(p).size
    }
+   
+   def numberOfValidSessionsPlayedBy(p: Player) =
+   {  validSessionsPlayedBy(p).size
+   }
 
+   def validSessionsPlayedBy(p: Player) =
+   {  sessionsPlayedBy(p).take( GlobalConstant.MINsESSIONSb4ACCESS2ALLcONSTIS )
+   }
+
+   /** @todo does this also include sessions that are still ongoing (not closed yet)? (It shouldn't).
+     */
    def sessionsPlayedBy(p:Player):List[SessionInfo] =
    {  val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! )
       sis
@@ -852,7 +862,7 @@ object PlayerScores
    }
 
    case class Result_averageDurationTranslation(val averageDurationTranslation:Option[Double], val sampleSize: Int)
-/** @return only includes time of correct translations
+/** @return only includes time of correct translations. Perhaps generalise to: time per correctly answered questions for challenge-isntances with multiple questions. So (number of correct questions in challenge instance/ total translation time)
   */
    def averageDurationTranslation(p:Player):Result_averageDurationTranslation =
    {  averageDurationTranslation(p, -1)
@@ -905,8 +915,18 @@ object PlayerScores
      */
    def averageFluency(p:Player):Option[Double] =
    {  //TODO
-      log("[MUSTDO] write averageFluency")
-      None
+      log("PlayerScores.averageFluency called")
+      val fss = fluencyScoreSample(p)
+
+      logp( "fluencyScore = " + (_:Option[Double]),
+      {  if(fss == Nil)
+         {  None
+         } else
+         {  val averageFluency = ( fss.map{ _.toDouble }.fold(0d)(_+_) )  /  fss.size
+            Some(averageFluency)
+         }
+      }
+      )
    }
 
    /** @param 

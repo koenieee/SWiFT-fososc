@@ -35,17 +35,22 @@ class AnalyseFluencySessionsOfRelease
          
       implicit val displayIfNone = "-"
 
+      def defaultRounding(d:Double):Double =
+      {  "%.2f".format(d).toDouble
+      }
+
       // create headers
       val header = 
          bind(
             "top", chooseTemplate("top", "row", ns),
-               "playerId"        -> <b>Player</b>,
-               "fluencyScore"         -> <b>Fluency Score</b>,
-               "averageFluency"         -> <b>Average Fluency</b>,
-               "masteredChallenge"        -> <b>Mastered Challenge</b>,
-               "averageTranslationTime"   -> <b>Average Translation Time </b>,
-               "shortestTransTime"        -> <b> Shortest Translation Time </b>,
-               "sessionsPlayedB4accessToAllConstis"   -> <b> Total valid sessions played </b>
+               "playerId"                    -> <b>Player</b>,
+               "fluencyScore"                -> <b>Fluency Score</b>,
+               "averageFluency"              -> <b>Average Fluency</b>,
+               "masteredChallenge"           -> <b>Mastered Challenge</b>,
+               "averageDurationTranslation"  -> <b>Average Translation Time</b>,
+               "shortestTransTime"           -> <b> Shortest Translation Time </b>,
+               "numberOfValidSessionsPlayed" -> <b> Number of valid sessions played </b>,
+               "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>
          )
    
       // create data rows
@@ -55,13 +60,14 @@ class AnalyseFluencySessionsOfRelease
          {  val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
             bind( "top", chooseTemplate("top", "row", ns),
-               "playerId"                 -> { Text(p.swiftDisplayName) },
-               "fluencyScore"             -> { Text(optionToUI(PlayerScores.fluencyScore(p))) },
-               "averageFluency"           -> { Text(optionToUI(PlayerScores.averageFluency(p))) },
-               "masteredChallenge"        -> { Text("not implemented yet") },
-               "averageTranslationTime"   -> { Text("TODO") },
-               "shortestTransTime"        -> { Text("TODO") },
-               "sessionsPlayedB4accessToAllConstis"   -> <b> Total valid sessions played </b>
+               "playerId"                    -> { Text(p.swiftDisplayName) },
+               "fluencyScore"                -> { Text( optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding } ) ) },
+               "averageFluency"              -> { Text(optionToUI(PlayerScores.averageFluency(p).map{ defaultRounding } ) ) },
+               "masteredChallenge"           -> { Text("not implemented yet") },
+               "averageDurationTranslation"  -> { Text( PlayerScores.averageDurationTranslation(p).toString ) },
+               "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock
+               "numberOfValidSessionsPlayed" -> { Text( OCBKCinfoPlayer.numberOfValidSessionsPlayedBy(p).toString ) },
+               "numberOfSessionsPlayed"      -> { Text( OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString ) }
             )
          }
       }
