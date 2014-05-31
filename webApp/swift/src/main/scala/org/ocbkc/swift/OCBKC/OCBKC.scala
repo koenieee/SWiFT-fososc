@@ -31,6 +31,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.test.SystemWithTesting
 import org.ocbkc.swift.test.TestHelpers._
+import scoring._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -135,12 +136,6 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
       }
    }
    
-   /** In the current (and most probable all future) design(s) a synonym for latestReleaseHasSufficientSampleSize.
-     */ 
-   def latestReleaseIsEvaluated:Boolean =
-   {  latestReleaseHasSufficientSampleSize
-   }
-
    def lastReleaseVersionInfo:Option[ConstiVersionInfo] =
    {  lastReleaseCommitId match
       {  case Some(commitid)     => getConstiVersionInfo(commitid)
@@ -300,16 +295,6 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
 
-   /** WARNING: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future.
-     * @todo optimize? (memoization?)
-     *
-     */
-   def latestReleaseHasSufficientSampleSize:Boolean =
-   {  // Determine whether sample size on the latest release without a fluency score is high enough
-      
-      ConstiScores.sampleSizeSufficient4FluencyScore(constiId).getOrElse(logAndThrow("[POTENTIAL_BUG]: assumes that there is at least one release, otherwise considered as bug + exception. This may be handy to change in the future."))
-   }
-
    def restore(commitId:String, liftUserId:String) // <&y2012.07.23.17:17:39& better do resolving of commit-hash to commit-object here>
    {  val revcom:RevCommit = JgitUtils.revComFromCommitId(commitId).getOrElse(throw new RuntimeException("this commit id doesn't exist, should be impossible, though, 'cause you restore is always called with an existing commitId... >:-("))
    
@@ -430,6 +415,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    {  jgit.get.tagDelete.setTags(RELEASE_VIRGIN_TAG_STRING).call
    }
    /** turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.
+     * @todo change by removing ifpossible, it should always work, for example by demanding the version id as input parameter.
      */
    def makeLatestVersionReleaseCandidateIfPossible
    {  // make latest version the new release candidate
@@ -472,26 +458,38 @@ getHistory.length, commitIdsReleases.length, isRelease
    def turnReleaseCandidateIntoVirginIfPossible
    {  log("turnReleaseCandidateIntoVirginIfPossible called")
       log("   consti = " + constiId)
-      releaseStatusPotentialRelease match
-      {  case Some(ReleaseCandidate) => 
-         {  if( !releasesExist || latestReleaseHasSufficientSampleSize )
-            {  log("   Yes, my dear organic friend! Possible! Doing it...")
-               // remove release candidate status
-               delTagReleaseCandidate
 
-               //releaseStatusLastVersion = Some(ReleaseVirgin)
-               releaseStatusPotentialRelease = Some(ReleaseVirgin)
-               tagReleaseVirgin(commitIdPotentialRelease.get)
-               if( commitIdPotentialRelease.get == latestRevCommit.get.name )
-               {  log("   It is the latest version which has become ReleaseVirgin...")
-                  releaseStatusLastVersion = Some(ReleaseVirgin)
+      def turnIt =
+      {  log("   Yes, my dear organic friend! Possible! Doing it...")
+         // remove release candidate status
+         delTagReleaseCandidate
+
+         //releaseStatusLastVersion = Some(ReleaseVirgin)
+         releaseStatusPotentialRelease = Some(ReleaseVirgin)
+         tagReleaseVirgin(commitIdPotentialRelease.get)
+         if( commitIdPotentialRelease.get == latestRevCommit.get.name )
+         {  log("   It is the latest version which has become ReleaseVirgin...")
+            releaseStatusLastVersion = Some(ReleaseVirgin)
+         }
+      }
+
+      releaseStatusPotentialRelease match
+      {  case Some(ReleaseCandidate)   => 
+         {  lastReleaseCommitId match
+            {  case None => turnIt
+               case Some(lrci) =>
+               {  if(ConstiScores.releaseIsEvaluated(lrci)) turnIt
+                  else
+                  {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
+                     doNothing
+                  }
                }
             }
-            else
-            {  log("   No, not possible. There is already a first release, and !latestReleaseHasSufficientSampleSize.")
-            }
          }
-         case _                     => { log("   There is no ReleaseCandidate, so not possible."); doNothing }
+         case _                        =>
+         {  log("   There is no ReleaseCandidate, so not possible.")
+            doNothing
+         }
       }
    }
 
@@ -539,11 +537,14 @@ getHistory.length, commitIdsReleases.length, isRelease
       log("   releaseStatusPotentialRelease = " + releaseStatusPotentialRelease)
       if( releaseStatusPotentialRelease == Some(ReleaseVirgin) )
       {  log("   last version is ReleaseVirgin, so turning into Release.")
+
+         val ci = commitIdPotentialRelease.get
+
          // remove virgin state
          delTagReleaseVirgin
-         commitIdPotentialRelease = None
+         commitIdPotentialRelease      = None
          releaseStatusPotentialRelease = None
-         releaseVersion(commitIdPotentialRelease.get)
+         releaseVersion(ci)
       }
    }
 
@@ -702,7 +703,10 @@ object Constitution
    /** @returns List with releases which are either (1) not yet completely evaluated, or (2) release virgins. I.e. "playable" releases.
      */
    def constisWithPlayableReleases:List[Constitution] =
-   {  constis.filter{ c => ( !c.latestReleaseIsEvaluated || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+   {  logp( 
+      { (cl:List[Constitution]) => "   constisWithPlayableReleases = " + (cl.map{ _.constiId }.mkString(", ")) },
+      constis.filter{ c => ( c.lastReleaseCommitId.exists( !ConstiScores.releaseIsEvaluated(_:VersionId) ) || c.releaseStatusLastVersion == Some(ReleaseVirgin) ) }
+      )
    }
 
    def constisWithTrailingVersionsWithoutReleaseStatus:List[Constitution] =
@@ -724,13 +728,24 @@ object Constitution
       }
    }
 
-   /** If this returns true, it is identical to all releases are evaluated, because a release may only be evaluated after the previous release is evaluated.
+/* Use constisWithPlayableReleases instead
+   /** @returns
      */
-   def allLatestReleasesOfAllConstisEvaluated:Boolean =
-   {  constis.forall{ c => c.latestReleaseIsEvaluated }
-   }
-}
+   def unevaluatedReleasesExist:Boolean =
+   {  log("unevaluatedReleasesExist called")
+      constis.exists
+      {  c =>
+         {  log("   checking consti " + consti.constiId)
 
+            c.lastReleaseCommitId match
+            {  case None         => false
+               case Some(lrci)   => !ConstiScores.sampleSizeSufficient4FluencyScore(lrci)
+            }
+         }
+      }
+   }
+*/
+}
 class StudyHistory
 {  private var constitutionStudyHistories:List[ConstitutionStudyHistory] = Nil
 
@@ -1056,6 +1071,11 @@ object ConstiScores
    {  //TODO
    }
 
+   def releaseIsEvaluated(releaseId:String):Boolean =
+   {  sampleSizeSufficient4FluencyScore(releaseId)
+   }
+
+   //val releaseIsEvaluated = sampleSizeSufficient4FluencyScore:(VersionId => Boolean) // synonym
    def sampleSizeSufficient4FluencyScore(releaseId:String):Boolean =
    {  // the sample size is sufficiently large, if the fluency score exists.
       val isSuf = averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, releaseId, GlobalConstant.AverageFluency.fluencyConstantK).isDefined
