@@ -61,9 +61,9 @@ import ConstitutionTypes._
 case class ConstitutionVersion(val consti:Constitution, val version:VersionId)
 */
 
-case class ReleaseStatus
+case class ReleaseStatus()
 
-abstract case class PotentialRelease extends ReleaseStatus 
+abstract case class PotentialRelease() extends ReleaseStatus 
 {  log("[MUSTDO] &y2013.05.23.00:54:41& problem with serialization of PotentialRelease, I think lift-json can't deal with abstract case classes. Perhaps try to remove the \"abstract\" keyword. Not elegant, because it should be abstract.")
 }
 case object ReleaseCandidate extends PotentialRelease // this will become a release virgin if there are no prior releases yet, or the previous release has received its score.

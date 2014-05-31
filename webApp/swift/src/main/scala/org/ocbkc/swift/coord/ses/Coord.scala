@@ -59,7 +59,7 @@ package ses
 
 //import Round._
 // TODO perhaps refactor: shouldn't this conceptually be part of the model and not the coordinator (controller)?
-case class RoundFluencySession
+case class RoundFluencySession()
 case object RoundStartSession extends RoundFluencySession
 case object RoundConstiStudy extends RoundFluencySession // only in first session
 case object RoundTranslation extends RoundFluencySession
@@ -74,7 +74,7 @@ case object NotInFluencySession extends RoundFluencySession
 object RoundFluencySessionInfo
 {  val roundsInOrder = List(RoundStartSession, RoundConstiStudy, RoundTranslation, RoundBridgeConstruction, RoundQuestionAttack, RoundAlgorithmicDefenceStage1, RoundAlgorithmicDefenceStage2, RoundFinaliseSession)
 
-   case class EditBehaviour
+   case class EditBehaviour()
 
    def reviewable(rfs:RoundFluencySession):Boolean =
    {  rfs match

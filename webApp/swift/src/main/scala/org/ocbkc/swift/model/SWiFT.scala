@@ -254,7 +254,7 @@ trait TextCTLbyPlayerObserver extends Observer
 }
 
 // "join" of player and sessionInfo
-case class PlayerSessionInfo_join extends LongKeyedMapper[PlayerSessionInfo_join] with IdPK
+case class PlayerSessionInfo_join() extends LongKeyedMapper[PlayerSessionInfo_join] with IdPK
 {  def getSingleton = PlayerSessionInfo_join
    object player extends MappedLongForeignKey(this, Player)
    object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)

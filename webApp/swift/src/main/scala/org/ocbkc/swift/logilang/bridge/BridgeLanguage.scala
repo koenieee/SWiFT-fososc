@@ -130,7 +130,7 @@ trait BridgeBasedAutoCTLtranslator[CTLsent__TP <: CTLsent, TargetLang__TP]
    }
 
    abstract class ConstantTranslationError
-   case class SomeConstantsUntranslatable extends ConstantTranslationError
+   case class SomeConstantsUntranslatable() extends ConstantTranslationError
 
    /** @returns (None, FINISH...
      */
