@@ -1,0 +1,24 @@
+<lift:surround with="default" at="content">
+    <lift:analyseFluencySessionsPlayer form="GET">
+        <h1>Analyse Fluency Sessions of Player <top:player /></h1>
+        <hr/>
+        Constituton: <top:constName /><br />
+        Release: <top:release /><br />
+        <hr />
+        <table id="analyseFluencySessionsPlayer">
+            <top:sessionPlayerTable>
+                <top:row>
+                    <tr>
+                        <td><top:session />              </td>
+                        <td><top:score />              </td>
+                        <td><top:transTime />           </td>
+                        <td><top:answerCor />   </td>
+                        <td><top:detailsLink />   </td>
+                    </tr>
+                </top:row>
+            </top:sessionPlayerTable>
+        </table>
+
+    </lift:analyseFluencySessionsPlayer>
+
+</lift:surround>

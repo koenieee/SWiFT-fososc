@@ -48,7 +48,7 @@ class AnalyseFluencySession
          bind( "top", chooseTemplate("top", "row", ns),
             "date"               -> { Text("todo") },
             "fluency"            -> { Text("todo") },
-            "translationTime"    -> { Text("todo") }
+            "translationTime"    -> { Text(session.durationTranslation.toString) }
          )
       }
       )
@@ -67,7 +67,7 @@ class AnalyseFluencySession
          {  case Some(consti) => // bind consti related fields
             {  bind( "top", playerBindResult,
                   "constName"    -> Text(consti.constiId.toString),
-                  "release"      -> Text("TODO release id"),
+                  "release"      -> Text(consti.currentVersionId),
                   "sessionTable" -> sessionTableRows(ns, player)
                )
             }
@@ -91,28 +91,60 @@ class AnalyseFluencySession
             )
       }
 
-      S.param("player_id") match
-      {  case Full(player_id)  =>
-         {  val msgStart = "   Player with id " + player_id
+    val all_params = S.request.toList.flatMap(_.params).toMap
+     all_params.flatMap{
+       param => param match {
 
-            Player.find(player_id) match
-            {  case Full(player) => {  log(msgStart + " found!")
-                                       renderWhenPlayerExists(player)
-                                    } // do nothing, player exists.
+         case ("consti_id",List(consti_id)) => consti_id match{
+
+           case consti_ID  =>
+           {  val msgStart = "Constitution ID: " + consti_id
+
+             Constitution.getById(consti_ID.toInt) match
+             {  case Some(consti_id) => {  log(msgStart + " found! TODO")
+               bind("top",ns,"constName" -> Text(consti_id.toString))
+               //renderWhenPlayerExists(player)
+             } // do nothing, player exists.
+             case _            =>
+             {  log("   " + msgStart + " not found... Me not happy. But doesn't have to be a bug.")
+               S.redirectTo("todoerror_no_player_not_found")
+             }
+             }
+           }
+         }
+
+
+         case ("player_id", List(player_id)) =>
+           player_id match{
+             case player_id  =>
+             {  val msgStart = "   Player with id " + player_id
+
+               Player.find(player_id) match
+               {  case Full(player) => {  log(msgStart + " found!")
+                 renderWhenPlayerExists(player)
+               } // do nothing, player exists.
                case _            =>
                {  log("   " + msgStart + " not found... Me not happy. But doesn't have to be a bug.")
-                  S.redirectTo("todoerror_no_player_not_found")
+                 S.redirectTo("todoerror_no_player_not_found")
                }
-            }
-         }
-         case _ =>
-         {  log("Parameter player_id missing in URL.")
-            S.redirectTo("index")
-         }
-      }
+               }
+             }
+
+           }
+
+         case _ => log("no match in params")
+           S.redirectTo("index")
+       }
+     } toSeq
+
+
+
+     }
+
+
    }
 }
 
-}
+
 }
 

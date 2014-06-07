@@ -31,7 +31,7 @@ class AnalyseFluencySessionsOfRelease
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
    {  log("sessionTableRows called")
       
-      TableSorter("#SessionTable")
+      TableSorter("#sessionOfReleaseTable")
          
       implicit val displayIfNone = "-"
 
@@ -51,6 +51,7 @@ class AnalyseFluencySessionsOfRelease
                "shortestTransTime"           -> <b> Shortest Translation Time </b>,
                "numberOfValidSessionsPlayed" -> <b> Number of valid sessions played </b>,
                "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>
+               "sessionLink"                 -> <b>Session Link</b>
          )
    
       // create data rows
@@ -68,6 +69,7 @@ class AnalyseFluencySessionsOfRelease
                "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock
                "numberOfValidSessionsPlayed" -> { Text( OCBKCinfoPlayer.numberOfValidSessionsPlayedBy(p).toString ) },
                "numberOfSessionsPlayed"      -> { Text( OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString ) }
+               "sessionLink"                          -> SHtml.link("analyseFluencySessionsPlayer.html?player_id="+p.id,()=>(),Text("Player Session"))
             )
          }
       }
@@ -81,17 +83,19 @@ class AnalyseFluencySessionsOfRelease
             if( Constitution.releaseExists(release_id) )
             {  log( msgStart + " found!")
                bind( "top", ns,
-                  "playerTable" -> playerTableRows(ns, release_id)
+                  "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
+                  "constName"             -> Text(constiOption.get.constiId.toString),
+                  "release"               -> Text(release_id)
                )
             } else
             {  log( "[POTENTIAL_BUG] " + msgStart + " not found... Me not happy. Perhaps the player used an old link to a release which has been deleted in the meanwhile.")
-               S.redirectTo("index")
+               S.redirectTo("../index")
             }
          }
 
          case _ =>
          {  log(" Parameter release_id missing in URL.")
-            S.redirectTo("index")
+            S.redirectTo("../index")
          }
       }
    }
@@ -99,3 +103,5 @@ class AnalyseFluencySessionsOfRelease
 
 }
 }
+
+
