@@ -768,6 +768,11 @@ object Constitution
       !commitIdsReleases.find(_.equals(releaseId)).isEmpty
    }
 
+   def getConstiOfRelease(releaseId:VersionId):Option[Constitution] =
+   {  constis.find
+      {  _.commitIdsReleases.contains(releaseId)
+      }
+   }
 }
 class StudyHistory
 {  private var constitutionStudyHistories:List[ConstitutionStudyHistory] = Nil

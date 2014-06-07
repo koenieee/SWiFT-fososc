@@ -50,7 +50,7 @@ class AnalyseFluencySessionsOfRelease
                "averageDurationTranslation"  -> <b>Average Translation Time</b>,
                "shortestTransTime"           -> <b> Shortest Translation Time </b>,
                "numberOfValidSessionsPlayed" -> <b> Number of valid sessions played </b>,
-               "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>
+               "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>,
                "sessionLink"                 -> <b>Session Link</b>
          )
    
@@ -68,8 +68,8 @@ class AnalyseFluencySessionsOfRelease
                "averageDurationTranslation"  -> { Text( PlayerScores.averageDurationTranslation(p).toString ) },
                "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock
                "numberOfValidSessionsPlayed" -> { Text( OCBKCinfoPlayer.numberOfValidSessionsPlayedBy(p).toString ) },
-               "numberOfSessionsPlayed"      -> { Text( OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString ) }
-               "sessionLink"                          -> SHtml.link("analyseFluencySessionsPlayer.html?player_id="+p.id,()=>(),Text("Player Session"))
+               "numberOfSessionsPlayed"      -> { Text( OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString ) },
+               "sessionLink"                 -> SHtml.link("analyseFluencySessionsPlayer.html?player_id="+p.id,()=>(),Text("Analyse"))
             )
          }
       }
@@ -79,14 +79,22 @@ class AnalyseFluencySessionsOfRelease
    {  S.param("release_id") match
       {  case Full(release_id) =>
          {  val msgStart = "   Release with id " + release_id
-
             if( Constitution.releaseExists(release_id) )
             {  log( msgStart + " found!")
-               bind( "top", ns,
-                  "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
-                  "constName"             -> Text(constiOption.get.constiId.toString),
-                  "release"               -> Text(release_id)
-               )
+            
+               Constitution.getConstiOfRelease(release_id) match
+               {  case Some(consti) =>
+                  {  bind( "top", ns,
+                        "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
+                        "constName"             -> Text(consti.constiId.toString),
+                        "release"               -> Text(release_id)                        
+                     )
+                  }
+                  case None =>
+                  {  log("[ERROR] constitution of release " + release_id + " not found.")
+                     S.redirectTo("../index")
+                  }
+               }
             } else
             {  log( "[POTENTIAL_BUG] " + msgStart + " not found... Me not happy. Perhaps the player used an old link to a release which has been deleted in the meanwhile.")
                S.redirectTo("../index")

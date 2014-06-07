@@ -21,7 +21,7 @@ class analyseFluencySessionsConsti
       "release"          -> <b>Release</b>,
       "currentVersionId" -> <b>Current Version ID</b>,
       "creationDate"     -> <b>Creation Date</b>,
-      "analyseLink"      -> <b>Analyse Relase</b>
+      "analyseLink"      -> <b>Analyse</b>
     )
     header ++
     constitution.commitIdsReleases.flatMap //this one?

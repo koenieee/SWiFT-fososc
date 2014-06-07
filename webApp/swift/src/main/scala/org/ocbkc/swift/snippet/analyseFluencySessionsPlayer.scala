@@ -42,7 +42,7 @@ class analyseFluencySessionsPlayer {
       "score"          -> { Text("TODO, FLuencyScore function by W") },
       "transTime"      -> { Text(session.durationTranslation.get.toString) },
       "answerCor"      -> { Text(session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}) },
-      "detailsLink"    -> { SHtml.link("analyseFluencySessionDetails.html?session_id="+session.id.toString,()=>(),Text("Details Link")) }
+      "detailsLink"    -> { SHtml.link("analyseFluencySessionDetails.html?session_id="+session.id.toString,()=>(),Text("Analyse")) }
       )
     }
   }
