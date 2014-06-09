@@ -7,35 +7,39 @@ import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.OCBKC.scoring.ConstiScores
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 
 class analyseFluencySessionsConsti
 { //todo by Wenzel.
 
   def constiTable(consti_id: Constitution, ns:NodeSeq):NodeSeq =
-  { val releaseID = "empty"
-    val constitution: Constitution = consti_id
+  { val constitution: Constitution = consti_id
+    implicit val displayNoneAs = "-"
+    val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
     val header =
     bind("top", chooseTemplate("top","row", ns),
-      "release"          -> <b>Release</b>,
-      "currentVersionId" -> <b>Current Version ID</b>,
+//      "releaseUUID"      -> <b>Release Unique ID</b>,
+      "releaseIndex"     -> <b>Release Index</b>,
+      "fluencyScore"     -> <b>Fluency Score</b>,
       "creationDate"     -> <b>Creation Date</b>,
       "analyseLink"      -> <b>Analyse</b>
     )
     header ++
-    constitution.commitIdsReleases.flatMap //this one?
-    { release =>
+    constitution.commitIdsReleases.flatMap
+    { releaseId =>
       bind("top", chooseTemplate("top", "row", ns),
-        "release"            -> Text(release),
-        "currentVersionId"   -> Text("TODO"),
-        "creationDate"       -> Text(constitution.creationTime.toString),
-        "analyseLink"        -> SHtml.link("analyseFluencySessionsOfRelease.html?consti_id="+consti_id.constiId+"&release_id="+release,()=>(),Text("Release Session"))
+//        "releaseUUID"        -> Text(releaseId),
+        "releaseIndex"       -> Text("R" + constitution.releaseIndex(releaseId)),
+        "fluencyScore"       -> Text(optionToUI(ConstiScores.averageFluency(releaseId))),
+        "creationDate"       -> Text(df.format(constitution.creationTime).toString),
+        "analyseLink"        -> SHtml.link("analyseFluencySessionsOfRelease.html?release_id="+releaseId, ()=>(), Text("Analyse"))
       )
     }
   }
 
-  def render(ns: NodeSeq):NodeSeq=
+  def render(ns: NodeSeq):NodeSeq =
   { S.param("consti_id") match
     { case Full(consti_id) =>
       { log("Searching for Constis with ID: " + consti_id)

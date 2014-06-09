@@ -10,6 +10,7 @@ import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
 import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
+import org.ocbkc.swift.general.GUIdisplayHelpers._
 
 class analyseFluencySessionsPlayer {
   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
@@ -39,7 +40,7 @@ class analyseFluencySessionsPlayer {
 
       bind( "top", chooseTemplate("top", "row", ns),
       "session"        -> { Text(session.id.toString) },
-      "score"          -> { Text("TODO, FLuencyScore function by W") },
+      "score"          -> { Text("TODO") },
       "transTime"      -> { Text(session.durationTranslation.get.toString) },
       "answerCor"      -> { Text(session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}) },
       "detailsLink"    -> { SHtml.link("analyseFluencySessionDetails.html?session_id="+session.id.toString,()=>(),Text("Analyse")) }

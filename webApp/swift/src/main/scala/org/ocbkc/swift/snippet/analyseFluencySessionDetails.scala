@@ -3,18 +3,18 @@ import scala.xml.{Text, NodeSeq}
 import org.ocbkc.swift.global.Logging._
 import net.liftweb.util.Helpers._
 import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.OCBKC.scoring.PlayerScores
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
 import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
-
-
+import org.ocbkc.swift.general.GUIdisplayHelpers._
 
 class analyseFluencySessionDetails
-{
-
-  def render(ns: NodeSeq): NodeSeq =
-  { S.param("session_id") match
+{ def render(ns: NodeSeq): NodeSeq =
+  { implicit val displayNoneAs = "-"
+  
+    S.param("session_id") match
     { case Full(session_id) =>
       {
         val msgStart = "Session ID " + session_id
@@ -23,18 +23,26 @@ class analyseFluencySessionDetails
 
         if( !sesCoordBySession.isEmpty )
         { log( msgStart + " found!")
-          val constiOption:Option[Constitution] = Constitution.getById(Player.find(By(Player.id, sesCoordBySession.get.userId.get)).get.firstChosenConstitution)
-        //  log(constiOption.toString)
+          Player.find(By(Player.id, sesCoordBySession.get.userId.get)) match
+          { case Full(p) =>
+            {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution)
+               //  log(constiOption.toString)
 
-          bind( "top", ns,
-          "sessionID"     -> Text(session_id),
-          "constName"     -> Text(constiOption.get.constiId.toString),
-          "release"       -> Text(constiOption.get.currentVersionId), //is this correct?
-          "sourceText"    -> Text(sesCoordBySession.get.textNL), //W: what do I need to get here?
-          "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
-          "score"         -> Text("Todo"),
-          "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"})
-          )
+                bind( "top", ns,
+                   "sessionID"     -> Text(session_id),
+                   "constName"     -> Text(constiOption.get.constiId.toString),
+                   "release"       -> Text(p.releaseOfFirstChosenConstitution.get), // put somewhere: {log("[ERROR] code &y2014.06.09.21:34:59&"); "not found"}),
+                   "sourceText"    -> Text(sesCoordBySession.get.textNL), //W: what do I need to get here?
+                   "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
+                   "score"         -> Text(optionToUI(PlayerScores.fluency(p, sesCoordBySession.get))),
+                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"})
+                )
+             }
+             case _ =>
+             { log("[ERROR] Session with id " + session_id + " does not have a player associated with it.")
+               S.redirectTo("../index")
+             }
+         }
         }
         else
         { log( "[POTENTIAL_BUG] " + msgStart + " not found.")

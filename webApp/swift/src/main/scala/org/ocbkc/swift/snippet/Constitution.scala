@@ -70,6 +70,10 @@ class ConstitutionSnippet
       {  S.redirectTo("history?id=" + const.get.constiId)
       }
 
+      def analyseScoresBtn() =
+      {  S.redirectTo("analyse/analyseFluencySessionsConsti?consti_id=" + const.get.constiId)
+      }
+
 /* &y2013.01.27.18:57:58& Still needed? 
 
       def updateConstitutionContent(const:Constitution) =
@@ -266,6 +270,7 @@ class ConstitutionSnippet
 	println(constLoc.followers.contains(currentUserId));
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
+                           "analyseScores"    -> SHtml.button("Analyse Scores", analyseScoresBtn),
                            "followCheckbox"     -> SHtml.ajaxCheckbox(constLoc.followers.contains(currentUserId), selected => processFollowCheckbox(selected)),//SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
                            "saveGeneralControlBt"             -> SHtml.button("Save", () => processGeneralSaveBtn),
                            "numberOfFollowers"  -> Text(constLoc.followers.size.toString),

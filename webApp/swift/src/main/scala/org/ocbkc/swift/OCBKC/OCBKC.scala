@@ -354,6 +354,7 @@ getHistory.length, commitIdsReleases.length, isRelease
    }
 
    /** @todo optimize this.
+     * @todo refactor, encapsulate the jgit engine
      */
    def getHistory:List[RevCommit] =
    {  import scala.collection.JavaConverters._
@@ -1163,7 +1164,9 @@ object ConstiScores
       )
    }
 
-   /** @returns None if there are not sufficient players with this release with a valid fluency score.
+   /** Calculates the (valid) fluency score for the given release
+     * @todo rename to "fluencyScore"
+     * @returns None if there are not sufficient players with this release with a valid fluency score.
      * @todo  &y2013.01.07.13:20:00& is there a check whether releaseId is indeed a release (and not another version)?
      * @todo <&y2014.05.03.21:58:22& currently algorithm is implemented without preventing rounding errors, change if necessary. See also thesis.>
      */
