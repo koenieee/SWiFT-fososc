@@ -2,6 +2,7 @@ package org.ocbkc.swift.snippet
 
 import scala.xml.{Text, NodeSeq}
 import net.liftweb.util.Helpers._
+import org.ocbkc.swift.global.DisplayHelpers._
 import scala.xml.Text
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
@@ -32,7 +33,7 @@ class analyseFluencySessionsConsti
       bind("top", chooseTemplate("top", "row", ns),
 //        "releaseUUID"        -> Text(releaseId),
         "releaseIndex"       -> Text("R" + constitution.releaseIndex(releaseId)),
-        "fluencyScore"       -> Text(optionToUI(ConstiScores.averageFluency(releaseId))),
+        "fluencyScore"       -> Text(optionToUI(ConstiScores.averageFluency(releaseId).map{ defaultRounding })),
         "creationDate"       -> Text(df.format(constitution.creationTime).toString),
         "analyseLink"        -> SHtml.link("analyseFluencySessionsOfRelease.html?release_id="+releaseId, ()=>(), Text("Analyse"))
       )

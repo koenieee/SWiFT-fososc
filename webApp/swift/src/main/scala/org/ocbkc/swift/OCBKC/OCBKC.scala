@@ -109,7 +109,8 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    def commitIdPotentialRelease:Option[VersionId] =
    {  _commitIdPotentialRelease
    }
-   /** first release has number 1
+   /** @todo move to object Constitution, because the index can be determined uniquely if you only know the releaseId.
+     * first release has number 1
      */
    def releaseIndex(releaseId:VersionId) = 
    {  commitIdsReleases.size - commitIdsReleases.indexOf(releaseId)
@@ -868,7 +869,7 @@ object PlayerScores
    }
 
    case class Result_averageDurationTranslation(val averageDurationTranslation:Option[Double], val sampleSize: Int)
-/** @return only includes time of correct translations. Perhaps generalise to: time per correctly answered questions for challenge-isntances with multiple questions. So (number of correct questions in challenge instance/ total translation time)
+/** Only includes time of correct translations. Perhaps generalise to: time per correctly answered questions for challenge-isntances with multiple questions. So (number of correct questions in challenge instance/ total translation time)
   */
    def averageDurationTranslation(p:Player):Result_averageDurationTranslation =
    {  averageDurationTranslation(p, -1)
@@ -891,7 +892,7 @@ object PlayerScores
    }
  
    /**
-     * @returns the fluencyscore of this player: averagefluencyscore. It returns None if the sample size is not sufficiently large for a fluency score for this player. Moreover, additional session played after determination of the fluency score are disregarded.
+     * @returns the fluencyscore of this player: which is the average fluency score of the sessions, provided that the sample size is large enough. It returns None if the sample size is not sufficiently large for a fluency score for this player. Moreover, additional session played after determination of the fluency score are disregarded.
      */
    def fluencyScore(p:Player):Option[Double] =
    {  log("fluencyScore called")
@@ -910,7 +911,7 @@ object PlayerScores
 
    /** Only returns FluencyScore if the session has been completed.
      */
-   def fluency(p:Player, session:SessionInfo):Option[FluencyScore] =
+   def fluencyScore(session:SessionInfo):Option[FluencyScore] =
    {  session.durationTranslation match
       {  case None => None
          case Some(dt) => Some(FluencyScore(if(session.answerPlayerCorrect.get) 1 else 0, 1, dt))

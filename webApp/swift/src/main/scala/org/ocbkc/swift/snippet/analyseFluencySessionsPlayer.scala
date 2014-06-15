@@ -2,6 +2,7 @@ package org.ocbkc.swift.snippet
 
 import scala.xml.{Text, NodeSeq}
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.DisplayHelpers._
 import net.liftweb.widgets.tablesorter.TableSorter
 import net.liftweb.util.Helpers._
 import org.ocbkc.swift.OCBKC.Constitution
@@ -21,27 +22,30 @@ class analyseFluencySessionsPlayer {
     TableSorter("#analyseFluencySessionsPlayer")
 
     implicit val displayIfNone = "-"
+    val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
 
     // create headers
     val header =
     bind("top", chooseTemplate("top", "row", ns),
-      "session"       -> <b>Session</b>,
-      "score"         -> <b>Score</b>,
-      "transTime"     -> <b>Translation Time</b>,
-      "answerCor"     -> <b>Answer Correct</b>,
-      "detailsLink"   -> <b>Details Link</b>
+      "sessionId"       -> <b>Session</b>,
+      "translationEndTime" -> <b>Translation End-Time</b>,
+      "score"           -> <b>Fluency Score</b>,
+      "durTrans"        -> <b>Duration Translation</b>,
+      "answerCor"       -> <b>Answer Correct</b>,
+      "detailsLink"     -> <b>Analyse</b>
     )
 
-    log("Fluency Score: "+ PlayerScores.fluencyScoreSample(playerID).toString())
+    // log("Fluency Score: "+ PlayerScores.fluencyScoreSample(playerID).toString())
 
     header ++
     sesCoordLR.sessionsPlayedBy(playerID).flatMap
     { session =>
 
       bind( "top", chooseTemplate("top", "row", ns),
-      "session"        -> { Text(session.id.toString) },
-      "score"          -> { Text("TODO") },
-      "transTime"      -> { Text(session.durationTranslation.get.toString) },
+      "sessionId"      -> { Text(session.id.toString) },
+      "translationEndTime"-> { Text(dateFormat.format(session.stopTimeTranslation.is)) },
+      "score"          -> { Text("" + optionToUI(PlayerScores.fluencyScore(session).map{ fs => defaultRounding(fs.toDouble) })) },
+      "durTrans"       -> { Text(session.durationTranslation.get.toString) },
       "answerCor"      -> { Text(session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}) },
       "detailsLink"    -> { SHtml.link("analyseFluencySessionDetails.html?session_id="+session.id.toString,()=>(),Text("Analyse")) }
       )

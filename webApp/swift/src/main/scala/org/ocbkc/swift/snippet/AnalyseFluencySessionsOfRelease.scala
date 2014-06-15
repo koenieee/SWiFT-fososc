@@ -3,6 +3,7 @@ package org.ocbkc.swift
 package snippet 
 {
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.DisplayHelpers._
 import _root_.scala.xml._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.http._
@@ -35,10 +36,6 @@ class AnalyseFluencySessionsOfRelease
          
       implicit val displayIfNone = "-"
 
-      def defaultRounding(d:Double):Double =
-      {  "%.2f".format(d).toDouble
-      }
-
       // create headers
       val header = 
          bind(
@@ -47,11 +44,11 @@ class AnalyseFluencySessionsOfRelease
                "fluencyScore"                -> <b>Fluency Score</b>,
                "averageFluency"              -> <b>Average Fluency</b>,
                "masteredChallenge"           -> <b>Mastered Challenge</b>,
-               "averageDurationTranslation"  -> <b>Average Translation Time</b>,
-               "shortestTransTime"           -> <b> Shortest Translation Time </b>,
-               "numberOfValidSessionsPlayed" -> <b> Number of valid sessions played </b>,
+               "averageDurationTranslation"  -> <b>Average Duration Translation</b>,
+               "shortestTranslationTime"     -> <b>Shortest Translation Time</b>,
+               "numberOfValidSessionsPlayed" -> <b>Number of valid sessions played</b>,
                "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>,
-               "sessionLink"                 -> <b>Session Link</b>
+               "sessionLink"                 -> <b>Analyse</b>
          )
    
       // create data rows
@@ -62,10 +59,10 @@ class AnalyseFluencySessionsOfRelease
 
             bind( "top", chooseTemplate("top", "row", ns),
                "playerId"                    -> { Text(p.swiftDisplayName) },
-               "fluencyScore"                -> { Text( optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding } ) ) },
+               "fluencyScore"                -> { Text(optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding } ) ) },
                "averageFluency"              -> { Text(optionToUI(PlayerScores.averageFluency(p).map{ defaultRounding } ) ) },
                "masteredChallenge"           -> { Text("not implemented yet") },
-               "averageDurationTranslation"  -> { Text( PlayerScores.averageDurationTranslation(p).toString ) },
+               "averageDurationTranslation"  -> { Text( "" + optionToUI( PlayerScores.averageDurationTranslation(p).averageDurationTranslation ) ) },
                "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock
                "numberOfValidSessionsPlayed" -> { Text( OCBKCinfoPlayer.numberOfValidSessionsPlayedBy(p).toString ) },
                "numberOfSessionsPlayed"      -> { Text( OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString ) },
@@ -111,5 +108,4 @@ class AnalyseFluencySessionsOfRelease
 
 }
 }
-
 

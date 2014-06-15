@@ -191,7 +191,11 @@ object LiftHelpers
 
 }
 
-
+object DisplayHelpers
+{  def defaultRounding(d:Double):Double =
+   {  "%.2f".format(d).toDouble
+   }
+}
 
 
 }

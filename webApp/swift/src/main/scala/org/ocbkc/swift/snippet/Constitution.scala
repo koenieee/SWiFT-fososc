@@ -16,6 +16,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.DisplayHelpers._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.scoring._
@@ -338,8 +339,7 @@ class ConstitutionSnippet
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "latestRelease"      -> { Text(optionToUI( latestReleaseIdOpt.collect{ case lr:VersionId => "R" + constLoc.releaseIndex(lr) } ) )
                                                    },
-                           "fluency"            -> { Text(optionToUI(fluencyScoreOpt.collect{ case (_, fs) => fs } ))
-                                                   },
+                           "fluency"            -> { Text(optionToUI(fluencyScoreOpt.collect{ case (_, fs) => fs }.map{ defaultRounding } )) },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
                      )
       answer
