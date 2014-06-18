@@ -11,6 +11,7 @@ import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 
+
 class analyseFluencySessionDetails
 { def render(ns: NodeSeq): NodeSeq =
   { implicit val displayNoneAs = "-"
@@ -29,10 +30,13 @@ class analyseFluencySessionDetails
             {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution)
                val releaseId = p.releaseOfFirstChosenConstitution.get
                //  log(constiOption.toString)
-
+               val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
                 bind( "top", ns,
                    "sessionID"     -> Text(session_id),
                    "constName"     -> Text(constiOption.get.constiId.toString),
+                   "playerName"    -> Text(p.swiftDisplayName),
+                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)*1000L))),
+                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)*1000L))),
                    "releaseIndex"  -> Text("R" + constiOption.get.releaseIndex(releaseId)), // put somewhere: {log("[ERROR] code &y2014.06.09.21:34:59&"); "not found"}),
                    "sourceText"    -> Text(sesCoordBySession.get.textNL),
                    "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),

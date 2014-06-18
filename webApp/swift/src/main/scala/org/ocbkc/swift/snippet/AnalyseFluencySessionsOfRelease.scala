@@ -42,6 +42,7 @@ class AnalyseFluencySessionsOfRelease
             "top", chooseTemplate("top", "row", ns),
                "playerId"                    -> <b>Player</b>,
                "fluencyScore"                -> <b>Fluency Score</b>,
+               "timeSessionPlayed"           -> <b>Time Session Played</b>,
                "averageFluency"              -> <b>Average Fluency</b>,
                "masteredChallenge"           -> <b>Mastered Challenge</b>,
                "averageDurationTranslation"  -> <b>Average Duration Translation</b>,
@@ -59,8 +60,9 @@ class AnalyseFluencySessionsOfRelease
 
             bind( "top", chooseTemplate("top", "row", ns),
                "playerId"                    -> { Text(p.swiftDisplayName) },
-               "fluencyScore"                -> { Text(optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding } ) ) },
+               "fluencyScore"                -> { Text(optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding }) ) },
                "averageFluency"              -> { Text(optionToUI(PlayerScores.averageFluency(p).map{ defaultRounding } ) ) },
+               "timeSessionPlayed"           -> { Text(df.format(sesCoordLR.sessionsPlayedBy(p).head.durationTranslation))},
                "masteredChallenge"           -> { Text("not implemented yet") },
                "averageDurationTranslation"  -> { Text( "" + optionToUI( PlayerScores.averageDurationTranslation(p).averageDurationTranslation ) ) },
                "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock

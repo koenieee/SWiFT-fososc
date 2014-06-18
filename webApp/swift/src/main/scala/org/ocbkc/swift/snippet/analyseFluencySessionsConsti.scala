@@ -10,6 +10,7 @@ import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC.Constitution
 import org.ocbkc.swift.OCBKC.scoring.ConstiScores
 import org.ocbkc.swift.general.GUIdisplayHelpers._
+import net.liftweb.widgets.tablesorter.TableSorter
 
 class analyseFluencySessionsConsti
 { //todo by Wenzel.
@@ -37,7 +38,9 @@ class analyseFluencySessionsConsti
         "creationDate"       -> Text(df.format(constitution.creationTime).toString),
         "analyseLink"        -> SHtml.link("analyseFluencySessionsOfRelease.html?release_id="+releaseId, ()=>(), Text("Analyse"))
       )
-    }
+    } ++
+    TableSorter("#ConstiTable")
+
   }
 
   def render(ns: NodeSeq):NodeSeq =
@@ -54,6 +57,7 @@ class analyseFluencySessionsConsti
           "description"       -> Text(constitution.get.shortDescription),
           "constiTable"       -> constiTable(constitution.get, ns)
           )
+
         }
         else
         { log("Constitution with ConstiID " + consti_id + " Not found!")
