@@ -1,17 +1,20 @@
 package org.ocbkc.swift.snippet
 
-import scala.xml.{Text, NodeSeq}
+import scala.xml._
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.global.DisplayHelpers._
 import net.liftweb.widgets.tablesorter.TableSorter
 import net.liftweb.util.Helpers._
-import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.OCBKC.{OCBKCinfoPlayer, Constitution}
 import org.ocbkc.swift.OCBKC.scoring.PlayerScores
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
 import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
 import org.ocbkc.swift.general.GUIdisplayHelpers._
+import net.liftweb.common.Full
+import scala.xml.Text
+import net.liftweb.common.Full
 
 class analyseFluencySessionsPlayer {
   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
@@ -19,37 +22,44 @@ class analyseFluencySessionsPlayer {
   def sessionPlayerTable(ns:NodeSeq, playerID: Player):NodeSeq =
   { log("sessionPlayerTable called")
 
-    TableSorter("#analyseFluencySessionsPlayer")
-
     implicit val displayIfNone = "-"
     val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
 
-    // create headers
-    val header =
-    bind("top", chooseTemplate("top", "row", ns),
-      "sessionId"       -> <b>Session</b>,
-      "translationEndTime" -> <b>Translation End-Time</b>,
-      "score"           -> <b>Fluency Score</b>,
-      "durTrans"        -> <b>Duration Translation</b>,
-      "answerCor"       -> <b>Answer Correct</b>,
-      "detailsLink"     -> <b>Analyse</b>
-    )
+    val header = Elem(
+      null,
+      "table",
+      new UnprefixedAttribute("id",
+        Text("analyseFluencySessionsPlayer"),
+        new UnprefixedAttribute("class", Text("tablesorter"), Null)),
+      TopScope,
+      <thead><tr><th>Session</th>
+        <th>Translation Endtime</th>
+        <th>Fluency Score</th>
+        <th>Duration Translation</th>
+        <th>Answer Correct</th>
+        <th>Analyse</th></tr></thead>
+      ,
+      <tbody>{  sesCoordLR.sessionsPlayedBy(playerID).map(
+        session =>
+        { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+          <tr>
+            <td>{ session.id.toString }</td>
+            <td>{ dateFormat.format(session.stopTimeTranslation.is)   }</td>
+            <td>{ "" + optionToUI(PlayerScores.fluencyScore(session).map{ fs => defaultRounding(fs.toDouble) })}</td>
+            <td>{  session.durationTranslation.get.toString  }</td>
+            <td>{  session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}  }</td>
+            <td><a href={ "analyseFluencySessionDetails.html?session_id="+session.id.toString }>Analyse</a></td>
 
-    // log("Fluency Score: "+ PlayerScores.fluencyScoreSample(playerID).toString())
-
-    header ++
-    sesCoordLR.sessionsPlayedBy(playerID).flatMap
-    { session =>
-
-      bind( "top", chooseTemplate("top", "row", ns),
-      "sessionId"      -> { Text(session.id.toString) },
-      "translationEndTime"-> { Text(dateFormat.format(session.stopTimeTranslation.is)) },
-      "score"          -> { Text("" + optionToUI(PlayerScores.fluencyScore(session).map{ fs => defaultRounding(fs.toDouble) })) },
-      "durTrans"       -> { Text(session.durationTranslation.get.toString) },
-      "answerCor"      -> { Text(session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}) },
-      "detailsLink"    -> { SHtml.link("analyseFluencySessionDetails.html?session_id="+session.id.toString,()=>(),Text("Analyse")) }
+          </tr>
+        }
       )
-    }
+        }
+      </tbody>
+    )
+    log(header.toString)
+    header ++ TableSorter("#analyseFluencySessionsPlayer")
+
+
   }
 
   def render(ns: NodeSeq): NodeSeq =

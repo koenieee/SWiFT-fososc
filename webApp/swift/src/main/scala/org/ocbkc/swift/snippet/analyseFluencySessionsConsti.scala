@@ -1,16 +1,18 @@
 package org.ocbkc.swift.snippet
 
-import scala.xml.{Text, NodeSeq}
+import scala.xml._
 import net.liftweb.util.Helpers._
 import org.ocbkc.swift.global.DisplayHelpers._
-import scala.xml.Text
 import net.liftweb.http.{SHtml, S}
 import net.liftweb.common.Full
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC.Constitution
-import org.ocbkc.swift.OCBKC.scoring.ConstiScores
+import org.ocbkc.swift.OCBKC.scoring.{PlayerScores, ConstiScores}
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import net.liftweb.widgets.tablesorter.TableSorter
+import net.liftweb.common.Full
+import scala.xml.Text
+import net.liftweb.common.Full
 
 class analyseFluencySessionsConsti
 { //todo by Wenzel.
@@ -20,26 +22,34 @@ class analyseFluencySessionsConsti
     implicit val displayNoneAs = "-"
     val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
-    val header =
-    bind("top", chooseTemplate("top","row", ns),
-//      "releaseUUID"      -> <b>Release Unique ID</b>,
-      "releaseIndex"     -> <b>Release Index</b>,
-      "fluencyScore"     -> <b>Fluency Score</b>,
-      "creationDate"     -> <b>Creation Date</b>,
-      "analyseLink"      -> <b>Analyse</b>
-    )
-    header ++
-    constitution.commitIdsReleases.flatMap
-    { releaseId =>
-      bind("top", chooseTemplate("top", "row", ns),
-//        "releaseUUID"        -> Text(releaseId),
-        "releaseIndex"       -> Text("R" + constitution.releaseIndex(releaseId)),
-        "fluencyScore"       -> Text(optionToUI(ConstiScores.averageFluency(releaseId).map{ defaultRounding })),
-        "creationDate"       -> Text(df.format(constitution.creationTime).toString),
-        "analyseLink"        -> SHtml.link("analyseFluencySessionsOfRelease.html?release_id="+releaseId, ()=>(), Text("Analyse"))
+    val header = Elem(
+      null,
+      "table",
+      new UnprefixedAttribute("id",
+      Text("analyseFluencySessionsPlayer"),
+      new UnprefixedAttribute("class", Text("tablesorter"), Null)),
+      TopScope,
+      <thead><tr><th>Release Index</th>
+      <th>Fluency Score</th>
+      <th>Creation Date</th>
+      <th>Analyse</th></tr></thead>
+      ,
+      <tbody>{  constitution.commitIdsReleases.map(
+      releaseId =>
+      { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+        <tr>
+        <td>{ "R" + constitution.releaseIndex(releaseId) }</td>
+        <td>{ optionToUI(ConstiScores.averageFluency(releaseId).map{ defaultRounding })  }</td>
+        <td>{df.format(constitution.creationTime)}</td>
+        <td><a href={ "analyseFluencySessionsOfRelease.html?release_id="+releaseId }>Analyse</a></td>
+
+        </tr>
+      }
       )
-    } ++
-    TableSorter("#ConstiTable")
+      }
+      </tbody>
+    )
+    header ++ TableSorter("#analyseFluencySessionsPlayer")
 
   }
 

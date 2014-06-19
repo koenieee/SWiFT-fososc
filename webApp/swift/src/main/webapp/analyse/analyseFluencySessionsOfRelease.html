@@ -8,11 +8,18 @@
         <ul>
             <li>Average duration translation only includes duration of correct translations</li>
         </ul>
+        <top:sessionOfReleaseTable />
+    </lift:AnalyseFluencySessionsOfRelease>
+</lift:surround>
+<!--
+  <top:sessionOfReleaseTable />
+        <table id="sessionOfReleaseTable" class="tablesorter">
 
-        <table id="sessionOfReleaseTable">
             <top:sessionOfReleaseTable>
+
                 <top:row>
-                    <!-- information limited to sessionsPlayedB4accessToAllConstis,  sessions after it are ignored -->
+
+                 information limited to sessionsPlayedB4accessToAllConstis,  sessions after it are ignored
                     <tr>
                         <td><top:playerId />          </td>
                         <td><top:fluencyScore />           </td>
@@ -24,10 +31,8 @@
                         <td><top:numberOfSessionsPlayed /> </td>
                         <td><top:sessionLink /> </td>
                     </tr>
-                </top:row>
+                 </top:row>
             </top:sessionOfReleaseTable>
         </table>
+-->
 
-    </lift:AnalyseFluencySessionsOfRelease>
-
-</lift:surround>
