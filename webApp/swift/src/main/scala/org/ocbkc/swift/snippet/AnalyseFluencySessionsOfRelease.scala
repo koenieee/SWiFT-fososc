@@ -129,7 +129,8 @@ class AnalyseFluencySessionsOfRelease
                   {  bind( "top", ns,
                         "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
                         "constName"             -> Text(consti.constiId.toString),
-                        "release"               -> Text(release_id)                        
+                        "release"               -> Text(release_id),
+                        "scoring"               -> Text(consti.averageScore.toString)
                      )
                   }
                   case None =>

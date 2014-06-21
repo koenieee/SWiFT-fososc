@@ -57,6 +57,7 @@ class analyseFluencySessionsConsti
   { S.param("consti_id") match
     { case Full(consti_id) =>
       { log("Searching for Constis with ID: " + consti_id)
+        log("System Locale:" )
         val constitution: Option[Constitution] = Constitution.getById(consti_id.toInt)
 
         if( !constitution.isEmpty )
