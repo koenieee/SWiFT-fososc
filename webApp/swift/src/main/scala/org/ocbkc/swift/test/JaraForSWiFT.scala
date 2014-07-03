@@ -245,7 +245,7 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
 
    // create additional states
    val qPlayTranslationSession = State("qPlayTranslationSession")
-   val qCreateSession = State("qCreateSession")
+   val qCreateSession = State("qCreateSession") // this is the Web-session, not the game-session!
    val qTryStartSession = State("qTryStartSession")
    val qCreateNewConsti = State("qCreateNewConsti")
    val qEditExistingConsti = State("qEditExistingConsti")
@@ -290,9 +290,9 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       qCreateSession       -> List(qTryStartSession),
       qTryStartSession     -> List(qTryStartSession), // qTryStartSession will adapt this transition to go to qPlayTranslationSession when it succeeds (this is a work-around for the fact the Jara model does not (yet) have conditional transitions.
       qPlayTranslationSession -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate), // in fact qCreateNewConsti is only allowed after a certain minimal number of sessions played, so actually executing the attached process succesfully only happens after. COULDDO: build this into these transitions somehow?
-      qEditExistingConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
-      qCreateNewConsti -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti, qChooseReleaseCandidate),
-      qChooseReleaseCandidate -> List(qEditExistingConsti, qPlayTranslationSession, qCreateNewConsti)
+      qEditExistingConsti -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate),
+      qCreateNewConsti -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti, qChooseReleaseCandidate),
+      qChooseReleaseCandidate -> List(qEditExistingConsti, qTryStartSession, qCreateNewConsti)
    )
 
    // attach delaygenerators to states, processes to states, and durationgenerators to processes.

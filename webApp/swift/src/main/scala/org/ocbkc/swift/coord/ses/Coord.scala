@@ -214,8 +214,13 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 
    def URstopTranslation =
    {  log("URstopTranslation called")
-      si.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
-      Unit
+      if( latestRoundFluencySession == RoundTranslation )
+      {  si.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+         Unit
+         // stay in same round
+      } else
+      {  log("[POTENTIAL_BUG] cannot stop translation, because player is not in state RoundTranslation.")
+      }
    }
 
    def URstartAlgorithmicDefenceStage1:QuerySent__TP =
@@ -238,6 +243,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       si.stopTime(System.currentTimeMillis).save
       sesHis.sessionInfos ::= si
       si.serialize // serialize the JSON part
+      log("Creating PlayerSessionInfo_join: player = " + currentPlayer.swiftDisplayName + ", session = " + si.id) // this info is also more or less shown by the default LiftMapper logger...
       PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
 
       // send update mail to followers that the score for a release of this constitution is updated
@@ -494,22 +500,28 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent_rb, E
 {  override def currentPlayer = currentPlayerVal
    val gameCore = new EfeLang(currentPlayer.id.get)
 
-   // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
+   // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not. This also means it encompasses both RoundAlgorithmicDefenceStage1 and algorithmicDefenceRoundStage2.
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
-   {  val cTM = SystemWithTesting.currentTimeMillis
-      log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
-      si.startTime(cTM).save
-      si.startTimeTranslation(cTM).save
-      si.stopTime(cTM + duration).save
-      si.stopTimeTranslation(cTM + duration).save
+   {  if( latestRoundFluencySession == RoundTranslation )
+      {  val cTM = SystemWithTesting.currentTimeMillis
+         log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
+         si.startTime(cTM).save
+         si.startTimeTranslation(cTM).save
+         si.stopTime(cTM + duration).save
+         si.stopTimeTranslation(cTM + duration).save
 
-      si.answerPlayerCorrect(winSession).save
-      si.serialize
-      PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
-      sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+         si.answerPlayerCorrect(winSession).save
+         si.serialize
 
-      turnReleaseCandidateIntoVirginIfPossible
-      latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+         log("Creating PlayerSessionInfo_join: player = " + currentPlayer.swiftDisplayName + ", session = " + si.id)
+         PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
+         sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+
+         turnReleaseCandidateIntoVirginIfPossible
+         latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+      } else
+      {  log("[BUG]  cannot go to state RoundAlgorithmicDefenceStage1 (and 2), because player is not in state RoundStartSession.")
+      }
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =
