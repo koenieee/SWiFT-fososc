@@ -78,7 +78,7 @@ class SelectConstitution
 		     }  </a></td><td>
 			{  displayNoneIfEmpty(c.shortDescription) 
 			}  </td><td>
-			   {  optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect
+			   {  optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(c.constiId).collect
 			     {  case afs:(VersionId,Double) => afs._2 
 			     } ) 
 			   }  </td><td>

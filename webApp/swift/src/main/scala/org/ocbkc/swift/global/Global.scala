@@ -62,7 +62,7 @@ object GlobalConstant
    val ADMINFIRSTNAME = "Admin"
    
    var adminOpt:Option[Player] = None
-   def adminGitUserId = {  println("retrieving adminGitUserId...")
+   def adminGitUserId = {  log("retrieving adminGitUserId...")
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
                         }.get // convention is that this method may only be called when an admin account exists, so .get is possible
 
@@ -85,8 +85,11 @@ object GlobalConstant
    {  val minimalNumberOfSessionsPerPlayer = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
    }
 
+   /** @param minimalSampleSizePerConsti given a consti C, the minimal number of fluency players who used consti C and have a valid fluency score that are required to assign a fluency score to the consti.
+     */
    object AverageFluency extends ScoringConstants
    {  val minimalSampleSizePerPlayer   = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
+      val minimalSampleSizePerConsti   = 2
       val fluencyConstantK             = 1000000
    }
 
@@ -188,7 +191,11 @@ object LiftHelpers
 
 }
 
-
+object DisplayHelpers
+{  def defaultRounding(d:Double):Double =
+   {  "%.2f".format(d).toDouble
+   }
+}
 
 
 }
