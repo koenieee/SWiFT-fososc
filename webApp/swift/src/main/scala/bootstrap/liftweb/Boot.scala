@@ -31,6 +31,7 @@ import org.ocbkc.swift.coord.ses._
 import org.ocbkc.generic.random._
 import ocbkc.swift.test.simulation.jara._
 import net.liftmodules.JQueryModule
+import java.util.Locale
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -44,6 +45,8 @@ class Boot
    
       PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
       PersDataUpgrader4SWiFT.apply
+      //set locale:
+     Locale.setDefault(new Locale("en", "US"));
 
       LiftRules.useXhtmlMimeType = false
       if (!DB.jndiJdbcConnAvailable_?) 

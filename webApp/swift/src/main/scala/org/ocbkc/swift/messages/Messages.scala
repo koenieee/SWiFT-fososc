@@ -32,7 +32,7 @@ object MailUtils
    /** Same as sendMail, but now to only one player
      */
    def sendMail(mail:Mail, player:Player)
-   {  println("sendupdatemail called")
+   {  println("sendMail called")
       println("   player email = " + player.email.get)
       Mailer.sendMail(From("cg@xs4all.nl"), Subject(mail.subject), To(player.email.get), new PlainMailBodyType(mail.body))
       println("   mail sent!")
@@ -67,7 +67,7 @@ sentenceOpening(const) + " has been edited by someone else...",
 """Constitution """ + const.constiId + """ has been edited by someone else. If you want to review the changes please visit this link:
 
 """ + GlobalConstant.SWIFTURL  + "/constitution?id=" + const.constiId + """
-
+s
 """ + how2unfollow
 )
 

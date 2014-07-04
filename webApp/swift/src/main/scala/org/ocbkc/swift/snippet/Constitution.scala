@@ -16,6 +16,7 @@ import org.ocbkc.swift.model._
 import org.ocbkc.swift.global._
 import org.ocbkc.swift.global.LiftHelpers._
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.DisplayHelpers._
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
 import org.ocbkc.swift.OCBKC.scoring._
@@ -25,7 +26,8 @@ import org.xml.sax.SAXParseException
 import org.ocbkc.swift.model.Player
 
 import org.ocbkc.swift.messages._
-import org.ocbkc.swift.messages.MailMessage._
+import org.ocbkc.swift.messages.MailUtils._
+import org.ocbkc.swift.messages.MailMessages._
 
 abstract class Error
 
@@ -67,6 +69,10 @@ class ConstitutionSnippet
 
       def processHistoryBtn() =
       {  S.redirectTo("history?id=" + const.get.constiId)
+      }
+
+      def analyseScoresBtn() =
+      {  S.redirectTo("analyse/analyseFluencySessionsConsti?consti_id=" + const.get.constiId)
       }
 
 /* &y2013.01.27.18:57:58& Still needed? 
@@ -206,7 +212,7 @@ class ConstitutionSnippet
          {  val constLoc = const.get
             if( checked && !constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.addFollower(sesCoordLR.currentPlayer, constLoc)
-               mailOtherFollowersUpdate(constLoc, MailMessage.newfollower(constLoc), sesCoordLR.currentPlayer)
+               sendOtherFollowersUpdateMail(constLoc, MailMessages.newfollower(constLoc), sesCoordLR.currentPlayer)
             } else if( !checked && constLoc.followers.contains(currentUserId) )
             {  sesCoordLR.removeFollower(sesCoordLR.currentPlayer, constLoc )
                // <&y2012.06.27.14:00:21& send mail to unfollower to confirm.>
@@ -259,16 +265,13 @@ class ConstitutionSnippet
      
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       implicit val displayIfNone = "-"
-      val fluencyScoreOpt = ConstiScores.averageFluencyLatestReleaseWithScore(
-                              GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, 
-                              constLoc.constiId,
-                              GlobalConstant.AverageFluency.fluencyConstantK
-                           )
+      val fluencyScoreOpt = ConstiScores.averageFluencyLatestReleaseWithScore( constLoc.constiId )
       val latestReleaseIdOpt = fluencyScoreOpt.collect{ case (id,_) => id }
       println("CURRENTUSERID::");
 	println(constLoc.followers.contains(currentUserId));
       val answer   = bind( "top", ns, 
                            "revisionHistory"    -> SHtml.button("History", processHistoryBtn),
+                           "analyseScores"    -> SHtml.button("Analyse Scores", analyseScoresBtn),
                            "followCheckbox"     -> SHtml.ajaxCheckbox(constLoc.followers.contains(currentUserId), selected => processFollowCheckbox(selected)),//SHtml.checkbox(constLoc.followers.contains(currentUserId), processFollowCheckbox),
                            "saveGeneralControlBt"             -> SHtml.button("Save", () => processGeneralSaveBtn),
                            "numberOfFollowers"  -> Text(constLoc.followers.size.toString),
@@ -336,8 +339,7 @@ class ConstitutionSnippet
                            "creationDate"       -> { if( !errorRetrievingConstitution ) Text(df.format(creationDate).toString) else emptyNode },
                            "latestRelease"      -> { Text(optionToUI( latestReleaseIdOpt.collect{ case lr:VersionId => "R" + constLoc.releaseIndex(lr) } ) )
                                                    },
-                           "fluency"            -> { Text(optionToUI(fluencyScoreOpt.collect{ case (_, fs) => fs } ))
-                                                   },
+                           "fluency"            -> { Text(optionToUI(fluencyScoreOpt.collect{ case (_, fs) => fs }.map{ defaultRounding } )) },
                            "description"        -> { if( !errorRetrievingConstitution ) Text(constLoc.shortDescription) else emptyNode }
                      )
       answer

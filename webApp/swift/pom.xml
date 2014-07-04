@@ -169,6 +169,7 @@
             <jvmArg>-Xmx1024m</jvmArg>
             <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
           </jvmArgs>
+	
         </configuration>
         <executions>
           <execution>
@@ -243,6 +244,7 @@
         <configuration>
           <contextPath>/</contextPath>
           <scanIntervalSeconds>5</scanIntervalSeconds>
+	<jvmArgs>-Duser.language=en -Duser.country=US -Duser.region=US</jvmArgs>
 	<connectors>
 	<connector implementation="org.mortbay.jetty.security.SslSocketConnector">
 	<port>8080</port>
@@ -374,6 +376,7 @@
             <jvmArg>-Xmx1024m</jvmArg>
             <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
           </jvmArgs>
+	 
         </configuration>
       </plugin>
     </plugins>

@@ -38,10 +38,11 @@ class ConstiGameTable
             bind("constiColumn", tableRowsTemplate,
                "id" -> <a href={ "constitution?id=" + constiId}>{ constiId }</a>,
                "description" -> c.shortDescription,
-               "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, c.constiId, GlobalConstant.AverageFluency.fluencyConstantK).collect{ case afs:(VersionId,Double) => afs._2 }),
+               "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(c.constiId).collect{ case afs:(VersionId,Double) => afs._2 }),
                "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
                "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
-               "creationDate" -> df.format(c.creationTime).toString
+               "creationDate" -> df.format(c.creationTime).toString,
+               "sessionConstiLink" -> SHtml.link("analyse/analyseFluencySessionsConsti.html?consti_id="+constiId,()=>(),Text("Session Consti"))
             )
          }
       }

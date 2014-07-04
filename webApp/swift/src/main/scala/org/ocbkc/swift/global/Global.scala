@@ -62,18 +62,20 @@ object GlobalConstant
    val ADMINFIRSTNAME = "Admin"
    
    var adminOpt:Option[Player] = None
-   def adminGitUserId = {  println("retrieving adminGitUserId...")
+   def adminGitUserId = {  log("retrieving adminGitUserId...")
                            adminOpt.collect{ case admin => Some(gitUserId(admin)) }
                         }.get // convention is that this method may only be called when an admin account exists, so .get is possible
 
-   val MINsESSIONSb4ACCESS2ALLcONSTIS = 4
+   val MINsESSIONSb4ACCESS2ALLcONSTIS = 2
+   log("[POTENTIAL_BUG]  <&y2014.05.12.14:56:26& shouldn't MINsESSIONSb4ACCESS2ALLcONSTIS be equal to minimalNumberOfSessionsPerPlayer>")
+
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
    val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
 
    // Scoring
 
-   abstract class ScoringConstants // purely intended for commentary purposes.
+   abstract class ScoringConstants // abstract class purely intended for commentary purposes.
 
    object AveragePercentageCorrect extends ScoringConstants
    {  val minimalNumberOfSessionsPerPlayer = 2
@@ -83,8 +85,11 @@ object GlobalConstant
    {  val minimalNumberOfSessionsPerPlayer = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
    }
 
+   /** @param minimalSampleSizePerConsti given a consti C, the minimal number of fluency players who used consti C and have a valid fluency score that are required to assign a fluency score to the consti.
+     */
    object AverageFluency extends ScoringConstants
    {  val minimalSampleSizePerPlayer   = AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer
+      val minimalSampleSizePerConsti   = 2
       val fluencyConstantK             = 1000000
    }
 
@@ -140,8 +145,9 @@ object Types
 object TestSettings
 {  object AUTOLOGIN
    {  val ON      = true
-      val USER_ID = "2" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
+      val USER_ID = "1" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
    }
+
    val AUTOTRANSLATION                 = false // true
    val CREATETESTUSERBASE              = true // false
    /* <&y2012.09.29.19:44:55& TODO: if constitutions DO exist, don't create new constitutions. Or perhaps better: erase them but not before prompting the developer> */
@@ -185,7 +191,11 @@ object LiftHelpers
 
 }
 
-
+object DisplayHelpers
+{  def defaultRounding(d:Double):Double =
+   {  "%.2f".format(d).toDouble
+   }
+}
 
 
 }

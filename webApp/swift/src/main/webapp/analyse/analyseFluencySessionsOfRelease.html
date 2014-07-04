@@ -1,0 +1,38 @@
+<lift:surround with="default" at="content">
+    <lift:AnalyseFluencySessionsOfRelease form="POST">
+        <h1>Analyse Fluency Sessions of Consti <top:constName />, Release <top:release />.</h1>
+        <hr/>
+        Score:  <top:scoring/>
+        <hr />
+        <b>Legend</b>
+        <ul>
+            <li>Average duration translation only includes duration of correct translations</li>
+        </ul>
+        <top:sessionOfReleaseTable />
+    </lift:AnalyseFluencySessionsOfRelease>
+</lift:surround>
+<!--
+  <top:sessionOfReleaseTable />
+        <table id="sessionOfReleaseTable" class="tablesorter">
+
+            <top:sessionOfReleaseTable>
+
+                <top:row>
+
+                 information limited to sessionsPlayedB4accessToAllConstis,  sessions after it are ignored
+                    <tr>
+                        <td><top:playerId />          </td>
+                        <td><top:fluencyScore />           </td>
+                        <td><top:timeSessionPlayed /> </td>
+                        <td><top:averageFluency />           </td>
+                        <td><top:masteredChallenge />     </td>
+                        <td><top:averageDurationTranslation />   </td>
+                        <td><top:numberOfValidSessionsPlayed /> </td>
+                        <td><top:numberOfSessionsPlayed /> </td>
+                        <td><top:sessionLink /> </td>
+                    </tr>
+                 </top:row>
+            </top:sessionOfReleaseTable>
+        </table>
+-->
+

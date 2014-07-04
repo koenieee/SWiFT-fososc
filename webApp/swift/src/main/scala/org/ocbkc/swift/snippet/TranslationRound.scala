@@ -26,6 +26,7 @@ class TranslationRound
 
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartTranslation
+      log("[POTENTIAL_BUG] shouldn't there be a double-check here to see whether the player really may start? (given the outcome of URtryStartSession).")
       def processSubmission() = 
       {  log("processSubmission called")
 

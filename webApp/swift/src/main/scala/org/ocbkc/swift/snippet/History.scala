@@ -78,7 +78,7 @@ class History
                                                                 }
                                        }
                                     ),
-            "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, revcom.name, GlobalConstant.AverageFluency.fluencyConstantK)) else "-" }
+            "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(revcom.name)) else "-" }
             )
       }
       )         
