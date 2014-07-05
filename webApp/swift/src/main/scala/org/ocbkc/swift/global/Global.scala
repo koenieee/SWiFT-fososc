@@ -145,7 +145,7 @@ object Types
 object TestSettings
 {  object AUTOLOGIN
    {  val ON      = true
-      val USER_ID = "1" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
+      val USER_ID = "2" // 1 is Admin. If you choose another number, make certain that that user exist. For example, if you have deleted the users data, then set CREATETESTUSERBASE to true.
    }
 
    val AUTOTRANSLATION                 = false // true
