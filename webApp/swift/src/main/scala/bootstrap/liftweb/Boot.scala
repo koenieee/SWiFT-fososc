@@ -153,8 +153,8 @@ class Boot
       //def playerIsLoggedInAndPlayed minSessionsPerPlayer
 
       def sitemap() = SiteMap(
-      Menu("Home") / "index" >> Player.AddUserMenusAfter, // Simple menu form
-      Menu(Loc("Help", "generalHelp" :: Nil, "Help")),
+      Menu("Instructions") / "index" >> Player.AddUserMenusAfter, // Simple menu form
+      Menu(Loc("Help", "fluencyGameHelp" :: Nil, "Help")),
       //Menu(Loc("About", "aboutPage" :: Nil, "About")),
       Menu(Loc("Constitutions", "constitutions" :: Nil, "Constitutions", 
          If(() =>
@@ -192,7 +192,7 @@ class Boot
       Menu(Loc("startSession4OneToStartWith", "constiTrainingDecision" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure == OneToStartWith ) && (SesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
       Menu(Loc("startSessionOtherwise", "fluencyGameSes" :: "startSession" :: Nil, "Start Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t && ( currentPlayer.constiSelectionProcedure != OneToStartWith ) && (SesCoord.is.latestRoundFluencySession == NotInFluencySession)}, () => RedirectResponse("/index")))),
       Menu(Loc("continueSession", "continueFluencySession" :: Nil, "Continue Fluency Session", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin && (SesCoord.is.latestRoundFluencySession != NotInFluencySession); log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
-      Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
+      Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => { false /* val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t */ }, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
@@ -225,11 +225,11 @@ class Boot
             )
          )
       ),
-      // this one only for constigame_exp_1
+      // this one only for fluencygame_exp_2014_07_03
       Menu(
          Loc(
-            "constigame_exp_1",
-            new Link("constigame_exp_1" :: Nil, true),
+            "fluencygame_exp_2014_07_03",
+            new Link("fluencygame_exp_2014_07_03" :: "instructions" :: Nil, true),
             "If you see this, something is wrong: should be hidden",
             List( Hidden )
             )
