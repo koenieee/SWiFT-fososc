@@ -364,7 +364,6 @@ class SimPlayer(val liftPlayer:Player) extends SimEntity
       }
    }
 
-
    def procTryStartSession(d: DurationInMillis) =
    {  log("procTryStartSession called")
 

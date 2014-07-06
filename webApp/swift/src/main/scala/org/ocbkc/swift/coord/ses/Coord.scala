@@ -479,6 +479,10 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
          case None => List()
       }
    }
+
+   def sessionsPlayedBy(p:Player):List[SessionInfo] =
+   {  OCBKCinfoPlayer.sessionsPlayedBy(p)
+   }
 }
 
 

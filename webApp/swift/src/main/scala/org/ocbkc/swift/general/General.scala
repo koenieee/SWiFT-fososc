@@ -20,6 +20,15 @@ object RandomExtras
 }
 }
 
+object ListUtils
+{  def takeNumOrAll[A](list:List[A], num:Int) =
+   {  if( num > -1 )
+         list.take(num)
+      else
+         list
+   }
+}
+
 object DateTime
 {  import org.ocbkc.swift.global.Types._
 

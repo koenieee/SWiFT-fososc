@@ -1,0 +1,34 @@
+<lift:surround with="default" at="content">
+    <lift:analyseFluencySessionDetails>
+        <h1>Details of Session: <top:sessionID /></h1>
+        <hr/>
+        <table>
+            <tr>
+                <td><b>Constituton: </b></td>
+                <td><top:constName /></td>
+            </tr>
+            <tr>
+                <td><b>Release Index: </b></td>
+                <td><top:releaseIndex /></td>
+            </tr>
+            <tr>
+                <td><b>Source Text:</b></td>
+                <td><top:sourceText/></td>
+            </tr>
+            <tr>
+                <td><b>Translation Time:</b></td>
+                <td><top:transTime /></td>
+            </tr>
+            <tr>
+                <td><b>Answer Correct:</b></td>
+                <td><top:answerCor /></td>
+            </tr>
+            <tr>
+                <td><b>Score Session: </b></td>
+                <td><top:score /></td>
+            </tr>
+        </table>
+
+    </lift:analyseFluencySessionDetails>
+
+</lift:surround>

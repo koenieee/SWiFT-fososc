@@ -1,0 +1,23 @@
+<lift:surround with="default" at="content">
+    <lift:analyseFluencySessionsConsti form="GET">
+        <h1>All releases of Constitution <top:constName /></h1>
+        <hr/>
+        Constituton: <top:constName /><br />
+        Description: <top:description /> <br/>
+        <hr />
+        <table id="ConstiTable">
+            <top:constiTable>
+                <top:row>
+                    <tr>
+                        <td><top:releaseIndex /></td>
+                        <td><top:fluencyScore /> </td>
+                        <td><top:creationDate /></td>
+                        <td><top:analyseLink /></td>
+                    </tr>
+                </top:row>
+            </top:constiTable>
+        </table>
+
+    </lift:analyseFluencySessionsConsti>
+
+</lift:surround>

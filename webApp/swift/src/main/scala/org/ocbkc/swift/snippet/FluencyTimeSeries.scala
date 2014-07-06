@@ -9,6 +9,7 @@ import org.ocbkc.swift.model.{SessionInfo, SessionInfoMetaMapperObj, Player}
 import net.liftweb.mapper.By
 import org.ocbkc.swift.global.Logging._
 import org.ocbkc.swift.OCBKC.scoring.PlayerScores
+import org.ocbkc.swift.global.DisplayHelpers._
 
 /**
  * Created by koen on 28-6-14.
@@ -35,7 +36,7 @@ class FluencyTimeSeries {
                 sessionWithIndex.map(session =>
                   "{ " +
                   "\"time\" : " + session._1.startTimeTranslation + ",\n" +
-                  "\"fluency\" : "+PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) } + ", \n" +
+                  "\"fluency\" : "+PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) }.get + ", \n" +
                   "\"id\": "+ session._2 +"\n" +
                   "},"
                 ).mkString.dropRight(1)
