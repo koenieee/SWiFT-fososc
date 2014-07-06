@@ -8,30 +8,46 @@ import net.liftweb.common.Full
 import org.ocbkc.swift.model.{SessionInfo, SessionInfoMetaMapperObj, Player}
 import net.liftweb.mapper.By
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.OCBKC.scoring.PlayerScores
+
 /**
  * Created by koen on 28-6-14.
  */
 class FluencyTimeSeries {
 
-  def render(xhtml:NodeSeq):NodeSeq=
-  { S.param("player") match
+  def render(xhtml: NodeSeq):NodeSeq=
+  { log("Fluency Time Series Graph Called")
+    S.param("player") match
     { case Full(player_id) =>
-      { val sessionsByPlayer:List[SessionInfo] = SessionInfoMetaMapperObj.findAll(By(SessionInfoMetaMapperObj.userId,player_id.toLong))
-        log(sessionsByPlayer.toString)
-       
-        bind("top",xhtml,
-            "user"    -> Text("todo"),
-            "input"   ->Text(
-            "[" +
-              sessionsByPlayer.map(session =>
-              "{ \"time\" : " + session.startTimeTranslation + ",\n" +
-              "\"fluency\" : 40 },"
-              ).mkString.dropRight(1)
+      { val player = Player.find(By(Player.id, player_id.toLong))
+        if( !player.isEmpty )
+        { log("Sessions for player: " + player)
 
-              +"]"
-            ),
-            "graph"   ->Text("todo")
-      )
+          val sessionsByPlayer:List[SessionInfo] = SessionInfoMetaMapperObj.findAll(By(SessionInfoMetaMapperObj.userId,player_id.toLong))
+          log("Sessions found: " + sessionsByPlayer.toString)
+          val sessionWithIndex = sessionsByPlayer.zipWithIndex
+
+
+          bind("top",xhtml,
+              "user"    -> Text(player.get.swiftDisplayName),
+              "input"   ->Text(
+              "[" +
+                sessionWithIndex.map(session =>
+                  "{ " +
+                  "\"time\" : " + session._1.startTimeTranslation + ",\n" +
+                  "\"fluency\" : "+PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) } + ", \n" +
+                  "\"id\": "+ session._2 +"\n" +
+                  "},"
+                ).mkString.dropRight(1)
+
+                +"]"
+              )
+          )
+        }
+        else
+        { log("Player doesn't exists. ")
+          S.redirectTo("/index")
+        }
       }
       case _ =>
       { log("Error, something went wrong.")

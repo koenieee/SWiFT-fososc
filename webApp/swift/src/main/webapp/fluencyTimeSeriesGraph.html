@@ -35,9 +35,7 @@ font-weight:bold;
 <hr/>
 <b>User: </b><top:user/><br/>
 
-<b>Graph: </b><top:graph/><br/>
-
-
+<hr/>
 <div id="chart"></div>
 <!--
 //in JSON format
@@ -75,32 +73,6 @@ font-weight:bold;
 </div>
 
 <script type="text/javascript">
-function getDate(d) {
-var date = new Date(d.time*1000);
-
-console.log(date);
-// dt.setHours(0);
-// dt.setMinutes(0);
-// dt.setSeconds(0);
-// dt.setMilliseconds(0);
-//var date = new Date(1404376732575*1000);
-// hours part from the timestamp/
-var hours = date.getHours();
-// minutes part from the timestamp
-var minutes = date.getMinutes();
-// seconds part from the timestamp
-var seconds = date.getSeconds();
-
-// will display time in 10:30:23 format
-var formattedTime = minutes; //de rest komt later
-//alert(formattedTime);
-console.log(formattedTime);
-return formattedTime;
-
-
-}
-
-
 
 function showData(obj, d,x) {
 var coord = d3.mouse(obj);
@@ -127,7 +99,7 @@ var h = 360 - m[0] - m[2]; // height
 
 //console.log(sortByKey(data, 'time'));
 
-var x = d3.scale.linear().domain([0, 60]).range([0, w]);
+var x = d3.scale.linear().domain([0, data[data.length-1].id]).range([0, w]);
 
 // X scale will fit all values from data[] within pixels 0-w
 //var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
@@ -139,14 +111,14 @@ var line = d3.svg.line()
 // assign the X function to plot our line as we wish
 .x(function(d, i) {
 // return the X coordinate where we want to plot this datapoint
-return x(getDate(d)); //x(i);
+return x(d.id); //x(i);
 })
 .y(function(d) {
 // return the Y coordinate where we want to plot this datapoint
 return y(d.fluency);
 });
 
-function xx(e) { return x(getDate(e)); };
+function xx(e) { return x(e.id); };
 function yy(e) { return y(e.fluency); };
 
 $('#chart').append('<p><small><em>Please move the mouse over data points to see details.</em></small></p>');
@@ -159,7 +131,7 @@ var graph = d3.select('#chart').append('svg:svg')
 .attr('transform', 'translate(' + m[3] + ',' + m[0] + ')');
 
 // create xAxis
-var xAxis = d3.svg.axis().scale(x).ticks(20).tickSize(-h).tickSubdivide(true);
+var xAxis = d3.svg.axis().scale(x).ticks(10).tickSize(-h).tickSubdivide(true);
 // Add the x-axis.
 graph.append('svg:g')
 .attr('class', 'x axis')
@@ -199,7 +171,7 @@ graph.append('svg:text')
 .attr('x', 250)
 .attr('y', 320).attr('dy', '.1em')
 .attr('transform', 'rotate(0)')
-.text('Minutes');
+.text('Session');
 
 $('#chart').append('<div class="infobox" style="display:none;">Test</div>');
 }
