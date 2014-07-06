@@ -36,7 +36,7 @@ class FluencyTimeSeries {
                 sessionWithIndex.map(session =>
                   "{ " +
                   "\"time\" : " + session._1.startTimeTranslation + ",\n" +
-                  "\"fluency\" : "+PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) }.get + ", \n" +
+                  "\"fluency\" : "+ PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) }.get + ", \n" +
                   "\"id\": "+ session._2 +"\n" +
                   "},"
                 ).mkString.dropRight(1)

@@ -45,6 +45,7 @@ class Boot
    
       PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
       PersDataUpgrader4SWiFT.apply
+
      Locale.setDefault(new Locale("en", "US"));
 
 

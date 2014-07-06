@@ -80,7 +80,7 @@ var infobox = d3.select('.infobox');
 // now we just position the infobox roughly where our mouse is
 infobox.style('left', (coord[0] + 870) + 'px' );
 infobox.style('top', (coord[1] + 60) + 'px');
-$('.infobox').html('Fluency Score: ' + d+'%<br></br>Date: '+new Date(x*1000));
+$('.infobox').html('Fluency Score: ' + d+'%<br></br>Date: '+new Date(x));
 $('.infobox').show();
 }
 
@@ -171,7 +171,7 @@ graph.append('svg:text')
 .attr('x', 250)
 .attr('y', 320).attr('dy', '.1em')
 .attr('transform', 'rotate(0)')
-.text('Session');
+.text('Sessions');
 
 $('#chart').append('<div class="infobox" style="display:none;">Test</div>');
 }

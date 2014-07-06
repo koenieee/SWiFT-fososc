@@ -32,16 +32,18 @@ class AnalyseFluencySessionsOfRelease
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
    {  log("sessionTableRows called")
       
-      TableSorter("#sessionOfReleaseTable")
+
          
       implicit val displayIfNone = "-"
 
       // create headers
+     /*
       val header = 
          bind(
             "top", chooseTemplate("top", "row", ns),
                "playerId"                    -> <b>Player</b>,
                "fluencyScore"                -> <b>Fluency Score</b>,
+               "timeSessionPlayed"           -> <b>Time Session Played</b>,
                "averageFluency"              -> <b>Average Fluency</b>,
                "masteredChallenge"           -> <b>Mastered Challenge</b>,
                "averageDurationTranslation"  -> <b>Average Duration Translation</b>,
@@ -50,17 +52,18 @@ class AnalyseFluencySessionsOfRelease
                "numberOfSessionsPlayed"      -> <b>Number of sessions played </b>,
                "sessionLink"                 -> <b>Analyse</b>
          )
-   
+
       // create data rows
-      header ++
+     val header =
       Constitution.playersWithRelease(release_id).flatMap
       {  p =>
          {  val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
 
             bind( "top", chooseTemplate("top", "row", ns),
                "playerId"                    -> { Text(p.swiftDisplayName) },
-               "fluencyScore"                -> { Text(optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding } ) ) },
+               "fluencyScore"                -> { Text(optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding }) ) },
                "averageFluency"              -> { Text(optionToUI(PlayerScores.averageFluency(p).map{ defaultRounding } ) ) },
+               "timeSessionPlayed"           -> { Text(df.format(new java.util.Date((sesCoordLR.sessionsPlayedBy(p).head.stopTimeTranslation.get)*1000L)))},
                "masteredChallenge"           -> { Text("not implemented yet") },
                "averageDurationTranslation"  -> { Text( "" + optionToUI( PlayerScores.averageDurationTranslation(p).averageDurationTranslation ) ) },
                "shortestTranslationTime"     -> { Text("TODO") }, // I think merge from develop.javascriptdurationclock
@@ -69,7 +72,49 @@ class AnalyseFluencySessionsOfRelease
                "sessionLink"                 -> SHtml.link("analyseFluencySessionsPlayer.html?player_id="+p.id,()=>(),Text("Analyse"))
             )
          }
+      } ++
+        TableSorter("#sessionOfReleaseTable")*/
+      val header = Elem(
+      null,
+      "table",
+      new UnprefixedAttribute("id",
+      Text("sessionOfReleaseTable"),
+      new UnprefixedAttribute("class", Text("tablesorter"), Null)),
+      TopScope,
+      <thead><tr><th>Player</th>
+      <th>Fluency Score</th>
+      <th>Time Session Played</th>
+      <th>Average Fluency</th>
+      <th>Mastered Challenge</th>
+      <th>Average Duration Translation</th>
+      <th>Shortest Translation Time</th>
+      <th>Number of valid sessions played</th>
+      <th>Number of sessions played</th>
+      <th>Analyse</th></tr></thead>
+      ,
+      <tbody>{ Constitution.playersWithRelease(release_id).map(
+      p =>
+      { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+        <tr>
+        <td>{ p.swiftDisplayName}</td>
+        <td>{ optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding })   }</td>
+        <td>{ df.format(new java.util.Date((sesCoordLR.sessionsPlayedBy(p).head.stopTimeTranslation.get)*1000L))}</td>
+        <td>{   optionToUI(PlayerScores.averageFluency(p).map{ defaultRounding } ) }</td>
+        <td>todo</td>
+        <td>{ optionToUI( PlayerScores.averageDurationTranslation(p).averageDurationTranslation ) }</td>
+        <td>todo</td>
+        <td>{ OCBKCinfoPlayer.numberOfValidSessionsPlayedBy(p).toString }</td>
+        <td>{ OCBKCinfoPlayer.numberOfSessionsPlayedBy(p).toString  }</td>
+        <td><a href={ "analyseFluencySessionsPlayer.html?player_id="+p.id }>Analyse</a></td>
+
+        </tr>
       }
+      )
+      }
+      </tbody>
+      )
+      log(header.toString)
+      header ++ TableSorter("#sessionOfReleaseTable")
    }
 
    def render(ns: NodeSeq): NodeSeq =
@@ -84,7 +129,8 @@ class AnalyseFluencySessionsOfRelease
                   {  bind( "top", ns,
                         "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
                         "constName"             -> Text(consti.constiId.toString),
-                        "release"               -> Text(release_id)                        
+                        "release"               -> Text(release_id),
+                        "scoring"               -> Text(consti.averageScore.toString)
                      )
                   }
                   case None =>
