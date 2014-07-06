@@ -22,7 +22,7 @@ class analyseFluencySessionDetails
         val msgStart = "Session ID " + session_id
         val sesCoordBySession = SessionInfoMetaMapperObj.find(By(SessionInfoMetaMapperObj.id,session_id.toInt))
         log(sesCoordBySession.toString)
-
+        //val sesCoordwithIndex =
         if( !sesCoordBySession.isEmpty )
         { log( msgStart + " found!")
           Player.find(By(Player.id, sesCoordBySession.get.userId.get)) match
@@ -30,13 +30,13 @@ class analyseFluencySessionDetails
             {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution)
                val releaseId = p.releaseOfFirstChosenConstitution.get
                //  log(constiOption.toString)
-               val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+               val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH'h'mm'm'ss's'")
                 bind( "top", ns,
                    "sessionID"     -> Text(session_id),
                    "constName"     -> Text(constiOption.get.constiId.toString),
                    "playerName"    -> Text(p.swiftDisplayName),
-                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)*1000L))),
-                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)*1000L))),
+                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)))),
+                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)))),
                    "releaseIndex"  -> Text("R" + constiOption.get.releaseIndex(releaseId)), // put somewhere: {log("[ERROR] code &y2014.06.09.21:34:59&"); "not found"}),
                    "sourceText"    -> Text(sesCoordBySession.get.textNL),
                    "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),

@@ -1,9 +1,9 @@
 package org.ocbkc.swift.general
 {
 object GUIdisplayHelpers
-{  def optionToUI(opt:Option[Any])(implicit displayNoneAs:String):String =
+{  def optionToUI(opt:Option[Any]):String =
    {  opt match
-      {  case None         => displayNoneAs
+      {  case None         => ""
          case Some(thing)  => thing.toString
       }
    }

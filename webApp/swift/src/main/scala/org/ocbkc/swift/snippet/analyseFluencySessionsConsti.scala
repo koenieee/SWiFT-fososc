@@ -36,7 +36,7 @@ class analyseFluencySessionsConsti
       ,
       <tbody>{  constitution.commitIdsReleases.map(
       releaseId =>
-      { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+      { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH'h'mm'm'ss's'")
         <tr>
         <td>{ "R" + constitution.releaseIndex(releaseId) }</td>
         <td>{ optionToUI(ConstiScores.averageFluency(releaseId).map{ defaultRounding })  }</td>

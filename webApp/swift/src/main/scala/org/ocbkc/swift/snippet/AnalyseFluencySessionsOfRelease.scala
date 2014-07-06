@@ -28,10 +28,10 @@ import _root_.net.liftweb.widgets.tablesorter.TableSorter
 */
 class AnalyseFluencySessionsOfRelease
 {  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
-
+   val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH'h'mm'm'ss's'")
    def playerTableRows(ns:NodeSeq, release_id:VersionId):NodeSeq =
    {  log("sessionTableRows called")
-      
+
 
          
       implicit val displayIfNone = "-"
@@ -94,7 +94,7 @@ class AnalyseFluencySessionsOfRelease
       ,
       <tbody>{ Constitution.playersWithRelease(release_id).map(
       p =>
-      { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+      {
         <tr>
         <td>{ p.swiftDisplayName}</td>
         <td>{ optionToUI(PlayerScores.fluencyScore(p).map{ defaultRounding })   }</td>
@@ -130,7 +130,8 @@ class AnalyseFluencySessionsOfRelease
                         "sessionOfReleaseTable" -> playerTableRows(ns, release_id),
                         "constName"             -> Text(consti.constiId.toString),
                         "release"               -> Text(release_id),
-                        "scoring"               -> Text(consti.averageScore.toString)
+                        "creationDate"          -> Text( df.format(new java.util.Date((consti.creationTime)))),
+                        "scoring"               -> optionToUI(ConstiScores.averageFluency(release_id).map{round =>  defaultRounding(round.toDouble) })
                      )
                   }
                   case None =>

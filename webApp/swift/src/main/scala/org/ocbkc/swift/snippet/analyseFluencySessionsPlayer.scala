@@ -23,7 +23,7 @@ class analyseFluencySessionsPlayer {
   { log("sessionPlayerTable called")
 
     implicit val displayIfNone = "-"
-    val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+    val dateFormat = new java.text.SimpleDateFormat("dd-MM-yyyy HH'h'mm'm'ss's'")
 
     val header = Elem(
       null,
@@ -41,8 +41,7 @@ class analyseFluencySessionsPlayer {
       ,
       <tbody>{  sesCoordLR.sessionsPlayedBy(playerID).map(
         session =>
-        { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
-          <tr>
+        {   <tr>
             <td>{ session.id.toString }</td>
             <td>{ dateFormat.format(session.stopTimeTranslation.is)   }</td>
             <td>{ "" + optionToUI(PlayerScores.fluencyScore(session).map{ fs => defaultRounding(fs.toDouble) })}</td>
