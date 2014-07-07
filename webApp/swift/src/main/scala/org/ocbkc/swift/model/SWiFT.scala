@@ -191,7 +191,7 @@ case class SessionInfo( var textNL: String,
 
 
    def serialize =
-   {  implicit val formats = Serialization.formats(NoTypeHints)
+   {  implicit val formats = Serialization.formats(NoTypeHints) + FieldSerializer[BridgeDoc]()
       var siSer:String = Serialization.write(this)
       println("  sessionInfos serialised to: " + siSer)
       // write session to file with unique name, e.g.: playerName/sessionInfo/
@@ -279,7 +279,7 @@ object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[Ses
    {  val si = super.createInstance(dbId, rs, mapFuncs)
       val siFileName = SESSIONINFOOBJECTDIR + "/si" + si.id
       val siFile  = new File( siFileName )
-      implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
+      implicit val formats = Serialization.formats(NoTypeHints) + FieldSerializer[BridgeDoc]() // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
       val in:BufferedReader   = new BufferedReader(new FileReader(siFile))
       var inStr:String        = in.readLine
       if( inStr == null) throw new RuntimeException("   Problems reading " + siFileName )

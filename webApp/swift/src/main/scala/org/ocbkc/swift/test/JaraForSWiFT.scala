@@ -420,7 +420,7 @@ class SimSubscriptions extends SimEntity
    var subscriptionId:Long = 0
 
    def procNewSubscription(d:DurationInMillis) =
-   {  val liftPlayer:Player = Player.create.firstName("Aap" + subscriptionId).email("aap" + subscriptionId + "@test.org").password("asdfghjk").validated(true)
+   {  val liftPlayer:Player = Player.create.firstName("Aap" + subscriptionId).email("aap" + subscriptionId + "@test.org").password("asdfasdf").validated(true)
       liftPlayer.save
       new SimPlayer(liftPlayer)
       subscriptionId += 1
