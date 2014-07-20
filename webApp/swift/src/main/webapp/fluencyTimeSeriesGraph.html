@@ -78,9 +78,13 @@ function showData(obj, d,x) {
 var coord = d3.mouse(obj);
 var infobox = d3.select('.infobox');
 // now we just position the infobox roughly where our mouse is
-infobox.style('left', (coord[0] + 870) + 'px' );
-infobox.style('top', (coord[1] + 60) + 'px');
-$('.infobox').html('Fluency Score: ' + d+'%<br></br>Date: '+new Date(x));
+infobox.style('left', (coord[0] + 880) + 'px' );
+infobox.style('top', (coord[1] + 70) + 'px');
+$('.infobox').html('Fluency Score: ' + d+'<br></br>Date: '+new Date(x) + '<br></br><br></br><small>Click for more details</small>');
+$('.infobox').click(function(){
+     alert('test:');
+     return false;
+});
 $('.infobox').show();
 }
 
@@ -95,6 +99,11 @@ var m = [20, 40, 60, 100]; // margins
 var w = 700 - m[1] - m[3]; // width
 var h = 360 - m[0] - m[2]; // height
 
+var propValues = data.map(function(node) {
+    return node['fluency'];
+});
+
+var maxValue = Math.max.apply(null, propValues);
 
 
 //console.log(sortByKey(data, 'time'));
@@ -104,7 +113,7 @@ var x = d3.scale.linear().domain([0, data[data.length-1].id]).range([0, w]);
 // X scale will fit all values from data[] within pixels 0-w
 //var x = d3.scale.linear().domain([0, data.length]).range([0, w]);
 // Y scale will fit values from 0-10 within pixels h-0 (Note the inverted domain for the y-scale: bigger is up!)
-var y = d3.scale.linear().domain([0, 100]).range([h, 0]);
+var y = d3.scale.linear().domain([0, maxValue+1]).range([h, 0]);
 
 // create a line function that can convert data[] into x and y points
 var line = d3.svg.line()
@@ -121,7 +130,7 @@ return y(d.fluency);
 function xx(e) { return x(e.id); };
 function yy(e) { return y(e.fluency); };
 
-$('#chart').append('<p><small><em>Please move the mouse over data points to see details.</em></small></p>');
+$('#chart').append('<p><small><em>Please move the mouse over data points to see details.<br></br>Click data points for more session details.</em></small></p>');
 
 // Add an SVG element with the desired dimensions and margin.
 var graph = d3.select('#chart').append('svg:svg')
@@ -153,11 +162,13 @@ graph
 .data(data)
 .enter().append('circle')
 .attr('fill', 'steelblue')
-.attr('r', 5)
+.attr('r', 6)
 .attr('cx', xx)
 .attr('cy', yy)
 .on('mouseover', function(d) { showData(this, d.fluency, d.time);})
-.on('mouseout', function(){ hideData();});
+.on('mouseout', function(){ hideData();})
+.on('click',function(d){ window.open('/analyse/analyseFluencySessionDetails.html?session_id=' + d.sessionID);});
+
 
 graph.append('svg:path').attr('d', line(data));
 graph.append('svg:text')
@@ -165,7 +176,7 @@ graph.append('svg:text')
 .attr('y', -90)
 .attr('dy', '.1em')
 .attr('transform', 'rotate(-90)')
-.text('Percentage');
+.text('Fluency Score');
 
 graph.append('svg:text')
 .attr('x', 250)

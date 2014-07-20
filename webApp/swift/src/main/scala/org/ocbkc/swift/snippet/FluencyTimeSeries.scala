@@ -24,10 +24,11 @@ class FluencyTimeSeries {
         if( !player.isEmpty )
         { log("Sessions for player: " + player)
 
-          val sessionsByPlayer:List[SessionInfo] = SessionInfoMetaMapperObj.findAll(By(SessionInfoMetaMapperObj.userId,player_id.toLong))
-          log("Sessions found: " + sessionsByPlayer.toString)
-          val sessionWithIndex = sessionsByPlayer.zipWithIndex
+        //val sessionsByPlayer:List[SessionInfo] = SessionInfoMetaMapperObj.findAll(By(SessionInfoMetaMapperObj.userId,player_id.toLong))
+       // log("Sessions found: " + sessionsByPlayer.toString)
+          val sessionWithIndex = SesCoord.is.sessionsPlayedBy(player.get).zipWithIndex
 
+ 	  log("Sessions found: " + sessionWithIndex)
 
           bind("top",xhtml,
               "user"    -> Text(player.get.swiftDisplayName),
@@ -37,7 +38,8 @@ class FluencyTimeSeries {
                   "{ " +
                   "\"time\" : " + session._1.startTimeTranslation + ",\n" +
                   "\"fluency\" : "+ PlayerScores.fluencyScore(session._1).map{ fs => defaultRounding(fs.toDouble) }.get + ", \n" +
-                  "\"id\": "+ session._2 +"\n" +
+                  "\"id\": "+ session._2 +",\n" +
+		  "\"sessionID\": "+ session._1.id +"\n" +
                   "},"
                 ).mkString.dropRight(1)
 
