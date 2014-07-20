@@ -314,7 +314,8 @@ getHistory.length, commitIdsReleases.length, isRelease
 
    /* Only serializes the object - not the html text which is already stored... */
    def serialize =
-   {  implicit val formats = Serialization.formats(NoTypeHints)
+   {  log("Constitution-object[id=" + id + "].serialize called")
+      implicit val formats = Serialization.formats(NoTypeHints)
       var constSer:String = Serialization.write(this)
       log("  Constitution-object serialised to: " + constSer)
       // write constitution-object to file with unique name
@@ -657,7 +658,7 @@ object Constitution
 
    def serialize = 
    {  log("object Constitution.serialize called")
-      constis.map(_.serialize)
+      constis.foreach(_.serialize)
 
       var outFile = new File( GlobalConstant.CONSTITUTIONOBJECTDIR + "/highestId")
       log("   creating file: " + outFile.getAbsolutePath)
