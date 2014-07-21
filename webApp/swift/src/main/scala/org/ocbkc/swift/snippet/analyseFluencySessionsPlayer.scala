@@ -80,7 +80,8 @@ class analyseFluencySessionsPlayer {
             "sessionPlayerTable"  -> sessionPlayerTable(ns, player.get),
             "player"              -> Text(player.get.firstName),
             "constName"           -> Text(constiOption.get.constiId.toString),
-            "release"             -> Text(constiOption.get.currentVersionId)
+            "release"             -> Text(constiOption.get.currentVersionId),
+            "graphLink"           -> SHtml.link("../fluencyTimeSeriesGraph.html?player="+player.get.userIdAsString,()=>(),Text("Link"))
           )
         }
         else
