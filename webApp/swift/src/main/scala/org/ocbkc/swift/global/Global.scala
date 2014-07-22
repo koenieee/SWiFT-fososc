@@ -16,6 +16,10 @@ import java.io._
 import org.ocbkc.swift.jgit.Translations._
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.global.Logging._
+import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConnectionIdentifier, StandardDBVendor, By}
+import org.ocbkc.swift.OCBKC.Constitution
+import org.apache.commons.io.FileUtils
+import org.ocbkc.swift.jgit.InitialiseJgit
 
 object GlobalConstant
 {  val TEST = true
@@ -104,11 +108,33 @@ object GlobalConstant
    var jgitRepo:Option[Repository] = None   
    var jgit:Option[Git] = None
 
-   // create paths
-   createDirIfNotExists(CONSTITUTIONOBJECTDIR)
-   createDirIfNotExists(CONSTITUTIONHTMLDIR)
-   createDirIfNotExists(SESSIONINFOOBJECTDIR)
-   createDirIfNotExists(INITIALISATIOnDATaDIR)
+   initialiseSWiFTdirs
+
+   def initialiseSWiFTdirs
+   {   // create paths
+      createDirIfNotExists(CONSTITUTIONOBJECTDIR)
+      createDirIfNotExists(CONSTITUTIONHTMLDIR)
+      createDirIfNotExists(SESSIONINFOOBJECTDIR)
+      createDirIfNotExists(INITIALISATIOnDATaDIR)
+   }
+
+   /**  If you want to start a running SWiFT instance as if it started with an completely clean database/persistency info. For example used by simulations.
+     *  @todo Move to other object.
+     * 
+     */
+   def clearAndReinitialiseSWiFTdatabase =
+   {  Player.bulkDelete_!!(By(Player.superUser,false))
+      Constitution.removeAll
+
+      FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
+      FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
+      log("[BUG] The following 'FileUtils.deleteDirectory(new File(GlobalConstant.SESSIONINFOOBJECTDIR))' does not seem to have effect??")
+      FileUtils.deleteDirectory(new File(GlobalConstant.SESSIONINFOOBJECTDIR))
+
+      initialiseSWiFTdirs
+
+      InitialiseJgit()
+   }
 
 /** TODO: <&y2012.10.01.15:14:30& refactor: put in general lib>
   * @returns: false dir doesn't exist and could not be created; true: dir exists (if it didn't before, it was created succesfully)

@@ -45,8 +45,9 @@ class Boot
    
       PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
       PersDataUpgrader4SWiFT.apply
-      //set locale:
+
      Locale.setDefault(new Locale("en", "US"));
+
 
       LiftRules.useXhtmlMimeType = false
       if (!DB.jndiJdbcConnAvailable_?) 
@@ -266,14 +267,16 @@ class Boot
     { Player.logUserIdIn("1")
     }
   */  
+
+
          //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
          if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
 
+         InitialiseJgit() // This must happen before Constitution methods are called!
          // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
          Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
          LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
 
-         InitialiseJgit()
 
          // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 
@@ -298,7 +301,7 @@ class Boot
          }
 
          GlobalConstant.adminOpt = Some(admin)
-
+         
 
          // TODO: before doing this, erase all persistency information, but not without a warning to the developer
          if(TestSettings.CREATETESTUSERBASE)
@@ -510,6 +513,11 @@ class Boot
          }
          ) => false})
       }
+
+      // print some stats in the log
+      log("Some stats about beginning state after boot:")
+      log("Number of Players in the database = " + Player.count)
+      log("Names of players in the database = " + Player.findAll.mkString(", "))
 
       log("Boot.boot finished")
    }
