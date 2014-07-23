@@ -68,7 +68,8 @@ trait CTLrepresentationBundleFactory[ScalaRepresentation__TP, CTLrepresentationB
 {  protected def apply():CTLrepresentationBundle__TP // the default factory must be supplied.
    case class FactoryResult(parseResult:Option[CTLrepresentationBundle__TP], parseErrorMessage:String, parseWarningMessage:String)
 
-   /** @returns
+   /** Creates a representation bundle, based on pure format representation pf. If pf is incorrect (parsing goes wrong), an error is returned and no represtation bundle is created. Otherwise, the result and, if applicable, warning messages are returned. 
+      @returns
      */
    def apply(pf: String):FactoryResult =
    {  val crb:CTLrepresentationBundle__TP = apply()
