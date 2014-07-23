@@ -438,7 +438,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
 
    def testSyntaxTranslation:String = 
-   {  gameCore.textCTLbyPlayer_rb_withErrorInfo match
+   {  gameCore.textCTLbyPlayer_rb_withErrorInfo_and_store match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _,       warnMsg) => warnMsg
          case EfeKRdoc_rb.FactoryResult(None,         errMsg,  _)       => errMsg
       }
