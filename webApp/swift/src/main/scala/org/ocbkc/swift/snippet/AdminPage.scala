@@ -13,103 +13,52 @@ import _root_.net.liftweb.http._
 import js._
 import JsCmds._
 import JE._
-/*
- * Cleanup non-used imports.
- * */
+import net.lingala.zip4j.core._
+import net.lingala.zip4j.model._
+import net.lingala.zip4j.util._
+
 class AdminPage
 {  // the SessionVar will contain a String with "Anonymous" as default value.
    object JaraDur extends SessionVar[String]("1")
    
    log("AdminPage called")
-   
-   //val path = GlobalConstant.WEBAPROOT
-   //JsonCmd(2,null,false,Map(command -> 2, params -> false))
 
-   var n_blaat = JaraDur.is 
-   // println(lines)
-	 
-		
    def settings =
    {  "#jsonscript"             #> Script(json.jsCmd) &
      ".startSimu [onclick]"     #> Text(json.call(ElemById("startSimu") ~> Value,ElemById("inputbox") ~> Value).toJsCmd) &
-     ".downloadInfo [onclick]"  #> Text(json.call(ElemById("downloadInfo") ~> Value).toJsCmd)
+     ".downloadInfo [onclick]"  #> Text(json.call(ElemById("downloadInfo") ~> Value,ElemById("passwd") ~> Value).toJsCmd)
    }
 
+  def zip4j(pwd: String):Unit=
+  { log("creating zip4j")
+    log("deleting previous file")
+    new java.io.File("src/main/webapp/output.zip").delete()
 
-  def downloadPerInfo():Unit=
-  { /*
-    Files to compress:
+    val zipFile: ZipFile  = new ZipFile("src/main/webapp/output.zip");
 
-    persistentDatastructureMainVersion.txt
-    persist/
-    src/main/webapp/constitutions/
-    lift_proto.db.h2.db
+    val parameters: ZipParameters  = new ZipParameters();
 
-     */
-    log("DownloadInfo Called")
-    val fileNames = List(
-      "persistentDatastructureMainVersion.txt",
-      "lift_proto.db.h2.db"
-    ) ::: listFiles("persist/sessionInfoobjs") ::: listFiles("persist/constobjs") ::: listFiles("src/main/webapp/constitutions/").filterNot(file => file.contains(".git") == true)
+    parameters.setCompressionMethod(Zip4jConstants.COMP_DEFLATE);
+    parameters.setCompressionLevel(Zip4jConstants.DEFLATE_LEVEL_NORMAL);
 
-    log("Ready for zipping: " + fileNames)
-    zip("src/main/webapp/output.zip", fileNames)
-
-    log("Zip file done")
-    S.redirectTo("/output.zip")
-  }
-  def listFiles(dirName: String): List[String] =
-  {
-    new java.io.File(dirName).listFiles.map(_.toString).toList
-  }
-
- /* def list2Files(dirName: String, dir:Boolean): List[String] =
-  {
-    val files = new java.io.File(dirName).listFiles().filterNot(_.isDirectory).toList
-    val dirs = new java.io.File(dirName).listFiles().map(_.isDirectory).toList
-
-    if(dir == true) {
-    dirs match {
-      case firstDir :: restDir => {
-        println("first file is directory")
-        list2Files(firstDir.toString)
-      }
-      case firstFile :: restOfFiles => {
-        restOfFiles ::: list2Files(firstFile.toString)
-
-      }
-
-      case _ => Nil
+    if(!pwd.isEmpty)
+    { parameters.setEncryptFiles(true);
+      parameters.setEncryptionMethod(Zip4jConstants.ENC_METHOD_STANDARD);
+      parameters.setPassword(pwd);
     }
-    }
-    else{
-      files.toString ::: dirs.toString
+    val consti: String = "src/main/webapp/constitutions/";
+    val persists: String = "persist/";
+    val swiftVersion: File = new java.io.File("persistentDatastructureMainVersion.txt")
+    val liftDB: File = new java.io.File("lift_proto.db.h2.db")
 
-    }
+
+    zipFile.addFolder(consti, parameters);
+    zipFile.addFolder(persists, parameters);
+    zipFile.addFile(swiftVersion, parameters);
+    zipFile.addFile(liftDB, parameters);
+
 
   }
-  list2Files("/home/koen/blaat/")
-
-  */
-//todo, it is only going two dirs, how can I get this full recursive..
-  def list2Files(filesOrDirs: List[File]): List[File] =
-  {
-    filesOrDirs match {
-      case firstFile :: restOfFiles  if(firstFile.isDirectory)=> {
-        val list = new java.io.File(firstFile.toString).listFiles().toList
-        list2Files(list) ::: restOfFiles
-      }
-      case firstFile :: restOfFiles => firstFile :: list2Files(restOfFiles)
-      case _ => Nil
-
-
-    }
-  }
-//list2Files(new java.io.File("/home/koen/blaat").listFiles().toList)
-
-
-
-
 
   object json extends JsonHandler
   { def apply(in: Any): JsCmd =
@@ -124,36 +73,19 @@ class AdminPage
 
           SetHtml("jararesult", Text("Simulation Ended!"))
         }
-        case JsonCmd("download", _, _, _) =>
-        { downloadPerInfo();
-          log("Button is working")
-          SetHtml("jararesult",Text("Ready for download"));
+        case JsonCmd("download", _, p: String, _) =>
+        { log("zip password is: " + p)
+          zip4j(p)
+          log("zip file done")
+
+          SetHtml("jararesult",Text("Ready for download<br>Your zip password is: " + p));
+
+          S.redirectTo("/output.zip")
         }
       }
     }
   }
 
-  def zip(out: String, files: List[String]) =
-  { import java.io.{ BufferedInputStream, FileInputStream, FileOutputStream }
-    import java.util.zip.{ ZipEntry, ZipOutputStream }
-
-    val zip = new ZipOutputStream(new FileOutputStream(out))
-
-    files.foreach
-    { name =>
-      zip.putNextEntry(new ZipEntry(name))
-      val in = new BufferedInputStream(new FileInputStream(name))
-      var b = in.read()
-      while (b > -1)
-      { zip.write(b)
-        b = in.read()
-      }
-      in.close()
-      zip.closeEntry()
-    }
-    zip.close()
-  }
-  
   
 		
 		
