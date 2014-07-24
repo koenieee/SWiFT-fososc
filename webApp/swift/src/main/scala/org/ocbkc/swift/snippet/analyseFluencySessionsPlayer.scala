@@ -8,22 +8,25 @@ import net.liftweb.util.Helpers._
 import org.ocbkc.swift.OCBKC.{OCBKCinfoPlayer, Constitution}
 import org.ocbkc.swift.OCBKC.scoring.PlayerScores
 import net.liftweb.http.{SHtml, S}
-import net.liftweb.common.Full
+
 import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
 import org.ocbkc.swift.general.GUIdisplayHelpers._
-import net.liftweb.common.Full
+
 import scala.xml.Text
+import java.io.File
 import net.liftweb.common.Full
+import org.jopendocument.dom.spreadsheet.SpreadSheet
+import javax.swing.table.{TableColumnModel, DefaultTableModel}
 
 class analyseFluencySessionsPlayer {
   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
-
+  val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
   def sessionPlayerTable(ns:NodeSeq, playerID: Player):NodeSeq =
   { log("sessionPlayerTable called")
 
     implicit val displayIfNone = "-"
-    val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+
 
     val header = Elem(
       null,
@@ -81,6 +84,7 @@ class analyseFluencySessionsPlayer {
             "player"              -> Text(player.get.firstName),
             "constName"           -> Text(constiOption.get.constiId.toString),
             "release"             -> Text(constiOption.get.currentVersionId),
+            "odsDownload"         -> SHtml.link("",() => downloadOdsFile(player.get),Text("Export Spreadsheet")),
             "graphLink"           -> SHtml.link("../fluencyTimeSeriesGraph.html?player="+player.get.userIdAsString,()=>(),Text("Link"))
           )
         }
@@ -96,4 +100,27 @@ class analyseFluencySessionsPlayer {
       }
     }
   }
+  def downloadOdsFile(playerID: Player)
+  { log("Making ODS file..")
+
+    val header: Array[AnyRef]= Array[AnyRef]("Session", "Translation Endtime","Fluency Score", "Duration Translation", "Answer Correct")
+    val Sessions =sesCoordLR.sessionsPlayedBy(playerID)
+    val data =  Array.ofDim[AnyRef](Sessions.length,5)
+
+    Sessions.zipWithIndex.map
+    { sess =>
+      { data(sess._2) = Array[AnyRef](sess._1.id, dateFormat.format(sess._1.stopTimeTranslation.is), PlayerScores.fluencyScore(sess._1).map{ fs => defaultRounding(fs.toDouble) }.get.toString, sess._1.durationTranslation.get.toString , sess._1.answerPlayerCorrect.get match { case true => "TRUE" case false => "FALSE"})
+      }
+    }
+
+    val tableModel = new DefaultTableModel( data, header)
+    val file: File  = new java.io.File("src/main/webapp/Session"+playerID.firstNameDisplayName+".ods");
+    SpreadSheet.createEmpty(tableModel).saveAs(file)
+    S.redirectTo("/Session"+playerID.firstNameDisplayName+".ods")
+    log("Exported Spreadsheet")
+
+  }
 }
+
+
+
