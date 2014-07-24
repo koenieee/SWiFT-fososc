@@ -30,9 +30,9 @@ class AdminPage
 	 
 		
    def settings =
-   {  "#jsonscript" #> Script(json.jsCmd) &
-     ".startSimu [onclick]" #> Text(json.call(ElemById("startSimu") ~> Value,ElemById("inputbox") ~> Value).toJsCmd) &
-     ".downloadInfo [onclick]" #> Text(json.call(ElemById("downloadInfo") ~> Value).toJsCmd)
+   {  "#jsonscript"             #> Script(json.jsCmd) &
+     ".startSimu [onclick]"     #> Text(json.call(ElemById("startSimu") ~> Value,ElemById("inputbox") ~> Value).toJsCmd) &
+     ".downloadInfo [onclick]"  #> Text(json.call(ElemById("downloadInfo") ~> Value).toJsCmd)
    }
 
 
@@ -57,51 +57,95 @@ class AdminPage
 
     log("Zip file done")
     S.redirectTo("/output.zip")
-
-
   }
-
   def listFiles(dirName: String): List[String] =
   {
     new java.io.File(dirName).listFiles.map(_.toString).toList
   }
 
-	
-   object json extends JsonHandler 
-   {  def apply(in: Any): JsCmd =
-      {  in match 
-         {  case JsonCmd("submit", _, p: String, _) => 
-            { SetHtml("jararesult",Text("Running Simulation.."));
-              JaraDur.set(p)
-              GlobalConstant.clearAndReinitialiseSWiFTdatabase
+ /* def list2Files(dirName: String, dir:Boolean): List[String] =
+  {
+    val files = new java.io.File(dirName).listFiles().filterNot(_.isDirectory).toList
+    val dirs = new java.io.File(dirName).listFiles().map(_.isDirectory).toList
 
-              log("Calling Jara")
-              PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
-
-              SetHtml("jararesult", Text("Simulation Ended!"))
-            }
-           case JsonCmd("download", _, _, _) =>
-           {
-             downloadPerInfo();
-             log("Button is working")
-             SetHtml("jararesult",Text("Ready for download"));
-           }
+    if(dir == true) {
+    dirs match {
+      case firstDir :: restDir => {
+        println("first file is directory")
+        list2Files(firstDir.toString)
       }
-      }
-   }
+      case firstFile :: restOfFiles => {
+        restOfFiles ::: list2Files(firstFile.toString)
 
-  def zip(out: String, files: List[String]) = {
-    import java.io.{ BufferedInputStream, FileInputStream, FileOutputStream }
+      }
+
+      case _ => Nil
+    }
+    }
+    else{
+      files.toString ::: dirs.toString
+
+    }
+
+  }
+  list2Files("/home/koen/blaat/")
+
+  */
+//todo, it is only going two dirs, how can I get this full recursive..
+  def list2Files(filesOrDirs: List[File]): List[File] =
+  {
+    filesOrDirs match {
+      case firstFile :: restOfFiles  if(firstFile.isDirectory)=> {
+        val list = new java.io.File(firstFile.toString).listFiles().toList
+        list2Files(list) ::: restOfFiles
+      }
+      case firstFile :: restOfFiles => firstFile :: list2Files(restOfFiles)
+      case _ => Nil
+
+
+    }
+  }
+//list2Files(new java.io.File("/home/koen/blaat").listFiles().toList)
+
+
+
+
+
+  object json extends JsonHandler
+  { def apply(in: Any): JsCmd =
+    { in match
+      { case JsonCmd("submit", _, p: String, _) =>
+        { SetHtml("jararesult",Text("Running Simulation.."));
+          JaraDur.set(p)
+          GlobalConstant.clearAndReinitialiseSWiFTdatabase
+
+          log("Calling Jara")
+          PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
+
+          SetHtml("jararesult", Text("Simulation Ended!"))
+        }
+        case JsonCmd("download", _, _, _) =>
+        { downloadPerInfo();
+          log("Button is working")
+          SetHtml("jararesult",Text("Ready for download"));
+        }
+      }
+    }
+  }
+
+  def zip(out: String, files: List[String]) =
+  { import java.io.{ BufferedInputStream, FileInputStream, FileOutputStream }
     import java.util.zip.{ ZipEntry, ZipOutputStream }
 
     val zip = new ZipOutputStream(new FileOutputStream(out))
 
-    files.foreach { name =>
+    files.foreach
+    { name =>
       zip.putNextEntry(new ZipEntry(name))
       val in = new BufferedInputStream(new FileInputStream(name))
       var b = in.read()
-      while (b > -1) {
-        zip.write(b)
+      while (b > -1)
+      { zip.write(b)
         b = in.read()
       }
       in.close()
