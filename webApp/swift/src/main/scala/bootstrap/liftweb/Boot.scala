@@ -72,6 +72,7 @@ class Boot
 
       // where to search snippet
       LiftRules.addToPackages("org.ocbkc.swift")
+      LiftRules.ajaxPostTimeout = 50000 //in minutes for ajax loader
 
       Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
 
