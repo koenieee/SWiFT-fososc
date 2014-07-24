@@ -114,9 +114,9 @@ class analyseFluencySessionsPlayer {
     }
 
     val tableModel = new DefaultTableModel( data, header)
-    val file: File  = new java.io.File("src/main/webapp/Session"+playerID.firstNameDisplayName+".ods");
+    val file: File  = new java.io.File("src/main/webapp/Session"+playerID.firstName+".ods");
     SpreadSheet.createEmpty(tableModel).saveAs(file)
-    S.redirectTo("/Session"+playerID.firstNameDisplayName+".ods")
+    S.redirectTo("/Session"+playerID.firstName+".ods")
     log("Exported Spreadsheet")
 
   }
