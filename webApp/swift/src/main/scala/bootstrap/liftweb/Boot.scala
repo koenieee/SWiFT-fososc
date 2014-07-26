@@ -73,7 +73,7 @@ class Boot
       // where to search snippet
       LiftRules.addToPackages("org.ocbkc.swift")
 
-      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
+      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
 
       // Build SiteMap
       /* originally generated code:

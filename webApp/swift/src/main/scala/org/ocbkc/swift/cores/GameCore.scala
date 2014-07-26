@@ -296,12 +296,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    {  val it =
       erfr match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), errMsg, warnMsg)    =>
-         {  val i = IntermediateTranslation.create.timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(true)
+         {  val i = IntermediateTranslation.create.sessionInfo(si).timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(true)
             i.save
             i
          }
          case EfeKRdoc_rb.FactoryResult(None, errMsg, warnMsg)            => 
-         {  val i = IntermediateTranslation.create.timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(false)
+         {  val i = IntermediateTranslation.create.sessionInfo(si).timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(false)
             i.save
             i
          }

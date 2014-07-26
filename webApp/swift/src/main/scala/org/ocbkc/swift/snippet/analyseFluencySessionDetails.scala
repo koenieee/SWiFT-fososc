@@ -37,14 +37,15 @@ class analyseFluencySessionDetails
                    "releaseIndex"  -> Text("R" + constiOption.get.releaseIndex(releaseId)), // put somewhere: {log("[ERROR] code &y2014.06.09.21:34:59&"); "not found"}),
                    "playerName"    -> Text(p.swiftDisplayName),
                    "questionNL"    -> Text(sesCoordBySession.get.questionNL),
-                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)*1000L))),
-                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)*1000L))),
+                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)))),
+                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)))),
                    "sourceText"    -> Text(sesCoordBySession.get.textNL),
                    "textCTLbyPlayer"   -> Text(sesCoordBySession.get.textCTLbyPlayer),
                    "bridgeCTL2NLplayer"-> Text(optionToUI(sesCoordBySession.get.bridgeCTL2NLplayer.map{ _.toString })),
                    "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
                    "score"         -> Text(optionToUI(PlayerScores.fluencyScore(sesCoordBySession.get).map{ fs => defaultRounding(fs.toDouble) })),
-                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"})
+                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}),
+                   "interTrans"    ->  SHtml.link("analyseIntermediateTranslations.html?sessionID=" + session_id, () => (), Text("Link"))
                 )
              }
              case _ =>
