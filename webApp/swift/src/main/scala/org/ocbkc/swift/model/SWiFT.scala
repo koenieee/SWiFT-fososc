@@ -251,7 +251,7 @@ case class SessionInfo( var textNL: String,
   */
 case class IntermediateTranslation extends LongKeyedMapper[IntermediateTranslation] with IdPK
 {  def getSingleton = IntermediateTranslation
-   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj) // redundant because of SessionInfo_IntermediateTranslation_join, but still handy.
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)// redundant because of SessionInfo_IntermediateTranslation_join, but still handy.
    object timeOffered  extends MappedLong(this)
    object textCTLbyPlayer extends MappedString(this, MAX_TRANSLATION_LENGTH)
    object parseErrorsAndWarnings extends MappedString(this, MAX_LENGTH_PARSE_ERROR)
