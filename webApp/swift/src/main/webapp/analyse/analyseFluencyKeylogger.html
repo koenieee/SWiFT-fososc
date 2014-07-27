@@ -18,11 +18,13 @@
          }
       </style>
       <h2>Analyse Fluency Typing</h2>
+	<hr/>
       See how a user types in Translation Round<br/>
       User ID: 
       <b><top:userName/></b>
       <br/>
-      <div id="duration"/>
+      <div id="duration"/><br/>
+      <center><button type="button" onclick="javascript:startPlaying()">Start Playing</button></center><br/>
       <hr/>
       <div id="input_data" style="display:none;">
          <top:jsonData/>
@@ -34,12 +36,12 @@
       <hr/>
       <br/>
       <div id="progressbar">
-         <div class="progress-label">Loading...</div>
+        <center> <div class="progress-label">Start Playing</div></center>
       </div>
       <br/>
       <script text="type/javascript">
          // <![CDATA[
-         
+         function startPlaying() {
          
 	  var jsonData = JSON.parse($('#input_data').html());
 
@@ -49,8 +51,8 @@
 	      total = total + jsonData[x].time;
 	  }
 
-	  $('#duration').append("Total Typing Duration: <b> " + total + "</b><br><br>");
-
+	  $('#duration').html("Total Typing Duration: <b> " + total + "</b><br><br>");
+	  $('#output').html("");
 	  function textLoop(i) {
 	      while (i < len) {
 		  $("#progressbar2").progressbar({
@@ -97,7 +99,7 @@
 	  }
 
 	  setTimeout(progress, totalTime);
-		 
+	}		 
          // ]]>
            
       </script>
