@@ -7,7 +7,7 @@ import net.liftweb.widgets.tablesorter.TableSorter
 import net.liftweb.util.Helpers._
 import org.ocbkc.swift.OCBKC.{OCBKCinfoPlayer, Constitution}
 import org.ocbkc.swift.OCBKC.scoring.PlayerScores
-import net.liftweb.http.{SHtml, S}
+import net.liftweb.http._
 
 import org.ocbkc.swift.model._
 import net.liftweb.mapper.By
@@ -18,10 +18,16 @@ import java.io.File
 import net.liftweb.common.Full
 import org.jopendocument.dom.spreadsheet.SpreadSheet
 import javax.swing.table.{TableColumnModel, DefaultTableModel}
+import net.liftweb.common.Full
+import scala.xml.Text
 
 class analyseFluencySessionsPlayer {
   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
   val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
+  val dateFormatODS =  new java.text.SimpleDateFormat("HH:mm-dd-MM-yyyy")
+  log("Removing files in temp dir: " + new java.io.File("src/main/webapp/temp/").listFiles().map(_.delete()))
+
+
   def sessionPlayerTable(ns:NodeSeq, playerID: Player):NodeSeq =
   { log("sessionPlayerTable called")
 
@@ -104,7 +110,7 @@ class analyseFluencySessionsPlayer {
   { log("Making ODS file..")
 
     val header: Array[AnyRef]= Array[AnyRef]("Session", "Translation Endtime","Fluency Score", "Duration Translation", "Answer Correct")
-    val Sessions =sesCoordLR.sessionsPlayedBy(playerID)
+    val Sessions = sesCoordLR.sessionsPlayedBy(playerID)
     val data =  Array.ofDim[AnyRef](Sessions.length,5)
 
     Sessions.zipWithIndex.map
@@ -114,11 +120,12 @@ class analyseFluencySessionsPlayer {
     }
 
     val tableModel = new DefaultTableModel( data, header)
-    val file: File  = new java.io.File("src/main/webapp/Session"+playerID.firstName+".ods");
+    val currentTime = dateFormatODS.format(System.currentTimeMillis())
+    val file: File  = new java.io.File("src/main/webapp/temp/sessions"+playerID.firstName+"-"+playerID.id+"-"+currentTime+".ods");
     SpreadSheet.createEmpty(tableModel).saveAs(file)
-    S.redirectTo("/Session"+playerID.firstName+".ods")
     log("Exported Spreadsheet")
 
+    S.redirectTo("/temp/sessions"+playerID.firstName+"-"+playerID.id+"-"+currentTime+".ods")
   }
 }
 
