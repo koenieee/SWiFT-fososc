@@ -62,6 +62,8 @@ object GlobalConstant
    val PERSISTDIR = "persist" // directory to hold all data required for making app persistent (= survive shutdown and starts)
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val SESSIONINFOOBJECTDIR = PERSISTDIR + "/sessionInfoobjs"
+   val KEYLOGFLUENCYDIR = PERSISTDIR + "/keylogs"
+
    val SWIFTURL = "http://127.0.0.1:8080"
    val ADMINFIRSTNAME = "Admin"
    

@@ -15,14 +15,22 @@ import System.err.println
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.swift.global.TestSettings._
 import org.ocbkc.swift.parser._
-import scala.util.parsing.combinator.Parsers //{Success, Failure}
+import scala.util.parsing.combinator.Parsers
+import net.liftweb.json
+import java.io.{FileWriter, BufferedWriter, PrintWriter}
+
+//{Success, Failure}
 import org.ocbkc.swift.coord.ses._
 import org.ocbkc.swift.global.Logging._
+import js._
+import JsCmds._
+import JE._
 
 class TranslationRound
 {  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
+   var keyLogData: String = ""
 
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartTranslation
@@ -31,7 +39,7 @@ class TranslationRound
       {  log("processSubmission called")
 
          // check errors on submission here
-         
+         //processKeyLogs("")
          // when errors, do a reload
          // <_&y2012.02.21.19:29:09& refactor using built-in parser of SessionInfo ???> 
          val transCorrect:Boolean =  sesCoordLR.testSyntaxTranslation match
@@ -53,8 +61,24 @@ class TranslationRound
 
       def processTestTransBt() =
       {  println("processTestTransBt called")
+
          // <&y2012.01.19.09:56:18& is processTranslationTA indeed called before this method, otherwise I have a problem...>/(importance = 10)
           S.redirectTo("translationRound.html")
+      }
+
+      def processKeyLogs(keylogs: String) =
+      { log("processing Keylogs")
+        val outputFileName: String = KEYLOGFLUENCYDIR + "/keylog_session"+sesCoordLR.si.id+"_user"+sesCoordLR.si.userId+"_"+System.currentTimeMillis()+".log"
+        val outFile = new java.io.File(outputFileName);
+        keyLogData = keylogs
+        val jsonKeylogData = "[" + keylogs.dropRight(1) + "]"
+        log("keylog val: " + jsonKeylogData)
+        outFile.getParentFile().mkdirs()
+        sesCoordLR.si.fileNameKeylogs = outputFileName
+        val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
+        out.println(jsonKeylogData)
+        out.close
+
       }
 
       // <? why can't scala infer that contentTranslationTA must be a String. (Omitting String, will result in an error).
@@ -88,6 +112,20 @@ class TranslationRound
       }else
       {  List()
       }
+      val javascript: String = """
+                                 document.onkeypress = function(evt) {
+                                    evt = evt || window.event
+                                    key = String.fromCharCode(evt.charCode)
+                                    if (key) {
+                                 	     var param = encodeURI(key)
+                                       var div = document.getElementById("output_data")
+                                       div.value = div.value +
+
+                                 "{\"" + param + "\": "+(new Date).getTime()+ "},";
+                                    }
+                                }
+                               """
+
 
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
@@ -95,7 +133,10 @@ class TranslationRound
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
-            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString())
+            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString()),
+            "keyLogScript"    -> Script(new Run(javascript)),
+            "keylogData"      -> SHtml.hidden((data: String) => processKeyLogs(data), keyLogData, "id" -> "output_data")
+
             //"test"          -> Text(test)
           )
       bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.si.textNL))
