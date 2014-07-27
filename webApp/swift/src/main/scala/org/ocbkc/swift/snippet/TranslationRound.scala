@@ -121,7 +121,7 @@ class TranslationRound
                                        var div = document.getElementById("output_data")
                                        div.value = div.value +
 
-                                 "{\"" + param + "\": "+(new Date).getTime()+ "},";
+                                 "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
                                     }
                                 }
                                """
