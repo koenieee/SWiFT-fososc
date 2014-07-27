@@ -1,0 +1,106 @@
+<lift:surround with="default" at="content">
+   <lift:AnalyseFluencyKeyLogger>
+      <style>
+         .ui-progressbar {
+         position: relative;
+         }
+         .progress-label {
+         position: absolute;
+         left: 50%;
+         top: 4px;
+         font-weight: bold;
+         text-shadow: 1px 1px 0 #fff;
+         }
+         #output{
+         font-weight: bold;
+         text-shadow: 1px 1px 0 #fff;
+	background-color: lightblue;
+         }
+      </style>
+      <h2>Analyse Fluency Typing</h2>
+      See how a user types in Translation Round<br/>
+      User ID: 
+      <b><top:userName/></b>
+      <br/>
+      <div id="duration"/>
+      <hr/>
+      <div id="input_data" style="display:none;">
+         <top:jsonData/>
+      </div>
+            <center>
+               <div id="output"  />
+            </center>
+      <br/>
+      <hr/>
+      <br/>
+      <div id="progressbar">
+         <div class="progress-label">Loading...</div>
+      </div>
+      <br/>
+      <script text="type/javascript">
+         // <![CDATA[
+         
+         
+	  var jsonData = JSON.parse($('#input_data').html());
+
+	  var len = jsonData.length;
+	  var total = 0;
+	  for (var x in jsonData) {
+	      total = total + jsonData[x].time;
+	  }
+
+	  $('#duration').append("Total Typing Duration: <b> " + total + "</b><br><br>");
+
+	  function textLoop(i) {
+	      while (i < len) {
+		  $("#progressbar2").progressbar({
+		      value: i / 100
+		  });
+		  if (jsonData[i].key == "%0D") {
+		      $('#output').append("<Br>")
+		  } else {
+		      $('#output').append(jsonData[i].key)
+		  }
+		  i++;
+		  setTimeout(function() {
+		      textLoop(i);
+		  }, jsonData[i].time);
+		  break;
+	      }
+	  };
+
+	  textLoop(0);
+	  var progressbar = $("#progressbar"),
+	      progressLabel = $(".progress-label");
+
+
+	  progressbar.progressbar({
+	      value: true,
+	      change: function() {
+		  progressLabel.text(progressbar.progressbar("value") + "%");
+	      },
+	      complete: function() {
+		  progressLabel.text("Complete!");
+	      }
+	  });
+
+	  var totalTime = (total + 200) / 100
+
+	  function progress() {
+	      var val = progressbar.progressbar("value") || 0;
+
+	      progressbar.progressbar("value", val + 1);
+
+	      if (val < 99) {
+		  setTimeout(progress, totalTime);
+	      }
+	  }
+
+	  setTimeout(progress, totalTime);
+		 
+         // ]]>
+           
+      </script>
+   </lift:AnalyseFluencyKeyLogger>
+</lift:surround>
+

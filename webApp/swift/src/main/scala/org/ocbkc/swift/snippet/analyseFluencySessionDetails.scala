@@ -44,7 +44,8 @@ class analyseFluencySessionDetails
                    "bridgeCTL2NLplayer"-> Text(optionToUI(sesCoordBySession.get.bridgeCTL2NLplayer.map{ _.toString })),
                    "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
                    "score"         -> Text(optionToUI(PlayerScores.fluencyScore(sesCoordBySession.get).map{ fs => defaultRounding(fs.toDouble) })),
-                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"})
+                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}),
+                   "keyLogLink"   -> SHtml.link("analyseFluencyKeylogger.html?sessionID=" + session_id,()=>(),Text("Keylogger Link"))
                 )
              }
              case _ =>
