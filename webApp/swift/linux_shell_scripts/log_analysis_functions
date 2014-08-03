@@ -6,14 +6,18 @@
 source settings_config
 
 function show_player_subscriptions
-{  grep -iE "Validating.*email" $SWIFT_LOG_FILE
+{  grep -niE "Validating.*email" $SWIFT_LOG_FILE
 }
 
 function player_creation_info
-{  grep -iE "Validating dbName=Player.*$1" $SWIFT_LOG_FILE
+{  grep -niE "Validating dbName=Player.*$1" $SWIFT_LOG_FILE
 }
 
 function sessioninfo_by_userid
-{  grep -Pzo "userId=$1.*\n.*corecontent.*\n" $SWIFT_LOG_FILE
+{  grep -nPzo "userId=$1.*\n.*sessionInfos.*\n" $SWIFT_LOG_FILE
+}
+
+function show_generated_docs
+{  grep -A 5 -niE "generated translation" $SWIFT_LOG_FILE
 }
 

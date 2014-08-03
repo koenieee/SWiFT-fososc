@@ -60,7 +60,7 @@ import gameCoreHelperTypes._
 
 trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
-   val gameCoreName:String
+      val gameCoreName:String
       val playerId:Long
       var si:SessionInfo
       var parseWarningMsgTxtCTLplayer:String = ""
@@ -73,7 +73,7 @@ trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, Answe
             si.userId(playerId).save
             si
       }
-   def generateText:String
+      def generateText:String
       def algorithmicDefenceGenerator:QuerySent__TP
       def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
 
