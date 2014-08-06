@@ -21,3 +21,7 @@ function show_generated_docs
 {  grep -A 5 -niE "generated translation" $SWIFT_LOG_FILE
 }
 
+function show_fluency_session_denied
+{  echo "This function still needs to be tested"
+   grep -niE "LCD y2014_m08_d06_h12_m44_s36" $SWIFT_LOG_FILE
+}

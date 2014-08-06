@@ -175,7 +175,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       {  if(currentPlayer.firstChosenConstitution.is == -1)
          {  Constitution.constisWithPlayableReleases match
             {  case Nil =>
-               {  log("   there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
+               {  log("   {| LCD y2014_m08_d06_h12_m44_s36 |} there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
                   None
                }
                case cwpr =>
