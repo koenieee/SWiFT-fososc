@@ -36,7 +36,7 @@ class StartSession
       
       // Begin For test remove
       println("### begin serialization test")
-      val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp(Predicate("predje",2),List(Constant("a"), Var("x")))))
+      val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp_FOL(Predicate("predje",2),List(Constant("a"), Var("x")))))
       println("   query serialized: " + query.serialize)
       
       /*

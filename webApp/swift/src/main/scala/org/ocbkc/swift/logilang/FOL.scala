@@ -260,17 +260,33 @@ object Unequal
    }
 }
 
-case class PredApp_FOL(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FOLstatement
+case class PredApp_FOL(override val p:Predicate, override val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FOLstatement
 
 /** Move to general CTL lib
   */
-case class PredApp(p:Predicate, terms:List[SimpleTerm]) // PredApp = predicate application
+
+//  WIW: solving case inheritance problem, still has to be compiled and tested. It is "ugly" because the superclass contains explicit references to subclasses (PredApp_FOL).
+// class PredApp(p:Predicate, terms:List[SimpleTerm]) // PredApp = predicate application
+// {  def unapply(p:PredApp):Option[(Predicate, List[SimpleTerm])] =
+//    {  p match
+//       case PredApp_FOL(p,terms) => Some(p, terms)
+//       case _ => None
+//    }
+// 
+//    def correct:Boolean =
+//    {  this match 
+//       {  case PredApp(p,t) => p.arity == t.size
+//       }
+//    }
+// }
+
+abstract class AbstractPredApp(p:Predicate, terms:List[SimpleTerm]) // PredApp = predicate application
 {  def correct:Boolean =
-   {  this match 
-      {  case PredApp(p,t) => p.arity == t.size
-      }
+   {  p.arity == terms.size
    }
 }
+
+
 /*
 class SimpleTerm(val name:String)
 {  override def toString =
@@ -459,7 +475,7 @@ case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) ext
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
-case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends PredApp(p, terms) with FofaSent
+case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FofaSent
 
 package translator
 {  

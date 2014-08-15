@@ -106,7 +106,7 @@ object Prover extends reas.ProverTrait
       val queryFof = queryParam match
       {  case MostInfo(patVar, forallPat) =>
          {  forallPat match
-            {  case plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp) =>
+            {  case plofofa.Forall(forallVar:Var, setPatVar:PatVar, predApp:PredApp_Plofofa) =>
                {  if( setPatVar != patVar )
                   {  log("   error in query, pattern variables are not the same")
                   } else

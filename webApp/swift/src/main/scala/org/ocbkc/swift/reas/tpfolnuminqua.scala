@@ -24,7 +24,7 @@ object TestTpFolnuminquaCLI extends CLIwithFileInput
  
          var ret:String = ""
 
-         val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp(Predicate("p",2),List(Constant("a"), Var("x"))))) // <&y2012.04.24.09:39:15& for test nice if you could also read this from the command line>
+         val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp_FOL(Predicate("p",2),List(Constant("a"), Var("x"))))) // <&y2012.04.24.09:39:15& for test nice if you could also read this from the command line>
 
          ret += "#### Original theory:\n" + ft +"\n\n"
    
@@ -73,7 +73,7 @@ Running example:
       // translate query to fof
       val queryFof:String =
       query match // <&y2012.04.24.10:02:31& perhaps use only one match on the query, and put interesting parts in aux. vars.
-      {  case Sharpest(NumResPat(Geq, PatVar(numpatvarname), Var(boundvarname), PredApp(p,consts))) => 
+      {  case Sharpest(NumResPat(Geq, PatVar(numpatvarname), Var(boundvarname), PredApp_FOL(p,consts))) => 
          {  val pv = "PV" + boundvarname // <&y2012.04.24.19:49:43& not sure what requirements are of question-var in tptp fof format...>
             "fof(form" + ft_noEqStats.stats.length + ", question, ? [" + pv + "] : " + p.name + consts.map( c => if( c.name.equals(boundvarname) ) pv else c.name ).mkString("(",",",")") + ")."
             // <&y2012.04.24.19:54:14& would be nice to have a map which stops when it finds the first occurrence of an item satisfying a boolean function.

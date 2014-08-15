@@ -59,7 +59,7 @@ package ses
 
 //import Round._
 // TODO perhaps refactor: shouldn't this conceptually be part of the model and not the coordinator (controller)?
-case class RoundFluencySession()
+class RoundFluencySession()
 case object RoundStartSession extends RoundFluencySession
 case object RoundConstiStudy extends RoundFluencySession // only in first session
 case object RoundTranslation extends RoundFluencySession

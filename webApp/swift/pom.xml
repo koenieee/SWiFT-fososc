@@ -169,6 +169,7 @@
             <jvmArg>-Xmx1024m</jvmArg>
             <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
           </jvmArgs>
+        <recompileMode>incremental</recompileMode> <!-- experimental as of y2014_m08_d14_h18_m34_s15, remove if it leads to errors -->
         </configuration>
         <executions>
           <execution>

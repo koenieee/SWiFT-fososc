@@ -21,7 +21,7 @@ object TestFolnuminquaCLI extends CLIwithFileInput
    def main(args: Array[String]) =
    {  if( args.length != 0 ) println("Usage: command, without arguments")
       def f:String =
-      {  val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp(Predicate("p",2),List(Constant("a"), Var("x")))))
+      {  val query = Sharpest(NumResPat(Geq, PatVar("n"), Var("x"), PredApp_FOL(Predicate("p",2),List(Constant("a"), Var("x")))))
          "   query serialized: " + query.serialize
       }
       //applyFunctionToFile(f)
@@ -38,7 +38,7 @@ object TestFolnuminquaCLI extends CLIwithFileInput
 // Questionlanguage: Folnuminqua
 
 // each FOL theory is associated with its own list of predicate and constant symbols, I.e. there may be more constants with the same name and id, as long as they are partr
-case class FolnuminquaQuery() // <&y2013.11.23.22:32:46& rename to PlonumoPat, also see terminologyBaseDocument.tex>
+abstract class FolnuminquaQuery() // <&y2013.11.23.22:32:46& rename to PlonumoPat, also see terminologyBaseDocument.tex>
 {  /*
    def serialize =
    {  // implicit val formats = Serialization.formats(NoTypeHints)
@@ -69,7 +69,7 @@ case class Sharpest(numrespat:NumResPat) extends FolnuminquaQuery // I don't ass
 
 import ComparisonOperator._
 
-case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp) extends FolnuminquaQuery
+case class NumResPat(comOp:ComparisonOperator, patvar:PatVar, boundvar:Var, predapp:PredApp_FOL) extends FolnuminquaQuery
 
 // Answer language:
 
