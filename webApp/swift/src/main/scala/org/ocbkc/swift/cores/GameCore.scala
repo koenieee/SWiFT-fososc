@@ -275,7 +275,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /** Parses the textCTLbyPlayer, and returns a representation bundle, including errors, moreover it makes the intermediate translation persistent in the database. The latter is only done when the translation changed since the last parsing + storage.
      */
    def textCTLbyPlayer_rb_withErrorInfo_and_store:EfeKRdoc_rb.FactoryResult =
-   {  log("textCTLbyPlayer_rb_withErrorInfo called")
+   {  log("textCTLbyPlayer_rb_withErrorInfo_and_store called")
 
       if(textCTLplayerUpdated4terParsing)
       {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
