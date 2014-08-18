@@ -20,6 +20,10 @@ import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConn
 import org.ocbkc.swift.OCBKC.Constitution
 import org.apache.commons.io.FileUtils
 import org.ocbkc.swift.jgit.InitialiseJgit
+import net.liftweb.common.{Box,Empty,Failure,Full}
+import org.ocbkc.swift.model._
+import org.ocbkc.generic._
+import org.ocbkc.swift.test._
 
 object GlobalConstant
 {  val TEST = true
@@ -205,13 +209,18 @@ object Logging
    }
 
    def log(msg:String) =
-   {  println(msg)
+   {  val user_info = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
+      {  case Full(player) => "[" + player.id + ", " + player.swiftDisplayName + "]"
+         case _            => ""
+      }
+      val datetime = "[" + DateTime.timeInMillis2dateString(SystemWithTesting.currentTimeMillis) + "]"
+      println(datetime + " " + user_info + "   " + msg)
    }
 
    /** Log and pass
      */
    def logp[T](msg: T => String, obj:T):T =
-   {  println(msg(obj))
+   {  log(msg(obj))
       obj
    }
 }

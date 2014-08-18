@@ -281,6 +281,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
          textCTLplayerUpdated4terParsing = false
          val e = EfeDoc_rb(textCTLbyPlayer)
+         log("return value = " + e)
          textCTLbyPlayer_rb_cached = Some(e)
          storeIntermediateTranslation(textCTLbyPlayer, e, SystemWithTesting.currentTimeMillis)
          e
