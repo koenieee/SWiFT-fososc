@@ -12,7 +12,7 @@
   <inceptionYear>2010</inceptionYear>
 <!--  <author>Chide Groenouwe</author> -->
   <properties>
-    <scala.version>2.11.1</scala.version>
+    <scala.version>2.11.2</scala.version>
     <!-- Common plugin settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
