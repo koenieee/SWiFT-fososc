@@ -25,7 +25,10 @@ class analyseFluencySessionsPlayer {
   val sesCoordLR = SesCoord.is // extract session coordinator object from session variable
   val dateFormat =  new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm:ss")
   val dateFormatODS =  new java.text.SimpleDateFormat("HH:mm-dd-MM-yyyy")
-  log("Removing files in temp dir: " + new java.io.File("src/main/webapp/temp/").listFiles().map(_.delete()))
+  val directory = new java.io.File("src/main/webapp/temp") match
+                  { case dir: File if(dir.exists()) =>  log("Removing files in temp dir: " + dir.listFiles().map(_.delete()))
+                    case dir: File => log("creating directory: " +dir.mkdir())
+                  }
 
 
   def sessionPlayerTable(ns:NodeSeq, playerID: Player):NodeSeq =
@@ -50,7 +53,7 @@ class analyseFluencySessionsPlayer {
       ,
       <tbody>{  sesCoordLR.sessionsPlayedBy(playerID).map(
         session =>
-        { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
+        {
           <tr>
             <td>{ session.id.toString }</td>
             <td>{ dateFormat.format(session.stopTimeTranslation.is)   }</td>
