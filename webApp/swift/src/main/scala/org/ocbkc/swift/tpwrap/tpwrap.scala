@@ -78,7 +78,8 @@ object Eprover
          val regex = """# SZS answers Tuple \[\[([^\]]+)\]|_\]""".r // WIW: translate from vim syntax to java syntax: only left: | and ^\ are they correct?
          println("   matched groups:")
          for(matchLoc <- regex.findAllIn(out).matchData; group <- matchLoc.subgroups)
-         { println(group); if (group != null) cs +:= Constant(group) }
+         { println(group); if (group != null) cs +:= Constant(group) 
+	 }
          cs
          
       /* Example output
@@ -138,7 +139,8 @@ object Paradox
          val regex = """% domain size is ([0-9]+)""".r // WIW: translate from vim syntax to java syntax: only left: | and ^\ are they correct?
          println("   matched groups:")
          for(matchLoc <- regex.findAllIn(out).matchData; group <- matchLoc.subgroups)
-         { println(group); if (group != null) result = group.toInt }
+         {  println(group); if (group != null) result = group.toInt 
+	 }
          result
       }
    }

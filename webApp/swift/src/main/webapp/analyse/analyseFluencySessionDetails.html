@@ -1,0 +1,62 @@
+<lift:surround with="default" at="content">
+    <lift:analyseFluencySessionDetails>
+        <h1>Details of Session: <top:sessionID /></h1>
+        <hr/>
+        <table>
+            <tr>
+                <td><b>Constituton: </b></td>
+                <td><top:constName /></td>
+            </tr>
+            <tr>
+                <td><b>Release Index: </b></td>
+                <td><top:releaseIndex /></td>
+            </tr>
+            <tr>
+                <td><b>Player Name: </b></td>
+                <td><top:playerName /></td>
+            </tr>
+            <tr>
+                <td><b>Start Time: </b></td>
+                <td><top:startTime /></td>
+            </tr>
+            <tr>
+                <td><b>Stop Time: </b></td>
+                <td><top:stopTime /></td>
+            </tr>
+            <tr>
+                <td><b>Source Text:</b></td>
+                <td><top:sourceText/></td>
+            </tr>
+            <tr>
+                <td><b>Question:</b></td>
+                <td><top:questionNL/></td>
+            </tr>
+            <tr>
+                <td><b>Translation Player:</b></td>
+                <td><top:textCTLbyPlayer/></td>
+            </tr>
+            <tr>
+                <td><b>Bridge Player:</b></td>
+                <td><top:bridgeCTL2NLplayer/></td>
+            </tr>
+            <tr>
+                <td><b>Translation Time:</b></td>
+                <td><top:transTime /></td>
+            </tr>
+            <tr>
+                <td><b>Answer Correct:</b></td>
+                <td><top:answerCor /></td>
+            </tr>
+            <tr>
+                <td><b>Fluency Score:</b></td>
+                <td><top:score /></td>
+            </tr>
+	    <tr>
+                <td><b>Intermediate Translations</b></td>
+                <td><top:interTrans /></td>
+            </tr>
+        </table>
+
+    </lift:analyseFluencySessionDetails>
+
+</lift:surround>

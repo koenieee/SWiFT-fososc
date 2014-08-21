@@ -1,3 +1,8 @@
+/**
+  * @todo COULDDO: automatically generate log-error message of which the following is an example:
+  *               "[POTENTIAL_BUG] cannot go to state RoundConstiStudy, because player is not in state RoundStartSession."
+  */
+
 /* <&y2012.04.09.13:58:55& for all scala code: change appending to Lists, because this is highly inefficient (use a ListBuffer instead)>/
 (  importance = 9
 )
@@ -26,8 +31,8 @@ import java.io._
 import scala.util.Random
 import org.ocbkc.generic.random._
 
-import org.ocbkc.swift.messages._
-import org.ocbkc.swift.messages.MailMessage._
+import org.ocbkc.swift.messages.MailMessages._
+import org.ocbkc.swift.messages.MailUtils._
 import net.liftweb.util.Mailer
 import net.liftweb.util.Mailer._
 
@@ -123,50 +128,74 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
      */
    def URsetReleaseCandidate(consti:Constitution, on:Boolean):Boolean =
    {  if(on)
-      {  if(Constitution.allLatestReleasesOfAllConstisEvaluated)
-         {  log("allLatestReleasesOfAllConstisEvaluated = true, so this version may be released.")   
-            consti.makeLatestVersionReleaseCandidateIfPossible
-            true
-         } else
-         {  log("allLatestReleasesOfAllConstisEvaluated = false, so this version may not be released.")
-            false
+      {  val allowed = consti.lastReleaseCommitId match
+         {  case None =>
+            {  true
+            }
+            case Some(lrci) =>
+            {  if(ConstiScores.sampleSizeSufficient4FluencyScore(lrci))
+               {  log("latestReleaseIsEvaluated = true, so this version may be released.")
+                  true
+               }
+               else
+               {  log("latestReleaseIsEvaluated = false, so this version may not be released.")
+                  false
+               }
+            }
          }
+         if(allowed) consti.makeLatestVersionReleaseCandidateIfPossible
+         allowed
       } else
       {  consti.unmakeCurrentPotentialRelease
          true
       }
    }
+
    def URconstiStudy =
    {  log("URconstiStudy called")
       if( latestRoundFluencySession == RoundStartSession )
          latestRoundFluencySession = RoundConstiStudy
+      else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundConstiStudy, because player is not in state RoundStartSession.")
+      }
    }
 
    /** @returns None: the translation may not be started because there aren't releases available which are not yet completely evaluated. The player is put on hold.
      */
    def URtryStartSession:Option[String] =
    {  log("URtryStartSession")
+
+      def startSessionPreps =
+      {  si = gameCore.initialiseSessionInfo
+         latestRoundFluencySession = RoundStartSession
+         Some(si.textNL)
+      }
+
       if( latestRoundFluencySession == NotInFluencySession )
-      {  if( Constitution.allLatestReleasesOfAllConstisEvaluated )
-         {  log("   allLatestReleasesOfAllConstisEvaluated, so session may not start.")   
-            None
-         }
-         else
-         {  si = gameCore.initialiseSessionInfo
-
-            log("Choose a random release for this player, if there was none chose yet (= it is the first session).")
-
-            {  if(currentPlayer.firstChosenConstitution.is == -1) 
-               {  val randomSeq = new Random()
-                  URchooseFirstConstitution(RandomExtras.pickRandomElementFromList(Constitution.constisWithPlayableReleases, randomSeq).get.constiId) // get must work because there are unevaluated constis.
+      {  if(currentPlayer.firstChosenConstitution.is == -1)
+         {  Constitution.constisWithPlayableReleases match
+            {  case Nil =>
+               {  log("   {| LCD y2014_m08_d06_h12_m44_s36 |} there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
+                  None
+               }
+               case cwpr =>
+               {  log("Choose a random release for this player, it is the first session for the dudicon!")
+                  val randomSeq = new Random()
+                  URchooseFirstConstitution(
+                  logp( 
+                  "   picked consti = " + (_:Int), 
+                  RandomExtras.pickRandomElementFromList(cwpr, randomSeq).get.constiId)
+                  )
+                           
+                  startSessionPreps
                }
             }
-
-            latestRoundFluencySession = RoundStartSession
-            Some(si.textNL)
+         }
+         else
+         {  startSessionPreps
          }
       } else
-      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page.")
+      {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page. The player is now in round: " + latestRoundFluencySession)
          None
       }
    }
@@ -177,14 +206,21 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
          si.startTime(SystemWithTesting.currentTimeMillis).save
          si.startTimeTranslation(si.startTime.is).save
          latestRoundFluencySession = RoundTranslation
+      } else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundTranslation, because player is not in state RoundConstiStudy")
       }
       Unit
    }
 
    def URstopTranslation =
    {  log("URstopTranslation called")
-      si.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
-      Unit
+      if( latestRoundFluencySession == RoundTranslation )
+      {  si.stopTimeTranslation(SystemWithTesting.currentTimeMillis).save
+         Unit
+         // stay in same round
+      } else
+      {  log("[POTENTIAL_BUG] cannot stop translation, because player is not in state RoundTranslation.")
+      }
    }
 
    def URstartAlgorithmicDefenceStage1:QuerySent__TP =
@@ -200,19 +236,21 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage1 )
       {  latestRoundFluencySession = RoundAlgorithmicDefenceStage2
       }
+      log("[POTENTIAL_BUG] code must only run when latestRoundFluencySession == RoundAlgorithmicDefenceStage1? Or not?")
       val res = gameCore.doAlgorithmicDefence
       // Session completed: store this session for future analysis/score calculations
       // now:Calendar = System.currentTimeMillis()
       si.stopTime(System.currentTimeMillis).save
       sesHis.sessionInfos ::= si
       si.serialize // serialize the JSON part
+      log("Creating PlayerSessionInfo_join: player = " + currentPlayer.swiftDisplayName + ", session = " + si.id) // this info is also more or less shown by the default LiftMapper logger...
       PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
 
       // send update mail to followers that the score for a release of this constitution is updated
       val fCC = Constitution.getById(currentPlayer.firstChosenConstitution.get).get
       val rOFCC = currentPlayer.releaseOfFirstChosenConstitution.get
       if(accessToConstiGame && ConstiScores.sampleSizeSufficient4FluencyScore(rOFCC)) // note: after accessToConstiGame, the players new sessions are disregarded for calculating the score of the consti release he learned playing the game with, and before it, are all sessions disregarged.
-      {  mailAllFollowersUpdate(fCC, newFluencyScore(fCC, rOFCC))
+      {  sendAllFollowersUpdateMail(fCC, newFluencyScore(fCC, rOFCC))
       }
 
       turnReleaseCandidateIntoVirginIfPossible
@@ -223,9 +261,12 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    def URfinaliseSession =
    {  if( latestRoundFluencySession == RoundAlgorithmicDefenceStage2 )
       {  latestRoundFluencySession = RoundFinaliseSession
+      } else
+      {  log("[POTENTIAL_BUG] cannot go to state RoundFinaliseSession, because player is not in state RoundAlgorithmicDefenceStage2.")
       }
    }
 
+   // rename to URcloseSession
    def closeSession =
    {  log("closeSession")
       if( latestRoundFluencySession == NotInFluencySession ) log("   session was already closed.")
@@ -250,11 +291,11 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    }
 
    def MUnewFluencyScore(consti:Constitution, releaseId:String) =
-   {  mailAllFollowersUpdate(consti, newFluencyScore(consti, releaseId))
+   {  sendAllFollowersUpdateMail(consti, newFluencyScore(consti, releaseId))
    }
 
    def URpublishConsti(consti:Constitution, text:String, description:String) =
-   {  mailOtherFollowersUpdate(consti, MailMessage.newPublication(consti), currentPlayer)
+   {  sendOtherFollowersUpdateMail(consti, newPublication(consti), currentPlayer)
 
       // in case no new versions occurred after the latest release, this publication may immediately become the next release.
       // {
@@ -397,7 +438,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
 
    def testSyntaxTranslation:String = 
-   {  gameCore.textCTLbyPlayer_rb_withErrorInfo match
+   {  gameCore.textCTLbyPlayer_rb_withErrorInfo_and_store match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _,       warnMsg) => warnMsg
          case EfeKRdoc_rb.FactoryResult(None,         errMsg,  _)       => errMsg
       }
@@ -418,7 +459,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =
-   {  mailAllFollowersUpdate(consti, newFluencyScore(consti))
+   {  sendAllFollowersUpdateMail(consti, newFluencyScore(consti))
    }
 */
 
@@ -444,6 +485,10 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
          case None => List()
       }
    }
+
+   def sessionsPlayedBy(p:Player):List[SessionInfo] =
+   {  OCBKCinfoPlayer.sessionsPlayedBy(p)
+   }
 }
 
 
@@ -455,21 +500,28 @@ class CoreSimu(val currentPlayerVal:Player) extends CoreTrait[EfeQuerySent_rb, E
 {  override def currentPlayer = currentPlayerVal
    val gameCore = new EfeLang(currentPlayer.id.get)
 
-   // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not.
+   // the following is a simplification: it skips playing an actual game, but just determines whether the player has succeeded or not. This also means it encompasses both RoundAlgorithmicDefenceStage1 and algorithmicDefenceRoundStage2.
    def URalgorithmicDefenceSimplified(winSession:Boolean, duration:DurationInMillis) =
-   {  val cTM = SystemWithTesting.currentTimeMillis
-      log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
-      si.startTime(cTM).save
-      si.startTimeTranslation(cTM).save
-      si.stopTime(cTM + duration).save
-      si.stopTimeTranslation(cTM + duration).save
+   {  if( latestRoundFluencySession == RoundTranslation )
+      {  val cTM = SystemWithTesting.currentTimeMillis
+         log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer))
+         si.startTime(cTM).save
+         si.startTimeTranslation(cTM).save
+         si.stopTime(cTM + duration).save
+         si.stopTimeTranslation(cTM + duration).save
 
-      si.answerPlayerCorrect(winSession).save
-      si.serialize
-      PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
-      sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+         si.answerPlayerCorrect(winSession).save
+         si.serialize
 
-      turnReleaseCandidateIntoVirginIfPossible
+         log("Creating PlayerSessionInfo_join: player = " + currentPlayer.swiftDisplayName + ", session = " + si.id)
+         PlayerSessionInfo_join.create.player(currentPlayer).sessionInfo(si).save
+         sesHis.sessionInfos ::= si  // [SHOULDDO] &y2013.05.10.09:56:36& still needed?
+
+         turnReleaseCandidateIntoVirginIfPossible
+         latestRoundFluencySession = RoundAlgorithmicDefenceStage2
+      } else
+      {  log("[BUG]  cannot go to state RoundAlgorithmicDefenceStage1 (and 2), because player is not in state RoundStartSession.")
+      }
    }
 /*
    override def MUnewFluencyScore(consti:Constitution) =

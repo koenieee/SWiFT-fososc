@@ -28,8 +28,12 @@ class Restore
 {  println("Restore constructor called")
    val const:Constitution = S.param("constid") match
    {  case Full(idLoc)  => Constitution.getById(idLoc.toInt) match
-                           { case Some(constLoc)   => { println("   Constitution id:" + idLoc); constLoc }
-                             case None             => { S.redirectTo("notfound.html") }
+                           { case Some(constLoc)   => 
+						     {  println("   Constitution id:" + idLoc); constLoc 
+						     }
+                             case None             => 
+  						     {  S.redirectTo("notfound.html") 
+						     }
                            }
       case _            => S.redirectTo("constitutions")
    }
@@ -45,8 +49,12 @@ class Restore
 
    // Try restoring
    val currentUserId:Int = Player.currentUserId match // <&y2012.06.23.14:41:16& refactor: put currentuserid in session var, and use that throughout the session-code>
-      {  case Full(id)  => { id.toInt }
-         case _         => { throw new RuntimeException("  No user id found.") }
+      {  case Full(id)  => 
+			  { id.toInt 
+			  }
+         case _         => 
+			  { throw new RuntimeException("  No user id found.") 
+			  }
       }
    println("   Trying to restore...")
    const.restore(commitId, currentUserId.toString) 

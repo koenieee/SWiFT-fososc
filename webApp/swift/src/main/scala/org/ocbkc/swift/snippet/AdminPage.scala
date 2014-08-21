@@ -24,7 +24,7 @@ import ocbkc.swift.test.simulation.jara._
 import org.ocbkc.swift.model.Player
 import java.io._
 import java.lang.{ Long => JLong }
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.storage.file._
@@ -37,72 +37,47 @@ import JE._
 /*
  * Cleanup non-used imports.
  * */
-
-
-
-
 class AdminPage
-{
-	// the SessionVar will contain a String with "Anonymous" as default value.
-	object JaraDur extends SessionVar[String]("1")
+{  // the SessionVar will contain a String with "Anonymous" as default value.
+   object JaraDur extends SessionVar[String]("1")
+   
+   log("AdminPage called")
+   
+   //val path = GlobalConstant.WEBAPROOT
+   //JsonCmd(2,null,false,Map(command -> 2, params -> false))
 
-	println("Adminpage is called")
-	//val path = GlobalConstant.WEBAPROOT
-//JsonCmd(2,null,false,Map(command -> 2, params -> false))
-
-	var n_blaat = JaraDur.is 
-	 // println(lines)
+   var n_blaat = JaraDur.is 
+   // println(lines)
 	 
 		
-	def settings =
-	{
-			
-    "#jsonscript" #> Script(json.jsCmd) &
-			".startSimu [onclick]" #> Text(json.call(ElemById("startSimu") ~> Value,ElemById("inputbox") ~> Value).toJsCmd)
- 
+   def settings =
+   {  "#jsonscript" #> Script(json.jsCmd) & ".startSimu [onclick]" #> Text(json.call(ElemById("startSimu") ~> Value,ElemById("inputbox") ~> Value).toJsCmd)
+   }
 	
-	
-	}
-	
-	object json extends JsonHandler {
-    def apply(in: Any): JsCmd =
-    {
-		in match {
-        case JsonCmd("submit", _, p: String, _) => 
-        {
-		println(p)
-		SetHtml("jararesult",Text("Running Simulation.."));
-		JaraDur.set(p)
-    
-		println("startsimu called");
-		Player.bulkDelete_!!(By(Player.superUser,false))
-		Constitution.removeAll
+   object json extends JsonHandler 
+   {  def apply(in: Any): JsCmd =
+      {  in match 
+         {  case JsonCmd("submit", _, p: String, _) => 
+            {  println(p)
+	       SetHtml("jararesult",Text("Running Simulation.."));
+	       JaraDur.set(p)
+               GlobalConstant.clearAndReinitialiseSWiFTdatabase
 
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
-		FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-		FileUtils.deleteDirectory(new File(GlobalConstant.SESSIONINFOOBJECTDIR))
-
-                InitialiseJgit()
-
-                Constitution.createConstiAlphaIfDoesntExist
-
- 		log("Calling Jara")	          
-                PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
+ 	       log("Calling Jara")	          
+               PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
 		
-                SetHtml("jararesult", Text("Simulation Ended!"))
-	}
-	}
-		
-	}
-	
-  }
+               SetHtml("jararesult", Text("Simulation Ended!"))
+	    }
+         }
+      }
+   }
   
   
 		
 		
 
 		
-	}
+}
 }
 
 

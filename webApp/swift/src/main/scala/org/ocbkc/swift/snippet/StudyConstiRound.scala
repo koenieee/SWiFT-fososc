@@ -31,7 +31,7 @@ class StudyConstiRound
   {
     if(SesCoord.is.latestRoundFluencySession == RoundAlgorithmicDefenceStage2) //latest round -> so ended
     { log("StudyConstiRound, saveTimesTogether called")
-      val durationList = sessionInfo.constiStudyIntervals
+      val durationList = sessionInfo.constiStudyIntervals.map(tupDura=>(tupDura._2 - tupDura._1))
       val totalDurationStudyTime = durationList.foldLeft(0)(_.toInt + _.toInt)
       sessionInfo.constiStudyTotalDuration = Some(totalDurationStudyTime)
       log("Total Constitution Study Duration Time: " + sessionInfo.constiStudyTotalDuration .get)
@@ -81,7 +81,7 @@ class StudyConstiRound
      { val stopTime = System.currentTimeMillis
        println("previous startTime: " + startTime)
        println("G is released on time: " + stopTime)
-       sessionInfo.constiStudyIntervals ::= (stopTime - startTime)
+       sessionInfo.constiStudyIntervals ::= (startTime, stopTime)
 
     }
   }

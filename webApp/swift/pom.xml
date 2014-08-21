@@ -61,7 +61,12 @@
   <artifactId>lift-jquery-module_2.5_2.9.2</artifactId>
   <version>2.3</version>
 </dependency>
-    <dependency>
+  <dependency>
+      <groupId>org.jopendocument</groupId>
+      <artifactId>jOpenDocument</artifactId>
+      <version>1.3</version>
+  </dependency>
+      <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_2.9.1</artifactId>
       <version>2.4</version>
@@ -169,6 +174,7 @@
             <jvmArg>-Xmx1024m</jvmArg>
             <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
           </jvmArgs>
+	
         </configuration>
         <executions>
           <execution>
@@ -243,6 +249,7 @@
         <configuration>
           <contextPath>/</contextPath>
           <scanIntervalSeconds>5</scanIntervalSeconds>
+	<jvmArgs>-Duser.language=en -Duser.country=US -Duser.region=US</jvmArgs>
 	<connectors>
 	<connector implementation="org.mortbay.jetty.security.SslSocketConnector">
 	<port>8080</port>
@@ -374,6 +381,7 @@
             <jvmArg>-Xmx1024m</jvmArg>
             <jvmArg>-DpackageLinkDefs=file://${project.build.directory}/packageLinkDefs.properties</jvmArg>
           </jvmArgs>
+	 
         </configuration>
       </plugin>
     </plugins>

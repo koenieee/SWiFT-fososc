@@ -69,15 +69,14 @@ object SystemWithTesting
 }
 
 object Types
-{   type SimulatedEvent = () => Any
-    type DelayedSimulatedEvent = (POSIXtime, SimulatedEvent)
+{  type SimulatedEvent = () => Any
+   type DelayedSimulatedEvent = (POSIXtime, SimulatedEvent)
 }
 
 object TestHelpers
-{
-/** @param min in milliseconds
-  * @param max in milliseconds
-  */
+{  /** @param min in milliseconds
+   * @param max in milliseconds
+   */
 
    def randomPause(min:Long, max:Long, randomSeq:Random):Long =
    {  min + randomSeq.nextInt( (max - min).toInt).toLong

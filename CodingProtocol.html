@@ -2,12 +2,13 @@
 
 <head>
 
-<title>CodingProtocol</title>
+<center><title>CodingProtocol</title></center>
 
 <body>
 
+<h1><font color="maroon">Coding Protocol</font></h1>
 <p>
-<h1><font color="maroon">Build management</font></h1>
+<h2><font color="teal">Build management</font></h2>
 </p>
 <br>
 <p>
@@ -130,7 +131,23 @@ which is:
 </p>
 
 <h4><font color="teal">TODO examples</font></h4>
+<p>
+<h2><font color="teal">Logging</font></h2>
+</p>
+When printing to the logfile from the source code, consider tagging some log entries with a unique identifier as follows:
+
+
+<pre class="prettyprint">
+log("   {| LCD y2014_m08_d06_h11_m59_s18 |} Database completely empty, I feel like a Zen-buddhist, dudicon!")
+</pre>
+
+The unique identifier consists of the date-time at/near the moment the log entry was created.
+
+The reason is that it makes it easy to find back these log entries in the log file, even if the text of the log entry is adapted in later versions of the code. Specifically tag log entries that you search for often in the log file. LCD stands for "Log entry Creation Date".
+
+
 
 </body>
 
 </head>
+

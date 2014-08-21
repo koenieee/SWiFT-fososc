@@ -16,6 +16,7 @@ import org.ocbkc.swift.OCBKC._
 import net.liftweb.json._
 import java.io._
 import org.ocbkc.swift.global.GlobalConstant._
+import org.ocbkc.generic.DateTime._
 
 /*
 class Source extends Enumeration
@@ -115,7 +116,7 @@ case class SessionInfo( var textNL: String,
                         var hurelanRole1NL:String,
                         var hurelanRole2NL:String,
                         var subjectNL:String,
-                        var constiStudyIntervals: List[Long],
+                        var constiStudyIntervals: List[(Long, Long)],
                         var constiStudyTotalDuration: Option[Long]
                         ) extends LongKeyedMapper[SessionInfo] with IdPK
 {  def getSingleton = SessionInfoMetaMapperObj
@@ -192,7 +193,7 @@ case class SessionInfo( var textNL: String,
 
 
    def serialize =
-   {  implicit val formats = Serialization.formats(NoTypeHints)
+   {  implicit val formats = Serialization.formats(NoTypeHints) + FieldSerializer[BridgeDoc]()
       var siSer:String = Serialization.write(this)
       println("  sessionInfos serialised to: " + siSer)
       // write session to file with unique name, e.g.: playerName/sessionInfo/
@@ -247,6 +248,34 @@ case class SessionInfo( var textNL: String,
       this.constiStudyTotalDuration = si.constiStudyTotalDuration
    }
 }
+
+/** Represents a moment of the translation still under construction. This object will be created when:
+   - The player clicks the check grammar button
+   - Does a submission attempt which contains grammatical errors.
+  */
+case class IntermediateTranslation extends LongKeyedMapper[IntermediateTranslation] with IdPK
+{  def getSingleton = IntermediateTranslation
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)// redundant because of SessionInfo_IntermediateTranslation_join, but still handy.
+   object timeOffered  extends MappedLong(this)
+   object textCTLbyPlayer extends MappedString(this, MAX_TRANSLATION_LENGTH)
+   object parseErrorsAndWarnings extends MappedString(this, MAX_LENGTH_PARSE_ERROR)
+   object grammaticallyCorrect extends MappedBoolean(this)
+}
+
+object IntermediateTranslation extends IntermediateTranslation with LongKeyedMetaMapper[IntermediateTranslation]
+{  
+}
+
+case class SessionInfo_IntermediateTranslation_join extends LongKeyedMapper[SessionInfo_IntermediateTranslation_join] with IdPK
+{  def getSingleton = SessionInfo_IntermediateTranslation_join
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)
+   object intermediateTranslation extends MappedLongForeignKey(this, IntermediateTranslation)
+}
+
+object SessionInfo_IntermediateTranslation_join extends SessionInfo_IntermediateTranslation_join with LongKeyedMetaMapper[SessionInfo_IntermediateTranslation_join]
+{
+}
+
 /** @todo Move this one to a general lib
   */
 trait Observer
@@ -270,7 +299,6 @@ object PlayerSessionInfo_join extends PlayerSessionInfo_join with LongKeyedMetaM
    }
 }
 
-
 object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[SessionInfo]
 {  override def create =
    {  super.create
@@ -282,7 +310,7 @@ object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[Ses
    {  val si = super.createInstance(dbId, rs, mapFuncs)
       val siFileName = SESSIONINFOOBJECTDIR + "/si" + si.id
       val siFile  = new File( siFileName )
-      implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
+      implicit val formats = Serialization.formats(NoTypeHints) + FieldSerializer[BridgeDoc]() // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function
       val in:BufferedReader   = new BufferedReader(new FileReader(siFile))
       var inStr:String        = in.readLine
       if( inStr == null) throw new RuntimeException("   Problems reading " + siFileName )
