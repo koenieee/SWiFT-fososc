@@ -1,0 +1,245 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.ocbkc.swift.model</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="value">
+      <div id="definition">
+        <img src="../../../../lib/package_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.ocbkc" class="extype" href="../../package.html">ocbkc</a>.<a name="org.ocbkc.swift" class="extype" href="../package.html">swift</a></p>
+        <h1>model</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">model</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.model.IntermediateTranslation" data-isabs="false">
+      <a id="IntermediateTranslation:IntermediateTranslation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="IntermediateTranslation.html"><span class="name">IntermediateTranslation</span></a><span class="params">()</span><span class="result"> extends LongKeyedMapper[IntermediateTranslation] with IdPK with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a moment of the translation still under construction.</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.model.Observer" data-isabs="true">
+      <a id="Observer:Observer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Observer.html"><span class="name">Observer</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      <p class="comment cmt"></p>
+    </li><li visbl="pub" name="org.ocbkc.swift.model.Player" data-isabs="false">
+      <a id="Player:Player"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Player.html"><span class="name">Player</span></a><span class="result"> extends MegaProtoUser[Player]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">An O-R mapped &quot;User&quot; class that includes first name, last name, password and we add a &quot;Personal Essay&quot; to it
+Design protocol: information regarding the score of the player should be put in PlayerScores, not here.</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.model.PlayerSessionInfo_join" data-isabs="false">
+      <a id="PlayerSessionInfo_join:PlayerSessionInfo_join"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayerSessionInfo_join.html"><span class="name">PlayerSessionInfo_join</span></a><span class="params">()</span><span class="result"> extends LongKeyedMapper[PlayerSessionInfo_join] with IdPK with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.SessionHistory" data-isabs="false">
+      <a id="SessionHistory:SessionHistory"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionHistory.html"><span class="name">SessionHistory</span></a><span class="result"> extends AnyRef</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.SessionInfo" data-isabs="false">
+      <a id="SessionInfo:SessionInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionInfo.html"><span class="name">SessionInfo</span></a><span class="params">(<span name="textNL">textNL: String</span>, <span name="questionNL">questionNL: String</span>, <span name="questionCTLcomputer_rb">questionCTLcomputer_rb: Option[EfeQuerySent_rb]</span>, <span name="textCTLbyComputer">textCTLbyComputer: Option[FOLtheory]</span>, <span name="bridgeCTL2NLcomputer">bridgeCTL2NLcomputer: Option[BridgeDoc]</span>, <span name="algoDefComputer_rb">algoDefComputer_rb: Option[EfeQuerySent_rb]</span>, <span name="answerComputerCTL">answerComputerCTL: Option[EfeAnswerLangSent]</span>, <span name="answerComputerNL">answerComputerNL: String</span>, <span name="textCTLbyPlayer_">textCTLbyPlayer_: String</span>, <span name="bridgeCTL2NLplayer">bridgeCTL2NLplayer: Option[BridgeDoc]</span>, <span name="algoDefPlayer">algoDefPlayer: Option[EfeQuerySent_rb]</span>, <span name="answerPlayerCTL">answerPlayerCTL: Option[EfeAnswerLangSent]</span>, <span name="answerPlayerNL">answerPlayerNL: String</span>, <span name="questionRelatedBridgeStats">questionRelatedBridgeStats: String</span>, <span name="hurelanRole1NL">hurelanRole1NL: String</span>, <span name="hurelanRole2NL">hurelanRole2NL: String</span>, <span name="subjectNL">subjectNL: String</span>)</span><span class="result"> extends LongKeyedMapper[SessionInfo] with IdPK with Product with Serializable</span>
+      </span>
+      </h4>
+      <p class="comment cmt">SessionInfo is general: it can hold data of any SWiFT challenge.</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.model.SessionInfo_IntermediateTranslation_join" data-isabs="false">
+      <a id="SessionInfo_IntermediateTranslation_join:SessionInfo_IntermediateTranslation_join"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionInfo_IntermediateTranslation_join.html"><span class="name">SessionInfo_IntermediateTranslation_join</span></a><span class="params">()</span><span class="result"> extends LongKeyedMapper[SessionInfo_IntermediateTranslation_join] with IdPK with Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.TextCTLbyPlayerObserver" data-isabs="true">
+      <a id="TextCTLbyPlayerObserver:TextCTLbyPlayerObserver"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="TextCTLbyPlayerObserver.html"><span class="name">TextCTLbyPlayerObserver</span></a><span class="result"> extends Observer</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.model.IntermediateTranslation" data-isabs="false">
+      <a id="IntermediateTranslation:IntermediateTranslation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="IntermediateTranslation$.html"><span class="name">IntermediateTranslation</span></a><span class="result"> extends IntermediateTranslation with LongKeyedMetaMapper[IntermediateTranslation]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.Player" data-isabs="false">
+      <a id="Player:Player"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Player$.html"><span class="name">Player</span></a><span class="result"> extends Player with MetaMegaProtoUser[Player]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">The singleton that has methods for accessing the database</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.model.PlayerSessionInfo_join" data-isabs="false">
+      <a id="PlayerSessionInfo_join:PlayerSessionInfo_join"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PlayerSessionInfo_join$.html"><span class="name">PlayerSessionInfo_join</span></a><span class="result"> extends PlayerSessionInfo_join with LongKeyedMetaMapper[PlayerSessionInfo_join]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.Round" data-isabs="false">
+      <a id="Round:Round"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Round$.html"><span class="name">Round</span></a><span class="result"> extends Enumeration</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.SessionInfoMetaMapperObj" data-isabs="false">
+      <a id="SessionInfoMetaMapperObj:SessionInfoMetaMapperObj"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionInfoMetaMapperObj$.html"><span class="name">SessionInfoMetaMapperObj</span></a><span class="result"> extends SessionInfo with LongKeyedMetaMapper[SessionInfo]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.model.SessionInfo_IntermediateTranslation_join" data-isabs="false">
+      <a id="SessionInfo_IntermediateTranslation_join:SessionInfo_IntermediateTranslation_join"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SessionInfo_IntermediateTranslation_join$.html"><span class="name">SessionInfo_IntermediateTranslation_join</span></a><span class="result"> extends SessionInfo_IntermediateTranslation_join with LongKeyedMetaMapper[SessionInfo_IntermediateTranslation_join]</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

@@ -1,0 +1,1117 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.ocbkc.swift.OCBKC.Constitution</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
+      <div id="definition">
+        <a title="Go to companion" href="Constitution$.html"><img src="../../../../lib/class_to_object_big.png" /></a>
+        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.ocbkc" class="extype" href="../../package.html">ocbkc</a>.<a name="org.ocbkc.swift" class="extype" href="../package.html">swift</a>.<a name="org.ocbkc.swift.OCBKC" class="extype" href="package.html">OCBKC</a></p>
+        <h1><a title="Go to companion" href="Constitution$.html">Constitution</a></h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Constitution</span><span class="params">(<span name="constiId">constiId: ConstiId</span>, <span name="creationTime">creationTime: <span name="scala.Long" class="extype">Long</span></span>, <span name="creatorUserID">creatorUserID: <span name="scala.Long" class="extype">Long</span></span>, <span name="averageScore">averageScore: <span name="scala.Int" class="extype">Int</span></span>, <span name="shortDescription">shortDescription: String</span>, <span name="predecessorId">predecessorId: <span name="scala.Option" class="extype">Option</span>[ConstiId]</span>, <span name="followers">followers: List[<span name="scala.Long" class="extype">Long</span>]</span>, <span name="leadersUserIDs">leadersUserIDs: List[<span name="scala.Long" class="extype">Long</span>]</span>, <span name="releaseStatusLastVersion">releaseStatusLastVersion: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.ReleaseStatus" class="extype" href="ReleaseStatus.html">ReleaseStatus</a>]</span>, <span name="_commitIdPotentialRelease">_commitIdPotentialRelease: <span name="scala.Option" class="extype">Option</span>[VersionId]</span>, <span name="releaseStatusPotentialRelease">releaseStatusPotentialRelease: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.PotentialRelease" class="extype" href="PotentialRelease.html">PotentialRelease</a>]</span>)</span><span class="result"> extends <span name="scala.Product" class="extype">Product</span> with <span name="scala.Serializable" class="extype">Serializable</span></span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">leadersUserIDs</dt><dd class="cmt"><p>the user ids of the leaders of this constitution. By default the person who has create this constitution.</p></dd></dl><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>&amp;y2013.05.06.11:09:01&amp; COULDDO make intelligent setter for releaseStatusLastVersion, which will also change releaseStatusPotentialRelease, and vice versa.
+</p></span></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><span name="scala.Serializable" class="extype">Serializable</span>, <span name="java.io.Serializable" class="extype">Serializable</span>, <span name="scala.Product" class="extype">Product</span>, <span name="scala.Equals" class="extype">Equals</span>, AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+        </div></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
+            </div>
+        <div id="ancestors">
+              <span class="filtertype">Inherited</span>
+              <ol><li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li></ol>
+              <ol id="linearization"><li name="org.ocbkc.swift.OCBKC.Constitution" class="in"><span>Constitution</span></li><li name="scala.Serializable" class="in"><span>Serializable</span></li><li name="java.io.Serializable" class="in"><span>Serializable</span></li><li name="scala.Product" class="in"><span>Product</span></li><li name="scala.Equals" class="in"><span>Equals</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+            </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div class="members" id="constructors">
+              <h3>Instance Constructors</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#this" data-isabs="false">
+      <a id="this:Constitution"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Constitution</span><span class="params">(<span name="constiId">constiId: ConstiId</span>, <span name="creationTime">creationTime: <span name="scala.Long" class="extype">Long</span></span>, <span name="creatorUserID">creatorUserID: <span name="scala.Long" class="extype">Long</span></span>, <span name="averageScore">averageScore: <span name="scala.Int" class="extype">Int</span></span>, <span name="shortDescription">shortDescription: String</span>, <span name="predecessorId">predecessorId: <span name="scala.Option" class="extype">Option</span>[ConstiId]</span>, <span name="followers">followers: List[<span name="scala.Long" class="extype">Long</span>]</span>, <span name="leadersUserIDs">leadersUserIDs: List[<span name="scala.Long" class="extype">Long</span>]</span>, <span name="releaseStatusLastVersion">releaseStatusLastVersion: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.ReleaseStatus" class="extype" href="ReleaseStatus.html">ReleaseStatus</a>]</span>, <span name="_commitIdPotentialRelease">_commitIdPotentialRelease: <span name="scala.Option" class="extype">Option</span>[VersionId]</span>, <span name="releaseStatusPotentialRelease">releaseStatusPotentialRelease: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.PotentialRelease" class="extype" href="PotentialRelease.html">PotentialRelease</a>]</span>)</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">leadersUserIDs</dt><dd class="cmt"><p>the user ids of the leaders of this constitution. By default the person who has create this constitution.</p></dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution.ConstiVersionInfo" data-isabs="false">
+      <a id="ConstiVersionInfo:ConstiVersionInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Constitution$ConstiVersionInfo.html"><span class="name">ConstiVersionInfo</span></a><span class="params">(<span name="commitId">commitId: String</span>, <span name="creationDatetimePOSIX">creationDatetimePOSIX: Long</span>, <span name="publisher">publisher: Player</span>, <span name="publishDescription">publishDescription: String</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution.HisCon" data-isabs="false">
+      <a id="HisCon:HisCon"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Constitution$HisCon.html"><span class="name">HisCon</span></a><span class="params">(<span name="content">content: Elem</span>, <span name="creationDatetimePOSIX">creationDatetimePOSIX: Long</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution.XMLandErr" data-isabs="false">
+      <a id="XMLandErr:XMLandErr"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Constitution$XMLandErr.html"><span class="name">XMLandErr</span></a><span class="params">(<span name="XML">XML: Option[Elem]</span>, <span name="exception">exception: SAXParseException</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $hash$hash">##</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#RELEASE_CANDIDATE_TAG_STRING" data-isabs="false">
+      <a id="RELEASE_CANDIDATE_TAG_STRING:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RELEASE_CANDIDATE_TAG_STRING</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#RELEASE_TAG_STRING" data-isabs="false">
+      <a id="RELEASE_TAG_STRING:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RELEASE_TAG_STRING</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#RELEASE_VIRGIN_TAG_STRING" data-isabs="false">
+      <a id="RELEASE_VIRGIN_TAG_STRING:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">RELEASE_VIRGIN_TAG_STRING</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#_commitIdPotentialRelease" data-isabs="false">
+      <a id="_commitIdPotentialRelease:Option[VersionId]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">_commitIdPotentialRelease</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[VersionId]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#addFollower" data-isabs="false">
+      <a id="addFollower(Player):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">addFollower</span><span class="params">(<span name="p">p: <a name="org.ocbkc.swift.model.Player" class="extype" href="../model/Player.html">Player</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#averageScore" data-isabs="false">
+      <a id="averageScore:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">averageScore</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#canEqual" data-isabs="false">
+      <a id="canEqual(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">canEqual</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → Equals</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#checkCorrectnessXMLfragment" data-isabs="false">
+      <a id="checkCorrectnessXMLfragment(String):XMLandErr"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">checkCorrectnessXMLfragment</span><span class="params">(<span name="xmlStr">xmlStr: String</span>)</span><span class="result">: <a name="org.ocbkc.swift.OCBKC.Constitution.XMLandErr" class="extype" href="Constitution$XMLandErr.html">XMLandErr</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>Still some problems here, XML.loadString is very unforgiving. A solution could be:
+http://alvinalexander.com/scala/scala-html-parsing
+http://stackoverflow.com/questions/20907861/scala-xml-parsing-with-real-world-html-with-unmatched-tag
+</p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#chosenAsFirstConsti" data-isabs="false">
+      <a id="chosenAsFirstConsti:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">chosenAsFirstConsti</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Method should be called as soon as a player chooses this consti as his.</p><div class="fullcomment"><div class="comment cmt"><p>Method should be called as soon as a player chooses this consti as his..her first constitution. If there is a release virgin, it is turned into a release.
+</p></div></div>
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#commitIdPotentialRelease" data-isabs="false">
+      <a id="commitIdPotentialRelease:Option[VersionId]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commitIdPotentialRelease</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[VersionId]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#commitIdPotentialRelease_=" data-isabs="false">
+      <a id="commitIdPotentialRelease_=(Option[VersionId]):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: commitIdPotentialRelease_$eq">commitIdPotentialRelease_=</span><span class="params">(<span name="commitId">commitId: <span name="scala.Option" class="extype">Option</span>[VersionId]</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#commitIdsReleases" data-isabs="false">
+      <a id="commitIdsReleases:List[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">commitIdsReleases</span><span class="result">: List[String]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#constiId" data-isabs="false">
+      <a id="constiId:ConstiId"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">constiId</span><span class="result">: ConstiId</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#contentInScalaXML" data-isabs="false">
+      <a id="contentInScalaXML:Elem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contentInScalaXML</span><span class="result">: <span name="scala.xml.Elem" class="extype">Elem</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#contentLastReleaseInScalaXML" data-isabs="false">
+      <a id="contentLastReleaseInScalaXML:Option[Elem]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">contentLastReleaseInScalaXML</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="scala.xml.Elem" class="extype">Elem</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#creationTime" data-isabs="false">
+      <a id="creationTime:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">creationTime</span><span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#creatorUserID" data-isabs="false">
+      <a id="creatorUserID:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">creatorUserID</span><span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#currentVersionId" data-isabs="false">
+      <a id="currentVersionId:VersionId"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">currentVersionId</span><span class="result">: VersionId</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#equals" data-isabs="false">
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → Equals → AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#firstReleaseExists" data-isabs="false">
+      <a id="firstReleaseExists:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">firstReleaseExists</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#followers" data-isabs="false">
+      <a id="followers:List[Long]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">followers</span><span class="result">: List[<span name="scala.Long" class="extype">Long</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#followersAsPlayerObjs" data-isabs="false">
+      <a id="followersAsPlayerObjs:List[Player]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">followersAsPlayerObjs</span><span class="result">: <span name="scala.collection.immutable.List" class="extype">List</span>[<a name="org.ocbkc.swift.model.Player" class="extype" href="../model/Player.html">Player</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass():java.lang.Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#getConstiVersionInfo" data-isabs="false">
+      <a id="getConstiVersionInfo(String):Option[ConstiVersionInfo]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getConstiVersionInfo</span><span class="params">(<span name="commitId">commitId: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.Constitution.ConstiVersionInfo" class="extype" href="Constitution$ConstiVersionInfo.html">ConstiVersionInfo</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#getFollowerConsti_join" data-isabs="false">
+      <a id="getFollowerConsti_join(Player):Option[FollowerConsti_join]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getFollowerConsti_join</span><span class="params">(<span name="p">p: <a name="org.ocbkc.swift.model.Player" class="extype" href="../model/Player.html">Player</a></span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.FollowerConsti_join" class="extype" href="FollowerConsti_join.html">FollowerConsti_join</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#getHistory" data-isabs="false">
+      <a id="getHistory:List[RevCommit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getHistory</span><span class="result">: List[<span name="org.eclipse.jgit.revwalk.RevCommit" class="extype">RevCommit</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>refactor, encapsulate the jgit engine
+</p></span>, <span class="cmt"><p>optimize this.</p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#hashCode" data-isabs="false">
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#historicContentInScalaXML" data-isabs="false">
+      <a id="historicContentInScalaXML(String):Option[HisCon]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">historicContentInScalaXML</span><span class="params">(<span name="commitId">commitId: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.Constitution.HisCon" class="extype" href="Constitution$HisCon.html">HisCon</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#htmlFileName" data-isabs="false">
+      <a id="htmlFileName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">htmlFileName</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#initialiseNew" data-isabs="false">
+      <a id="initialiseNew:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initialiseNew</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This constitution is a completely new one - initialise it from scratch.</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#isFirstPublication" data-isabs="false">
+      <a id="isFirstPublication:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isFirstPublication</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#isRelease" data-isabs="false">
+      <a id="isRelease(String):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isRelease</span><span class="params">(<span name="commitId">commitId: String</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#lastReleaseCommitId" data-isabs="false">
+      <a id="lastReleaseCommitId:Option[String]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastReleaseCommitId</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[String]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#lastReleaseVersionInfo" data-isabs="false">
+      <a id="lastReleaseVersionInfo:Option[ConstiVersionInfo]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lastReleaseVersionInfo</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.Constitution.ConstiVersionInfo" class="extype" href="Constitution$ConstiVersionInfo.html">ConstiVersionInfo</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#latestRevCommit" data-isabs="false">
+      <a id="latestRevCommit:Option[RevCommit]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">latestRevCommit</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<span name="org.eclipse.jgit.revwalk.RevCommit" class="extype">RevCommit</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#leadersUserIDs" data-isabs="false">
+      <a id="leadersUserIDs:List[Long]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">leadersUserIDs</span><span class="result">: List[<span name="scala.Long" class="extype">Long</span>]</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">the user ids of the leaders of this constitution.</p><div class="fullcomment"><div class="comment cmt"><p>the user ids of the leaders of this constitution. By default the person who has create this constitution.</p></div></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#makeLatestVersionReleaseCandidateIfPossible" data-isabs="false">
+      <a id="makeLatestVersionReleaseCandidateIfPossible:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">makeLatestVersionReleaseCandidateIfPossible</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">turns current version into a release candidate.</p><div class="fullcomment"><div class="comment cmt"><p>turns current version into a release candidate. The current version is the last version that was committed with git. Non-git-committed changes will not be stored, and note that the constitution object cannot even see these, because they are entirely a matter of the GUI.</p></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>change by removing ifpossible, it should always work, for example by demanding the version id as input parameter.
+</p></span></dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#plainContent" data-isabs="false">
+      <a id="plainContent:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plainContent</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#plainContentLastRelease" data-isabs="false">
+      <a id="plainContentLastRelease:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plainContentLastRelease</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#plainTextXMLfragment2ScalaXMLinLiftChildren" data-isabs="false">
+      <a id="plainTextXMLfragment2ScalaXMLinLiftChildren(String):Elem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">plainTextXMLfragment2ScalaXMLinLiftChildren</span><span class="params">(<span name="plain">plain: String</span>)</span><span class="result">: <span name="scala.xml.Elem" class="extype">Elem</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#predecessorId" data-isabs="false">
+      <a id="predecessorId:Option[ConstiId]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">predecessorId</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[ConstiId]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#productArity" data-isabs="false">
+      <a id="productArity:Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productArity</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#productElement" data-isabs="false">
+      <a id="productElement(Int):Any"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productElement</span><span class="params">(<span name="arg0">arg0: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Any" class="extype">Any</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="scala.Product#productIterator" data-isabs="false">
+      <a id="productIterator:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productIterator</span><span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#productPrefix" data-isabs="false">
+      <a id="productPrefix:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">productPrefix</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → Product</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#publish" data-isabs="false">
+      <a id="publish(String,String,String):VersionId"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">publish</span><span class="params">(<span name="constitutionText">constitutionText: String</span>, <span name="commitMsg">commitMsg: String</span>, <span name="userId">userId: String</span>)</span><span class="result">: VersionId</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Adds and commits constitutionText using jgit</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releaseIndex" data-isabs="false">
+      <a id="releaseIndex(VersionId):Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releaseIndex</span><span class="params">(<span name="releaseId">releaseId: VersionId</span>)</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>move to object Constitution, because the index can be determined uniquely if you only know the releaseId.
+first release has number 1
+</p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releaseStatus" data-isabs="false">
+      <a id="releaseStatus(String):Option[ReleaseStatus]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releaseStatus</span><span class="params">(<span name="commitId">commitId: String</span>)</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.ReleaseStatus" class="extype" href="ReleaseStatus.html">ReleaseStatus</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releaseStatusLastVersion" data-isabs="false">
+      <a id="releaseStatusLastVersion:Option[ReleaseStatus]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releaseStatusLastVersion</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.ReleaseStatus" class="extype" href="ReleaseStatus.html">ReleaseStatus</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releaseStatusPotentialRelease" data-isabs="false">
+      <a id="releaseStatusPotentialRelease:Option[PotentialRelease]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releaseStatusPotentialRelease</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.OCBKC.PotentialRelease" class="extype" href="PotentialRelease.html">PotentialRelease</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releaseVersion" data-isabs="false">
+      <a id="releaseVersion(VersionId):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releaseVersion</span><span class="params">(<span name="versionId">versionId: VersionId</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This method may ONLY be called for constitution alpha, or when it is certain that the last release is a virgin release (currently, only method chosenAsFirstConsti is doing this).</p>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#releasesExist" data-isabs="false">
+      <a id="releasesExist:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">releasesExist</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#removeFollower" data-isabs="false">
+      <a id="removeFollower(Player):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">removeFollower</span><span class="params">(<span name="p">p: <a name="org.ocbkc.swift.model.Player" class="extype" href="../model/Player.html">Player</a></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#restore" data-isabs="false">
+      <a id="restore(String,String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">restore</span><span class="params">(<span name="commitId">commitId: String</span>, <span name="liftUserId">liftUserId: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#save" data-isabs="false">
+      <a id="save(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">save</span><span class="params">(<span name="constitutionText">constitutionText: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">This method only saves the constitution text to a file (no git commit, no mapper framework, no jason)&lt;? &amp;y2012.</p><div class="fullcomment"><div class="comment cmt"><p>This method only saves the constitution text to a file (no git commit, no mapper framework, no jason)&lt;? &amp;y2012.05.28.16:36:27&amp; what would be a good way to store constitutions? In a database? As files? In memory in a string field (of course not, but just to make my list complete)?&gt;
+</p></div></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#serialize" data-isabs="false">
+      <a id="serialize:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">serialize</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#shortDescription" data-isabs="false">
+      <a id="shortDescription:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">shortDescription</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
+      <a id="synchronized[T0](⇒ T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#toString" data-isabs="false">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.OCBKC.Constitution" class="extype" href="">Constitution</a> → AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#turnReleaseCandidateIntoVirginIfPossible" data-isabs="false">
+      <a id="turnReleaseCandidateIntoVirginIfPossible:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">turnReleaseCandidateIntoVirginIfPossible</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p>
+    </li><li visbl="pub" name="org.ocbkc.swift.OCBKC.Constitution#unmakeCurrentPotentialRelease" data-isabs="false">
+      <a id="unmakeCurrentPotentialRelease:Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">unmakeCurrentPotentialRelease</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Eliminates the role release candidate from the version which is the release candidate (there can only be one) of this constitution.</p>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        <div class="values members" id="values">
+              <h3>Deprecated Value Members</h3>
+              <ol><li visbl="pub" name="scala.Product#productElements" data-isabs="false">
+      <a id="productElements:Iterator[Any]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name deprecated" title="Deprecated: (Since version 2.8.0) use productIterator instead">productElements</span><span class="result">: Iterator[<span name="scala.Any" class="extype">Any</span>]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Product</dd><dt>Annotations</dt><dd>
+                <span class="name">@deprecated</span>
+              
+        </dd><dt>Deprecated</dt><dd class="cmt"><p><i>(Since version 2.8.0)</i> use productIterator instead</p></dd></dl></div>
+    </li></ol>
+            </div>
+        </div>
+
+        <div id="inheritedMembers">
+        <div name="scala.Serializable" class="parent">
+              <h3>Inherited from <span name="scala.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="java.io.Serializable" class="parent">
+              <h3>Inherited from <span name="java.io.Serializable" class="extype">Serializable</span></h3>
+            </div><div name="scala.Product" class="parent">
+              <h3>Inherited from <span name="scala.Product" class="extype">Product</span></h3>
+            </div><div name="scala.Equals" class="parent">
+              <h3>Inherited from <span name="scala.Equals" class="extype">Equals</span></h3>
+            </div><div name="scala.AnyRef" class="parent">
+              <h3>Inherited from AnyRef</h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>

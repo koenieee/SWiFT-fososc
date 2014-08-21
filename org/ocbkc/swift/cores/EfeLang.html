@@ -1,0 +1,669 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>org.ocbkc.swift.cores.EfeLang</title>
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link type="text/css" media="screen" rel="stylesheet" href="../../../../lib/template.css" />
+      <script type="text/javascript" src="../../../../lib/jquery.js"></script>
+      <script type="text/javascript" src="../../../../lib/jquery-ui.js"></script>
+      <script type="text/javascript" src="../../../../lib/template.js"></script>
+      <script type="text/javascript" src="../../../../lib/tools.tooltip.js"></script>
+    
+        </head>
+        <body onload="sh_highlightDocument('../lib/', '.min.js');" class="type">
+      <div id="definition">
+        <img src="../../../../lib/class_big.png" />
+        <p id="owner"><a name="org" class="extype" href="../../../package.html">org</a>.<a name="org.ocbkc" class="extype" href="../../package.html">ocbkc</a>.<a name="org.ocbkc.swift" class="extype" href="../package.html">swift</a>.<a name="org.ocbkc.swift.cores" class="extype" href="package.html">cores</a></p>
+        <h1>EfeLang</h1>
+      </div>
+
+      <h4 class="signature" id="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EfeLang</span><span class="result"> extends <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a>[EfeQuerySent_rb, EfeAnswerLangSent]</span>
+      </span>
+      </h4>
+      
+      <div class="fullcommenttop" id="comment"><div class="comment cmt"></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>&amp;y2014.02.01.18:22:29&amp; why not make EfeLang a singleton object?
+</p></span></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a>[EfeQuerySent_rb, EfeAnswerLangSent], AnyRef, <span name="scala.Any" class="extype">Any</span></div>
+        </div></div>
+    
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input accesskey="/" type="text" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol><li class="alpha in"><span>Alphabetic</span></li><li class="inherit out"><span>By inheritance</span></li></ol>
+            </div>
+        <div id="ancestors">
+              <span class="filtertype">Inherited</span>
+              <ol><li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li></ol>
+              <ol id="linearization"><li name="org.ocbkc.swift.cores.EfeLang" class="in"><span>EfeLang</span></li><li name="org.ocbkc.swift.cores.TraitGameCore" class="in"><span>TraitGameCore</span></li><li name="scala.AnyRef" class="in"><span>AnyRef</span></li><li name="scala.Any" class="in"><span>Any</span></li></ol>
+            </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        <div class="members" id="constructors">
+              <h3>Instance Constructors</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#this" data-isabs="false">
+      <a id="this:EfeLang"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">new</span>
+      </span>
+      <span class="symbol">
+        <span class="name">EfeLang</span><span class="params">(<span name="playerIdInit">playerIdInit: <span name="scala.Long" class="extype">Long</span></span>)</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        <div class="types members" id="types">
+              <h3>Type Members</h3>
+              <ol><li visbl="pub" name="org.ocbkc.swift.cores.TraitGameCore.AlgorithmicDefenceResult" data-isabs="false">
+      <a id="AlgorithmicDefenceResult:AlgorithmicDefenceResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="TraitGameCore$AlgorithmicDefenceResult.html"><span class="name">AlgorithmicDefenceResult</span></a><span class="params">(<span name="answerCorrect">answerCorrect: Boolean</span>, <span name="answerPlayerNL">answerPlayerNL: String</span>, <span name="reasonerComment">reasonerComment: String</span>, <span name="answerPlayerCTL">answerPlayerCTL: AnswerLangSent__TP</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang.TranslationProblem" data-isabs="false">
+      <a id="TranslationProblem:TranslationProblem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="EfeLang$TranslationProblem.html"><span class="name">TranslationProblem</span></a><span class="params">(<span name="textCTL">textCTL: FOLtheory</span>, <span name="textNL">textNL: String</span>, <span name="bridge">bridge: BridgeDoc</span>, <span name="algoDef_rb">algoDef_rb: EfeQuerySent_rb</span>, <span name="answerCTL">answerCTL: EfeAnswerLangSent</span>)</span><span class="result"> extends Product with Serializable</span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div class="values members" id="values">
+              <h3>Value Members</h3>
+              <ol><li visbl="pub" name="scala.AnyRef#!=" data-isabs="false">
+      <a id="!=(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#!=" data-isabs="false">
+      <a id="!=(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $bang$eq">!=</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef###" data-isabs="false">
+      <a id="##():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $hash$hash">##</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#==" data-isabs="false">
+      <a id="==(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#==" data-isabs="false">
+      <a id="==(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: $eq$eq">==</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#algorithmicDefenceGenerator" data-isabs="false">
+      <a id="algorithmicDefenceGenerator:EfeQuerySent_rb"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">algorithmicDefenceGenerator</span><span class="result">: EfeQuerySent_rb</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#asInstanceOf" data-isabs="false">
+      <a id="asInstanceOf[T0]:T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">asInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: T0</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#clone" data-isabs="false">
+      <a id="clone():AnyRef"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">clone</span><span class="params">()</span><span class="result">: AnyRef</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#doAlgorithmicDefence" data-isabs="false">
+      <a id="doAlgorithmicDefence:AlgorithmicDefenceResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">doAlgorithmicDefence</span><span class="result">: <a name="org.ocbkc.swift.cores.TraitGameCore.AlgorithmicDefenceResult" class="extype" href="TraitGameCore$AlgorithmicDefenceResult.html">AlgorithmicDefenceResult</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd><dt>To do</dt><dd><span class="cmt"><p>check answer correct with  BridgeBasedAutoFofaTranslator, instead of comparing the translations to natural language. The latter may be prone to errors, because different translations may exist for the same CTL sentence. And do exist already: the order of the names of persons may be different.
+</p></span></dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#eq" data-isabs="false">
+      <a id="eq(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">eq</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#equals" data-isabs="false">
+      <a id="equals(Any):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">equals</span><span class="params">(<span name="arg0">arg0: <span name="scala.Any" class="extype">Any</span></span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="prt" name="scala.AnyRef#finalize" data-isabs="false">
+      <a id="finalize():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">finalize</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Attributes</dt><dd>protected[<a name="java.lang" class="extype" href="../../../../java/lang/package.html">lang</a>] </dd><dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#gameCoreName" data-isabs="false">
+      <a id="gameCoreName:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">gameCoreName</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#generateQuestionAndCorrectAnswer" data-isabs="false">
+      <a id="generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">generateQuestionAndCorrectAnswer</span><span class="result">: <a name="org.ocbkc.swift.cores.gameCoreHelperTypes.QuestionAndCorrectAnswer" class="extype" href="gameCoreHelperTypes/QuestionAndCorrectAnswer.html">QuestionAndCorrectAnswer</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#generateText" data-isabs="false">
+      <a id="generateText:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">generateText</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#generateTranslationProblem" data-isabs="false">
+      <a id="generateTranslationProblem:TranslationProblem"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">generateTranslationProblem</span><span class="result">: <a name="org.ocbkc.swift.cores.EfeLang.TranslationProblem" class="extype" href="EfeLang$TranslationProblem.html">TranslationProblem</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#getClass" data-isabs="false">
+      <a id="getClass():java.lang.Class[_]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getClass</span><span class="params">()</span><span class="result">: java.lang.Class[_]</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#getOrCreatePlayerBridge" data-isabs="false">
+      <a id="getOrCreatePlayerBridge:BridgeDoc"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">getOrCreatePlayerBridge</span><span class="result">: <a name="org.ocbkc.swift.logilang.bridge.brone.BridgeDoc" class="extype" href="../logilang/bridge/brone/BridgeDoc.html">BridgeDoc</a></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#hashCode" data-isabs="false">
+      <a id="hashCode():Int"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">hashCode</span><span class="params">()</span><span class="result">: <span name="scala.Int" class="extype">Int</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#initialiseEfeDoc" data-isabs="false">
+      <a id="initialiseEfeDoc(FOLtheory):(BridgeDoc, Predicate, Predicate)"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initialiseEfeDoc</span><span class="params">(<span name="efeDoc">efeDoc: <a name="org.ocbkc.swift.logilang.FOLtheory" class="extype" href="../logilang/FOLtheory.html">FOLtheory</a></span>)</span><span class="result">: (<a name="org.ocbkc.swift.logilang.bridge.brone.BridgeDoc" class="extype" href="../logilang/bridge/brone/BridgeDoc.html">BridgeDoc</a>, <a name="org.ocbkc.swift.logilang.Predicate" class="extype" href="../logilang/Predicate.html">Predicate</a>, <a name="org.ocbkc.swift.logilang.Predicate" class="extype" href="../logilang/Predicate.html">Predicate</a>)</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">EfeLang is not equal to FOL, but FOL is just used, with some predefined predicates.</p><div class="fullcomment"><div class="comment cmt"><p>EfeLang is not equal to FOL, but FOL is just used, with some predefined predicates. The &quot;right&quot; solution would be to define a new language in a separate package. This is a quick solution. Just throw a FOLtheory through this method, and it will add the predefined predicates. Moreover it will return the BridgeDoc.
+</p></div></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#initialiseSessionInfo" data-isabs="false">
+      <a id="initialiseSessionInfo:SessionInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">initialiseSessionInfo</span><span class="result">: <a name="org.ocbkc.swift.model.SessionInfo" class="extype" href="../model/SessionInfo.html">SessionInfo</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="scala.Any#isInstanceOf" data-isabs="false">
+      <a id="isInstanceOf[T0]:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">isInstanceOf</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#ne" data-isabs="false">
+      <a id="ne(AnyRef):Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">ne</span><span class="params">(<span name="arg0">arg0: AnyRef</span>)</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#notify" data-isabs="false">
+      <a id="notify():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notify</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#notifyAll" data-isabs="false">
+      <a id="notifyAll():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">notifyAll</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.TraitGameCore#parseErrorMsgTextCTLplayer" data-isabs="false">
+      <a id="parseErrorMsgTextCTLplayer:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseErrorMsgTextCTLplayer</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.TraitGameCore#parseWarningMsgTxtCTLplayer" data-isabs="false">
+      <a id="parseWarningMsgTxtCTLplayer:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">parseWarningMsgTxtCTLplayer</span><span class="result">: String</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#playerId" data-isabs="false">
+      <a id="playerId:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">playerId</span><span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#playerIdInit" data-isabs="false">
+      <a id="playerIdInit:Long"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">val</span>
+      </span>
+      <span class="symbol">
+        <span class="name">playerIdInit</span><span class="result">: <span name="scala.Long" class="extype">Long</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#si" data-isabs="false">
+      <a id="si:SessionInfo"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">si</span><span class="result">: <a name="org.ocbkc.swift.model.SessionInfo" class="extype" href="../model/SessionInfo.html">SessionInfo</a></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd><a name="org.ocbkc.swift.cores.EfeLang" class="extype" href="">EfeLang</a> → <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#storeIntermediateTranslation" data-isabs="false">
+      <a id="storeIntermediateTranslation(String,FactoryResult,TimeInMillis):Unit.type"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">storeIntermediateTranslation</span><span class="params">(<span name="textCTLbyPlayer_loc">textCTLbyPlayer_loc: String</span>, <span name="erfr">erfr: <a name="org.ocbkc.swift.logilang.CTLrepresentationBundleFactory.FactoryResult" class="extype" href="../logilang/CTLrepresentationBundleFactory$FactoryResult.html">FactoryResult</a></span>, <span name="timeOffered">timeOffered: TimeInMillis</span>)</span><span class="result">: Unit.type</span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Intended for use by textCTLbyPlayer_rb_withErrorInfo_and_store
+</p>
+    </li><li visbl="pub" name="scala.AnyRef#synchronized" data-isabs="false">
+      <a id="synchronized[T0](⇒ T0):T0"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">synchronized</span><span class="tparams">[<span name="T0">T0</span>]</span><span class="params">(<span name="arg0">arg0: ⇒ T0</span>)</span><span class="result">: T0</span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayer" data-isabs="false">
+      <a id="textCTLbyPlayer:String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLbyPlayer</span><span class="result">: String</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayerChanged" data-isabs="false">
+      <a id="textCTLbyPlayerChanged(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLbyPlayerChanged</span><span class="params">(<span name="newTextCTL">newTextCTL: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayer_=" data-isabs="false">
+      <a id="textCTLbyPlayer_=(String):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name" title="gt4s: textCTLbyPlayer_$eq">textCTLbyPlayer_=</span><span class="params">(<span name="t">t: String</span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="attributes block"> <dt>To do</dt><dd><span class="cmt"><p>It may be more elegant to put this intelligent setter and getter in the class SessionInfo instead, and then attach the GameCore to it using the observer pattern.
+</p></span></dd></dl></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayer_rb" data-isabs="false">
+      <a id="textCTLbyPlayer_rb:Option[EfeDoc_rb]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLbyPlayer_rb</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.logilang.efe.EfeDoc_rb" class="extype" href="../logilang/efe/EfeDoc_rb.html">EfeDoc_rb</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayer_rb_cached" data-isabs="false">
+      <a id="textCTLbyPlayer_rb_cached:Option[FactoryResult]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLbyPlayer_rb_cached</span><span class="result">: <span name="scala.Option" class="extype">Option</span>[<a name="org.ocbkc.swift.logilang.CTLrepresentationBundleFactory.FactoryResult" class="extype" href="../logilang/CTLrepresentationBundleFactory$FactoryResult.html">FactoryResult</a>]</span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLbyPlayer_rb_withErrorInfo_and_store" data-isabs="false">
+      <a id="textCTLbyPlayer_rb_withErrorInfo_and_store:FactoryResult"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLbyPlayer_rb_withErrorInfo_and_store</span><span class="result">: <a name="org.ocbkc.swift.logilang.CTLrepresentationBundleFactory.FactoryResult" class="extype" href="../logilang/CTLrepresentationBundleFactory$FactoryResult.html">FactoryResult</a></span>
+      </span>
+      </h4>
+      <p class="shortcomment cmt">Parses the textCTLbyPlayer, and returns a representation bundle, including errors, moreover it makes the intermediate translation persistent in the database.</p><div class="fullcomment"><div class="comment cmt"><p>Parses the textCTLbyPlayer, and returns a representation bundle, including errors, moreover it makes the intermediate translation persistent in the database. The latter is only done when the translation changed since the last parsing + storage.
+</p></div></div>
+    </li><li visbl="pub" name="org.ocbkc.swift.cores.EfeLang#textCTLplayerUpdated4terParsing" data-isabs="false">
+      <a id="textCTLplayerUpdated4terParsing:Boolean"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">var</span>
+      </span>
+      <span class="symbol">
+        <span class="name">textCTLplayerUpdated4terParsing</span><span class="result">: <span name="scala.Boolean" class="extype">Boolean</span></span>
+      </span>
+      </h4>
+      
+    </li><li visbl="pub" name="scala.AnyRef#toString" data-isabs="false">
+      <a id="toString():String"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">toString</span><span class="params">()</span><span class="result">: <span name="java.lang.String" class="extype">String</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef → Any</dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait():Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">()</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(Long,Int):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>, <span name="arg1">arg1: <span name="scala.Int" class="extype">Int</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li><li visbl="pub" name="scala.AnyRef#wait" data-isabs="false">
+      <a id="wait(Long):Unit"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">def</span>
+      </span>
+      <span class="symbol">
+        <span class="name">wait</span><span class="params">(<span name="arg0">arg0: <span name="scala.Long" class="extype">Long</span></span>)</span><span class="result">: <span name="scala.Unit" class="extype">Unit</span></span>
+      </span>
+      </h4>
+      <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd><dt>Annotations</dt><dd>
+                <span class="name">@throws</span><span class="args">()</span>
+              
+        </dd></dl></div>
+    </li></ol>
+            </div>
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div name="org.ocbkc.swift.cores.TraitGameCore" class="parent">
+              <h3>Inherited from <a name="org.ocbkc.swift.cores.TraitGameCore" class="extype" href="TraitGameCore.html">TraitGameCore</a>[EfeQuerySent_rb, EfeAnswerLangSent]</h3>
+            </div><div name="scala.AnyRef" class="parent">
+              <h3>Inherited from AnyRef</h3>
+            </div><div name="scala.Any" class="parent">
+              <h3>Inherited from <span name="scala.Any" class="extype">Any</span></h3>
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+
+
+    </body>
+      </html>
