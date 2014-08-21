@@ -31,24 +31,24 @@ class TranslationRound
       {  log("processSubmission called")
 
          // check errors on submission here
-         
+         // <&y2014.07.23.17:35:53& refactor: better do this check in SesCoord, so have there a URsubmissionTranslation which for example returns false when there are errors in the translation.
          // when errors, do a reload
          // <_&y2012.02.21.19:29:09& refactor using built-in parser of SessionInfo ???> 
          val transCorrect:Boolean =  sesCoordLR.testSyntaxTranslation match
          {  case ""           => true
             case _            => false
          }
-
+         
          // sesCoord
          // <&y2011.10.23.17:49:39&>
          println("TranslationRound.processSubmission: translation = " + sesCoordLR.si.textCTLbyPlayer)
-         
+         log("[BUG]? URstopTranslation also when there are errors???") 
          SesCoord.URstopTranslation
          
-         if(transCorrect) 
+         if(transCorrect)
          {  S.redirectTo("bridgeconstruction_efe.html") 
          }   
-         else S.redirectTo("translationRound.html") 
+         else S.redirectTo("translationRound.html")
       }
 
       def processTestTransBt() =

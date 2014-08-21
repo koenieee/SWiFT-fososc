@@ -1,0 +1,27 @@
+#!/bin/bash
+
+# load this script from the command line with:
+# source log_analysis_functions
+
+source settings_config
+
+function show_player_subscriptions
+{  grep -niE "Validating.*email" $SWIFT_LOG_FILE
+}
+
+function player_creation_info
+{  grep -niE "Validating dbName=Player.*$1" $SWIFT_LOG_FILE
+}
+
+function sessioninfo_by_userid
+{  grep -nPzo "userId=$1.*\n.*sessionInfos.*\n" $SWIFT_LOG_FILE
+}
+
+function show_generated_docs
+{  grep -A 5 -niE "generated translation" $SWIFT_LOG_FILE
+}
+
+function show_fluency_session_denied
+{  echo "This function still needs to be tested"
+   grep -niE "LCD y2014_m08_d06_h12_m44_s36" $SWIFT_LOG_FILE
+}

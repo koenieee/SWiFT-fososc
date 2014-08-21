@@ -77,6 +77,10 @@ object GlobalConstant
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
    val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
 
+   log("[MUSTDO] [POTENTIALBUG] Determine the right MAX_TRANSLATION_LENGTH, or find another way to make it persistent without a max size, just pointer to a file for example. Current solution is or very inefficient (takes a lot of space), or is dangerous (if the size turns out not big enough for some translations). Same holds for MAX_LENGTH_PARSE_ERROR.")
+   val MAX_TRANSLATION_LENGTH = 1024 
+   val MAX_LENGTH_PARSE_ERROR = 1024
+
    // Scoring
 
    abstract class ScoringConstants // abstract class purely intended for commentary purposes.

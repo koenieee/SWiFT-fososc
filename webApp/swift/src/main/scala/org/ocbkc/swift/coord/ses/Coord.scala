@@ -175,7 +175,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       {  if(currentPlayer.firstChosenConstitution.is == -1)
          {  Constitution.constisWithPlayableReleases match
             {  case Nil =>
-               {  log("   there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
+               {  log("   {| LCD y2014_m08_d06_h12_m44_s36 |} there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
                   None
                }
                case cwpr =>
@@ -438,7 +438,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
 
    def testSyntaxTranslation:String = 
-   {  gameCore.textCTLbyPlayer_rb_withErrorInfo match
+   {  gameCore.textCTLbyPlayer_rb_withErrorInfo_and_store match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _,       warnMsg) => warnMsg
          case EfeKRdoc_rb.FactoryResult(None,         errMsg,  _)       => errMsg
       }

@@ -11,6 +11,7 @@ import org.ocbkc.swift.logilang.efe._
 import scala.util.Random
 import org.ocbkc.generic.random.RandomExtras
 import org.ocbkc.swift.global.Logging._
+import org.ocbkc.swift.global.Types._
 import org.ocbkc.swift.natlang
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.query._
@@ -36,6 +37,8 @@ import net.liftweb.json._
 import net.liftweb.json.ext._
 import scala.util.parsing.combinator.Parsers
 import org.ocbkc.swift.logilang.bridge.brone.translators._
+import org.ocbkc.swift.test._
+
 
 
 /* Conventions:
@@ -57,7 +60,7 @@ import gameCoreHelperTypes._
 
 trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  // SHOULDDO: how to initialize a val of this trait in a subclass of this trait? (would like to do that with playerId)
-   val gameCoreName:String
+      val gameCoreName:String
       val playerId:Long
       var si:SessionInfo
       var parseWarningMsgTxtCTLplayer:String = ""
@@ -70,7 +73,7 @@ trait TraitGameCore[QuerySent__TP/* __TP = Type Parameter */ <: QuerySent, Answe
             si.userId(playerId).save
             si
       }
-   def generateText:String
+      def generateText:String
       def algorithmicDefenceGenerator:QuerySent__TP
       def generateQuestionAndCorrectAnswer:QuestionAndCorrectAnswer
 
@@ -262,20 +265,24 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    var textCTLbyPlayer_rb_cached:Option[EfeKRdoc_rb.FactoryResult] = None
 
    def textCTLbyPlayer_rb:Option[EfeDoc_rb] =
-   {  textCTLbyPlayer_rb_withErrorInfo match
+   {  textCTLbyPlayer_rb_withErrorInfo_and_store match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _, _)   => Some(ctl_rb)
          case EfeKRdoc_rb.FactoryResult(None, _, _)      => None
       }
    }
-   
-   def textCTLbyPlayer_rb_withErrorInfo:EfeKRdoc_rb.FactoryResult =
-   {  log("textCTLbyPlayer_rb called")
+      
+
+   /** Parses the textCTLbyPlayer, and returns a representation bundle, including errors, moreover it makes the intermediate translation persistent in the database. The latter is only done when the translation changed since the last parsing + storage.
+     */
+   def textCTLbyPlayer_rb_withErrorInfo_and_store:EfeKRdoc_rb.FactoryResult =
+   {  log("textCTLbyPlayer_rb_withErrorInfo called")
 
       if(textCTLplayerUpdated4terParsing)
       {  log("textCTLplayerUpdated4terParsing is true, so creating new representation bundle (which will also parse the text)")
          textCTLplayerUpdated4terParsing = false
          val e = EfeDoc_rb(textCTLbyPlayer)
          textCTLbyPlayer_rb_cached = Some(e)
+         storeIntermediateTranslation(textCTLbyPlayer, e, SystemWithTesting.currentTimeMillis)
          e
       }else
       {  log("   !textCTLplayerUpdated4terParsing, so using cached value")
@@ -283,6 +290,26 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       }
    }
 
+   /** Intended for use by textCTLbyPlayer_rb_withErrorInfo_and_store
+     */
+   def storeIntermediateTranslation(textCTLbyPlayer_loc: String, erfr: EfeKRdoc_rb.FactoryResult, timeOffered:TimeInMillis) =
+   {  val it =
+      erfr match
+      {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), errMsg, warnMsg)    =>
+         {  val i = IntermediateTranslation.create.sessionInfo(si).timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(true)
+            i.save
+            i
+         }
+         case EfeKRdoc_rb.FactoryResult(None, errMsg, warnMsg)            => 
+         {  val i = IntermediateTranslation.create.sessionInfo(si).timeOffered(timeOffered).parseErrorsAndWarnings(errMsg + warnMsg).textCTLbyPlayer(textCTLbyPlayer_loc).grammaticallyCorrect(false)
+            i.save
+            i
+         }
+      }
+
+      SessionInfo_IntermediateTranslation_join.create.intermediateTranslation(it).sessionInfo(si).save
+      Unit
+   }
    def generateText = "todo"
 
    /**
