@@ -97,28 +97,27 @@ Note: _pf = pure format
   * @param textCTLbyPlayer_ This is a String, and not a RepresentationBundle, because a player can have entered a syntactically incorrect document.
   */
 
-case class SessionInfo( var textNL: String,
-                        var questionNL: String,
-                        var questionCTLcomputer_rb: Option[EfeQuerySent_rb],
-                        var textCTLbyComputer: Option[FOLtheory],
-                        var bridgeCTL2NLcomputer: Option[BridgeDoc],
-                        var algoDefComputer_rb: Option[EfeQuerySent_rb],
-                        var answerComputerCTL: Option[EfeAnswerLangSent],
-                        var answerComputerNL: String,
-                        var textCTLbyPlayer_ : String, // don't change this one directly.
-//                      var constantsByPlayer:Option[List[String]],
-//                      var predsByPlayer:Option[List[String]],
-                        var bridgeCTL2NLplayer: Option[BridgeDoc],
-                        var algoDefPlayer: Option[EfeQuerySent_rb],
-                        var answerPlayerCTL: Option[EfeAnswerLangSent],
-                        var answerPlayerNL: String, // remove after changing answerPlayerCTL to _rb format
-                        var questionRelatedBridgeStats: String,
-                        var hurelanRole1NL:String,
-                        var hurelanRole2NL:String,
-                        var subjectNL:String
-                      ) extends LongKeyedMapper[SessionInfo] with IdPK
+case class SessionInfo() extends LongKeyedMapper[SessionInfo] with IdPK
 {  def getSingleton = SessionInfoMetaMapperObj
    // object player extends MappedLongForeignKey(this, Player)
+    object textNL extends MappedText(this)
+    object questionNL extends MappedText(this)
+    object objectquestionCTLcomputer_rb extends EfeQuerySent_rb
+    object textCTLbyComputer extends FOLtheory
+    object  bridgeCTL2NLcomputer extends BridgeDoc
+    object algoDefComputer_rb extends EfeQuerySent_rb
+ //    object answerComputerCTL extends EfeAnswerLangSent
+    object answerComputerNL extends MappedText(this)
+    object textCTLbyPlayer_ extends MappedText(this)
+    object bridgeCTL2NLplayer extends BridgeDoc
+    object algoDefPlayer extends EfeQuerySent_rb
+    //  object answerPlayerCTL extends EfeAnswerLangSent(this)
+    object answerPlayerNL extends MappedText(this)
+    object questionRelatedBridgeStats extends MappedText(this)
+    object hurelanRole1NL extends MappedText(this)
+    object hurelanRole2NL extends MappedText(this)
+    object  subjectNL extends MappedText(this)
+
    object gameCoreName extends MappedString(this, 100)
    object startTime extends MappedLong(this)
    object stopTime extends MappedLong(this)
@@ -127,7 +126,7 @@ case class SessionInfo( var textNL: String,
    object answerPlayerCorrect extends MappedBoolean(this)
    object userId extends MappedLong(this)
 
-   def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","")
+   //def this() = this("","",None,None,None,None,None,"","",None,None,None,"","","","","")
 
    var observers:List[TextCTLbyPlayerObserver] = Nil
 
@@ -213,7 +212,8 @@ case class SessionInfo( var textNL: String,
 
    def textCTLbyPlayer_=(t:String) =
    {  observers.foreach{ _.textCTLbyPlayerChanged(textCTLbyPlayer) }
-      textCTLbyPlayer_ = t
+      //textCTLbyPlayer_.
+     SessionInfoMetaMapperObj.create.textCTLbyPlayer(t).save
    }
 
    def textCTLbyPlayer = textCTLbyPlayer_
@@ -222,27 +222,7 @@ case class SessionInfo( var textNL: String,
    {  if(!observers.contains(observer)) observers ::= observer
    }
 
-   def copyJsonSerializedFieldsFrom(si:SessionInfo) =
-   {  this.textNL = si.textNL
-      this.questionNL = si.questionNL
-      this.questionCTLcomputer_rb = si.questionCTLcomputer_rb
-      this.textCTLbyComputer = si.textCTLbyComputer
-      this.bridgeCTL2NLcomputer = si.bridgeCTL2NLcomputer
-      this.algoDefComputer_rb = si.algoDefComputer_rb
-      this.answerComputerCTL = si.answerComputerCTL
-      this.answerComputerNL = si.answerComputerNL
-      this.textCTLbyPlayer_  = si.textCTLbyPlayer_ 
-//    this.constantsByPlayer = si.constantsByPlayer
-//    this.predsByPlayer = si.predsByPlayer
-      this.bridgeCTL2NLplayer = si.bridgeCTL2NLplayer
-      this.algoDefPlayer = si.algoDefPlayer
-      this.answerPlayerCTL = si.answerPlayerCTL
-      this.answerPlayerNL = si.answerPlayerNL
-      this.questionRelatedBridgeStats = si.questionRelatedBridgeStats
-      this.hurelanRole1NL = si.hurelanRole1NL
-      this.hurelanRole2NL = si.hurelanRole2NL
-      this.subjectNL = si.subjectNL
-   }
+
 }
 
 /** Represents a moment of the translation still under construction. This object will be created when:
