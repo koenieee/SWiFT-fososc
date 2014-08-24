@@ -30,6 +30,18 @@ import scala.sys.process._
 import scala.util.matching._
 import scala.util.matching.Regex._
 import java.io._
+import org.ocbkc.swift.logilang.query.PatVar
+import scala.Some
+import org.ocbkc.swift.model.SessionInfo
+import org.ocbkc.swift.logilang.bridge.brone.EntityBridgeSent
+import org.ocbkc.swift.logilang.Constant
+import org.ocbkc.swift.logilang.Var
+import org.ocbkc.swift.logilang.fofa.PredApp_Fofa
+import org.ocbkc.swift.logilang.PredApp_FOL
+import org.ocbkc.swift.logilang.bridge.brone.PredicateBridgeSent
+import org.ocbkc.swift.logilang.query.plofofa.MostInfo
+import org.ocbkc.swift.logilang.query.plofofa.PredApp_Plofofa
+
 //import java.lang._
 import org.ocbkc.swift.parser._
 import org.ocbkc.swift.trans._
@@ -229,26 +241,41 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
       val tp = generateTranslationProblem
-      si.textCTLbyComputer = Some(tp.textCTL)
-      si.textNL = tp.textNL
+      //si.textCTLbyComputer = Some(tp.textCTL)
+    //  si.textNL = tp.textNL
       // move to generateTranslationProblem si.textNL = Translation.FOltheory2NL_straight(tp.textCTL, tp.bridge)(0)
-      si.questionCTLcomputer_rb = Some(tp.algoDef_rb)
-      si.questionNL = TranslatePlofofaSentToNL(tp.algoDef_rb, tp.bridge)
+    //  si.questionCTLcomputer_rb = Some(tp.algoDef_rb)
+   //   si.questionNL = TranslatePlofofaSentToNL(tp.algoDef_rb, tp.bridge)
                                           /*
          - TODO replace with generated item
          - Moreover, initialise with the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).*/
-      si.algoDefComputer_rb = si.questionCTLcomputer_rb
-      si.answerComputerCTL = Some(tp.answerCTL)
+    //  si.algoDefComputer_rb = si.questionCTLcomputer_rb
+   //   si.answerComputerCTL = Some(tp.answerCTL)
 /*       - TODO replace with generated item
          - Moreover, perhaps for now use the scalaFormat instead, because in this increment people do not need to enter the queries themselves. This prevents some extra work (writing parsers).
 */
 
-      si.answerComputerNL = TranslateFofaSentToNL(tp.answerCTL, tp.bridge)
-      si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
-      si.subjectNL = "subjectNL" // <still applicable?>
+   //   si.answerComputerNL = TranslateFofaSentToNL(tp.answerCTL, tp.bridge)
+   //   si.questionRelatedBridgeStats = "TODOquestionRelatedBridgeStats"
+   //   si.subjectNL = "subjectNL" // <still applicable?>
       // <&y2012.02.17.09:43:47& perhaps replace the first identifier match with a regular expression drawn from the parser (so that if you make changes their, it automatically gets changed here...>
-      si.bridgeCTL2NLcomputer = Some(tp.bridge)
-      si
+   //   si.bridgeCTL2NLcomputer = Some(tp.bridge)
+
+     si.textCTLbyComputer(tp.textCTL).
+
+       textNL(tp.textNL).
+       questionCTLcomputer_rb(tp.algoDef_rb).
+       questionNL(TranslatePlofofaSentToNL(tp.algoDef_rb, tp.bridge)).
+       algoDefComputer_rb(si.questionCTLcomputer_rb).
+       answerComputerCTL(tp.answerCTL).
+       answerComputerNL(TranslateFofaSentToNL(tp.answerCTL, tp.bridge)).
+       questionRelatedBridgeStats("TODOquestionRelatedBridgeStats").
+       subjectNL("subjectNL").
+       bridgeCTL2NLcomputer(tp.bridge)
+
+       .save
+     si
+
    }
 
    var textCTLplayerUpdated4terParsing = true // starts with true, because also includes situation that no parsing has taken place ever.
@@ -259,7 +286,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    }
    /** @todo It may be more elegant to put this intelligent setter and getter in the class SessionInfo instead, and then attach the GameCore to it using the observer pattern.
      */
-   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; /* WIW textCTLbyPlayer_rb = EfeDoc_rb(); */ si.textCTLbyPlayer_ =  t }
+   def textCTLbyPlayer_=(t:String) = { textCTLplayerUpdated4terParsing = true; /* WIW textCTLbyPlayer_rb = EfeDoc_rb(); */ SessionInfoMetaMapperObj.create.textCTLbyPlayer_(t).save }
    def textCTLbyPlayer = si.textCTLbyPlayer_
 
    var textCTLbyPlayer_rb_cached:Option[EfeKRdoc_rb.FactoryResult] = None
@@ -316,8 +343,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /**
      */
    def algorithmicDefenceGenerator:EfeQuerySent_rb =
-   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb.get, si.bridgeCTL2NLcomputer.get, si.bridgeCTL2NLplayer.get, null).get
-      si.algoDefPlayer = Some(ret)
+   {  val ret = BridgeBasedAutoPlofafaTranslator(si.algoDefComputer_rb, si.bridgeCTL2NLcomputer, si.bridgeCTL2NLplayer, null).get
+      si.algoDefPlayer(ret).save
       ret
    }
 
@@ -326,14 +353,14 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    /** @todo check answer correct with  BridgeBasedAutoFofaTranslator, instead of comparing the translations to natural language. The latter may be prone to errors, because different translations may exist for the same CTL sentence. And do exist already: the order of the names of persons may be different.
      */
    def doAlgorithmicDefence:AlgorithmicDefenceResult =
-   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer.get, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
-      si.answerPlayerCTL = Some(answerPlayerCTL)
-      si.answerPlayerNL = TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer.get)
+   {  val answerPlayerCTL = reas.plofofa.Prover.query(si.algoDefPlayer, textCTLbyPlayer_rb.get.sf) // for now scala format is needed, because the prover works on a more expressive CTL than EfeDoc.
+      si.answerPlayerCTL(answerPlayerCTL).save
+      si.answerPlayerNL(TranslateFofaSentToNL(answerPlayerCTL, si.bridgeCTL2NLplayer)).save
 
-      val answerPlayerCTLtranslated2answerLangComputer = BridgeBasedAutoFofaTranslator(answerPlayerCTL, si.bridgeCTL2NLplayer.get, si.bridgeCTL2NLcomputer.get, si.textCTLbyComputer.get)
+      val answerPlayerCTLtranslated2answerLangComputer = BridgeBasedAutoFofaTranslator(answerPlayerCTL, si.bridgeCTL2NLplayer, si.bridgeCTL2NLcomputer, si.textCTLbyComputer)
       match
       {  case Some(answerPlayerCTLtranslated2answerLangComputer) =>
-         {  si.answerPlayerCorrect( si.answerComputerCTL.get.equalsModuloVarNames(answerPlayerCTLtranslated2answerLangComputer) ).save
+         {  si.answerPlayerCorrect( si.answerComputerCTL.equalsModuloVarNames(answerPlayerCTLtranslated2answerLangComputer) ).save
          }
          case None => si.answerPlayerCorrect( false ).save
       }
@@ -343,13 +370,14 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 
    def getOrCreatePlayerBridge:BridgeDoc =
-   {  si.bridgeCTL2NLplayer match
-      {  case None =>
-         {  val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(textCTLbyPlayer_rb.getOrElse(logAndThrow("Never call this method when textCTLbyPlayer has nto been defined yet")).sf)
-            si.bridgeCTL2NLplayer = Some(bridgeDoc)
+   {  si.bridgeCTL2NLplayer.get match
+      {  case _ =>
+         {  val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(textCTLbyPlayer_rb.getOrElse(logAndThrow("Never call this method when textCTLbyPlayer has not been defined yet")).sf)
+            si.bridgeCTL2NLplayer(bridgeDoc).save
+
             bridgeDoc
          }
-         case Some(b) => b
+         case brit: BridgeDoc => brit
       }
    }
 

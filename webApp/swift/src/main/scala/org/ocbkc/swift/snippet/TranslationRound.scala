@@ -22,7 +22,7 @@ import org.ocbkc.swift.global.Logging._
 class TranslationRound
 {  val sesCoordLR = SesCoord.is // extract session coordinator object from session variable.
    var errorTrans:String = ""
-   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
+   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.toString
 
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartTranslation

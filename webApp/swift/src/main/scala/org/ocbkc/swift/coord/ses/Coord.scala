@@ -187,12 +187,12 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
                   RandomExtras.pickRandomElementFromList(cwpr, randomSeq).get.constiId)
                   )
                            
-                  startSessionPreps
+                  Some(startSessionPreps.get.is)
                }
             }
          }
          else
-         {  startSessionPreps
+         {  Some(startSessionPreps.get.is)
          }
       } else
       {  log("[BUG] URtryStartSession should not be called when player is in a session. Solve by for example disabling the StartSession page. The player is now in round: " + latestRoundFluencySession)

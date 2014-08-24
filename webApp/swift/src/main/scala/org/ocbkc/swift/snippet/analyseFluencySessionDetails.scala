@@ -41,7 +41,7 @@ class analyseFluencySessionDetails
                    "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)))),
                    "sourceText"    -> Text(sesCoordBySession.get.textNL),
                    "textCTLbyPlayer"   -> Text(sesCoordBySession.get.textCTLbyPlayer),
-                   "bridgeCTL2NLplayer"-> Text(optionToUI(sesCoordBySession.get.bridgeCTL2NLplayer.map{ _.toString })),
+                   "bridgeCTL2NLplayer"-> Text(sesCoordBySession.get.bridgeCTL2NLplayer.toString),
                    "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
                    "score"         -> Text(optionToUI(PlayerScores.fluencyScore(sesCoordBySession.get).map{ fs => defaultRounding(fs.toDouble) })),
                    "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}),

@@ -28,10 +28,10 @@ class AlgorithmicDefenceRoundStage2
          "top", ns,
          "continue"              -> SHtml.submit("Continue", processSubmission), // <&y2011.11.09.13:39:03& change to "explain error" when applicable>
          "questionNL"            -> Text(sesCoordLR.si.questionNL), 
-         "algoDefPlayer"         -> Text(sesCoordLR.si.algoDefPlayer.get.sf.toString), // @todo replace with pf as soon as implemented
-         "answerFromSourceCTL"   -> Text(sesCoordLR.si.answerComputerCTL.get.toString),
+         "algoDefPlayer"         -> Text(sesCoordLR.si.algoDefPlayer.sf.toString), // @todo replace with pf as soon as implemented
+         "answerFromSourceCTL"   -> Text(sesCoordLR.si.answerComputerCTL.toString),
          "answerFromSourceNL"    -> Text(sesCoordLR.si.answerComputerNL),
-         "answerFromTransCTL"    -> Text(sesCoordLR.si.answerPlayerCTL.get.toString),
+         "answerFromTransCTL"    -> Text(sesCoordLR.si.answerPlayerCTL.toString),
          "answerFromTransNL"     -> Text(sesCoordLR.si.answerPlayerNL),
          "conclusion"            -> Text( if (sesCoordLR.si.answerPlayerCorrect) "The answer derived from your translation is completely correct. You won!" else "The answer derived from your translation is wrong! Buzinga! Got ya'!")
          //"questionNo"      -> Text("TODO: questionNo")

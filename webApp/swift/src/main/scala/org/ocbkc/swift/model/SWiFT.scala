@@ -17,6 +17,7 @@ import net.liftweb.json._
 import java.io._
 import org.ocbkc.swift.global.GlobalConstant._
 import org.ocbkc.generic.DateTime._
+import org.ocbkc.swift.model._
 
 /*
 class Source extends Enumeration
@@ -102,16 +103,16 @@ case class SessionInfo() extends LongKeyedMapper[SessionInfo] with IdPK
    // object player extends MappedLongForeignKey(this, Player)
     object textNL extends MappedText(this)
     object questionNL extends MappedText(this)
-    object objectquestionCTLcomputer_rb extends EfeQuerySent_rb
-    object textCTLbyComputer extends FOLtheory
-    object  bridgeCTL2NLcomputer extends BridgeDoc
-    object algoDefComputer_rb extends EfeQuerySent_rb
- //    object answerComputerCTL extends EfeAnswerLangSent
+    object questionCTLcomputer_rb extends MappedEfeQuerySent_rb(this)
+    object textCTLbyComputer extends MappedFOLtheory(this)
+    object bridgeCTL2NLcomputer extends MappedBridgeDoc(this)
+    object algoDefComputer_rb extends MappedEfeQuerySent_rb(this)
+    object answerComputerCTL extends MappedEfeAnswerLangSent(this)
     object answerComputerNL extends MappedText(this)
     object textCTLbyPlayer_ extends MappedText(this)
-    object bridgeCTL2NLplayer extends BridgeDoc
-    object algoDefPlayer extends EfeQuerySent_rb
-    //  object answerPlayerCTL extends EfeAnswerLangSent(this)
+    object bridgeCTL2NLplayer extends MappedBridgeDoc(this)
+    object algoDefPlayer extends MappedEfeQuerySent_rb(this)
+    object answerPlayerCTL extends MappedEfeAnswerLangSent(this)
     object answerPlayerNL extends MappedText(this)
     object questionRelatedBridgeStats extends MappedText(this)
     object hurelanRole1NL extends MappedText(this)
@@ -209,6 +210,29 @@ case class SessionInfo() extends LongKeyedMapper[SessionInfo] with IdPK
 
       val testDeSer:SessionInfo = Serialization.read[SessionInfo](siSer)
    }
+
+  def copyJsonSerializedFieldsFrom(si:SessionInfo) =
+  {  this.textNL(si.textNL)
+    .questionNL(si.questionNL)
+    .questionCTLcomputer_rb(si.questionCTLcomputer_rb)
+    .textCTLbyComputer(si.textCTLbyComputer)
+    .bridgeCTL2NLcomputer(si.bridgeCTL2NLcomputer)
+    .algoDefComputer_rb(si.algoDefComputer_rb)
+    .answerComputerCTL(si.answerComputerCTL)
+    .answerComputerNL(si.answerComputerNL)
+    .textCTLbyPlayer_(si.textCTLbyPlayer_)
+    //    this.constantsByPlayer = si.constantsByPlayer
+    //    this.predsByPlayer = si.predsByPlayer
+    .bridgeCTL2NLplayer(si.bridgeCTL2NLplayer)
+    .algoDefPlayer(si.algoDefPlayer)
+    .answerPlayerCTL(si.answerPlayerCTL)
+    .answerPlayerNL(si.answerPlayerNL)
+    .questionRelatedBridgeStats(si.questionRelatedBridgeStats)
+    .hurelanRole1NL(si.hurelanRole1NL)
+    .hurelanRole2NL(si.hurelanRole2NL)
+    .subjectNL(si.subjectNL)
+    .save
+  }
 
    def textCTLbyPlayer_=(t:String) =
    {  observers.foreach{ _.textCTLbyPlayerChanged(textCTLbyPlayer) }

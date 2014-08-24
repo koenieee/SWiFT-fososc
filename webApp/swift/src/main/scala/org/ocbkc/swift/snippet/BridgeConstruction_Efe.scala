@@ -38,7 +38,7 @@ class BridgeConstruction
 
    val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
    var errorTrans:String = ""
-   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
+   var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.toString
 
 // { transformed2efe
    def processMenu4EntityBridgeSelect(constant:Constant, entNLname:String) =
@@ -49,7 +49,7 @@ class BridgeConstruction
      */
    def generateMenus4EntityBridge(ns:NodeSeq):NodeSeq =
    {  val constants = sesCoordLR.constantsByPlayer
-      val entNLnames = sesCoordLR.si.bridgeCTL2NLcomputer.getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLnames(0) }
+      val entNLnames = Some(sesCoordLR.si.bridgeCTL2NLcomputer).getOrElse{ logAndThrow("bridgeCTL2NLcomputer is None.") }.entityBridgeSents.map{ eb => eb.entNLnames(0) }
       constants.flatMap
       {  constant =>
          {

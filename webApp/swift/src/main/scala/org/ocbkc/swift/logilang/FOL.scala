@@ -397,7 +397,7 @@ import org.ocbkc.swift.global.Logging._
 
 /** @todo &y2014.01.20.16:17:06& also provide a representation bundle for this?
   */
-sealed trait FofaSent extends CTLsent
+trait FofaSent extends CTLsent
 {  def equalsModuloVarNames(otherStat:FofaSent):Boolean =
    {  logAndThrow("Not yet implemented for the given case")
    }
