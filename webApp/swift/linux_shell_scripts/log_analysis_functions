@@ -25,3 +25,8 @@ function show_fluency_session_denied
 {  echo "This function still needs to be tested"
    grep -niE "LCD y2014_m08_d06_h12_m44_s36" $SWIFT_LOG_FILE
 }
+
+function show_intermediate_translations
+{  echo "This function works with version [develop/Sun Aug 10 14:48:12 2014 +0200]. May not work with newer versions."
+   grep -niE -B 3 -A 20 "textCTLplayerUpdated4terParsing is true" nohup.out
+}
