@@ -127,8 +127,12 @@ which is:
 <br>
 <li>The commits which coincide with a version, carry a tag with the version number in it, in the following form: 
    version[version number]</li>
+<li>If you intend to use a running instance of an ``experimental branch'', to produce data, that you want to continue using in running instances of the release branch, well... Don't do that! Instead, merge the experimental branch first into develop and release it. This may feel somewhat counter-intuitive, because it is something you want to "try out" - however, you will avoid problems with persistent data migration management. You can merge the experiment such that it remains a bit isolated in the running main application, for example by offering an alternative UI that only shows when the application is started in a certain mode.</li>
+<li>Try to avoid real forking (that is: creating a separate branch with its own formal releases), unless you have a very good reason to do so. So, if you have some ``experimental versions'', which however produce serious data by serious users, first merge this experimental version somehow into the develop branch.</li>
 </ul>
 </p>
+
+
 
 <h4><font color="teal">TODO examples</font></h4>
 <p>
