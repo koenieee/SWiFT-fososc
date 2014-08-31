@@ -371,13 +371,14 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
    def getOrCreatePlayerBridge:BridgeDoc =
    {  si.bridgeCTL2NLplayer.get match
-      {  case brit: BridgeDoc => brit
-         case _ =>
-         {  val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(textCTLbyPlayer_rb.getOrElse(logAndThrow("Never call this method when textCTLbyPlayer has not been defined yet")).sf)
-           si.bridgeCTL2NLplayer(bridgeDoc).save
+     { case brit: BridgeDoc if (brit==None) =>
+     {  val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(textCTLbyPlayer_rb.getOrElse(logAndThrow("Never call this method when textCTLbyPlayer has not been defined yet")).sf)
+       si.bridgeCTL2NLplayer(bridgeDoc).save
 
-           bridgeDoc
-         }
+       bridgeDoc
+     }
+     case brit: BridgeDoc => brit
+
       }
    }
 
