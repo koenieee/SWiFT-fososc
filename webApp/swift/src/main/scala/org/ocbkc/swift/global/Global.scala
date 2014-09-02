@@ -67,7 +67,9 @@ object GlobalConstant
    val CONSTITUTIONOBJECTDIR = PERSISTDIR + "/constobjs"
    val SESSIONINFOOBJECTDIR = PERSISTDIR + "/sessionInfoobjs"
    val SWIFTURL = "http://127.0.0.1:8080"
-   val ADMINFIRSTNAME = "Admin"
+   val TESTADMINEMAIL = "admin@test.org"
+   val TESTADMINFIRSTNAME = "AdminTest"
+   val TESTADMINPW = "asdfasdf"
    
    var adminOpt:Option[Player] = None
    def adminGitUserId = {  log("retrieving adminGitUserId...")

@@ -196,6 +196,7 @@ class Boot
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+      Menu(Loc("AdminHelp", "adminHelp" :: Nil, "Admin Help", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
          Loc(
             "constitution",
@@ -285,7 +286,7 @@ class Boot
                                     player 
                                  } // do nothing, player exists.
             case _            => {  log("   Doesn't exist: creating it...")
-                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email(GlobalConstant.TESTADMINEMAIL).password(GlobalConstant.TESTADMINPW).superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                                     p.save
                                     p
                                  }
