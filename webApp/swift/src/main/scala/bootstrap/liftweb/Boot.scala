@@ -123,7 +123,7 @@ class Boot
       }
 
       def playerIsAdmin(player:Player):Boolean =
-      {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
+      {  player.firstName.is.equals(GlobalConstant.TESTADMINFIRSTNAME)
       }
 
       // assumes playerIsLoggedIn
@@ -281,12 +281,12 @@ class Boot
          }
 
          log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
-         val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+         val admin = Player.find(By(Player.firstName, GlobalConstant.TESTADMINFIRSTNAME)) match
          {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
                                     player 
                                  } // do nothing, player exists.
             case _            => {  log("   Doesn't exist: creating it...")
-                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email(GlobalConstant.TESTADMINEMAIL).password(GlobalConstant.TESTADMINPW).superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                                    val p = Player.create.firstName(GlobalConstant.TESTADMINFIRSTNAME).email(GlobalConstant.TESTADMINEMAIL).password(GlobalConstant.TESTADMINPW).superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                                     p.save
                                     p
                                  }
