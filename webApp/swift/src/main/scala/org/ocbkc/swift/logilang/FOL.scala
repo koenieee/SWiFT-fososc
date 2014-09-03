@@ -478,7 +478,9 @@ object TranslateFofaSentToNL extends TranslateCTL2NL[FofaSent] // change to _rb 
    }
 
    private def translate(fs: FofaSent, bs: BridgeDoc):String =
-   {  fs match
+   {  log("translate called")
+      log("   FofaSent = " + fs)
+      fs match
       {  case Forall(vr, constantList, PredApp_Fofa(pred, _)) =>
          {  val predNL = bs.pred2NLadjectiveOrException(pred)
             val andListEntitiesNL = NLgen.commaAndList(constantList.map{ bs.constant2entNLname(_).get })

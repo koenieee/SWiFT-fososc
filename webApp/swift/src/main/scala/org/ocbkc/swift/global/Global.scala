@@ -20,6 +20,10 @@ import _root_.net.liftweb.mapper.{DB, ConnectionManager, Schemifier, DefaultConn
 import org.ocbkc.swift.OCBKC.Constitution
 import org.apache.commons.io.FileUtils
 import org.ocbkc.swift.jgit.InitialiseJgit
+import net.liftweb.common.{Box,Empty,Failure,Full}
+import org.ocbkc.swift.model._
+import org.ocbkc.generic._
+import org.ocbkc.swift.test._
 
 object GlobalConstant
 {  val TEST = true
@@ -65,7 +69,9 @@ object GlobalConstant
    val KEYLOGFLUENCYDIR = PERSISTDIR + "/keylogs"
 
    val SWIFTURL = "http://127.0.0.1:8080"
-   val ADMINFIRSTNAME = "Admin"
+   val TESTADMINEMAIL = "admin@test.org"
+   val TESTADMINFIRSTNAME = "AdminTest"
+   val TESTADMINPW = "asdfasdf"
    
    var adminOpt:Option[Player] = None
    def adminGitUserId = {  log("retrieving adminGitUserId...")
@@ -78,6 +84,10 @@ object GlobalConstant
    val GIThASHsIZE = 41 + 10 // + 10, I'm not certain it is 41. Better safe than sorry.
    val INITIALISATIOnDATaDIR = WEBAPP_BASE_DIR + "/initialisationData" 
    val CONSTI_ALPHA_INIT = INITIALISATIOnDATaDIR + "/efe/constitutionAlpha_core"
+
+   log("[MUSTDO] [POTENTIALBUG] Determine the right MAX_TRANSLATION_LENGTH, or find another way to make it persistent without a max size, just pointer to a file for example. Current solution is or very inefficient (takes a lot of space), or is dangerous (if the size turns out not big enough for some translations). Same holds for MAX_LENGTH_PARSE_ERROR.")
+   val MAX_TRANSLATION_LENGTH = 1024 
+   val MAX_LENGTH_PARSE_ERROR = 1024
 
    // Scoring
 
@@ -203,13 +213,18 @@ object Logging
    }
 
    def log(msg:String) =
-   {  println(msg)
+   {  val user_info = Player.currentUser match // <&y2012.08.04.20:16:59& refactor rest of code to use this currentPlayer, instead of doing this again and again....>
+      {  case Full(player) => "[" + player.id + ", " + player.swiftDisplayName + "]"
+         case _            => ""
+      }
+      val datetime = "[" + DateTime.timeInMillis2dateString(SystemWithTesting.currentTimeMillis) + "]"
+      println(datetime + " " + user_info + "   " + msg)
    }
 
    /** Log and pass
      */
    def logp[T](msg: T => String, obj:T):T =
-   {  println(msg(obj))
+   {  log(msg(obj))
       obj
    }
 }

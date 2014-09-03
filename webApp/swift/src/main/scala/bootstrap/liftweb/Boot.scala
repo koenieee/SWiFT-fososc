@@ -73,7 +73,7 @@ class Boot
       // where to search snippet
       LiftRules.addToPackages("org.ocbkc.swift")
 
-      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
+      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
 
       // Build SiteMap
       /* originally generated code:
@@ -123,7 +123,7 @@ class Boot
       }
 
       def playerIsAdmin(player:Player):Boolean =
-      {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
+      {  player.firstName.is.equals(GlobalConstant.TESTADMINFIRSTNAME)
       }
 
       // assumes playerIsLoggedIn
@@ -196,6 +196,7 @@ class Boot
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+      Menu(Loc("AdminHelp", "adminHelp" :: Nil, "Admin Help", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
          Loc(
             "constitution",
@@ -280,12 +281,12 @@ class Boot
          }
 
          log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
-         val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+         val admin = Player.find(By(Player.firstName, GlobalConstant.TESTADMINFIRSTNAME)) match
          {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
                                     player 
                                  } // do nothing, player exists.
             case _            => {  log("   Doesn't exist: creating it...")
-                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                                    val p = Player.create.firstName(GlobalConstant.TESTADMINFIRSTNAME).email(GlobalConstant.TESTADMINEMAIL).password(GlobalConstant.TESTADMINPW).superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                                     p.save
                                     p
                                  }

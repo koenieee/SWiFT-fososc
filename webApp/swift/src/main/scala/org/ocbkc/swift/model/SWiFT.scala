@@ -247,6 +247,34 @@ case class SessionInfo( var textNL: String,
       this.fileNameKeylogs = si.fileNameKeylogs
    }
 }
+
+/** Represents a moment of the translation still under construction. This object will be created when:
+   - The player clicks the check grammar button
+   - Does a submission attempt which contains grammatical errors.
+  */
+case class IntermediateTranslation extends LongKeyedMapper[IntermediateTranslation] with IdPK
+{  def getSingleton = IntermediateTranslation
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)// redundant because of SessionInfo_IntermediateTranslation_join, but still handy.
+   object timeOffered  extends MappedLong(this)
+   object textCTLbyPlayer extends MappedString(this, MAX_TRANSLATION_LENGTH)
+   object parseErrorsAndWarnings extends MappedString(this, MAX_LENGTH_PARSE_ERROR)
+   object grammaticallyCorrect extends MappedBoolean(this)
+}
+
+object IntermediateTranslation extends IntermediateTranslation with LongKeyedMetaMapper[IntermediateTranslation]
+{  
+}
+
+case class SessionInfo_IntermediateTranslation_join extends LongKeyedMapper[SessionInfo_IntermediateTranslation_join] with IdPK
+{  def getSingleton = SessionInfo_IntermediateTranslation_join
+   object sessionInfo extends MappedLongForeignKey(this, SessionInfoMetaMapperObj)
+   object intermediateTranslation extends MappedLongForeignKey(this, IntermediateTranslation)
+}
+
+object SessionInfo_IntermediateTranslation_join extends SessionInfo_IntermediateTranslation_join with LongKeyedMetaMapper[SessionInfo_IntermediateTranslation_join]
+{
+}
+
 /** @todo Move this one to a general lib
   */
 trait Observer
@@ -269,7 +297,6 @@ object PlayerSessionInfo_join extends PlayerSessionInfo_join with LongKeyedMetaM
    {  this.create.player(player).sessionInfo(si)
    }
 }
-
 
 object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[SessionInfo]
 {  override def create =

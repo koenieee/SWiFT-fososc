@@ -1,4 +1,6 @@
-/**
+/** Programming protocol (Level 0): the Coord (``Coordinator'') is the controller of the application (inspired by the MCV design pattern (Model Controller View), but possibly not completely equivalent to it).
+  * This means that user requests should never be directly fully handled by GUI components (GUI components = mainly the Lift-snippets), but instead these GUI components should pass on a request to Coord, and if applicable, wait for a response from the Coord. An example is the method URtryStartSession, where UR stands for User Request. The associated snippet StartSession, passes the associated request to URtryStartSession, which in its turn contains the ``logic'' to deal with the situation.
+  *
   * @todo COULDDO: automatically generate log-error message of which the following is an example:
   *               "[POTENTIAL_BUG] cannot go to state RoundConstiStudy, because player is not in state RoundStartSession."
   */
@@ -175,7 +177,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       {  if(currentPlayer.firstChosenConstitution.is == -1)
          {  Constitution.constisWithPlayableReleases match
             {  case Nil =>
-               {  log("   there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
+               {  log("   {| LCD y2014_m08_d06_h12_m44_s36 |} there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
                   None
                }
                case cwpr =>
@@ -438,7 +440,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
 // <&y2012.02.21.19:22:56& refactor by using built-in parser.?>
 
    def testSyntaxTranslation:String = 
-   {  gameCore.textCTLbyPlayer_rb_withErrorInfo match
+   {  gameCore.textCTLbyPlayer_rb_withErrorInfo_and_store match
       {  case EfeKRdoc_rb.FactoryResult(Some(ctl_rb), _,       warnMsg) => warnMsg
          case EfeKRdoc_rb.FactoryResult(None,         errMsg,  _)       => errMsg
       }

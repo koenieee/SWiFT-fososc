@@ -91,7 +91,7 @@ class SWiFTparser extends JavaTokenParsers
 /** The superclass containing the sub-parsers which can be reused in all parsers which belong to the "Alpha Group" - this is the group of parsers developed for the first languages for the SWiFT game, such as Folnuminqua and EfeLang, and related parsers such as the bridge parsers belonging to one of these languages. Parsers added to this class may not postprocess!
   */
 class AlphaGroupParser extends SWiFTparser
-{   def id: Parser[String]              = """[a-zA-Z][a-zA-Z0-9_\-]*""".r
+{   def id: Parser[String]              = """[a-z][a-zA-Z0-9_\-]*""".r
 }
 
 
