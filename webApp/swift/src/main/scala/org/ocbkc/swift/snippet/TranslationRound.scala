@@ -69,17 +69,17 @@ class TranslationRound
 
       def processKeyLogs(keylogs: String) =
       { log("processing Keylogs")
-        val outputFileName: String = KEYLOGFLUENCYDIR + "/keylog_session"+sesCoordLR.si.id+"_user"+sesCoordLR.si.userId+"_"+System.currentTimeMillis()+".log"
+        val outputFileName: String = KEYLOGFLUENCYDIR + "/keylog_session"+sesCoordLR.si.id+"_user"+sesCoordLR.si.userId+"_"+sesCoordLR.si.startTime+".log"
         val outFile = new java.io.File(outputFileName);
         keyLogData = keylogs
-        val jsonKeylogData = "[" + keylogs.dropRight(1) + "]"
-        log("keylog val: " + jsonKeylogData)
+        log("keylog val: " + keylogs)
         outFile.getParentFile().mkdirs()
         sesCoordLR.si.fileNameKeylogs = outputFileName
-        val out:PrintWriter = new PrintWriter(new BufferedWriter(new FileWriter(outFile)))
-        out.println(jsonKeylogData)
-        out.close
-
+        val FileOutput = new FileWriter(outputFileName, true)
+        try {
+          FileOutput.write(keylogs)
+        }
+        finally FileOutput.close()
       }
 
       // <? why can't scala infer that contentTranslationTA must be a String. (Omitting String, will result in an error).

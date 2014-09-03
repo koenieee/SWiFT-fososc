@@ -17,7 +17,8 @@ class AnalyseFluencyKeyLogger
     { log("keylogPlayBackPage called")
       val jsonFileName = SessionInfoMetaMapperObj.find(By(SessionInfoMetaMapperObj.id,sessionID.toInt)).get
 
-      val contents = scala.io.Source.fromFile(jsonFileName.fileNameKeylogs).mkString
+      val contents = "[" + scala.io.Source.fromFile(jsonFileName.fileNameKeylogs).mkString.dropRight(1) + "]"
+
       val jsonContent = JSON.parseFull(contents).get.asInstanceOf[List[Map[String,Any]]]
       val keysTimes: List[((String, Double), Int)] = jsonContent.flatMap(jsonObject=> Map(jsonObject("key").asInstanceOf[String] -> jsonObject("time").asInstanceOf[Double])).zipWithIndex
       log("Keytimes: " + keysTimes.toString)
