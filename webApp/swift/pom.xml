@@ -232,7 +232,7 @@
 		</execution>
 	    </executions>
 	    <configuration>
-		<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+		<keystore>src/main/resources/jetty-ssl.keystore</keystore>
 		<dname>cn=localhost</dname>
 		<keypass>secret</keypass>
 		<storepass>secret</storepass>

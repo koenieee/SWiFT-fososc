@@ -17,9 +17,4 @@
     <Arg><New class="org.eclipse.jetty.server.ForwardedRequestCustomizer"/></Arg>
   </Call>
   -->
-
-<!-- This is your HTTP connector, you should have another one for HTTPS -->
-
 </Configure>
-
-
