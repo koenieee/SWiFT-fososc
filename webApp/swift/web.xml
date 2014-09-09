@@ -3,7 +3,7 @@
   <servlet-class>org.h2.server.web.WebServlet</servlet-class>
   <init-param>
     <param-name>webAllowOthers</param-name> 
-    <param-value></param-value> 
+    <param-value>true</param-value> 
   </init-param>
   <context-param>
    <param-name>db.password</param-name> 
@@ -15,3 +15,12 @@
   <servlet-name>H2Console</servlet-name>
   <url-pattern>/console/*</url-pattern>
 </servlet-mapping>
+<security-constraint>
+  <web-resource-collection>
+   <web-resource-name>Everything</web-resource-name>
+   <url-pattern>/*</url-pattern>
+  </web-resource-collection>
+  <user-data-constraint>
+   <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+  </user-data-constraint>
+</security-constraint>
