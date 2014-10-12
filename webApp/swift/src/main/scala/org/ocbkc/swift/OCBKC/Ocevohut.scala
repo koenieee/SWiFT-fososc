@@ -27,12 +27,17 @@ trait OcevohutTrait[Individual__TP]
    }
 }
 
-trait ProportionalSelectionTrait[Individual__TP]
-{  def apply(List[Individual__TP], ProportionalSelection[Individual__TP]):Map[Individual__TP, Int]
+trait ProportionalSelectionTrait
+{  def apply(ListIndividiulTrait], ProportionalSelection[Individual__TP]):Map[Individual__TP, Int]
 }
 
 object SUS extends ProportionalSelectionTrait
-{  def apply(List[Individual__TP], ProportionalSelection[Individual__TP]):Map[Individual__TP, Int]
+{  def apply(List[IndividualTrait], ProportionalSelection[Individual__TP]):Map[Individual__TP, Int]
    {  
    }
+}
+
+
+trait Individual[Genottype__TP]
+{     val genotype Genotype__TP
 }
