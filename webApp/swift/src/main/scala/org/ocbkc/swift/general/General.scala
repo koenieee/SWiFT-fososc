@@ -11,6 +11,12 @@ object RandomExtras
    {  min + ranSeq.nextInt( max - min + 1 )
    }
 
+   /** min is inclusive, max is exclusive
+     */
+   def nextBetween(ranSeq: Random, min:Double, max:Doube):Double =
+   {  min + ranSeq.nextDouble * (max - min)
+   }
+
    def pickRandomElementFromList[A](list:List[A], rs:Random):Option[A] =
    {  list match
       {  case Nil => None
