@@ -49,6 +49,7 @@ object SUS extends ProportionalSelectionTrait[Genotype__TP]
 
          val passOffset = gridLength - ( ( length - offset ) % gridLength )
          */
+
    }
 }
 

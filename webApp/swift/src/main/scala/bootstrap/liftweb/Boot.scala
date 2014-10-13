@@ -390,20 +390,7 @@ class Boot
          val minDurationAlgoDef = 1000 * 2 // ms
          val maxDurationAlgoDef = 1000 * 60 // ms
 
-         // subfunctions
-
-         /**  @param f: function which maps element if inList (A) to value of type C, and gets a value of type B as context information originating from the previous time f was applied to the element at the left. 
-         *
-         */
-         // <&y2012.10.23.23:40:37& todo: move to general lib>
-         def mapWithLeftContext[A,B,C](inList:List[A], leftContext:B, f:(A,B) => (C,B) ):List[C] =
-         {  inList match
-            {  case x::xs  => {  val (newX, nextLeftContext) = f(x,leftContext)
-                              newX::mapWithLeftContext(xs, nextLeftContext, f)
-                           }
-               case List() => List()
-            }
-         }
+         import org.OCBKC.generic.ListUtils._
 
          val randomSeq = new Random
 
