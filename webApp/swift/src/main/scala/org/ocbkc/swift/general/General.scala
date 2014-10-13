@@ -13,7 +13,7 @@ object RandomExtras
 
    /** min is inclusive, max is exclusive
      */
-   def nextBetween(ranSeq: Random, min:Double, max:Doube):Double =
+   def nextBetween(ranSeq: Random, min:Double, max:Double):Double =
    {  min + ranSeq.nextDouble * (max - min)
    }
 
@@ -46,7 +46,6 @@ object ListUtils
          case List() => List()
       }
    }
-
 }
 
 object DateTime

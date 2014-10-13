@@ -390,7 +390,7 @@ class Boot
          val minDurationAlgoDef = 1000 * 2 // ms
          val maxDurationAlgoDef = 1000 * 60 // ms
 
-         import org.OCBKC.generic.ListUtils._
+         import org.ocbkc.generic.ListUtils._
 
          val randomSeq = new Random
 
