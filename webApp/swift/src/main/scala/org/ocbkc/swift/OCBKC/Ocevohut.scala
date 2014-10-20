@@ -30,13 +30,27 @@ class Main
 
       import Types._
 
-      class _3Dpoint extends Individual[_3DpointGenotype]
+      class _3Dpoint(x:Int, y:Int, z:Int) extends Individual[_3DpointGenotype]
+      {  val genotype = (x,y,z)
+      }
 
       /** Fitness is the distance to the optimal point at (4,5,98)
         */
       def oFiFun(_3dpg:_3DpointGenotype):Double =
       {  sqrt( pow( 4d - _3dpg._1, 2d ) + pow( 5d  - _3dpg._2, 2d ) + pow(98d - _3dpg._3, 2d) )
       }
+      
+      val SUSfor3dpg = new SUS[_3DpointGenotype]
+
+      val test_pop = List(
+                        new _3Dpoint(1,2,3),
+                        new _3Dpoint(3,5,90),
+                        new _3Dpoint(6,5,80)
+                        )
+
+      SUSfor3dpg(test_pop
+
+
    }
 }
 
@@ -100,7 +114,9 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       val gridLength:Double      = averageFitness // just a synonym, that is same extension, however, different intension (Rudolf Carnap, the morning star is the evening star" - ;-) )
       val randomShift:Double     = RandomExtras.nextBetween(ranSeq, 0d, averageFitness)
 
-      /** length = 2
+      /** Some notes, with an example calculation:
+
+          length = 2
           offset = 0.5
           gridlenght = 1
 
