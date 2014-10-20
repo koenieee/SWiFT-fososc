@@ -70,7 +70,7 @@ class TranslationRound
       def processKeyLogs(keylogs: String) =
       { log("processing Keylogs")
         val outputFileName: String = KEYLOGFLUENCYDIR + "/keylog_session"+sesCoordLR.si.id+"_user"+sesCoordLR.si.userId+"_"+sesCoordLR.si.startTime+".log"
-        val outFile = new java.io.File(outputFileName);
+        val outFile = new java.io.File(outputFileName)
         keyLogData = keylogs
         log("keylog val: " + keylogs)
         outFile.getParentFile().mkdirs()
