@@ -11,11 +11,7 @@
          font-weight: bold;
          text-shadow: 1px 1px 0 #fff;
          }
-         #output{
-         font-weight: bold;
-         text-shadow: 1px 1px 0 #fff;
-	background-color: lightblue;
-         }
+
       </style>
       <h2>Analyse Fluency Typing</h2>
 	<hr/>
@@ -27,9 +23,9 @@
       <center>
 
           <button type="button" onclick="javascript:startPlaying()" >Start Playing</button>
-          <button type="button" onclick="javascript:pausePlaying()" id="stopstart">Pause Playing</button>
-          <button type="button" onclick="javascript:nextKey()">Next Key</button>
-          <button type="button" onclick="javascript:prevKey()">Previous Key</button>
+          <button type="button" onclick="javascript:pausePlaying()" id="stopstart" disabled="true">Pause Playing</button>
+          <button type="button" onclick="javascript:nextKey()" id="next">Next Key</button>
+          <button type="button" onclick="javascript:prevKey()" id="prev" disabled="true">Previous Key</button>
 
       </center><br/>
       <hr/>
@@ -37,27 +33,31 @@
          <top:jsonData/>
       </div>
             <center>
-               <div id="output"  />
+               <textarea id="output" disabled="true" ></textarea>
             </center>
       <br/>
       <hr/>
       <br/>
       <div id="progressbar" >
-        <center> <div class="progress-label">Start Playing</div></center>
+        <center> <div class="progress-label"></div></center>
       </div>
       <br/>
       <script text="type/javascript">
+
          // <![CDATA[
          //global vars
          var timer;
          var progTimer;
-         var knopje = $("#stopstart");
+         var pauze = $("#stopstart");
+         var next = $("#next");
+         var prev = $("#prev");
          var progressbar = $("#progressbar")
          var progressLabel = $(".progress-label");
          var jsonData = JSON.parse($('#input_data').html());
          var len = jsonData.length;
          var total = 0;
-
+         var handmatig = false;
+         var curpos = 0;
 
          for (var x in jsonData) {
              total = total + jsonData[x].time;
@@ -70,7 +70,7 @@
          progressbar.progressbar({
                  value: true,
                  change: function() {
-                     progressLabel.text((progressbar.progressbar("value") || 0) + "%");
+                     progressLabel.text((progressbar.progressbar("value")  || 0) + "%" );
                  },
                  complete: function() {
                      progressLabel.text("Complete!");
@@ -99,33 +99,53 @@
              this.resume();
          }
 
-        function textLoop(i) {
+        function textLoop() {
+            if(handmatig == true){
 
-            while (i < len) {
-                $("#progressbar2").progressbar({
-                value: i / 100
-                });
-                if (jsonData[i].key == "%0D") {
-                    $('#output').append("<Br>");
+                   if (jsonData[curpos].key == "%0D") {
+                        $('#output').append("\n");
+                    }
+                     else if(jsonData[curpos].key == "%20"){
+                      $('#output').append(" ");
+                     }
+                     else if(jsonData[curpos].key == "%08"){
+                     var nieuwtekst = $('#output').text().slice(0,-1)
+                     $('#output').html(nieuwtekst);
+
+                     }
+
+                     else {
+                        $('#output').append(jsonData[curpos].key)
+                    }
+
+
+
+            }
+            else {
+                while (curpos < len) {
+
+                    if (jsonData[curpos].key == "%0D") {
+                        $('#output').append("\n");
+                    }
+                     else if(jsonData[curpos].key == "%20"){
+                      $('#output').append(" ");
+                     }
+                     else if(jsonData[curpos].key == "%08"){
+                     var nieuwtekst = $('#output').text().slice(0,-1)
+                     $('#output').html(nieuwtekst);
+
+                     }
+
+                     else {
+                        $('#output').append(jsonData[curpos].key)
+                    }
+                    curpos++;
+                    timer = new Timer(function() {
+                    textLoop();
+                    }, jsonData[curpos].time);
+
+                    break;
                 }
-                 else if(jsonData[i].key == "%20"){
-                  $('#output').append(" ");
-                 }
-                 else if(jsonData[i].key == "%08"){
-                 var nieuwtekst = $('#output').text().slice(0,-1)
-                 $('#output').html(nieuwtekst);
-
-                 }
-
-                 else {
-                    $('#output').append(jsonData[i].key)
-                }
-                i++;
-                timer = new Timer(function() {
-                textLoop(i);
-                }, jsonData[i].time);
-
-                break;
             }
         }
 
@@ -137,29 +157,40 @@
              if (val < 99) {
                  progTimer = new Timer(progress, totalTime);
              }
+             else
+             {
+             next.attr("disabled","true");
+             pauze.attr("disabled","true");
+             }
         }
 
          function startPlaying() {
+         curpos=0;
+         handmatig = false;
+             pauze.removeAttr("disabled");
+             next.removeAttr("disabled");
+             prev.removeAttr("disabled");
              $('#output').empty();
              progressbar.progressbar("value", 0);
              if(typeof timer != "undefined"){
              timer.clear();
              progTimer.clear();
              }
-             knopje.html('Pause Playing');
+             pauze.html('Pause Playing');
+            textLoop();
 
-             textLoop(0);
              progTimer = new Timer(progress, totalTime);
          }
 
          function pausePlaying() {
-             if (knopje.html() == "Pause Playing") {
-                 knopje.html('Continue Playing');
+         handmatig = false;
+             if (pauze.html() == "Pause Playing") {
+                 pauze.html('Continue Playing');
                  timer.pause()
                  progTimer.pause();
                  // alert("pause");
              } else {
-                 knopje.html('Pause Playing');
+                 pauze.html('Pause Playing');
                  timer.resume()
                  progTimer.resume();
                  // alert("pause");
@@ -168,15 +199,51 @@
          }
 
          function nextKey() {
+         if(typeof timer != "undefined"){
              timer.pause()
              progTimer.pause();
-             alert("nextKey");
+             }
+             handmatig = true;
+             pauze.html('Continue Playing');
+             if(curpos < len){
+             prev.removeAttr("disabled");
+             textLoop();
+             var val = progressbar.progressbar("value");
+             progressbar.progressbar("value", parseInt((curpos/len)*100));
+
+             curpos++;
+             }
+             else{
+             progressbar.progressbar("value", 100);
+             next.attr("disabled","true");
+              prev.removeAttr("disabled");
+             }
+
          }
 
          function prevKey() {
+          if(typeof timer != "undefined"){
              timer.pause()
              progTimer.pause();
-             alert("prevKey");
+             }
+             handmatig = true;
+             pauze.html('Continue Playing');
+             pauze.removeAttr("disabled");
+             if(curpos > 0){
+            next.removeAttr("disabled");
+             var val = progressbar.progressbar("value");
+             progressbar.progressbar("value", parseInt((curpos/len)*100));
+            // textLoop(); blabla??
+            var nieuwtekst = $('#output').text().slice(0,-1)
+                     $('#output').html(nieuwtekst);
+             curpos--;
+             }
+             else{
+             progressbar.progressbar("value", 0);
+             prev.attr("disabled","true");
+             next.removeAttr("disabled");
+             }
+
 
          }
 

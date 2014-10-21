@@ -113,7 +113,7 @@ class TranslationRound
       }else
       {  List()
       }
-      val javascript: String = """
+      val javascript: String = """function keyLogData(){
                                  document.onkeypress = function(evt) {
                                     evt = evt || window.event
                                     key = String.fromCharCode(evt.charCode)
@@ -137,7 +137,7 @@ class TranslationRound
                                   "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
                                   }
                                  });
-
+                                }
 
 
                                """
@@ -145,7 +145,7 @@ class TranslationRound
 
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
-            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, ( List("rows" -> "10", "style" -> "width: 100%") ++ editableAttrib ):_*), // todo: how to make text area page width?
+            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, ( List("rows" -> "10", "style" -> "width: 100%", "onfocus" -> "keyLogData()") ++ editableAttrib ):_*), // todo: how to make text area page width?
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
