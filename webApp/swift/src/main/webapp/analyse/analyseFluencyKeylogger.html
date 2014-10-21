@@ -24,7 +24,14 @@
       <b><top:userName/></b>
       <br/>
       <div id="duration"/><br/>
-      <center><button type="button" onclick="javascript:startPlaying()">Start Playing</button></center><br/>
+      <center>
+
+          <button type="button" onclick="javascript:startPlaying()" >Start Playing</button>
+          <button type="button" onclick="javascript:pausePlaying()" id="stopstart">Pause Playing</button>
+          <button type="button" onclick="javascript:nextKey()">Next Key</button>
+          <button type="button" onclick="javascript:prevKey()">Previous Key</button>
+
+      </center><br/>
       <hr/>
       <div id="input_data" style="display:none;">
          <top:jsonData/>
@@ -35,71 +42,144 @@
       <br/>
       <hr/>
       <br/>
-      <div id="progressbar">
+      <div id="progressbar" >
         <center> <div class="progress-label">Start Playing</div></center>
       </div>
       <br/>
       <script text="type/javascript">
          // <![CDATA[
+         //global vars
+         var timer;
+         var progTimer;
+         var knopje = $("#stopstart");
+         var progressbar = $("#progressbar")
+         var progressLabel = $(".progress-label");
+         var jsonData = JSON.parse($('#input_data').html());
+         var len = jsonData.length;
+         var total = 0;
+
+
+         for (var x in jsonData) {
+             total = total + jsonData[x].time;
+         }
+         var totalTime = (total + 200) / 100;
+
+         $('#duration').html("Total Typing Duration: <b> " + total + "</b><br><br>");
+         $('#output').html("");
+
+         progressbar.progressbar({
+                 value: true,
+                 change: function() {
+                     progressLabel.text((progressbar.progressbar("value") || 0) + "%");
+                 },
+                 complete: function() {
+                     progressLabel.text("Complete!");
+                 }
+             });
+
+
+
+         function Timer(callback, delay) {
+             var timerId, start, remaining = delay;
+
+             this.pause = function() {
+                 window.clearTimeout(timerId);
+                 remaining -= new Date() - start;
+             };
+
+             this.resume = function() {
+                 start = new Date();
+                 window.clearTimeout(timerId);
+                 timerId = window.setTimeout(callback, remaining);
+             };
+             this.clear = function() {
+                 window.clearTimeout(timerId);
+             };
+
+             this.resume();
+         }
+
+        function textLoop(i) {
+
+            while (i < len) {
+                $("#progressbar2").progressbar({
+                value: i / 100
+                });
+                if (jsonData[i].key == "%0D") {
+                    $('#output').append("<Br>");
+                }
+                 else if(jsonData[i].key == "%20"){
+                  $('#output').append(" ");
+                 }
+                 else if(jsonData[i].key == "%08"){
+                 var nieuwtekst = $('#output').text().slice(0,-1)
+                 $('#output').html(nieuwtekst);
+
+                 }
+
+                 else {
+                    $('#output').append(jsonData[i].key)
+                }
+                i++;
+                timer = new Timer(function() {
+                textLoop(i);
+                }, jsonData[i].time);
+
+                break;
+            }
+        }
+
+        function progress() {
+
+             var val = progressbar.progressbar("value") || 0;
+             progressbar.progressbar("value", val + 1);
+
+             if (val < 99) {
+                 progTimer = new Timer(progress, totalTime);
+             }
+        }
+
          function startPlaying() {
-         
-	  var jsonData = JSON.parse($('#input_data').html());
+             $('#output').empty();
+             progressbar.progressbar("value", 0);
+             if(typeof timer != "undefined"){
+             timer.clear();
+             progTimer.clear();
+             }
+             knopje.html('Pause Playing');
 
-	  var len = jsonData.length;
-	  var total = 0;
-	  for (var x in jsonData) {
-	      total = total + jsonData[x].time;
-	  }
+             textLoop(0);
+             progTimer = new Timer(progress, totalTime);
+         }
 
-	  $('#duration').html("Total Typing Duration: <b> " + total + "</b><br><br>");
-	  $('#output').html("");
-	  function textLoop(i) {
-	      while (i < len) {
-		  $("#progressbar2").progressbar({
-		      value: i / 100
-		  });
-		  if (jsonData[i].key == "%0D") {
-		      $('#output').append("<Br>")
-		  } else {
-		      $('#output').append(jsonData[i].key)
-		  }
-		  i++;
-		  setTimeout(function() {
-		      textLoop(i);
-		  }, jsonData[i].time);
-		  break;
-	      }
-	  };
+         function pausePlaying() {
+             if (knopje.html() == "Pause Playing") {
+                 knopje.html('Continue Playing');
+                 timer.pause()
+                 progTimer.pause();
+                 // alert("pause");
+             } else {
+                 knopje.html('Pause Playing');
+                 timer.resume()
+                 progTimer.resume();
+                 // alert("pause");
 
-	  textLoop(0);
-	  var progressbar = $("#progressbar"),
-	      progressLabel = $(".progress-label");
+             }
+         }
 
+         function nextKey() {
+             timer.pause()
+             progTimer.pause();
+             alert("nextKey");
+         }
 
-	  progressbar.progressbar({
-	      value: true,
-	      change: function() {
-		  progressLabel.text(progressbar.progressbar("value") + "%");
-	      },
-	      complete: function() {
-		  progressLabel.text("Complete!");
-	      }
-	  });
+         function prevKey() {
+             timer.pause()
+             progTimer.pause();
+             alert("prevKey");
 
-	  var totalTime = (total + 200) / 100
+         }
 
-	  function progress() {
-	      var val = progressbar.progressbar("value") || 0;
-
-	      progressbar.progressbar("value", val + 1);
-
-	      if (val < 99) {
-		  setTimeout(progress, totalTime);
-	      }
-	  }
-
-	  setTimeout(progress, totalTime);
-	}		 
          // ]]>
            
       </script>

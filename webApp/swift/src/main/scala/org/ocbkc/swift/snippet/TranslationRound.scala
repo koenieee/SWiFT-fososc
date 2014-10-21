@@ -125,6 +125,21 @@ class TranslationRound
                                  "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
                                     }
                                 }
+                                 $(document).keydown(function(e){
+
+                                  if(e.keyCode == 8)
+                                  {
+                                  var key = String.fromCharCode(e.keyCode);
+                                  var param = encodeURI(key)
+                                  var div = document.getElementById("output_data")
+                                  div.value = div.value +
+
+                                  "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
+                                  }
+                                 });
+
+
+
                                """
 
 
