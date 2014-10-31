@@ -98,8 +98,20 @@
 
              this.resume();
          }
+        function replaceRange(s, start, end, substitute) {
+            return s.substring(0, start) + substitute + s.substring(end);
+        }
 
         function textLoop() {
+                String.prototype.replaceAt=function(index, character) {
+                            return this.substr(0, index) + character + this.substr(index+character.length);
+                      }
+                      String.prototype.insert = function (index, string) {
+                    if (index > 0)
+                     return this.substring(0, index) + string + this.substring(index, this.length);
+                    else
+                          return string + this;
+                    };
             if(handmatig == true){
 
                    if (jsonData[curpos].key == "%0D") {
@@ -115,30 +127,49 @@
                      }
 
                      else {
-                        $('#output').append(jsonData[curpos].key)
+                           //todo
                     }
-
-
-
             }
             else {
                 while (curpos < len) {
-
-                    if (jsonData[curpos].key == "%0D") {
-                        $('#output').append("\n");
+                    var text = $('#output').text();
+                    var key = jsonData[curpos].key
+                    var pos = jsonData[curpos].pos
+                    insert = false;
+                    if (key == "%0D") { //nieuwe regel
+                         text = text.replaceAt(pos, " ");
                     }
-                     else if(jsonData[curpos].key == "%20"){
-                      $('#output').append(" ");
+                     else if(key == "%20"){ //spatie
+                       text = text.replaceAt(pos, " ");
                      }
-                     else if(jsonData[curpos].key == "%08"){
-                     var nieuwtekst = $('#output').text().slice(0,-1)
-                     $('#output').html(nieuwtekst);
+                     else if(key == "."){ //delete knop
+                       text = text.replaceAt(pos, " ");
+                     }
+                     else if(key == "%08"){ //backspace
+                     console.log(pos-1);
+                       text = text.replaceAt(pos-1, " ");
+                   //    insert = true;
 
                      }
-
                      else {
-                        $('#output').append(jsonData[curpos].key)
+                   //  if(insert){
+                   //  text = text.replaceAt(pos, key);
+
+                   //  insert = false;
+                  //   }
+                  //   else
+                  //   {
+                        text = text.insert(pos, key);
+                   //   }
+                       // console.log(text.charAt(jsonData[curpos].pos+1));
+                      //  if(text.charAt(jsonData[curpos].pos+1) == " ")
+                      //  {
+                      //      text = text.replaceAt(jsonData[curpos].pos+1, "");
+
+                      //  }
                     }
+
+                    $('#output').html(text.replace(/ /g,''));
                     curpos++;
                     timer = new Timer(function() {
                     textLoop();
