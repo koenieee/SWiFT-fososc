@@ -12,7 +12,8 @@
   <inceptionYear>2010</inceptionYear>
 <!--  <author>Chide Groenouwe</author> -->
   <properties>
-    <scala.version>2.11.0</scala.version>
+    <scala.version>2.11</scala.version>
+    <liftweb.version>2.6-RC1</liftweb.version>
     <!-- Common plugin settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
@@ -53,8 +54,8 @@
   <dependencies>
    <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-json-ext_2.9.1</artifactId>
-      <version>2.4</version>
+      <artifactId>lift-json-ext_${scala.version}</artifactId>
+      <version>${liftweb.version}</version>
    </dependency>
 <dependency>
   <groupId>net.liftmodules</groupId>
@@ -63,8 +64,8 @@
 </dependency>
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-mapper_2.9.1</artifactId>
-      <version>2.4</version>
+      <artifactId>lift-mapper_${scala.version}</artifactId>
+      <version>${liftweb.version}</version>
     </dependency>
     <dependency>
       <groupId>ch.qos.logback</groupId>
@@ -124,11 +125,14 @@
      <artifactId>gitective-core</artifactId>
      <version>0.9.9</version>
    </dependency>
+   <!-- &y2014.11.03.21:36:42& problem here, there is no lift-widgets for  Scala 2.11? Or is it -->
+   <!--
     <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-widgets_2.9.1</artifactId>
-      <version>2.4</version>
+      <artifactId>lift-widgets_${scala.version}</artifactId>
+      <version>${liftweb.version}</version>
     </dependency>
+   -->
   </dependencies>
 
   <build>
