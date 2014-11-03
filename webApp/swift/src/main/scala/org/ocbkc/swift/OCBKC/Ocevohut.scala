@@ -1,10 +1,12 @@
+wiw &y2014.10.22.01:29:21& current code compiles, now test by writing test driver, made preps in [swift git repo root]/test/ocevohut, but realised that mc is perhaps not needed: just make use of the classes already compiled by mvn.
+
 package org.ocbkc.swift
 
 import scala.util.Random
 import org.ocbkc.generic._
 import org.ocbkc.generic.random._
 import scala.math._
-
+import org.ocbkc.swift.global.Logging._
 
 package object ocevohut
 {  val ranSeq = new Random
@@ -48,9 +50,13 @@ class Main
                         new _3Dpoint(6,5,80)
                         )
 
-      SUSfor3dpg(test_pop
+      val selFiFun:LocalSelectiveFitnessFunction[_3DpointGenotype] = new LocalSelectiveFitnessFunction[_3DpointGenotype]
+      {  override def apply(gt:_3DpointGenotype):Option[Double] =
+         {  Some(oFiFun(gt))
+         }
+      }
 
-
+      println(SUSfor3dpg(test_pop, selFiFun))
    }
 }
 
@@ -68,7 +74,7 @@ trait OcevohutTrait[Genotype__TP]
    val numberOfChildren = populationSize - numberOfClones
    
    def oFiFun(g:Genotype__TP):Double = 0d // TODO
-
+   
    /** @returns a Map with items (Individual__TP, number_of_children assigned to this parent)
      */
    def selectParents:Map[IndividualType, Int] =
@@ -86,13 +92,16 @@ trait CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP]
 }
 
-trait LocalSelectiveFitnessFunction[Genotype__TP]
+trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
 {  val map:Map[Genotype__TP, Double]
-   def apply(gt:Genotype__TP):Option[Double] =
+   override def apply(gt:Genotype__TP):Option[Double] =
    {  map.get(gt)
    }
 }
 
+trait LocalSelectiveFitnessFunction[Genotype__TP]
+{  def apply(gt:Genotype__TP):Option[Double]
+}
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  override def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP] =
    {  null // TODO
@@ -126,7 +135,7 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
          val passOffset = gridLength - ( ( length - offset ) % gridLength )
          */
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
-      {  val fitnessI:Double        = selFiFun(i.genotype)
+      {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
          val gridFits:Double        = ( fitnessI - offset )/gridLength
          val numberOfChildren:Int   = ( if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) ).toInt
          val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
