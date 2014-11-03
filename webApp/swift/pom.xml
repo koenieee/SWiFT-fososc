@@ -6,7 +6,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.ocbkc.swift</groupId>
   <artifactId>swift</artifactId>
-  <version>0.1</version>
+  <version>0.1</version> <!-- &y2014.11.03.21:04:01& wrong, is much higher in the meanwhile -->
   <packaging>war</packaging>
   <name>SWiFT Project</name>
   <inceptionYear>2010</inceptionYear>
