@@ -127,10 +127,41 @@ which is:
 <br>
 <li>The commits which coincide with a version, carry a tag with the version number in it, in the following form: 
    version[version number]</li>
+<li>If you intend to use a running instance of an ``experimental branch'', to produce data, that you want to continue using in running instances of the release branch, well... Don't do that! Instead, merge the experimental branch first into develop and release it. This may feel somewhat counter-intuitive, because it is something you want to "try out" - however, you will avoid problems with persistent data migration management. You can merge the experiment such that it remains a bit isolated in the running main application, for example by offering an alternative UI that only shows when the application is started in a certain mode.</li>
+<li>Try to avoid real forking (that is: creating a separate branch with its own formal releases), unless you have a very good reason to do so. So, if you have some ``experimental versions'', which however produce serious data by serious users, first merge this experimental version somehow into the develop branch.</li>
 </ul>
 </p>
 
+
+
 <h4><font color="teal">TODO examples</font></h4>
+<p>
+<h2><font color="teal">Design Patterns/Architectural Design Requirements</font></h2>
+Read all comments in the SWiFT API containing the words "Programming Protocol". The level of the protocol is indicated with (Level n), where n is an integer. n = 0 is the most basic, important level, for protocols affecting a large part of the application philosophy. The higher the number, the more localised the influence of the protocol. 
+
+Please, at least read the level 0 protocols before starting to contribute to the SWiFT project.
+
+<h2><font color="teal">Logging</font></h2>
+</p>
+When printing to the logfile from the source code, consider tagging some log entries with a unique identifier as follows:
+
+
+<pre class="prettyprint">
+log("   {| LCD y2014_m08_d06_h11_m59_s18 |} Database completely empty, I feel like a Zen-buddhist, dudicon!")
+</pre>
+
+The unique identifier consists of the date-time at/near the moment the log entry was created.
+
+The reason is that it makes it easy to find back these log entries in the log file, even if the text of the log entry is adapted in later versions of the code. Specifically tag log entries that you search for often in the log file. LCD stands for "Log entry Creation Date".
+
+<h2><font color="teal">Testing</font></h2>
+<h3><font color="teal">Test admin account</font></h3>
+It is often needed to test the SWiFT application in the role of an administrator. For this purpose, you can login to the following admin test account (using the running SWiFT Web interface):
+<br /><br />
+email: admin@test.org<br />
+password: asdfasdf<br />
+<br />
+(Note that this account is not available when the application is deployed!)
 
 </body>
 

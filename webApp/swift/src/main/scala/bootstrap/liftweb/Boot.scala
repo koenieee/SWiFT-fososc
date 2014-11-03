@@ -21,7 +21,7 @@ import org.ocbkc.swift.jgit.InitialiseJgit
 import java.io._
 import org.ocbkc.swift.snippet.SesCoord
 import scala.util.Random
-import _root_.net.liftweb.widgets.tablesorter.TableSorter
+import _root_.net.liftmodules.widgets.tablesorter.TableSorter
 import org.ocbkc.swift.test._
 import org.ocbkc.swift.test.Types._
 import org.ocbkc.swift.test.TestHelpers._
@@ -31,6 +31,7 @@ import org.ocbkc.swift.coord.ses._
 import org.ocbkc.generic.random._
 import ocbkc.swift.test.simulation.jara._
 import net.liftmodules.JQueryModule
+import java.util.Locale
 
 /**
  * A class that's instantiated early and run.  It allows the application
@@ -44,6 +45,9 @@ class Boot
    
       PersDataUpgrader4SWiFT.initialise(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME, GlobalConstant.MAIN_VERSION)
       PersDataUpgrader4SWiFT.apply
+
+     Locale.setDefault(new Locale("en", "US"));
+
 
       LiftRules.useXhtmlMimeType = false
       if (!DB.jndiJdbcConnAvailable_?) 
@@ -69,7 +73,7 @@ class Boot
       // where to search snippet
       LiftRules.addToPackages("org.ocbkc.swift")
 
-      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join)
+      Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
 
       // Build SiteMap
       /* originally generated code:
@@ -119,7 +123,7 @@ class Boot
       }
 
       def playerIsAdmin(player:Player):Boolean =
-      {  player.firstName.is.equals(GlobalConstant.ADMINFIRSTNAME)
+      {  player.firstName.is.equals(GlobalConstant.TESTADMINFIRSTNAME)
       }
 
       // assumes playerIsLoggedIn
@@ -192,6 +196,7 @@ class Boot
       Menu(Loc("playConstiGame", "constiGame" :: Nil, "Play ConstiGame", If(() => {val t = playerIsLoggedIn && !loggedInPlayerIsAdmin; log("Menu Loc \"startSession\": user logged in = " + t); t}, () => RedirectResponse("/index")))),
       Menu(Loc("playerStats", "playerStats" :: Nil, "Your stats", If(() => playerIsLoggedIn && !loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(Loc("AdminPage", "adminPage" :: Nil, "Admin Control", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
+      Menu(Loc("AdminHelp", "adminHelp" :: Nil, "Admin Help", If(() => playerIsLoggedIn && loggedInPlayerIsAdmin, () => RedirectResponse("/index")))),
       Menu(
          Loc(
             "constitution",
@@ -255,14 +260,16 @@ class Boot
     { Player.logUserIdIn("1")
     }
   */  
+
+
          //if(TestSettings.AUTOLOGIN) {LiftSession.afterSessionCreate = ((l:LiftSession,r:Req)=>(log)) :: LiftSession.afterSessionCreate}
          if(TestSettings.AUTOLOGIN.ON) { LiftSession.afterSessionCreate ::= ( (l:LiftSession, r: Req) => Player.logUserIdIn(TestSettings.AUTOLOGIN.USER_ID) ) }
 
+         InitialiseJgit() // This must happen before Constitution methods are called!
          // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
          Constitution.deserialize // when lift starts up (= running this boot method!) load all constitutions from permanent storage
          LiftRules.unloadHooks.append(() => Constitution.serialize) // when lift shuts down, store all constitution objects
 
-         InitialiseJgit()
 
          // <&y2012.08.04.19:33:00& perhaps make it so that also this rewrite URL becomes visible in the browser URL input line>
 
@@ -274,12 +281,12 @@ class Boot
          }
 
          log("   check whether admin account exists, if not: create it (yes, I feel just like God)...")
-         val admin = Player.find(By(Player.firstName, GlobalConstant.ADMINFIRSTNAME)) match
+         val admin = Player.find(By(Player.firstName, GlobalConstant.TESTADMINFIRSTNAME)) match
          {  case Full(player) => {  log("   Admin account already exists, my beloved friend.")
                                     player 
                                  } // do nothing, player exists.
             case _            => {  log("   Doesn't exist: creating it...")
-                                    val p = Player.create.firstName(GlobalConstant.ADMINFIRSTNAME).email("cg@xs4all.nl").password("asdfasdf").superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
+                                    val p = Player.create.firstName(GlobalConstant.TESTADMINFIRSTNAME).email(GlobalConstant.TESTADMINEMAIL).password(GlobalConstant.TESTADMINPW).superUser(true).validated(true)  // <&y2012.08.30.20:13:36& TODO read this information from a property file, it is not safe to have it up here (in open source repo)>
                                     p.save
                                     p
                                  }
@@ -287,7 +294,7 @@ class Boot
          }
 
          GlobalConstant.adminOpt = Some(admin)
-
+         
 
          // TODO: before doing this, erase all persistency information, but not without a warning to the developer
          if(TestSettings.CREATETESTUSERBASE)
@@ -499,6 +506,11 @@ class Boot
          }
          ) => false})
       }
+
+      // print some stats in the log
+      log("Some stats about beginning state after boot:")
+      log("Number of Players in the database = " + Player.count)
+      log("Names of players in the database = " + Player.findAll.mkString(", "))
 
       log("Boot.boot finished")
    }

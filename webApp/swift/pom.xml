@@ -18,7 +18,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
     <!-- vscaladoc settings -->
-    <maven.scaladoc.vscaladocVersion>1.2-m1</maven.scaladoc.vscaladocVersion>
+    <!-- <maven.scaladoc.vscaladocVersion>1.2-m1</maven.scaladoc.vscaladocVersion> -->
     <vscaladoc.links.liftweb.pathsufix>scaladocs/</vscaladoc.links.liftweb.pathsufix>
     <vscaladoc.links.liftweb.baseurl>http://scala-tools.org/mvnsites/liftweb</vscaladoc.links.liftweb.baseurl>
   </properties>
@@ -62,7 +62,12 @@
   <artifactId>lift-jquery-module_2.5_2.9.2</artifactId>
   <version>2.8</version>
 </dependency>
-    <dependency>
+  <dependency>
+      <groupId>org.jopendocument</groupId>
+      <artifactId>jOpenDocument</artifactId>
+      <version>1.3</version>
+  </dependency>
+      <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-mapper_${scala.version}</artifactId>
       <version>${liftweb.version}</version>
@@ -96,23 +101,20 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
-
-    <dependency>
-      <groupId>org.mortbay.jetty</groupId>
-      <artifactId>jetty</artifactId>
-      <version>6.1.25</version>
-      <scope>test</scope>
-    </dependency>
-    <!-- for LiftConsole -->
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.11.1</version>
+      <version>2.11.0</version>
     </dependency>
+      <dependency>
+          <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
+          <version>2.4</version>
+      </dependency>
     <dependency>
       <groupId>org.eclipse.jgit</groupId>
       <artifactId>org.eclipse.jgit</artifactId>
-      <version>2.3.1.201302201838-r</version>
+      <version>3.5.1.201410131835-r</version>
       <!-- <version>2.0.0.201206130900-r</version> -->
     </dependency>
    <dependency>
@@ -120,8 +122,22 @@
      <artifactId>gitective-core</artifactId>
      <version>0.9.9</version>
    </dependency>
-   <!-- &y2014.11.03.21:36:42& problem here, there is no lift-widgets for  Scala 2.11? Or is it -->
+      <dependency>
+          <groupId>net.liftmodules</groupId>
+          <artifactId>widgets_2.10</artifactId>
+          <version>2.5-M4-1.2</version>
+      </dependency>
+
+
+      <!-- &y2014.11.03.21:36:42& problem here, there is no lift-widgets for  Scala 2.11? Or is it -->
    <!--
+=======
+<dependency>
+<groupId>org.eclipse.jetty</groupId>
+  <artifactId>jetty-maven-plugin</artifactId>
+  <version>9.2.2.v20140723</version>
+</dependency>
+>>>>>>> develop.redHttp2Https
     <dependency>
       <groupId>net.liftweb</groupId>
       <artifactId>lift-widgets_${scala.version}</artifactId>
@@ -161,33 +177,44 @@
         <plugin>
             <groupId>net.alchim31.maven</groupId>
             <artifactId>scala-maven-plugin</artifactId>
-            <version>3.2.0</version>
+            <version>3.1.0</version>
             <executions>
+
                 <execution>
+                    <id>scala-compile-first</id>
+                    <phase>process-resources</phase>
                     <goals>
                         <goal>compile</goal>
-                        <goal>testCompile</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>attach-scaladocs</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>doc-jar</goal>
                     </goals>
                 </execution>
             </executions>
             <configuration>
-                <recompileMode>incremental</recompileMode>
-                <useZincServer>true</useZincServer>
-
+                <scalaVersion>2.11</scalaVersion>
+                <source>${java.version}</source>
+                <target>${java.version}</target>
+                <encoding>UTF-8</encoding>
                 <args>
                     <arg>-unchecked</arg>
                     <arg>-deprecation</arg>
-                    <arg>-explaintypes</arg>
+                    <arg>-feature</arg>
+                    <arg>-language:postfixOps</arg>
                 </args>
+                 <javacArgs>
+                    <javacArg>-source</javacArg>
+                    <javacArg>${java.version}</javacArg>
+                    <javacArg>-target</javacArg>
+                    <javacArg>${java.version}</javacArg>
+                </javacArgs>
 
-                <jvmArgs>
-                    <jvmArg>-Xms256m</jvmArg>
-                    <jvmArg>-Xmx256m</jvmArg>
-                </jvmArgs>
             </configuration>
-
         </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-resources-plugin</artifactId>
@@ -236,33 +263,23 @@
 		</execution>
 	    </executions>
 	    <configuration>
-		<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
+		<keystore>src/main/resources/jetty-ssl.keystore</keystore>
 		<dname>cn=localhost</dname>
-		<keypass>jetty6</keypass>
-		<storepass>jetty6</storepass>
-		<alias>jetty6</alias>
+		<keypass>secret</keypass>
+		<storepass>secret</storepass>
+		<alias>secret</alias>
 		<keyalg>RSA</keyalg>
 	    </configuration>
 	</plugin>
-      <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <version>6.1.25</version>
-        
-        <configuration>
-          <contextPath>/</contextPath>
-          <scanIntervalSeconds>5</scanIntervalSeconds>
-	<connectors>
-	<connector implementation="org.mortbay.jetty.security.SslSocketConnector">
-	<port>8080</port>
-	<maxIdleTime>60000</maxIdleTime>
-	<keystore>${project.build.directory}/jetty-ssl.keystore</keystore>
-	<password>jetty6</password>
-	<keyPassword>jetty6</keyPassword>
-	</connector>
-	</connectors>
-       </configuration>
-      </plugin>
+	<plugin>
+	  <groupId>org.eclipse.jetty</groupId>
+	  <artifactId>jetty-maven-plugin</artifactId>
+	  <version>9.2.2.v20140723</version>
+	  <configuration>
+	    <jettyXml>jetty_config_files/jetty.xml,jetty_config_files/jetty-ssl.xml,jetty_config_files/jetty-https.xml,jetty_config_files/jetty-http.xml</jettyXml>
+	  </configuration>
+	</plugin>
+
       <plugin>
         <groupId>net.sf.alchim</groupId>
         <artifactId>yuicompressor-maven-plugin</artifactId>

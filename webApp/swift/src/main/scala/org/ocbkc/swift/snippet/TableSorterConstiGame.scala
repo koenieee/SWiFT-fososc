@@ -13,7 +13,7 @@ import org.ocbkc.swift.OCBKC.scoring._
 import Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
-import _root_.net.liftweb.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
+import _root_.net.liftmodules.widgets.tablesorter.{TableSorter, DisableSorting, Sorting, Sorter}
 
 class TableSorterConstiGame
 {  //val headers = List( (0, Sorter("text")), (2, Sorter("digit")), (3, Sorter("digit")) )

@@ -1,0 +1,17 @@
+<lift:surround with="default" at="content">
+    <lift:analyseFluencySessionsPlayer form="GET">
+        <h1>Analyse Fluency Sessions of Player <top:player /></h1>
+        <hr/>
+        Constituton: <top:constName /><br />
+        Release: <top:release /><br />
+        Graphical View: <top:graphLink/><br/>
+        Export session to Spreadsheet: <top:odsDownload/>
+        <br/>
+        <hr />
+
+        <top:sessionPlayerTable/>
+
+
+    </lift:analyseFluencySessionsPlayer>
+
+</lift:surround>

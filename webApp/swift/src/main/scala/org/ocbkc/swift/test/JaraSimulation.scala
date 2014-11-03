@@ -191,7 +191,7 @@ object SimGod
             {  u => u._1.doProposedTransition
             }
             // [MOVE2OC]
-            unoccupiedEntitiesWithProposedActivities = unoccupiedEntitiesWithProposedActivities -- unoccupiedEntitiesWithFirstStartTime
+            unoccupiedEntitiesWithProposedActivities = unoccupiedEntitiesWithProposedActivities diff unoccupiedEntitiesWithFirstStartTime
             occupiedEntities_Jn_Start_Stop = sortByStop( occupiedEntities_Jn_Start_Stop ++ unoccupiedEntitiesWithFirstStartTime )
             environmentChange = true
          }
@@ -205,7 +205,7 @@ object SimGod
 	    }
 
             unoccupiedEntitiesWithoutProposedActivities = unoccupiedEntitiesWithoutProposedActivities ++ occupiedEntitiesWithFirstStopTime.map{ case (o,_) => o }
-            occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop -- occupiedEntitiesWithFirstStopTime
+            occupiedEntities_Jn_Start_Stop = occupiedEntities_Jn_Start_Stop diff occupiedEntitiesWithFirstStopTime
             environmentChange = true
          }
 

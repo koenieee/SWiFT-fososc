@@ -1,0 +1,10 @@
+#!/bin/bashrc
+
+# Copy this script to settings_config and adapt for your local machine.
+# Changes intended for everyone should be made in settings_config_template and pushed to the repo
+# Changes pulled from the repo, should be manually processed in your logical settings_config.
+
+SWIFT_POM_DIR=
+SWIFT_LOG_FILE=$SWIFT_POM_DIR/[log file here]
+
+

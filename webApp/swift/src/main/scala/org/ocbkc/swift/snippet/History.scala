@@ -18,7 +18,7 @@ import org.ocbkc.swift.model._
 import org.eclipse.jgit.revwalk.RevCommit 
 import org.eclipse.jgit.lib.ObjectId
 import org.ocbkc.swift.global.LiftHelpers._
-import _root_.net.liftweb.widgets.tablesorter.TableSorter
+import _root_.net.liftmodules.widgets.tablesorter.TableSorter
 
 class History
 {  val sesCoordLR = SesCoord.is; // extract session coordinator object from session variable.
@@ -78,7 +78,7 @@ class History
                                                                 }
                                        }
                                     ),
-            "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(GlobalConstant.AverageFluency.minimalSampleSizePerPlayer, revcom.name, GlobalConstant.AverageFluency.fluencyConstantK)) else "-" }
+            "fluency"             -> { if( isRelease ) optionToUI(ConstiScores.averageFluency(revcom.name)) else "-" }
             )
       }
       )         

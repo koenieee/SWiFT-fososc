@@ -24,7 +24,7 @@ import ocbkc.swift.test.simulation.jara._
 import org.ocbkc.swift.model.Player
 import java.io._
 import java.lang.{ Long => JLong }
-import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FileUtils
 import org.eclipse.jgit.api._
 import org.eclipse.jgit.lib._
 import org.eclipse.jgit.storage.file._
@@ -37,15 +37,11 @@ import JE._
 /*
  * Cleanup non-used imports.
  * */
-
-
-
-
 class AdminPage
 {  // the SessionVar will contain a String with "Anonymous" as default value.
    object JaraDur extends SessionVar[String]("1")
    
-   println("Adminpage is called")
+   log("AdminPage called")
    
    //val path = GlobalConstant.WEBAPROOT
    //JsonCmd(2,null,false,Map(command -> 2, params -> false))
@@ -65,16 +61,7 @@ class AdminPage
             {  println(p)
 	       SetHtml("jararesult",Text("Running Simulation.."));
 	       JaraDur.set(p)
-    
-	       println("startsimu called");
-	       Player.bulkDelete_!!(By(Player.superUser,false))
-	       Constitution.removeAll
-
-	       FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONOBJECTDIR))
-	       FileUtils.deleteDirectory(new File(GlobalConstant.CONSTITUTIONHTMLDIR))
-	       FileUtils.deleteDirectory(new File(GlobalConstant.SESSIONINFOOBJECTDIR))
-
-               InitialiseJgit()
+               GlobalConstant.clearAndReinitialiseSWiFTdatabase
 
  	       log("Calling Jara")	          
                PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)

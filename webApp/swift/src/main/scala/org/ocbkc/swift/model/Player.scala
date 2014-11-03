@@ -16,6 +16,7 @@ import org.ocbkc.swift.global.Logging._
 
 /**
  * The singleton that has methods for accessing the database
+ *
  */
 
 object Player extends Player with MetaMegaProtoUser[Player] {
@@ -52,6 +53,7 @@ object Player extends Player with MetaMegaProtoUser[Player] {
 
 /**
  * An O-R mapped "User" class that includes first name, last name, password and we add a "Personal Essay" to it
+ * Design protocol: information regarding the score of the player should be put in PlayerScores, not here.
  */
 class Player extends MegaProtoUser[Player] {
    def getSingleton = Player // what's the "meta" server
@@ -94,7 +96,8 @@ class Player extends MegaProtoUser[Player] {
          super.apply(constiId)
       }
    }
-   
+
+
    // <&y2012.08.03.10:20:25& perhaps in future refactor, or supplement, with more generic, row of chosen constitutions>
    object releaseOfFirstChosenConstitution extends MappedString(this, GlobalConstant.GIThASHsIZE)
 
