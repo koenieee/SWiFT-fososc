@@ -1,0 +1,2 @@
+fof(form0, axiom, F(david)).
+fof(form1, question, ? [PVx] : F(PVx)).
