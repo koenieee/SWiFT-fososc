@@ -13,6 +13,8 @@ import net.liftweb.common.Empty
 import org.ocbkc.swift.OCBKC.Constitution
 import bootstrap.liftweb.Boot
 import org.ocbkc.swift.jgit.InitialiseJgit
+import org.ocbkc.swift.logilang.{Predicate, FOLtheory, PredApp_FOL}
+import org.ocbkc.swift.logilang.bridge.brone.{PredicateBridgeSent, BridgeDoc}
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
@@ -50,6 +52,18 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
       // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
       Constitution.deserialize
       sesCoordLR.URchooseFirstConstitution(Constitution.constis.head.constiId)
+
+
+
+
+      //force to use own translation input:
+      val generatedEfeDoc = new FOLtheory
+      val randomPersonCTLname = "ctlName" + "Kibbeling"
+      val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
+      generatedEfeDoc.addPredApp(PredApp_FOL(Predicate("F", 1), List(randomPersonConstant)))
+
+      info("generatedEFEDOc: " + generatedEfeDoc)
+
       sesCoordLR.URtryStartSession
       SesCoord.is.URconstiStudy
 //begin testing a full translation round!
@@ -60,6 +74,8 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 			val translation: String = "F(david)" //generate answer
       sesCoordLR.si.textCTLbyPlayer = translation;
       SesCoord.URstopTranslation
+
+      sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc);
 
       sesCoordLR.URstartBridgeConstruction // start bridge round
 			when("Round Bridge: ")
