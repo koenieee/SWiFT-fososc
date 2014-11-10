@@ -14,7 +14,8 @@ import org.ocbkc.swift.OCBKC.Constitution
 import bootstrap.liftweb.Boot
 import org.ocbkc.swift.jgit.InitialiseJgit
 import org.ocbkc.swift.logilang.{Predicate, FOLtheory, PredApp_FOL}
-import org.ocbkc.swift.logilang.bridge.brone.{PredicateBridgeSent, BridgeDoc}
+import org.ocbkc.swift.logilang.bridge.brone.{EntityBridgeSent, PredicateBridgeSent, BridgeDoc}
+
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
@@ -42,7 +43,7 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
     }
 
   "Translation Test Constitution 1"  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
-  val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
+    val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
     S.initIfUninitted(session) {
       //initialise everything
       Player.logUserIn(userID);
@@ -58,16 +59,33 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 
       //force to use own translation input:
       val generatedEfeDoc = new FOLtheory
+
       val randomPersonCTLname = "ctlName" + "Kibbeling"
       val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-      generatedEfeDoc.addPredApp(PredApp_FOL(Predicate("F", 1), List(randomPersonConstant)))
+      def initialiseEfeDoc(efeDoc:FOLtheory):(BridgeDoc, Predicate) =
+      {  val fastPredicate       = efeDoc.gocPredicate("F", 1).get
+        val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
+        val bd                  = new BridgeDoc
+        bd.bridgeSents          ++= List(fastPredicateBridge)
+        (bd, fastPredicate)
+      }
+      val (bridgeDoc, fastPredicate) = initialiseEfeDoc(generatedEfeDoc)
+      val entityBridge = EntityBridgeSent(randomPersonCTLname, List("Kibbeling"))
 
-      info("generatedEFEDOc: " + generatedEfeDoc)
+      bridgeDoc.bridgeSents ++= List(entityBridge)
+      generatedEfeDoc.addPredApp(PredApp_FOL(fastPredicate, List(randomPersonConstant)))
+
+      info("CUSTOM GENERATED FOLTHEORY: " + generatedEfeDoc) //how to pass this through?
 
       sesCoordLR.URtryStartSession
       SesCoord.is.URconstiStudy
+      //generatedEfeDoc must be giving to generateTranslationProblem as starting point..
+
 //begin testing a full translation round!
       sesCoordLR.URstartTranslation //start translation round
+      sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc) //HOWTO?
+      sesCoordLR.si.bridgeCTL2NLcomputer = Some(bridgeDoc)//HOWTO??
+      info("CTL TExt: "+sesCoordLR.si.textCTLbyComputer)
 			given("a text: ");
       info("Text: "+ sesCoordLR.si.textNL)
 			given("a correct Translation: ")
