@@ -158,6 +158,28 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
      if(iTheo != null){
        //custom, howTO?
+
+       //generatedEFE DOC, without ANSWERCTL
+       /*
+             val generatedEfeDoc = new FOLtheory
+
+      val randomPersonCTLname = "ctlName" + "Kibbeling"
+      val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
+
+      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
+
+      val bridgeDoc = new BridgeDoc
+
+      bridgeDoc.bridgeSents  ++= List(fastPredicateBridge)
+      val fastPredicate       = generatedEfeDoc.gocPredicate("F", 1).get
+      val entityBridge = EntityBridgeSent(randomPersonCTLname, List("Kibbeling"))
+
+      bridgeDoc.bridgeSents ++= List(entityBridge)
+      generatedEfeDoc.addPredApp(PredApp_FOL(fastPredicate, List(randomPersonConstant)))
+
+
+
+        */
      }
      else {
          (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
