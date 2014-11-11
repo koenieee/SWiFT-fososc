@@ -139,14 +139,18 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
    {  log("generateTranslationProblem started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
+
+      // { create return variables (they will be filled in the rest of this method)
       val generatedEfeDoc = new FOLtheory
-   // { refactor the following not using vars
- 
+      // { refactor the following not using vars
       var textNL:String = ""  // refactor not using vars
       var algoDef_rb_option:Option[EfeQuerySent_rb] = None
       var answerCTL_option:Option[EfeAnswerLangSent] = None
-      
-   // }
+      // }
+      // }
+
+      // { now fill generatedEfeDoc with... uhm, just that, a randomly generated EfeDoc. 
+      //   For testers: if you want to provide your own handcrafted information, skip this part, and instead provide a generatedEfeDoc, and (until future implementations) answerCTL_option. Moreover, choose how to generate the TextNL from your generatedEfeDoc (look how it is done in the non-test code below). Also, add additional bridges to bridgeDocs, for all entities occurring in your handcrafted efeDoc (again, look how it is done in the normal code below).
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
 
       // in this increment: pick one random translation problem of efe (in future increment they will be combined into one TextNL document).
@@ -168,7 +172,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
             bridgeDoc.bridgeSents ++= List(entityBridge)
             generatedEfeDoc.addPredApp(PredApp_FOL(pred, List(randomPersonConstant)))      
             
-            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
+            // <&y2014.11.11.20:44:50& the answerCTL_option is not generated using the query, that advantage of doing this is that (1) elegance: it is redundant information, which can be generated, which will be less error prone (2) ease for others adding new translation problems, they don't have to also handcraft the answer.
+        
             answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(pred, List(Var("x")))))
             textNL = TranslateFOLtheory2NL.NLstyleStraight(generatedEfeDoc, bridgeDoc)(0)
          }
@@ -176,10 +181,12 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          case 1 =>
          {  val (constants, pred) = addKR4distributedPredicateInNL(generatedEfeDoc, bridgeDoc)
             textNL = TranslateFOLtheory2NL.NLstyleDistributePredicateUnchecked(constants, pred, bridgeDoc)
-            algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
             answerCTL_option = Some(fofa.Forall(Var("x"), constants, PredApp_Fofa(pred, List(Var("x")))))
          }
       }
+
+      algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
+      // }
 
       def randomPredicate =
       {  pickRandomElementFromList( List(bigPredicate, fastPredicate), rg ).get
