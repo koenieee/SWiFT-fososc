@@ -62,14 +62,13 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 
       val randomPersonCTLname = "ctlName" + "Kibbeling"
       val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-      def initialiseEfeDoc(efeDoc:FOLtheory):(BridgeDoc, Predicate) =
-      {  val fastPredicate       = efeDoc.gocPredicate("F", 1).get
-        val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
-        val bd                  = new BridgeDoc
-        bd.bridgeSents          ++= List(fastPredicateBridge)
-        (bd, fastPredicate)
-      }
-      val (bridgeDoc, fastPredicate) = initialiseEfeDoc(generatedEfeDoc)
+
+      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
+
+      val bridgeDoc = new BridgeDoc
+
+      bridgeDoc.bridgeSents  ++= List(fastPredicateBridge)
+      val fastPredicate       = generatedEfeDoc.gocPredicate("F", 1).get
       val entityBridge = EntityBridgeSent(randomPersonCTLname, List("Kibbeling"))
 
       bridgeDoc.bridgeSents ++= List(entityBridge)
@@ -93,7 +92,7 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
       sesCoordLR.si.textCTLbyPlayer = translation;
       SesCoord.URstopTranslation
 
-      sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc);
+    //  sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc);
 
       sesCoordLR.URstartBridgeConstruction // start bridge round
 			when("Round Bridge: ")

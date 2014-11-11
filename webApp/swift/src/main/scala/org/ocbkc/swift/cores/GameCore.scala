@@ -135,7 +135,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       (bd, fastPredicate, bigPredicate)
    }
 
-   def generateTranslationProblem:TranslationProblem =
+   def generateTranslationProblem(iTheo: FOLtheory = null):TranslationProblem =
    {  log("generateTranslationProblem started")
       import RandomExtras.pickRandomElementFromList
       val rg = new Random()
@@ -146,13 +146,22 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       var textNL:String = ""  // refactor not using vars
       var algoDef_rb_option:Option[EfeQuerySent_rb] = None
       var answerCTL_option:Option[EfeAnswerLangSent] = None
+
+     var bridgeDoc:BridgeDoc = null
+     var fastPredicate: Predicate = null
+     var bigPredicate: Predicate = null
       // }
       // }
 
       // { now fill generatedEfeDoc with... uhm, just that, a randomly generated EfeDoc. 
       //   For testers: if you want to provide your own handcrafted information, skip this part, and instead provide a generatedEfeDoc, and (until future implementations) answerCTL_option. Moreover, choose how to generate the TextNL from your generatedEfeDoc (look how it is done in the non-test code below). Also, add additional bridges to bridgeDocs, for all entities occurring in your handcrafted efeDoc (again, look how it is done in the normal code below).
-      val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
 
+     if(iTheo != null){
+       //custom, howTO?
+     }
+     else {
+         (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
+     }
       // in this increment: pick one random translation problem of efe (in future increment they will be combined into one TextNL document).
 
       val numberOfSubTranslationProblems = 2 // &y2014.02.23.12:56:50& Note: not needed in future increment with more questions in one algorithmic defence. Then SWiFT will work with an enumeration like datatype to indicate these.
@@ -166,12 +175,13 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
             val pred = randomPredicate
             val randomPersonCTLname = "ctlName" + randomPersonNLname
+
             val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
             val entityBridge = EntityBridgeSent(randomPersonCTLname, List(randomPersonNLname))
 
             bridgeDoc.bridgeSents ++= List(entityBridge)
             generatedEfeDoc.addPredApp(PredApp_FOL(pred, List(randomPersonConstant)))      
-            
+
             // <&y2014.11.11.20:44:50& the answerCTL_option is not generated using the query, that advantage of doing this is that (1) elegance: it is redundant information, which can be generated, which will be less error prone (2) ease for others adding new translation problems, they don't have to also handcraft the answer.
         
             answerCTL_option = Some(fofa.Forall(Var("x"), List(randomPersonConstant), PredApp_Fofa(pred, List(Var("x")))))
@@ -185,7 +195,8 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          }
       }
 
-      algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(pred, List(Var("x")))))))
+
+      algoDef_rb_option = Some(EfeQuerySent_rb(MostInfo(PatVar("s"), plofofa.Forall(Var("x"), PatVar("s"), PredApp_Plofofa(randomPredicate, List(Var("x")))))))
       // }
 
       def randomPredicate =
@@ -235,7 +246,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
    override def initialiseSessionInfo:SessionInfo =
    {  super.initialiseSessionInfo
-      val tp = generateTranslationProblem
+      val tp = generateTranslationProblem()
       si.textCTLbyComputer = Some(tp.textCTL)
       si.textNL = tp.textNL
       // move to generateTranslationProblem si.textNL = Translation.FOltheory2NL_straight(tp.textCTL, tp.bridge)(0)
