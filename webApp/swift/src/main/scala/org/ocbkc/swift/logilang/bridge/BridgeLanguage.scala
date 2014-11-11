@@ -36,7 +36,9 @@ so in this case:
   */
 case class PredicateBridgeSent(predCTLname: String, predNLname: List[String]) extends BroneSent
 
-/** Assumptions: each entNLname refers unambiguously to an entity. So that means that all entNLnames in the List refer to the same entity. Moreover, it is assumed that the bridge is complete: a counter-example, if ("c", List("Aardvark Jumbo", "The sleeper") occurs, and ("d", List("The sleeper")), then the second is not complete: "Aardvark Jumbo" is another name for the same entity, so should also occur in the second list.
+/** An EntityBridgeSent forms a "bridge" between the CTL constants and natural language words, needed to translate between them. In this implementation, it are simple pairs, an  example is ("c", "Christophori"), meaning the constant c in the CTL langauge, refers to the same entity as the name "Christophori" in natural language. 
+
+   Assumptions: each entNLname refers unambiguously to an entity. So that means that all entNLnames in the List refer to the same entity. Moreover, it is assumed that the bridge is complete: a counter-example, if ("c", List("Aardvark Jumbo", "The sleeper") occurs, and ("d", List("The sleeper")), then the second is not complete: "Aardvark Jumbo" is another name for the same entity, so should also occur in the second list.
 @todo &y2014.02.27.19:32:33& perhaps refactoring would be handy: introduce the notion of a NLentityGroup or so, in which all NLnames for a specirfic entity are collected. Then you can reuse the same group for more constants.
 @todo &y2014.02.27.19:57:39& perhaps it is better to use Constant instead of the String identifier of a Constant for entCTL...
   */
