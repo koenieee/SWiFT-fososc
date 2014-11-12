@@ -19,32 +19,23 @@ import org.ocbkc.swift.logilang.bridge.brone.{EntityBridgeSent, PredicateBridgeS
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
-    var userID:Player = Player;
-    "A test-Player" must "be created" in {
-      if (!DB.jndiJdbcConnAvailable_?)
-      {  val vendor =
-        new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-          Props.get("db.url") openOr
-            "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
-          Props.get("db.user"), Props.get("db.password"))
+  ignore   must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
 
-        LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
+    if (!DB.jndiJdbcConnAvailable_?)
+    {  val vendor =
+      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+        Props.get("db.url") openOr
+          "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
+        Props.get("db.user"), Props.get("db.password"))
 
-        DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
-      }
-      userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
-      val good: Boolean = userID.save
+      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
 
-      info("PLayer saving: "+ good)
-
-      assert(good)
-
-
+      DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
+    val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
 
-  "Translation Test Constitution 1"  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
-    val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
-    S.initIfUninitted(session) {
+      val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
+      S.initIfUninitted(session) {
       //initialise everything
       Player.logUserIn(userID);
 
@@ -82,8 +73,8 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 
 //begin testing a full translation round!
       sesCoordLR.URstartTranslation //start translation round
-      sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc) //HOWTO?
-      sesCoordLR.si.bridgeCTL2NLcomputer = Some(bridgeDoc)//HOWTO??
+//      sesCoordLR.si.textCTLbyComputer = Some(generatedEfeDoc) //HOWTO?
+ //     sesCoordLR.si.bridgeCTL2NLcomputer = Some(bridgeDoc)//HOWTO??
       info("CTL TExt: "+sesCoordLR.si.textCTLbyComputer)
 			given("a text: ");
       info("Text: "+ sesCoordLR.si.textNL)
@@ -132,9 +123,11 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
       sesCoordLR.URfinaliseSession
       sesCoordLR.closeSession
 			
-		}
+
   }
 
 
-	}
 }
+  }
+}
+
