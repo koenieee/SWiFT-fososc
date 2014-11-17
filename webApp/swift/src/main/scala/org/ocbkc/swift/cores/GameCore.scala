@@ -155,8 +155,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
       
       // now fill generatedEfeDoc with... uhm, just that, a randomly generated EfeDoc. 
 
-      // For testers: if you want to provide your own handcrafted information, skip this part (coreOfTranslationProblemGeneration), and instead provide your own pred, generatedEfeDoc, and (until future implementations) answerCTL_option (in the future, the latter will be generated automatically from the other information). Moreover, choose how to generate the TextNL from your generatedEfeDoc (look how it is done in the non-test code below). Also, add additional bridges to bridgeDocs, for all entities occurring in your handcrafted efeDoc (again, look how it is done in the normal code below).
-
+      // For testers: if you want to provide your own handcrafted information, replace this part (coreOfTranslationProblemGeneration), by instead providing your own pred, generatedEfeDoc, and (until future implementations) answerCTL_option (in the future, the latter will be generated automatically from the other information). Moreover, choose how to generate the TextNL from your generatedEfeDoc (look how it is done in the non-test code below). Also, add additional bridges to bridgeDocs, for all entities occurring in your handcrafted efeDoc (again, look how it is done in the normal code below). TODO refactor code such that it reflects this in its structure.
       // in this increment: pick one random translation problem of efe (in future increment they will be combined into one TextNL document).
 
       val numberOfSubTranslationProblems = 2 // &y2014.02.23.12:56:50& Note: not needed in future increment with more questions in one algorithmic defence. Then SWiFT will work with an enumeration like datatype to indicate these.
