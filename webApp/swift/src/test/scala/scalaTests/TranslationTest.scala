@@ -3,18 +3,21 @@ package org.ocbkc.swift {
 import org.ocbkc.swift.snippet.SesCoord
 import org.scalatest.FlatSpec
 import org.scalatest.GivenWhenThen
-import org.ocbkc.swift.model.Player
+import org.ocbkc.swift.model._
 import net.liftweb.http.{S, LiftRules, Req, LiftSession}
 import org.ocbkc.swift.global.TestSettings
 import net.liftweb.mapper._
 import net.liftweb.db.StandardDBVendor
 import net.liftweb.util.{StringHelpers, Props}
 import net.liftweb.common.Empty
-import org.ocbkc.swift.OCBKC.Constitution
+import org.ocbkc.swift.OCBKC.{FollowerConsti_join, Constitution}
 import bootstrap.liftweb.Boot
 import org.ocbkc.swift.jgit.InitialiseJgit
 import org.ocbkc.swift.logilang.{Predicate, FOLtheory, PredApp_FOL}
 import org.ocbkc.swift.logilang.bridge.brone.{EntityBridgeSent, PredicateBridgeSent, BridgeDoc}
+import org.ocbkc.swift.logilang.PredApp_FOL
+import org.ocbkc.swift.logilang.bridge.brone.PredicateBridgeSent
+import org.ocbkc.swift.logilang.bridge.brone.EntityBridgeSent
 
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
@@ -34,6 +37,7 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 
           DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
         }
+        Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
         val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
         userID.save;
 
@@ -50,23 +54,6 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 
 
       //force to use own translation input:
-      val generatedEfeDoc = new FOLtheory
-
-      val randomPersonCTLname = "ctlName" + "Kibbeling"
-      val randomPersonConstant = generatedEfeDoc.gocConstant(randomPersonCTLname)
-
-      val fastPredicateBridge = PredicateBridgeSent("F", List("fast"))
-
-      val bridgeDoc = new BridgeDoc
-
-      bridgeDoc.bridgeSents  ++= List(fastPredicateBridge)
-      val fastPredicate       = generatedEfeDoc.gocPredicate("F", 1).get
-      val entityBridge = EntityBridgeSent(randomPersonCTLname, List("Kibbeling"))
-
-      bridgeDoc.bridgeSents ++= List(entityBridge)
-      generatedEfeDoc.addPredApp(PredApp_FOL(fastPredicate, List(randomPersonConstant)))
-
-      info("CUSTOM GENERATED FOLTHEORY: " + generatedEfeDoc) //how to pass this through?
 
       sesCoordLR.URtryStartSession
       SesCoord.is.URconstiStudy
@@ -80,7 +67,7 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
 			given("a text: ");
       info("Text: "+ sesCoordLR.si.textNL)
 			given("a correct Translation: ")
-			val translation: String = "F(david)" //generate answer
+			val translation: String = "B(kibbeling)" //generate answer
       sesCoordLR.si.textCTLbyPlayer = translation;
       SesCoord.URstopTranslation
 

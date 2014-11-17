@@ -4,10 +4,10 @@ import org.scalatest.{GivenWhenThen, FlatSpec}
 import net.liftweb.http.{LiftRules, S, LiftSession}
 import net.liftweb.util.{Props, StringHelpers}
 import net.liftweb.common.Empty
-import org.ocbkc.swift.model.Player
+import org.ocbkc.swift.model._
 import org.ocbkc.swift.snippet.SesCoord
 import org.ocbkc.swift.jgit.InitialiseJgit
-import org.ocbkc.swift.OCBKC.{OCBKCinfoPlayer, Constitution}
+import org.ocbkc.swift.OCBKC.{FollowerConsti_join, OCBKCinfoPlayer, Constitution}
 import org.ocbkc.swift.coord.ses.CoreSimu;
 import net.liftweb.mapper._
 import net.liftweb.db.StandardDBVendor
@@ -35,6 +35,7 @@ class StatisticsTest extends FlatSpec with GivenWhenThen{
 
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
+    Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
     val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
     userID.save;
 
