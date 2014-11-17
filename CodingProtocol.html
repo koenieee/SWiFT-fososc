@@ -12,9 +12,7 @@
 </p>
 <br>
 <p>
-<ul>
 <li>When adding new artifacts to the pom.xml file, always refer to a specific version of an artifact. If you don't do this, maven may attempt to download the newest version, while the code has not been adapted yet. E.g. you can run into missing goals (because they were deprecated), your code may not compile (because the code refers to deprecated classes), etc. etc.</li>
-</ul>
 </p>
 
 <p>
@@ -32,9 +30,7 @@
    <li>Recommended: set your text editor to a tab-width of 3 spaces.</li>
    </ul>
 </li>
-</ul>
 <br>
-<ul>
 <li>Follow the following style when using curly brackets:</li>
 <pre class="prettyprint">def intelligentMethod() =
 {  [here code]
@@ -85,8 +81,19 @@
 </pre>
 <br>
 <li>If there is a locally good reason, one may locally deviate from the code layout rules defined in this document. An example are Domain Specific Languages created within Scala.</li>
-</ul>
 </p>
+<li>Optional commenting style: delimit blocks of code you want to refer to/talk about in the following way:
+<pre class="prettyprint">
+// {-generateStarData
+
+... here code ...
+
+
+// }
+</pre>
+The word after {- is the label of the comment block, that you can use to refer to it in other comments.
+An additional advantage of this notation is that the matching branches navigation of your editor (in vim for example: command mode: %) can be used to jump over your comment-blocks.
+</ul>
 <h2><font color="teal">Versioning protocol</font></h2>
 <br>
 <p>
