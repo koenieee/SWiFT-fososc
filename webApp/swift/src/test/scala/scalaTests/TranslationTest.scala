@@ -19,23 +19,24 @@ import org.ocbkc.swift.logilang.bridge.brone.{EntityBridgeSent, PredicateBridgeS
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
-  ignore   must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
-
-    if (!DB.jndiJdbcConnAvailable_?)
-    {  val vendor =
-      new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
-        Props.get("db.url") openOr
-          "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
-        Props.get("db.user"), Props.get("db.password"))
-
-      LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
-
-      DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
-    }
-    val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
+  "Translation Test Constitution 1"  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
 
       val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
       S.initIfUninitted(session) {
+        if (!DB.jndiJdbcConnAvailable_?)
+        {  val vendor =
+          new StandardDBVendor(Props.get("db.driver") openOr "org.h2.Driver",
+            Props.get("db.url") openOr
+              "jdbc:h2:lift_proto.db;AUTO_SERVER=TRUE",
+            Props.get("db.user"), Props.get("db.password"))
+
+          LiftRules.unloadHooks.append(vendor.closeAllConnections_! _)
+
+          DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
+        }
+        val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
+        userID.save;
+
       //initialise everything
       Player.logUserIn(userID);
 

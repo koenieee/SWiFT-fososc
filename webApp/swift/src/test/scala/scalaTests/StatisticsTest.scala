@@ -22,7 +22,7 @@ import org.ocbkc.swift.global.Logging._
  */
 class StatisticsTest extends FlatSpec with GivenWhenThen{
 
-  "Statistics"  must "be correctly calculated by SWiFT" in {
+    ignore must "be correctly calculated by SWiFT" in {//"Statistics"
 
     if (!DB.jndiJdbcConnAvailable_?)
     {  val vendor =
@@ -36,6 +36,7 @@ class StatisticsTest extends FlatSpec with GivenWhenThen{
       DB.defineConnectionManager(DefaultConnectionIdentifier, vendor)
     }
     val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
+    userID.save;
 
      val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
     S.initIfUninitted(session) {
