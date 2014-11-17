@@ -160,7 +160,6 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
        //custom, howTO?
 
        //generatedEFE DOC, without ANSWERCTL
-     /**/
       val generatedEfeDoc = new FOLtheory
 
       val randomPersonCTLname = "ctlName" + "Kibbeling"
