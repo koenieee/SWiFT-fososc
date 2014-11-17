@@ -151,7 +151,9 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
 
       val (bridgeDoc, fastPredicate, bigPredicate) = initialiseEfeDoc(generatedEfeDoc)
 
-      // { now fill generatedEfeDoc with... uhm, just that, a randomly generated EfeDoc. 
+      // {-coreOfTranslationProblemGeneration
+      
+      // now fill generatedEfeDoc with... uhm, just that, a randomly generated EfeDoc. 
 
       // For testers: if you want to provide your own handcrafted information, skip this part (between ' { now fill ' and the matching ' } '), and instead provide your own pred, generatedEfeDoc, and (until future implementations) answerCTL_option (in the future, the latter will be generated automatically from the other information). Moreover, choose how to generate the TextNL from your generatedEfeDoc (look how it is done in the non-test code below). Also, add additional bridges to bridgeDocs, for all entities occurring in your handcrafted efeDoc (again, look how it is done in the normal code below).
 
