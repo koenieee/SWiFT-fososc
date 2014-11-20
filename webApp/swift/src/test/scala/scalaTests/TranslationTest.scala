@@ -22,7 +22,7 @@ import org.ocbkc.swift.logilang.bridge.brone.EntityBridgeSent
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
-  "Translation Test Constitution 1"  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
+  ignore  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
 
       val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
       S.initIfUninitted(session) {

@@ -22,7 +22,7 @@ import org.ocbkc.swift.global.Logging._
  */
 class StatisticsTest extends FlatSpec with GivenWhenThen{
 
-    ignore must "be correctly calculated by SWiFT" in {//"Statistics"
+  "Statistics" must "be correctly calculated by SWiFT" in {//"Statistics"
 
     if (!DB.jndiJdbcConnAvailable_?)
     {  val vendor =
@@ -49,13 +49,13 @@ class StatisticsTest extends FlatSpec with GivenWhenThen{
       // Initialisation/shutdown code for OCBKC stuffzzzzariowaikoeikikal
       Constitution.deserialize
 
-
+      sesCoord.URchooseFirstConstitution(Constitution.constis.head.constiId)
       //simple translation session:
-
+      sesCoord.URtryStartSession
       SesCoord.URconstiStudy
       SesCoord.URstartTranslation // Don't think this one is needed, it already covered by URalgorithmicDefenceSimplified. Note: in the previous version of SWiFT this was already carried out (with a working jaraforswift simulation).
       //SesCoord.URstopTranslation
-
+      sesCoord.si.textCTLbyPlayer = "F(kibbeling)";
       val cTM = SystemWithTesting.currentTimeMillis
       val duration = 1234
       log("   playerHasAccessToAllConstis just before this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(sesCoord.currentPlayer))
@@ -66,6 +66,16 @@ class StatisticsTest extends FlatSpec with GivenWhenThen{
 
       sesCoord.si.answerPlayerCorrect(true).save
       sesCoord.si.serialize
+
+      //handle rounds:
+      SesCoord.URstopTranslation
+      sesCoord.URstartBridgeConstruction
+      SesCoord.URstopBridgeConstruction
+      SesCoord.URstartQuestionAttack
+      sesCoord.URstartAlgorithmicDefenceStage1
+
+      sesCoord.URstartAlgorithmicDefenceStage2
+
 
 
       SesCoord.URfinaliseSession
