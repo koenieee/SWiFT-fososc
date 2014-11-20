@@ -1,4 +1,4 @@
-package org.ocbkc.swift {
+package scalaTests {
 
 import org.ocbkc.swift.snippet.SesCoord
 import org.scalatest.FlatSpec
@@ -19,10 +19,13 @@ import org.ocbkc.swift.logilang.PredApp_FOL
 import org.ocbkc.swift.logilang.bridge.brone.PredicateBridgeSent
 import org.ocbkc.swift.logilang.bridge.brone.EntityBridgeSent
 
-
+object user{
+  var UserID: Player = null;
+}
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
-  ignore  must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
+
+  "Translation Test Constitution 1" must "correctly be handled by SWiFT" in { //"Translation Test Constitution 1"
 
       val session : LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
       S.initIfUninitted(session) {
@@ -39,6 +42,7 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
         }
         Schemifier.schemify(true, Schemifier.infoF _, Player, PlayerSessionInfo_join, SessionInfoMetaMapperObj, FollowerConsti_join, IntermediateTranslation, SessionInfo_IntermediateTranslation_join)
         val userID = Player.create.firstName("test").email("test@test.org").password("test123").validated(true);
+        user.UserID = userID;
         userID.save;
 
       //initialise everything
