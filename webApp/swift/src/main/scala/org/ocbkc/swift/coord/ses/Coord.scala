@@ -99,6 +99,7 @@ object RoundFluencySessionInfo
 
 import RoundFluencySessionInfo._
 
+
 // in trait, make for easy reuse for creating test simulation sessions.
 trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 {  var si: SessionInfo = null
@@ -326,11 +327,19 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
 import org.ocbkc.swift.cores.EfeChallengeTypes._
 import org.ocbkc.swift.logilang.fofa._
 
-class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
+
+class EfeCore(/* val player: User, var text: Text,v ar round: Round */ val input: EfeLang = null ) extends
 /* {  override val gameCore = new EfeLang(currentPlayer.id.get)
 } with */ CoreTrait[EfeQuerySent_rb, EfeAnswerLangSent]
 {  log("ses.Core.constructor called")
-   override val gameCore = new EfeLang(currentPlayer.id.get)
+
+   override val gameCore = input match {
+      case null => new EfeLang(currentPlayer.id.get)
+      case _ => input
+   }
+
+
+ //  override val gameCore =
   
    /* <&y2012.08.08.20:00:20& following MUST be refactored as soon as Mapper framework is understood (see the tryMapperPersistency gitbranch). Now things are only retained during a session, but not accross sessions...> */
    // BEGIN temporary solution for constiSelectionProcedure
