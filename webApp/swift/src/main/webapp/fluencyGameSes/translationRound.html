@@ -20,8 +20,71 @@
 <i>Total translation time </i><Br/></center>
 <div id="timeBox"></div>
 <div id="time" style="display:none;"><form:startTime /></div>
-<form:keyLogScript/>
+<script type="text/javascript">
+    // <![CDATA[
+    function keyLogData(){
+    function saveData(key, pos){
+
+    var param = encodeURI(key)
+    var div = document.getElementById("output_data_keys")
+    div.value = div.value +
+
+    "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ ", \"pos\" : "+pos+ "},";
+                                            }
+          document.onkeypress = function(evt) {
+             evt = evt || window.event
+             key = String.fromCharCode(evt.charCode)
+             if (key) {
+             var posi = $('#inp').prop('selectionStart')
+                 saveData(key, posi);
+                 console.log(key)
+             }
+
+
+         }
+          $(document).keydown(function(e){
+
+           if(e.keyCode == 8 || e.keyCode == 46)
+           {
+           var key = String.fromCharCode(e.keyCode);
+           var posi = $('#inp').prop('selectionStart')
+           console.log(e.keyCode);
+           saveData(key, posi);
+           }
+          });
+
+          $('#inp').select( function() {
+            var textComponent = document.getElementById('inp');
+             var selectedText;
+           // IE version
+             if (document.selection != undefined)
+             {
+              textComponent.focus();
+              var sel = document.selection.createRange();
+              selectedText = sel.text;
+             }
+            // Mozilla version
+          else if (textComponent.selectionStart != undefined)
+            {
+              var startPos = textComponent.selectionStart;
+              var endPos = textComponent.selectionEnd;
+              selectedText = textComponent.value.substring(startPos, endPos)
+            }
+              console.log("Selected text: " + selectedText + " Startpos: "+startPos + " EndPos: "+ endPos);
+
+          var div = document.getElementById("output_data_selections")
+          div.value = div.value +
+
+         "{\"start\" : " + startPos + ", \"end\" : " + endPos + ", \"selText\" : \"" + selectedText + "\", \"time\" : "+(new Date).getTime()+ "},";
+
+        });
+
+
+         }
+    // ]]>
+</script>
 <form:keylogData/>
+<form:keylogSelections/>
 <script type="text/javascript">
 
 	//USING EPOCH TIME -- tested in CHROME and FIREFOX//

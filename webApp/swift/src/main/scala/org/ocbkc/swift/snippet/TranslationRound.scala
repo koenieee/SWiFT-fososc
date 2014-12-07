@@ -31,6 +31,7 @@ class TranslationRound
    var errorTrans:String = ""
    var translationTAcontents:String = if(!TEST) "Enter translation here." else sesCoordLR.si.textCTLbyComputer.get.toString
    var keyLogData: String = ""
+  var keyLogSelections: String =""
 
    def render(ns: NodeSeq): NodeSeq =
    {  sesCoordLR.URstartTranslation
@@ -67,11 +68,18 @@ class TranslationRound
           S.redirectTo("translationRound.html")
       }
 
-      def processKeyLogs(keylogs: String) =
-      { log("processing Keylogs")
+      def processKeyLogs(keylogs: String, select: Boolean = false) =
+
+      {
+        log("processing Keylogs")
         val outputFileName: String = KEYLOGFLUENCYDIR + "/keylog_session"+sesCoordLR.si.id+"_user"+sesCoordLR.si.userId+"_"+sesCoordLR.si.startTime+".log"
         val outFile = new java.io.File(outputFileName)
+        if(select){
+          keyLogSelections = keylogs;
+        }
+        else {
         keyLogData = keylogs
+        }
         log("keylog val: " + keylogs)
         outFile.getParentFile().mkdirs()
         sesCoordLR.si.fileNameKeylogs = outputFileName
@@ -113,45 +121,16 @@ class TranslationRound
       }else
       {  List()
       }
-      val javascript: String = """function keyLogData(){
-                                 document.onkeypress = function(evt) {
-                                    evt = evt || window.event
-                                    key = String.fromCharCode(evt.charCode)
-                                    if (key) {
-                                 	     var param = encodeURI(key)
-                                       var div = document.getElementById("output_data")
-                                       div.value = div.value +
-
-                                 "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
-                                    }
-                                }
-                                 $(document).keydown(function(e){
-
-                                  if(e.keyCode == 8)
-                                  {
-                                  var key = String.fromCharCode(e.keyCode);
-                                  var param = encodeURI(key)
-                                  var div = document.getElementById("output_data")
-                                  div.value = div.value +
-
-                                  "{\"key\" : \"" + param + "\",\"time\" : "+(new Date).getTime()+ "},";
-                                  }
-                                 });
-                                }
-
-
-                               """
-
 
       val testExampleTextCTL = "p({a},{b})"
       var boundForm = bind( "form", ns, 
-            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, ( List("rows" -> "10", "style" -> "width: 100%", "onfocus" -> "keyLogData()") ++ editableAttrib ):_*), // todo: how to make text area page width?
+            "translation" -> SHtml.textarea(if(AUTOTRANSLATION && sesCoordLR.si.textCTLbyPlayer.equals("")) testExampleTextCTL else sesCoordLR.si.textCTLbyPlayer, processTranslationTA, ( List("rows" -> "10", "style" -> "width: 100%", "onfocus" -> "keyLogData()", "id"-> "inp") ++ editableAttrib ):_*), // todo: how to make text area page width?
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
             "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString()),
-            "keyLogScript"    -> Script(new Run(javascript)),
-            "keylogData"      -> SHtml.hidden((data: String) => processKeyLogs(data), keyLogData, "id" -> "output_data")
+            "keylogData"      -> SHtml.hidden((data: String) => processKeyLogs(data), keyLogData, "id" -> "output_data_keys"),
+            "keylogSelections" -> SHtml.hidden((data: String) => processKeyLogs(data, true), keyLogSelections, "id" -> "output_data_selections")
 
             //"test"          -> Text(test)
           )
