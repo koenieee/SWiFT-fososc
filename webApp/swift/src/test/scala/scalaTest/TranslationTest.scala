@@ -24,6 +24,8 @@ import org.ocbkc.swift.trans.TranslateFOLtheory2NL
 import org.ocbkc.swift.cores.EfeChallengeTypes.{EfeQuerySent_rb, EfeAnswerLangSent}
 import org.ocbkc.swift.cores.{EfeLang, TraitGameCore}
 import org.ocbkc.swift.coord.ses
+import org.ocbkc.swift.logilang.query.plofofa.translator.TranslatePlofofaSentToNL
+import org.ocbkc.swift.logilang.fofa.translator.TranslateFofaSentToNL
 
 
 object user {
@@ -55,10 +57,7 @@ class EfelangTest extends EfeLang(user.UserID.id) with TraitGameCore[EfeQuerySen
       TranslationProblem(FOLcus, textNL, bridgeDoc, algoDef_rb_option.get, answerCTL_option.get)
 
    }
-
    super.initialiseSessionInfo
-
-
 }
 
 class TranslationTest extends FlatSpec with GivenWhenThen {
@@ -94,7 +93,8 @@ class TranslationTest extends FlatSpec with GivenWhenThen {
          Constitution.deserialize
 
          val EFeinput = new EfelangTest;
-         info("EFEEE: " + EFeinput)
+
+         info("EFEEE: " + EFeinput.initialiseSessionInfo)
          object SesCoord extends SessionVar(new ses.EfeCore(EFeinput))
          val sesCoordLR = SesCoord.is
 
