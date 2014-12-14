@@ -32,7 +32,8 @@ class AnalyseFluencyKeyLogger
 
       bind("top", ns,
       "jsonData" -> Text(newJsonData),
-      "userName"  -> Text(jsonFileName.userId.toString)
+      "userName"  -> Text(jsonFileName.userId.toString),
+      "ftranslatie" -> Text(jsonFileName.textCTLbyPlayer_)
        )
     }
 
