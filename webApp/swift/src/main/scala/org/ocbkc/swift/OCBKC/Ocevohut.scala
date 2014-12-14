@@ -1,6 +1,6 @@
-wiw &y2014.10.22.01:29:21& current code compiles, now test by writing test driver, made preps in [swift git repo root]/test/ocevohut, but realised that mc is perhaps not needed: just make use of the classes already compiled by mvn.
+//wiw &y2014.10.22.01:29:21& current code compiles, now test by writing test driver, made preps in [swift git repo root]/test/ocevohut, but realised that mc is perhaps not needed: just make use of the classes already compiled by mvn.
 
-package org.ocbkc.swift
+package org.ocbkc
 
 import scala.util.Random
 import org.ocbkc.generic._
@@ -24,7 +24,7 @@ import Types._
 /** 
   * For testing purposes
   */
-class Main
+object MainTest
 {  def main(args:Array[String])
    {  object Types
       {  type _3DpointGenotype = (Int, Int, Int)
@@ -36,10 +36,10 @@ class Main
       {  val genotype = (x,y,z)
       }
 
-      /** Fitness is the distance to the optimal point at (4,5,98)
+      /** Fitness is the inverse of the distance to the optimal point at (4,5,98) + a small number to prevent division by zero.
         */
       def oFiFun(_3dpg:_3DpointGenotype):Double =
-      {  sqrt( pow( 4d - _3dpg._1, 2d ) + pow( 5d  - _3dpg._2, 2d ) + pow(98d - _3dpg._3, 2d) )
+      {  1 / (sqrt( pow( 4d - _3dpg._1, 2d ) + pow( 5d  - _3dpg._2, 2d ) + pow(98d - _3dpg._3, 2d) ) + 0.0001)
       }
       
       val SUSfor3dpg = new SUS[_3DpointGenotype]
@@ -47,7 +47,8 @@ class Main
       val test_pop = List(
                         new _3Dpoint(1,2,3),
                         new _3Dpoint(3,5,90),
-                        new _3Dpoint(6,5,80)
+                        new _3Dpoint(6,5,100),
+                        new _3Dpoint(4,5,97)
                         )
 
       val selFiFun:LocalSelectiveFitnessFunction[_3DpointGenotype] = new LocalSelectiveFitnessFunction[_3DpointGenotype]
@@ -114,6 +115,10 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
 trait ProportionalSelectionTrait[Genotype__TP]
 {  def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP]):Map[Individual[Genotype__TP], Int]
 }
+
+/** Given a LocalSelectiveFitnessFunction, this assigns children to parents according to Stochatic Universal Sampling (SUS). The number of children assigned is equal to population size of parameter pop.
+@todo there is a bug in here, the assigned children are sometimes less, sometimes more than the population size parameter pop.
+  */
 
 class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
 {  override def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP]):Map[Individual[Genotype__TP], Int] =
