@@ -15,10 +15,13 @@ package object ocevohut
 package ocevohut
 {
 
+import org.ocbkc.ocevohut.Types.FitnessFunctionType
+
+/** Genotype__TP represents the genotype of the individuals of the population.
+  */
 object Types
 {  type FitnessFunctionType[Genotype__TP] = Genotype__TP => Double
 }
-
 
 /** @param populationSize size of the population in iterations > 0
   * @param oFiFun objective fitness function
@@ -48,8 +51,11 @@ trait OcevohutTrait[Genotype__TP]
    }
 }
 
+/** Creates a CreateScaledFitnessFunctionTrait based on a population pop, and a globalFitnessFunction.
+  */
+
 trait CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP]
+{  def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP]
 }
 
 trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
@@ -62,8 +68,11 @@ trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelective
 trait LocalSelectiveFitnessFunction[Genotype__TP]
 {  def apply(gt:Genotype__TP):Option[Double]
 }
+
+/** 
+  */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  override def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP] =
+{  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
    {  null // TODO
    }
 }
