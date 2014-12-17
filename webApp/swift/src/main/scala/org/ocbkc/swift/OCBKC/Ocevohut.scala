@@ -15,6 +15,8 @@ package object ocevohut
 package ocevohut
 {
 
+/** Genotype__TP represents the genotype of the individuals of the population.
+  */
 object Types
 {  type FitnessFunctionType[Genotype__TP] = Genotype__TP => Double
 }
@@ -32,6 +34,7 @@ object MainTest
 
       import Types._
 
+      // The individuals of the population are 3D points in space
       class _3Dpoint(x:Int, y:Int, z:Int) extends Individual[_3DpointGenotype]
       {  val genotype = (x,y,z)
       }
@@ -45,19 +48,21 @@ object MainTest
       val SUSfor3dpg = new SUS[_3DpointGenotype]
 
       val test_pop = List(
-                        new _3Dpoint(1,2,3),
+                        new _3Dpoint(1,2,3),                        
                         new _3Dpoint(3,5,90),
                         new _3Dpoint(6,5,100),
                         new _3Dpoint(4,5,97)
                         )
 
+      // define the local selective fitness function to be equal to oFiFun. (so, in fact, it is not local).
       val selFiFun:LocalSelectiveFitnessFunction[_3DpointGenotype] = new LocalSelectiveFitnessFunction[_3DpointGenotype]
       {  override def apply(gt:_3DpointGenotype):Option[Double] =
          {  Some(oFiFun(gt))
          }
       }
 
-      println(SUSfor3dpg(test_pop, selFiFun))
+      // Test how SUS works on test_pop, and the given oFiFun (the latter of which is wrapped in selFiFun).
+      println("" + SUSfor3dpg(test_pop, selFiFun))
    }
 }
 
@@ -89,8 +94,11 @@ trait OcevohutTrait[Genotype__TP]
    }
 }
 
+/** Creates a CreateScaledFitnessFunctionTrait based on a population pop, and a globalFitnessFunction.
+  */
+
 trait CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP]
+{  def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP]
 }
 
 trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
@@ -103,8 +111,11 @@ trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelective
 trait LocalSelectiveFitnessFunction[Genotype__TP]
 {  def apply(gt:Genotype__TP):Option[Double]
 }
+
+/** 
+  */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  override def apply(pop:List[Individual[Genotype__TP]]):LocalSelectiveFitnessFunction[Genotype__TP] =
+{  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
    {  null // TODO
    }
 }
