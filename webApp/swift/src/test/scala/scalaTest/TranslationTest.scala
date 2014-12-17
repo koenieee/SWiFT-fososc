@@ -63,7 +63,7 @@ class EfelangTest extends EfeLang(user.UserID.id) with TraitGameCore[EfeQuerySen
 class TranslationTest extends FlatSpec with GivenWhenThen {
 
 
-   "Translation Test Constitution 1" must "correctly be handled by SWiFT" in {
+   ignore must "correctly be handled by SWiFT" in {
       //"Translation Test Constitution 1"
 
       val session: LiftSession = new LiftSession("", StringHelpers.randomString(20), Empty)
