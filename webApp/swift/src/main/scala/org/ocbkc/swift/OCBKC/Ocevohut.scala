@@ -122,6 +122,5 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
 
 trait Individual[Genotype__TP]
 {  val genotype:Genotype__TP
-   def toString: String
 }
 }
