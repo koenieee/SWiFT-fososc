@@ -23,6 +23,7 @@ class OcevoHutTesting extends FlatSpec with GivenWhenThen {
    // The individuals of the population are 3D points in space
    class _3Dpoint(x:Int, y:Int, z:Int) extends Individual[_3DpointGenotype]
    {  val genotype = (x,y,z)
+      override def toString: String = "[3DPoint x="+x+" y="+y+" z="+z+"]" //added this one, to see in this testing case also the output of 3D point (instead of memory addresses)
    }
 
    /** Fitness is the inverse of the distance to the optimal point at (4,5,98) + a small number to prevent division by zero.
@@ -48,6 +49,6 @@ class OcevoHutTesting extends FlatSpec with GivenWhenThen {
    }
 
    // Test how SUS works on test_pop, and the given oFiFun (the latter of which is wrapped in selFiFun).
-      info("Final output: " + SUSfor3dpg(test_pop, selFiFun))
+      info("Final output: " + SUSfor3dpg(test_pop, selFiFun, 4))
    }
 }

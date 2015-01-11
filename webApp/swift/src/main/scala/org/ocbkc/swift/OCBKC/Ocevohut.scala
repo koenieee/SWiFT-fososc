@@ -81,7 +81,7 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
 /** @todo perhaps more elegant to also allow global selective fitness functions, for that redesign of LocalSelectiveFitnessFunction is needed (it should have the same type as a global one) - perhaps using (possibly) partially defined functions.
   */
 trait ProportionalSelectionTrait[Genotype__TP]
-{  def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP]):Map[Individual[Genotype__TP], Int]
+{  def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP], n: Int):Map[Individual[Genotype__TP], Int]
 }
 
 /** Given a LocalSelectiveFitnessFunction, this assigns children to parents according to Stochatic Universal Sampling (SUS). The number of children assigned is equal to population size of parameter pop.
@@ -89,8 +89,8 @@ trait ProportionalSelectionTrait[Genotype__TP]
   */
 
 class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
-{  override def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP]):Map[Individual[Genotype__TP], Int] =
-   {  val n:Int = pop.size
+{  override def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP], n: Int):Map[Individual[Genotype__TP], Int] =
+   {  //val n:Int = pop.size //changed as parameter
       val totalFitness:Double    = pop.map{ i => selFiFun(i.genotype).get }.fold(0d){(a:Double,b:Double)=>a+b}
       val averageFitness:Double  = totalFitness/n
       val gridLength:Double      = averageFitness // just a synonym, that is same extension, however, different intension (Rudolf Carnap, the morning star is the evening star" - ;-) )
@@ -110,7 +110,7 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
          val gridFits:Double        = ( fitnessI - offset )/gridLength
-         val numberOfChildren:Int   = ( if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) ).toInt
+         val numberOfChildren:Int   = ( if(round(gridFits) == n) gridFits else (gridFits + 1) ).toInt
          val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
 
          ((i, numberOfChildren), passOffset)
@@ -122,5 +122,6 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
 
 trait Individual[Genotype__TP]
 {  val genotype:Genotype__TP
+   def toString: String
 }
 }
