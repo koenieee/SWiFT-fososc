@@ -1,5 +1,6 @@
 //wiw &y2014.10.22.01:29:21& current code compiles, now test by writing test driver, made preps in [swift git repo root]/test/ocevohut, but realised that mc is perhaps not needed: just make use of the classes already compiled by mvn.
 
+
 package org.ocbkc
 
 import scala.util.Random
@@ -15,7 +16,10 @@ package object ocevohut
 package ocevohut
 {
 
-/** Genotype__TP represents the genotype of the individuals of the population.
+/**  
+This package provides is a framework to create ANY evolutionary computation system. So it does not come with predefined fitness function definitions, or a predefined genotype space (therefore the type parameter). It is library, which allows you to define those yourself, and then let the library do the rest of the work, such as fitness function scaling, sampling, and evolutionary algorithm execution. You simply have to provide the fitness function definitions, and make a selection of available scaling/sampling methods.
+
+@param Genotype__TP represents the genotype of the individuals of the population.
   */
 object Types
 {  type FitnessFunctionType[Genotype__TP] = Genotype__TP => Double
@@ -94,7 +98,7 @@ trait OcevohutTrait[Genotype__TP]
    }
 }
 
-/** Creates a CreateScaledFitnessFunctionTrait based on a population pop, and a globalFitnessFunction.
+/** Use this trait to make a creator of a scaled fitness function based on a population pop, and a globalFitnessFunction. So, extend it and override apply.
   */
 
 trait CreateScaledFitnessFunctionTrait[Genotype__TP]
@@ -107,6 +111,9 @@ trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelective
    {  map.get(gt)
    }
 }
+
+/** LocalSelectiveFitnessFunction represents a local selective fitness function. Create your own local selective fitness function by extending this class and overriding the apply method. The apply *may* be partially defined, and does not have to range over the complete Genetype__TP domain (no wonder, it is a *local* selective function). Let apply return None for all points in the genotype space where it is undefined.
+ */
 
 trait LocalSelectiveFitnessFunction[Genotype__TP]
 {  def apply(gt:Genotype__TP):Option[Double]
