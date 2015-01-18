@@ -129,7 +129,7 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
 
 
 /** @todo perhaps more elegant to also allow global selective fitness functions, for that redesign of LocalSelectiveFitnessFunction is needed (it should have the same type as a global one) - perhaps using (possibly) partially defined functions.
-@returns A map, in which each pair (i, number_of_children), consists of an individual I with a particular genotype (of type Genotype__TP), and the number of children (nochild) that individual may have. Note that there may be MORE than one individual with the same genotype!
+@returns A map, in which each pair (i, number_of_children) consists of an individual i with a particular genotype (of type Genotype__TP), and the number of children (nochild) that individual i will produce. So, if number_of_children = 4, then individual i will contribute 4 children to the next generation. Note that there may be MORE than one individual with the same genotype!
   */
 trait ProportionalSelectionTrait[Genotype__TP]
 {  def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP]):Map[Individual[Genotype__TP], Int]
