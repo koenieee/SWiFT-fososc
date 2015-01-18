@@ -147,16 +147,16 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       val gridLength:Double      = averageFitness // just a synonym, that is same extension, however, different intension (Rudolf Carnap, the morning star is the evening star" - ;-) )
       val randomShift:Double     = RandomExtras.nextBetween(ranSeq, 0d, averageFitness)
 
-      /** Some notes, with an example calculation:
+      /** Some notes, with an example calculation for one iteration (determining number of children for a given individual i):
 
-          length = 2
-          offset = 0.5
-          gridlenght = 1
+          fitness_i     = 2
+          offset        = 0.5
+          gridlength    = 1
 
-          val gridFits = ( length - offset )/gridlength 
-          { if(round(gridFits) == gridFits) gridFits else (gridFits + 1) }
+          val gridFits = ( fitness_i - offset )/gridlength 
+          { if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) }
 
-         val passOffset = gridLength - ( ( length - offset ) % gridLength )
+          val passOffset = gridLength - ( ( length - offset ) % gridLength )
          */
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
