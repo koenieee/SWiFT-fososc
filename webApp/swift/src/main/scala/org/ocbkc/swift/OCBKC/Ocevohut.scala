@@ -148,16 +148,38 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       val randomShift:Double     = RandomExtras.nextBetween(ranSeq, 0d, averageFitness)
 
       /** Some notes, with an example calculation for one iteration (determining number of children for a given individual i):
-
+          
           fitness_i     = 2
           offset        = 0.5
           gridlength    = 1
 
+          // Attempt 1 (wrong)
+          {
+
           val gridFits = ( fitness_i - offset )/gridlength 
           { if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) }
+         
+            val passOffset = gridLength - ( ( length - offset ) % gridLength )
+          }
+          // Attempt 2m (sketch)
 
-          val passOffset = gridLength - ( ( length - offset ) % gridLength )
+         
+          (totalOffspring passOffset) = 
+            { if offset less_than fitness_i: 
+               {  gridfits = (fitness_i - offset) / gridLength;
+                  to = if( isWholeNumber(gridfits) ) ( gridfits ) else floor(gridfits) + 1.
+                  (to, gridLength - ( ( fitness_i - offset ) % gridLength ) )
+               }
+               else (0, offset - fitness_i)
+            }            
+
+          def isWholeNumber(d:double) = floor(d) == d
+          
+          Explanation: the special cases are the ones where the spokes coincide with the boundary between two area's of the roulette wheel (see thesis CG). In this case the spoke is considered to be hovering over the RIGHT area (not the left).
+            val passOffset = gridLength - ( ( length - offset ) % gridLength )
+
          */
+
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
          val gridFits:Double        = ( fitnessI - offset )/gridLength
