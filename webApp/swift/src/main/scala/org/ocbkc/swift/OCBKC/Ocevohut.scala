@@ -1,5 +1,6 @@
 //wiw &y2014.10.22.01:29:21& current code compiles, now test by writing test driver, made preps in [swift git repo root]/test/ocevohut, but realised that mc is perhaps not needed: just make use of the classes already compiled by mvn.
 
+
 package org.ocbkc
 
 import scala.util.Random
@@ -15,9 +16,15 @@ package object ocevohut
 package ocevohut
 {
 
+
 import org.ocbkc.ocevohut.Types.FitnessFunctionType
 
 /** Genotype__TP represents the genotype of the individuals of the population.
+
+
+This package provides is a framework to create ANY evolutionary computation system. So it does not come with predefined fitness function definitions, or a predefined genotype space (therefore the type parameter). It is library, which allows you to define those yourself, and then let the library do the rest of the work, such as fitness function scaling, sampling, and evolutionary algorithm execution. You simply have to provide the fitness function definitions, and make a selection of available scaling/sampling methods.
+
+@param Genotype__TP represents the genotype of the individuals of the population.
   */
 object Types
 {  type FitnessFunctionType[Genotype__TP] = Genotype__TP => Double
@@ -51,7 +58,7 @@ trait OcevohutTrait[Genotype__TP]
    }
 }
 
-/** Creates a CreateScaledFitnessFunctionTrait based on a population pop, and a globalFitnessFunction.
+/** Use this trait to make a creator of a scaled fitness function based on a population pop, and a globalFitnessFunction. So, extend it and override apply.
   */
 
 trait CreateScaledFitnessFunctionTrait[Genotype__TP]
@@ -64,6 +71,9 @@ trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelective
    {  map.get(gt)
    }
 }
+
+/** LocalSelectiveFitnessFunction represents a local selective fitness function. Create your own local selective fitness function by extending this class and overriding the apply method. The apply *may* be partially defined, and does not have to range over the complete Genetype__TP domain (no wonder, it is a *local* selective function). Let apply return None for all points in the genotype space where it is undefined.
+ */
 
 trait LocalSelectiveFitnessFunction[Genotype__TP]
 {  def apply(gt:Genotype__TP):Option[Double]
@@ -79,6 +89,7 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
 
 
 /** @todo perhaps more elegant to also allow global selective fitness functions, for that redesign of LocalSelectiveFitnessFunction is needed (it should have the same type as a global one) - perhaps using (possibly) partially defined functions.
+@returns A map, in which each pair (i, number_of_children) consists of an individual i with a particular genotype (of type Genotype__TP), and the number of children (nochild) that individual i will produce. So, if number_of_children = 4, then individual i will contribute 4 children to the next generation. Note that there may be MORE than one individual with the same genotype!
   */
 trait ProportionalSelectionTrait[Genotype__TP]
 {  def apply(pop:List[Individual[Genotype__TP]], selFiFun:LocalSelectiveFitnessFunction[Genotype__TP], n: Int):Map[Individual[Genotype__TP], Int]
@@ -96,21 +107,43 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       val gridLength:Double      = averageFitness // just a synonym, that is same extension, however, different intension (Rudolf Carnap, the morning star is the evening star" - ;-) )
       val randomShift:Double     = RandomExtras.nextBetween(ranSeq, 0d, averageFitness)
 
-      /** Some notes, with an example calculation:
+      /** Some notes, with an example calculation for one iteration (determining number of children for a given individual i):
+          
+          fitness_i     = 2
+          offset        = 0.5
+          gridlength    = 1
 
-          length = 2
-          offset = 0.5
-          gridlenght = 1
+          // Attempt 1 (wrong)
+          {
 
-          val gridFits = ( length - offset )/gridlength 
-          { if(round(gridFits) == gridFits) gridFits else (gridFits + 1) }
+          val gridFits = ( fitness_i - offset )/gridlength 
+          { if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) }
+         
+            val passOffset = gridLength - ( ( length - offset ) % gridLength )
+          }
+          // Attempt 2m (sketch)
 
-         val passOffset = gridLength - ( ( length - offset ) % gridLength )
+         
+          (totalOffspring passOffset) = 
+            { if offset less_than fitness_i: 
+               {  gridfits = (fitness_i - offset) / gridLength;
+                  to = if( isWholeNumber(gridfits) ) ( gridfits ) else floor(gridfits) + 1.
+                  (to, gridLength - ( ( fitness_i - offset ) % gridLength ) )
+               }
+               else (0, offset - fitness_i)
+            }            
+
+          def isWholeNumber(d:double) = floor(d) == d
+          
+          Explanation: the special cases are the ones where the spokes coincide with the boundary between two area's of the roulette wheel (see thesis CG). In this case the spoke is considered to be hovering over the RIGHT area (not the left).
+            val passOffset = gridLength - ( ( length - offset ) % gridLength )
+
          */
+
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
          val gridFits:Double        = ( fitnessI - offset )/gridLength
-         val numberOfChildren:Int   = ( if(round(gridFits) == n) gridFits else (gridFits + 1) ).toInt
+         val numberOfChildren:Int   = ( if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) ).toInt
          val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
 
          ((i, numberOfChildren), passOffset)
