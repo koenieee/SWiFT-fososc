@@ -83,7 +83,34 @@ trait LocalSelectiveFitnessFunction[Genotype__TP]
   */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
-   {  null // TODO
+   {
+     val resultingMultieSet:List[Double] = pop.map(elementP => globalFitnessFunction(elementP.genotype) )
+     val constant: Double = 0.32
+     val sampleStandardDeviation = constant * sampleSD(resultingMultieSet)
+     val sampleMean: Double = resultingMultieSet.sum / resultingMultieSet.size
+     val betweenBrackets = sampleMean - sampleStandardDeviation
+
+     new LocalSelectiveFitnessFunction() {
+       override def apply(gt: Genotype__TP): Option[Double]= {
+            Option(globalFitnessFunction(gt) - betweenBrackets)
+       }
+     }
+
+
+
+     //resultingMultieSet.map(elem => (Some(elem - betweenBrackets)))
+
+     def sampleSD(ls: List[Double]): Double ={
+       ls match{
+         case Nil => 0.0
+         case list => {
+           val avarege: Double = (list.reduceLeft(_ + _ ) / list.size)
+           val newList: List[Double] = list.map(inNumber => math.pow(inNumber - avarege, 2))
+           val summList: Double = newList.reduceLeft(_ + _)
+           summList / list.size
+         }
+       }
+     }
    }
 }
 
