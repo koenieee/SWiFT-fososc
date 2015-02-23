@@ -6,7 +6,7 @@ package org.ocbkc
 import scala.util.Random
 import org.ocbkc.generic._
 import org.ocbkc.generic.random._
-import scala.math._
+
 import org.ocbkc.swift.global.Logging._
 
 package object ocevohut
@@ -65,7 +65,7 @@ trait CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP]
 }
 
-trait MapBasedLocalSelectiveFitnessFunction[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
+trait MapBasedLocalSelectiveFitnessFunctiongridLength[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
 {  val map:Map[Genotype__TP, Double]
    override def apply(gt:Genotype__TP):Option[Double] =
    {  map.get(gt)
@@ -164,19 +164,18 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
 
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double          = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
-
          if(offset < fitnessI)
          { val gridFits:Double        = ( fitnessI - offset )/gridLength
-           val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else floor(gridFits) + 1 ).toInt
-           val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
+           val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else math.floor(gridFits) + 1 ).toInt
+           val passOffset:Double      = gridLength - ( ( fitnessI - offset ) % gridLength )
            ((i, numberOfChildren), passOffset)
          }
          else
-         { ((i, (offset - fitnessI).toInt), offset)
+         { ((i, offset.toInt), (offset - fitnessI))
          }
       }
 
-      def isWholeNumber(d:Double):Boolean = floor(d) == d
+      def isWholeNumber(d:Double):Boolean = math.floor(d) == d
 
       ListUtils.mapWithLeftContext(pop, randomShift, calculateNumberOfChildrenAndPassOffset).toMap
    }
