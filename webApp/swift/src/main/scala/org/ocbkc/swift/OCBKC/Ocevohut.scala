@@ -85,21 +85,9 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
 {  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
    { val resultingMultieSet:List[Double] = pop.map(elementP => globalFitnessFunction(elementP.genotype) )
      val constant: Double = 0.32 //better to use this as parameter?
-     val sampleStndDeviation = constant * sampleStandardDeviation(resultingMultieSet)
+     val sampleStndDeviation = sampleStandardDeviation(resultingMultieSet) * constant
      val sampleMean: Double = resultingMultieSet.sum / resultingMultieSet.size
      val betweenBrackets = sampleMean - sampleStndDeviation
-
-     def sampleStandardDeviation(ls: List[Double]): Double =
-     { ls match
-       { case Nil => 0.0
-         case list =>
-         { val avarege: Double = list.reduceLeft(_ + _ ) / list.size
-           val newList: List[Double] = list.map(inNumber => math.pow(inNumber - avarege, 2))
-           val summList: Double = newList.reduceLeft(_ + _)
-           summList / list.size
-         }
-       }
-     }
 
      new LocalSelectiveFitnessFunction[Genotype__TP]()
      { override def apply(gt: Genotype__TP): Option[Double]=
@@ -107,6 +95,18 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
        }
      }
    }
+
+  def sampleStandardDeviation(ls: List[Double]): Double =
+  { ls match
+    { case Nil  => 0.0
+      case list =>
+      { val avarege: Double = list.reduceLeft(_ + _ ) / list.size
+        val newList: List[Double] = list.map(inNumber => math.pow( inNumber - avarege, 2 ))
+        val summList: Double = newList.reduceLeft(_ + _)
+        summList / list.size
+      }
+    }
+  }
 }
 
 
