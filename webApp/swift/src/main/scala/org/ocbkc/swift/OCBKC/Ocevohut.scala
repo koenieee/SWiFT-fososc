@@ -83,7 +83,7 @@ trait LocalSelectiveFitnessFunction[Genotype__TP]
   */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
-   { val resultingMultieSet:List[Double] = pop.map(elementP => globalFitnessFunction(elementP.genotype) )
+   { val resultingMultieSet: List[Double] = pop.map(elementP => globalFitnessFunction(elementP.genotype) )
      val constant: Double = 0.32 //better to use this as parameter?
      val sampleStndDeviation = sampleStandardDeviation(resultingMultieSet) * constant
      val sampleMean: Double = resultingMultieSet.sum / resultingMultieSet.size
@@ -100,8 +100,8 @@ class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitness
   { ls match
     { case Nil  => 0.0
       case list =>
-      { val avarege: Double = list.reduceLeft(_ + _ ) / list.size
-        val newList: List[Double] = list.map(inNumber => math.pow( inNumber - avarege, 2 ))
+      { val average: Double = list.reduceLeft(_ + _ ) / list.size
+        val newList: List[Double] = list.map(inNumber => math.pow( inNumber - average, 2 ))
         val summList: Double = newList.reduceLeft(_ + _)
         summList / list.size
       }
@@ -163,13 +163,20 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
          */
 
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
-      {  val fitnessI:Double        = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
-         val gridFits:Double        = ( fitnessI - offset )/gridLength
-         val numberOfChildren:Int   = ( if(floor(gridFits) == gridFits) gridFits else (gridFits + 1) ).toInt
-         val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
+      {  val fitnessI:Double          = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
 
-         ((i, numberOfChildren), passOffset)
+         if(offset < fitnessI)
+         { val gridFits:Double        = ( fitnessI - offset )/gridLength
+           val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else floor(gridFits) + 1 ).toInt
+           val passOffset:Double      = gridLength - ( ( gridLength - offset ) % gridLength )
+           ((i, numberOfChildren), passOffset)
+         }
+         else
+         { ((i, (offset - fitnessI).toInt), offset)
+         }
       }
+
+      def isWholeNumber(d:Double):Boolean = floor(d) == d
 
       ListUtils.mapWithLeftContext(pop, randomShift, calculateNumberOfChildrenAndPassOffset).toMap
    }
