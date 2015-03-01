@@ -9,7 +9,7 @@ import scala.math._
  * Created by koen on 17-12-14.
  */
 class OcevoHutTesting extends FlatSpec with GivenWhenThen {
-"Ocevohut testing" must " be correctly runned" in {
+"" must " give a correct output" in {
 
    /**
     * For testing purposes
@@ -48,7 +48,13 @@ class OcevoHutTesting extends FlatSpec with GivenWhenThen {
    }
    }
 
+   val numberOfPop = 5
+   val outputofSUS = SUSfor3dpg(test_pop, selFiFun, numberOfPop)
+   val totalOfPop = outputofSUS.map(indi => indi._2).sum
+
    // Test how SUS works on test_pop, and the given oFiFun (the latter of which is wrapped in selFiFun).
-      info("Final output: " + SUSfor3dpg(test_pop, selFiFun, 4))
+      info("Final output: " + outputofSUS)
+      info("Number of linked children: " + totalOfPop)
+      assert(numberOfPop == totalOfPop)
    }
 }

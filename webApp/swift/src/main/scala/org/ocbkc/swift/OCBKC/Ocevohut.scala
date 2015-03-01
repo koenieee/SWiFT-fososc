@@ -162,16 +162,16 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
          */
 
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
-      {  val fitnessI:Double          = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
+      {  val fitnessI:Double           = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
 
          if(offset < fitnessI)
-         { val gridFits:Double        = ( fitnessI - offset )/gridLength
-           val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else math.floor(gridFits) + 1 ).toInt
-           val passOffset:Double      = gridLength - ( ( fitnessI - offset ) % gridLength )
-           ((i, numberOfChildren), passOffset)
+         {  val gridFits:Double        = ( fitnessI - offset )/gridLength
+            val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else math.floor(gridFits) + 1 ).toInt
+            val passOffset:Double      = gridLength - ( ( fitnessI - offset ) % gridLength )
+            ((i, numberOfChildren), passOffset)
          }
          else
-         { ((i, offset.toInt), (offset - fitnessI))
+         {  ((i, offset.toInt), (offset - fitnessI))
          }
       }
 
