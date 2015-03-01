@@ -62,7 +62,7 @@ trait OcevohutTrait[Genotype__TP]
   */
 
 trait CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP]
+{  def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP], constant: Double):LocalSelectiveFitnessFunction[Genotype__TP]
 }
 
 trait MapBasedLocalSelectiveFitnessFunctiongridLength[Genotype__TP] extends LocalSelectiveFitnessFunction[Genotype__TP]
@@ -82,9 +82,8 @@ trait LocalSelectiveFitnessFunction[Genotype__TP]
 /** 
   */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
-{  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
+{  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP], constant: Double = 0.32):LocalSelectiveFitnessFunction[Genotype__TP] =
    {  val resultingMultiSet: List[Double]   = pop.map( elementP => globalFitnessFunction(elementP.genotype) )
-      val constant: Double                  = 0.32 //better to use this as parameter?
       val sampleStndDeviation               = sampleStandardDeviation(resultingMultiSet) * constant
       val sampleMean: Double                = resultingMultiSet.sum / resultingMultiSet.size
       val betweenBrackets                   = sampleMean - sampleStndDeviation
