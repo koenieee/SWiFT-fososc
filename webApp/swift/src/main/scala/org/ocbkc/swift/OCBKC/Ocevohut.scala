@@ -83,30 +83,30 @@ trait LocalSelectiveFitnessFunction[Genotype__TP]
   */
 class CreateSigmaScaledFitnessFunction[Genotype__TP] extends CreateScaledFitnessFunctionTrait[Genotype__TP]
 {  override def apply(pop:List[Individual[Genotype__TP]], globalFitnessFunction:FitnessFunctionType[Genotype__TP]):LocalSelectiveFitnessFunction[Genotype__TP] =
-   { val resultingMultiSet: List[Double]   = pop.map( elementP => globalFitnessFunction(elementP.genotype) )
-     val constant: Double                  = 0.32 //better to use this as parameter?
-     val sampleStndDeviation               = sampleStandardDeviation(resultingMultiSet) * constant
-     val sampleMean: Double                = resultingMultiSet.sum / resultingMultiSet.size
-     val betweenBrackets                   = sampleMean - sampleStndDeviation
+   {  val resultingMultiSet: List[Double]   = pop.map( elementP => globalFitnessFunction(elementP.genotype) )
+      val constant: Double                  = 0.32 //better to use this as parameter?
+      val sampleStndDeviation               = sampleStandardDeviation(resultingMultiSet) * constant
+      val sampleMean: Double                = resultingMultiSet.sum / resultingMultiSet.size
+      val betweenBrackets                   = sampleMean - sampleStndDeviation
 
-     new LocalSelectiveFitnessFunction[Genotype__TP]()
-     { override def apply(gt: Genotype__TP): Option[Double]=
-       { Some( globalFitnessFunction(gt) - betweenBrackets )
-       }
-     }
+      new LocalSelectiveFitnessFunction[Genotype__TP]()
+      {  override def apply(gt: Genotype__TP): Option[Double]=
+         {  Some( globalFitnessFunction(gt) - betweenBrackets )
+         }
+      }
    }
 
-  def sampleStandardDeviation(ls: List[Double]): Double =
-  { ls match
-    { case Nil  => 0.0
-      case list =>
-      { val average: Double       = list.sum / list.size
-        val newList: List[Double] = list.map(inNumber => math.pow( inNumber - average, 2 ))
-        val sumList: Double       = newList.sum
-        sumList / list.size
+   def sampleStandardDeviation(ls: List[Double]): Double =
+   {  ls match
+      {  case Nil  => 0.0
+         case list =>
+         {  val average: Double       = list.sum / list.size
+            val newList: List[Double] = list.map(inNumber => math.pow( inNumber - average, 2 ))
+            val sumList: Double       = newList.sum
+            sumList / list.size
+         }
       }
-    }
-  }
+   }
 }
 
 
@@ -165,7 +165,7 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
       def calculateNumberOfChildrenAndPassOffset(i:Individual[Genotype__TP], offset:Double):((Individual[Genotype__TP], Int), Double) =
       {  val fitnessI:Double          = selFiFun(i.genotype).getOrElse(logAndThrow("Hey, dude, you gave me a local selFiFun that isn't defined on member " + i + " of this population... Ain't not smart, youknow..."))
 
-        if(offset < fitnessI)
+         if(offset < fitnessI)
          { val gridFits:Double        = ( fitnessI - offset )/gridLength
            val numberOfChildren:Int   = ( if(isWholeNumber(gridFits)) gridFits else math.floor(gridFits) + 1 ).toInt
            val passOffset:Double      = gridLength - ( ( fitnessI - offset ) % gridLength )
