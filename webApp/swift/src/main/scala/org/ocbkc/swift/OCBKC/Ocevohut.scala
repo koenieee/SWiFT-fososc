@@ -171,8 +171,7 @@ class SUS[Genotype__TP] extends ProportionalSelectionTrait[Genotype__TP]
             ((i, numberOfChildren), passOffset)
          }
          else
-         {  log("Offset: " + offset.toInt)
-            ((i, 0), offset - fitnessI)
+         {  ((i, 0), offset - fitnessI)
          }
       }
 
