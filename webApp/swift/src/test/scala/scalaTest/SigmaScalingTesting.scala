@@ -1,7 +1,7 @@
 package scalaTest
 
 import org.ocbkc.ocevohut.Types.FitnessFunctionType
-import org.ocbkc.ocevohut.{CreateSigmaScaledFitnessFunction, Individual}
+import org.ocbkc.ocevohut.{LocalSelectiveFitnessFunction, SUS, CreateSigmaScaledFitnessFunction, Individual}
 import org.scalatest.{GivenWhenThen, FlatSpec}
 import scala.math._
 
@@ -48,8 +48,6 @@ class SigmaScalingTesting extends FlatSpec with GivenWhenThen
          ( countGoodOnes * 100d / TARGET_WORD_LENGTH.toDouble ) / 100d //11 comes from 11 elements of 'the one', see perfect above
       }
 
-      val SigmaforString = new CreateSigmaScaledFitnessFunction[String]
-
       //todo: generate this random from the target word
       val test_pop = List(
          new TestStrings("Hallo Werel"),
@@ -59,6 +57,26 @@ class SigmaScalingTesting extends FlatSpec with GivenWhenThen
          new TestStrings("VisseEnzovr")
       )
 
+      //uncomment for SUS
+      /*
+      val SUSforString = new SUS[String]
+      val selFiFun:LocalSelectiveFitnessFunction[String] = new LocalSelectiveFitnessFunction[String]
+      {  override def apply(gt:String):Option[Double] =
+      {  Some(oFiFun(gt))
+      }
+      }
+
+      val numberOfPop = 5
+      val outputofSUS = SUSforString(test_pop, selFiFun, numberOfPop)
+      val totalOfPop = outputofSUS.map(_._2).sum
+
+      // Test how SUS works on test_pop, and the given oFiFun (the latter of which is wrapped in selFiFun).
+      info("Final output: " + outputofSUS)
+      info("Number of linked children: " + totalOfPop)
+      */
+
+
+      val SigmaforString = new CreateSigmaScaledFitnessFunction[String]
 
       info("Target Word: " + TARGET_WORD + " With length: " + TARGET_WORD_LENGTH)
       info("Test Populuation: " + test_pop)
@@ -69,7 +87,7 @@ class SigmaScalingTesting extends FlatSpec with GivenWhenThen
          }
       }
 
-      info("Final output: " + SigmaforString(test_pop, globalSelFunc).apply("Hallo World")) //output:
+      info("Final output: " + SigmaforString(test_pop, globalSelFunc).apply("Hallo World")) //output: Some(0.5112330578512396)
 
    }
 }
