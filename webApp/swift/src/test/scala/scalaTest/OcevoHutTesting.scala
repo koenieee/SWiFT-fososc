@@ -48,9 +48,9 @@ class OcevoHutTesting extends FlatSpec with GivenWhenThen {
    }
    }
 
-   val numberOfPop = 5
+   val numberOfPop = 7
    val outputofSUS = SUSfor3dpg(test_pop, selFiFun, numberOfPop)
-   val totalOfPop = outputofSUS.map(indi => indi._2).sum
+   val totalOfPop = outputofSUS.map(_._2).sum
 
    // Test how SUS works on test_pop, and the given oFiFun (the latter of which is wrapped in selFiFun).
       info("Final output: " + outputofSUS)
