@@ -13,7 +13,7 @@
 <!--  <author>Chide Groenouwe</author> -->
   <properties>
     <scala.version>2.11</scala.version>
-    <liftweb.version>2.6-RC1</liftweb.version>
+    <liftweb.version>2.6</liftweb.version>
     <!-- Common plugin settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>${project.build.sourceEncoding}</project.reporting.outputEncoding>
