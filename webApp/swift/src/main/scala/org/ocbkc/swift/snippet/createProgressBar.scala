@@ -46,8 +46,9 @@ class createProgress
       val mapRound2DisplayName = Map(RoundStartSession -> "Start", RoundConstiStudy -> "Consti Study", RoundTranslation -> "Translation", RoundBridgeConstruction -> "Bridge", RoundQuestionAttack -> "Question Attack", RoundAlgorithmicDefenceStage1 -> "Defence 1", RoundAlgorithmicDefenceStage2 -> "Defence 2", RoundFinaliseSession -> "End Session")
 
       val mapRound2DisplayLinks = Map(RoundStartSession -> "startSession.html", RoundConstiStudy -> "studyConstiRound.html", RoundTranslation -> "translationRound.html", RoundBridgeConstruction -> "bridgeconstruction_efe.html", RoundQuestionAttack -> "questionAttackRound.html", RoundAlgorithmicDefenceStage1 -> "algorithmicDefenceRound.html", RoundAlgorithmicDefenceStage2 -> "algorithmicDefenceRoundStage2.html", RoundFinaliseSession -> "finaliseSession.html")
-
-      val mapRound2DisplayPerc = Map(NotInFluencySession -> "0", RoundConstiStudy -> "8", RoundTranslation -> "16", RoundBridgeConstruction -> "32", RoundQuestionAttack -> "48", RoundAlgorithmicDefenceStage1 -> "64", RoundAlgorithmicDefenceStage2 -> "80", RoundFinaliseSession -> "100")
+   
+   /* {| y2015_m05_d17_h22_m13_s52 |}, somehow, in the statement in the next line a type error follows when the type of the Map is not explicitly declared. That is the case since the upgrade from Scala 2.9 to 2.11. */
+   val mapRound2DisplayPerc:Map[RoundFluencySession, String] = Map(NotInFluencySession -> "0", RoundConstiStudy -> "8", RoundTranslation -> "16", RoundBridgeConstruction -> "32", RoundQuestionAttack -> "48", RoundAlgorithmicDefenceStage1 -> "64", RoundAlgorithmicDefenceStage2 -> "80", RoundFinaliseSession -> "100")
 
    import RoundFluencySessionInfo._
    val indexLatestRound = roundsInOrder.indexOf(lrfs)

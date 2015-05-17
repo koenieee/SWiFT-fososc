@@ -618,7 +618,7 @@ object Constitution
       if( constitutionFiles != null && constitutionFiles.length != 0 )
       {  implicit val formats = Serialization.formats(NoTypeHints) // <? &y2012.01.10.20:11:00& is this a 'closure' in action? It is namely used in the following function>
          // retrieve all tags needed for reconstructing releases.
-         val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asBuffer(jgit.get.tagList.call)
+         val taglist:scala.collection.mutable.Buffer[Ref] = scala.collection.JavaConversions.asScalaBuffer(jgit.get.tagList.call)
          log("   names of tags found:")
          taglist.map( ref => log(ref.getName) )
  
