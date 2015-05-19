@@ -260,7 +260,7 @@ object Unequal
    }
 }
 
-case class PredApp_FOL(override val p:Predicate, override val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FOLstatement
+case class PredApp_FOL(val p:Predicate, val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FOLstatement
 
 /** Move to general CTL lib
   */
@@ -475,7 +475,7 @@ case class Forall(vr:Var, constantList:List[Constant], predApp:PredApp_Fofa) ext
 
 /** @todo &y2014.02.13.18:23:52& perhaps overload "PredApp" in the same way as Forall (working with longer dotted package names to disambiguate)
   */
-case class PredApp_Fofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FofaSent
+case class PredApp_Fofa(val p:Predicate, val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with FofaSent
 
 package translator
 {  
@@ -589,13 +589,25 @@ object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory
    {  val parseWarningMsg  = if(pf.equals("")) "Warning: empty document." else ""  // <&y2012.05.19.20:27:13& replace with regex for visually empty file (thus file with only space characters, like space, newline, tab etc.>
 
       //Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, textCTLbyPlayer) match
+      /* <&y2015.05.19.16:07:39& somehow, a strange error appears here (note that there IS a case matching Error(...) in the code):
+
+      [WARNING] /home/jashafa/jowneeGitProjects/SWiFTfososc/webApp/swift/src/main/scala/org/ocbkc/swift/logilang/FOL.scala:592: warning: match may not be exhaustive.
+[ERROR] It would fail on the following input: Error(_, _)
+[INFO]       Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, pf) match
+[INFO]                                   ^
+      */
       Efe2FOLtheoryParser.parseAll(Efe2FOLtheoryParser.efeDocument, pf) match
-         {  case Efe2FOLtheoryParser.Success(ftl,_)         => {  ParseResult[FOLtheory](Some(ftl), "", parseWarningMsg)
-                                                               }
-            case failMsg@Efe2FOLtheoryParser.Failure(_,_)   => {  log("  parse error: " + failMsg.toString)
-                                                                  ParseResult[FOLtheory](None, failMsg.toString, parseWarningMsg)
-                                                               }
-         }
+      {  case Efe2FOLtheoryParser.Success(ftl,_)         => {  ParseResult[FOLtheory](Some(ftl), "", parseWarningMsg)
+                                                            }
+         case failMsg@Efe2FOLtheoryParser.Failure(_,_)   => {  log("  parse failure: " + failMsg.toString)
+                                                               ParseResult[FOLtheory](None, failMsg.toString, parseWarningMsg)
+                                                            }
+         case Efe2FOLtheoryParser.Error(ermsg, _)        => {  log("  parse error: " + ermsg)
+                                                               ParseResult[FOLtheory](None, ermsg.toString, parseWarningMsg)
+                                                            }
+         case rest                                       => {  log("   strange error: " + rest)
+                                                            }
+      }
     }
 
    override def sf2pf(sf:FOLtheory) = logAndThrow("TODO")

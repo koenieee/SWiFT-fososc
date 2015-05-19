@@ -72,7 +72,7 @@ class Player extends MegaProtoUser[Player] {
    /** Why is this defined on the level of the player, shouldn't it be a global setting?
      */
    def constiSelectionProcedure =
-   {  Player.int2CSP(constiSelectionProcedureInner)
+   {  Player.int2CSP(constiSelectionProcedureInner.get)
    }
 
    object constiSelectionProcedureInner extends MappedInt(this) // embodies which procedure is followed to let people study the constitutions, e.g.: allow them to choose only one constitution and study it the first time they play, or allow any constitution to be consulted at any moment etc. etc
@@ -105,7 +105,7 @@ class Player extends MegaProtoUser[Player] {
      */
    object timeFirstChosenConstitution extends MappedLong(this)
    def followedConstis:List[ConstiId] =
-   {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.is}
+   {  FollowerConsti_join.findAll( By(FollowerConsti_join.player, this) ).map{fcj => fcj.constiId.get}
    }
    
    //object deletePlayer extends MappedString(this, 100)

@@ -10,8 +10,12 @@ object EqualityEliminatorCLI extends CLIwithFileInput
 {  def main(args: Array[String]) =
    {  def f(constantsAndFolminqua:String):String =
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, constantsAndFolminqua) match
-         {  case Folminqua2FOLtheoryParser.Success(ftl,_)  => ftl
-            case  failMsg@Folminqua2FOLtheoryParser.Failure(_,_)           => return "  parse error: " + failMsg.toString
+         {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => ftl
+            case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => return "  parse failure: " + failMsg.toString
+            case Folminqua2FOLtheoryParser.Error(ermsg, _)        => {  log("  parse error: " + ermsg)
+                                                                        return "  parse error: " + ermsg.toString
+                                                                     }
+            
          }
          /* 
          <&y2012.04.13.19:31:57& finish. For now I don't read constants from first line...>

@@ -27,8 +27,11 @@ object ConstantSubtitutionCLI extends CLIwithFileInput
 {  def main(args: Array[String])
    {  def f(folminqua:String):String =
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminqua) match
-         {  case Folminqua2FOLtheoryParser.Success(ftl,_)  => ftl
-            case  failMsg@Folminqua2FOLtheoryParser.Failure(_,_)           => return "  parse error: " + failMsg.toString
+         {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => ftl
+            case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => return "  parse failure: " + failMsg.toString
+            case Folminqua2FOLtheoryParser.Error(ermsg, _)                                  => {  log("  parse error: " + ermsg)
+                                                                        return "  parse error: " + ermsg.toString
+                                                                     }
          }
 
          def getConstant(cn:String) = ft.getConstant(cn) match

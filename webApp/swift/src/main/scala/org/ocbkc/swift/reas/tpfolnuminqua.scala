@@ -20,6 +20,9 @@ object TestTpFolnuminquaCLI extends CLIwithFileInput
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminquaFile) match
          {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => ftl
             case  failMsg@Folminqua2FOLtheoryParser.Failure(_,_)  => { "  parse error: " + failMsg.toString; new FOLtheory() }
+            case Error(ermsg, _)                                  => {  log("  parse error: " + ermsg)
+                                                                        "  parse error: " + ermsg.toString; new FOLtheory()
+                                                                     }
          }
  
          var ret:String = ""

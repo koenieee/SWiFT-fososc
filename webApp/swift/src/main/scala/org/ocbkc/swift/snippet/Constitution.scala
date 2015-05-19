@@ -291,7 +291,7 @@ class ConstitutionSnippet
                                                             "noPublishDescriptionError" -> { if( errorsLR.find( { case _:NoPublishDescriptionError => true; case _  => false } ).isDefined) { println("   player forgot publish description, naughty boy."); <font color="red" ><b>ERROR: PROVIDE</b></font> } else { println("   player provided publish description: good good boy."); emptyNode } },
                                                             "errorInHtml" -> { errHtml match 
                                                                               {  case Some(ErrorInHtml(e))  => <font color="red"><b>{ "COULD NOT PUBLISH:\nError on line " + e.getLineNumber + ", at character " + e.getColumnNumber + ": " + e.getMessage }</b></font>
-                                                                                 case None                  => emptyNode
+                                                                                 case _                     => emptyNode
                                                                               }
                                                                              },        
                                                             "publishBt"          -> SHtml.button("Publish", () => processPublishBtn()),

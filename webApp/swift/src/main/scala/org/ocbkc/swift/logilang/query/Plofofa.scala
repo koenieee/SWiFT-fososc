@@ -87,7 +87,7 @@ case class MostInfo(patVar: PatVar, forallPat: Forall) extends PlofofaPat // I d
 
 // Example: mostInfo(s_, forall x from s_.P(c_2, x))
 case class Forall(vr:Var, setPatVar:PatVar, predApp:PredApp_Plofofa) extends PlofofaPat
-case class PredApp_Plofofa(override val p:Predicate, override val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with PlofofaPat
+case class PredApp_Plofofa(val p:Predicate, val terms:List[SimpleTerm]) extends AbstractPredApp(p, terms) with PlofofaPat
 
 package translator
 {
