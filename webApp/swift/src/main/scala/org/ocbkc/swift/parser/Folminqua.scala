@@ -16,6 +16,7 @@ import System._
 import java.io._
 import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.test.CLIwithFileInput
+import org.ocbkc.swift.global.Logging._
 
 object Folminqua2FOLtheoryParserCLI extends CLIwithFileInput
 {  def main(args: Array[String])
@@ -29,7 +30,7 @@ object ConstantSubtitutionCLI extends CLIwithFileInput
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminqua) match
          {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => ftl
             case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => return "  parse failure: " + failMsg.toString
-            case Folminqua2FOLtheoryParser.Error(ermsg, _)                                  => {  log("  parse error: " + ermsg)
+            case Folminqua2FOLtheoryParser.Error(ermsg, _)        => {  log("  parse error: " + ermsg)
                                                                         return "  parse error: " + ermsg.toString
                                                                      }
          }

@@ -5,6 +5,7 @@ import org.ocbkc.swift.logilang.query._
 import System._
 import java.io._
 import org.ocbkc.swift.parser._
+import org.ocbkc.swift.global.Logging._
 
 /* Conventions:
 Abbreviation for constitution: consti (const is to much similar to constant).
@@ -605,7 +606,9 @@ object EfeRepresentationTransforms extends CTLrepresentationTransforms[FOLtheory
          case Efe2FOLtheoryParser.Error(ermsg, _)        => {  log("  parse error: " + ermsg)
                                                                ParseResult[FOLtheory](None, ermsg.toString, parseWarningMsg)
                                                             }
-         case rest                                       => {  log("   strange error: " + rest)
+         case rest                                       => {  log("  [POTENTIAL_BUG] strange error: " + rest)
+                                                               ParseResult[FOLtheory](None, rest.toString, parseWarningMsg)
+                                                               
                                                             }
       }
     }

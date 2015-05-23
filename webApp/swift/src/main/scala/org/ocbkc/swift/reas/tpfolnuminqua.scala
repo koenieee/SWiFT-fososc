@@ -11,6 +11,7 @@ import query._
 import System.err.println
 import java.io._
 import org.ocbkc.swift.test.CLIwithFileInput
+import org.ocbkc.swift.global.Logging._
 
 /* Assumed is: args(0) = input file, where first line is list of space separated constantnames, the rest is the folminqua file */
 object TestTpFolnuminquaCLI extends CLIwithFileInput
@@ -19,8 +20,8 @@ object TestTpFolnuminquaCLI extends CLIwithFileInput
       def f(folminquaFile:String):String =
       {  val ft:FOLtheory = Folminqua2FOLtheoryParser.parseAll(Folminqua2FOLtheoryParser.folminquaTheory, folminquaFile) match
          {  case Folminqua2FOLtheoryParser.Success(ftl,_)         => ftl
-            case  failMsg@Folminqua2FOLtheoryParser.Failure(_,_)  => { "  parse error: " + failMsg.toString; new FOLtheory() }
-            case Error(ermsg, _)                                  => {  log("  parse error: " + ermsg)
+            case failMsg@Folminqua2FOLtheoryParser.Failure(_,_)   => { "  parse error: " + failMsg.toString; new FOLtheory() }
+            case Folminqua2FOLtheoryParser.Error(ermsg, _)        => {  log("  parse error: " + ermsg)
                                                                         "  parse error: " + ermsg.toString; new FOLtheory()
                                                                      }
          }

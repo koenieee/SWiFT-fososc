@@ -4,6 +4,7 @@ import org.ocbkc.swift.parser._
 import org.ocbkc.swift.logilang._
 import System.err.println
 import org.ocbkc.swift.test.CLIwithFileInput
+import org.ocbkc.swift.global.Logging._
 
 /* Assumed is: args(0) = input file, where first line is list of space separated constantnames, the rest is the folminqua file */
 object EqualityEliminatorCLI extends CLIwithFileInput
