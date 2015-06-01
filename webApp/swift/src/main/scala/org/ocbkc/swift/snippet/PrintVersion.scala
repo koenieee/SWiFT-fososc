@@ -7,7 +7,7 @@ import _root_.net.liftweb.common._
 import _root_.java.util.Date
 import org.ocbkc.swift.lib._
 import org.ocbkc.swift.OCBKC._
-import Helpers._
+import net.liftweb.util.Helpers._
 import System.err.println
 import org.ocbkc.swift.model._
 import org.ocbkc.swift.general.GUIdisplayHelpers._
@@ -22,13 +22,16 @@ class Version_swift
    val lines = source.mkString
    source.close()*/
    val lines = GlobalConstant.MAIN_VERSION
-   def printing(xhtml: NodeSeq): NodeSeq = 
-   {  
-      {  <h4 class="alt">
-            <a href={ "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines} ><i>SWiFT fososc</i></a> 
-            version {lines}
-         </h4>
-      }
+   def render(ns: NodeSeq): NodeSeq =
+   {
+      val link = "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines
+      var version = lines
+      bind( "top", ns,
+         "link" -> SHtml.link(link, () => (), <i>SWiFT fososc {version}</i> )
+      )
+
    }
+
+
 }
 
