@@ -21,17 +21,14 @@ class Version_swift
    val source = scala.io.Source.fromFile(GlobalConstant.PERSISTENT_DATA_MAIN_VERSION_PATHNAME)
    val lines = source.mkString
    source.close()*/
-   val lines = GlobalConstant.MAIN_VERSION
-   def render(ns: NodeSeq): NodeSeq =
-   {
-      val link = "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines
-      var version = lines
-      bind( "top", ns,
-         "link" -> SHtml.link(link, () => (), <i>SWiFT fososc {version}</i> )
-      )
+   def version = 
+   { 
+   		val lines = GlobalConstant.MAIN_VERSION
+   		val link = "http://htmlpreview.github.io/?https://github.com/swiftgame/SWiFT-fososc/blob/develop/webApp/swift/version_history.html#version" + lines
+   		var swift_current_version = lines 
 
+   		"#version_link" #> SHtml.link(link, () => (), <i>SWiFT fososc {swift_current_version}</i> )
    }
-
 
 }
 
