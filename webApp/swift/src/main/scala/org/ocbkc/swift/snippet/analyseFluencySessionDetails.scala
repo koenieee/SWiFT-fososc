@@ -25,7 +25,7 @@ class analyseFluencySessionDetails
 
         if( !sesCoordBySession.isEmpty )
         { log( msgStart + " found!")
-          Player.find(By(Player.id, sesCoordBySession.get.userId.get)) match
+          Player.find(By(Player.id, sesCoordBySession.openOrThrowException("No session").userId.get)) match
           { case Full(p) =>
             {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution)
                val releaseId = p.releaseOfFirstChosenConstitution.get
@@ -36,15 +36,15 @@ class analyseFluencySessionDetails
                    "constName"     -> Text(constiOption.get.constiId.toString),
                    "releaseIndex"  -> Text("R" + constiOption.get.releaseIndex(releaseId)), // put somewhere: {log("[ERROR] code &y2014.06.09.21:34:59&"); "not found"}),
                    "playerName"    -> Text(p.swiftDisplayName),
-                   "questionNL"    -> Text(sesCoordBySession.get.questionNL),
-                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.get.startTimeTranslation.is)))),
-                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.get.stopTimeTranslation.is)))),
-                   "sourceText"    -> Text(sesCoordBySession.get.textNL),
-                   "textCTLbyPlayer"   -> Text(sesCoordBySession.get.textCTLbyPlayer),
-                   "bridgeCTL2NLplayer"-> Text(optionToUI(sesCoordBySession.get.bridgeCTL2NLplayer.map{ _.toString })),
-                   "transTime"     -> Text(sesCoordBySession.get.durationTranslation.get.toString),
-                   "score"         -> Text(optionToUI(PlayerScores.fluencyScore(sesCoordBySession.get).map{ fs => defaultRounding(fs.toDouble) })),
-                   "answerCor"     -> Text(sesCoordBySession.get.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}),
+                   "questionNL"    -> Text(sesCoordBySession.map(_.questionNL).openOrThrowException("No NL question")),
+                   "startTime"     -> Text(df.format(new java.util.Date((sesCoordBySession.openOrThrowException("No starttime").startTimeTranslation.get)))),
+                   "stopTime"      -> Text(df.format(new java.util.Date((sesCoordBySession.openOrThrowException("No stoptime").stopTimeTranslation.get)))),
+                   "sourceText"    -> Text(sesCoordBySession.map(_.textNL).openOrThrowException("No source text")),
+                   "textCTLbyPlayer"   -> Text(sesCoordBySession.map(_.textCTLbyPlayer).openOrThrowException("No text defined by player")),
+                   "bridgeCTL2NLplayer"-> Text(optionToUI(sesCoordBySession.openOrThrowException("No bridge text").bridgeCTL2NLplayer.map{ _.toString })),
+                   "transTime"     -> Text(sesCoordBySession.openOrThrowException("No session").durationTranslation.get.toString),
+                   "score"         -> Text(optionToUI(PlayerScores.fluencyScore(sesCoordBySession.openOrThrowException("No session")).map{ fs => defaultRounding(fs.toDouble) })),
+                   "answerCor"     -> Text(sesCoordBySession.openOrThrowException("No session").answerPlayerCorrect.get match { case true => "Yes" case false => "No"}),
                    "interTrans"    ->  SHtml.link("analyseIntermediateTranslations.html?sessionID=" + session_id, () => (), Text("Link"))
                 )
              }

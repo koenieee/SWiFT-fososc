@@ -22,13 +22,13 @@ class AnalyseIntermediateTranslations
 
         log("Found Intersession: " + HistoryTranslation)
         bind("top", ns,
-          "user"  -> Text(HistoryTranslation.head.sessionInfo.open_!.userId.toString),
+          "user"  -> Text(HistoryTranslation.head.sessionInfo.openOrThrowException("No session history").userId.toString),
           "interTables"  -> generateTable(HistoryTranslation)
         )
     }
     else {
         bind("top", ns,
-          "user"  -> Text(HistoryTranslation.head.sessionInfo.open_!.userId.toString),
+          "user"  -> Text(HistoryTranslation.head.sessionInfo.openOrThrowException("NO session history").userId.toString),
           "interTables"  -> Text("No intermediate translations found for this player.")
         )
       }

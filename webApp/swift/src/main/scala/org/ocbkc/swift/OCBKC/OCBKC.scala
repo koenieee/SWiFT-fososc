@@ -166,7 +166,7 @@ case class Constitution(val constiId:ConstiId, // unique identifier for this con
    }
 
    def followersAsPlayerObjs =
-   {  followers.map{ Player.find(_).open_! }
+   {  followers.map{ Player.find(_).openOrThrowException("No following players found")}
    }
 /* &y2012.06.23.14:39:56& just use followers.contains(...) directly, instead of:
    def followedByUser/isFollower(userId:Int):boolean = 
@@ -372,9 +372,9 @@ getHistory.length, commitIdsReleases.length, isRelease
    
 
    def addFollower(p:Player) = 
-   {  if(!followers.contains(p.id.is))
+   {  if(!followers.contains(p.id.get))
       {  FollowerConsti_join.create.player(p).constiId(this.constiId).save
-         followers = p.id.is::followers
+         followers = p.id.get::followers
       }
    }
 
@@ -383,7 +383,7 @@ getHistory.length, commitIdsReleases.length, isRelease
       {  case Some(fcj) => { if(!fcj.delete_!) throw new RuntimeException("Couldn't remove player " + p + " as follower from consti " + this + " from the database.") }
          case _         => log("   player wasn't a follower anyway, nothing to remove. Why did you disturb me from my Devine nap...")
       }
-      followers = followers.filter(_ != p.id.is)
+      followers = followers.filter(_ != p.id.get)
       Unit
    }
 
@@ -737,7 +737,7 @@ object Constitution
    {  if(constis == Nil)
       {  log("There are no constitutions yet, so adding constitution alpha to constitution-population.")
          val constiAlphaStr = scala.io.Source.fromFile(GlobalConstant.CONSTI_ALPHA_INIT).mkString
-         val adminId = GlobalConstant.adminOpt.get.id.is
+         val adminId = GlobalConstant.adminOpt.get.id.get
          val constiAlpha = Constitution.create(adminId)
          val id = constiAlpha.publish( constiAlphaStr, "first publication", adminId.toString )
          constiAlpha.releaseVersion(id)
@@ -825,7 +825,7 @@ object OCBKCinfoPlayer
    /** @todo does this also include sessions that are still ongoing (not closed yet)? (It shouldn't).
      */
    def sessionsPlayedBy(p:Player):List[SessionInfo] =
-   {  val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! )
+   {  val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.openOrThrowException("No played sessions found") )
       sis
    }
    
@@ -858,11 +858,11 @@ object PlayerScores
    def percentageCorrect(p:Player, numOfSessions:Int):Result_percentageCorrect = 
    {  log("percentageCorrect called")
 
-      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
+      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.openOrThrowException("No played sessions") ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
 
 
       //val correctCcs = sis.filter( si => si.answerPlayerCorrect )
-      val numberCorrect = sis.count( si => si.answerPlayerCorrect.is )
+      val numberCorrect = sis.count( si => si.answerPlayerCorrect.get )
       val totalNumber = sis.length
 
       log("   Number of sessions taken into consideration: " + totalNumber)
@@ -947,12 +947,12 @@ object PlayerScores
 
    def fluencyScoreSample(p:Player):List[FluencyScore] = 
    {  log("PlayerScores.fluencyScoreSample")
-      val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }
+      val sis:List[SessionInfo] = PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.openOrThrowException("No played sessions found") ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }
       
       val ret = sis.map(
          si =>
          {  FluencyScore(               
-               if(si.answerPlayerCorrect.is) 1 else 0,
+               if(si.answerPlayerCorrect.get) 1 else 0,
                1,
                si.durationTranslation.get
             )

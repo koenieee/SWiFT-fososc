@@ -26,12 +26,12 @@ class FluencyTimeSeries {
 
         //val sessionsByPlayer:List[SessionInfo] = SessionInfoMetaMapperObj.findAll(By(SessionInfoMetaMapperObj.userId,player_id.toLong))
        // log("Sessions found: " + sessionsByPlayer.toString)
-          val sessionWithIndex = SesCoord.is.sessionsPlayedBy(player.get).zipWithIndex
+          val sessionWithIndex = SesCoord.is.sessionsPlayedBy(player.openOrThrowException("No player")).zipWithIndex
 
  	  log("Sessions found: " + sessionWithIndex)
 
           bind("top",xhtml,
-              "user"    -> Text(player.get.swiftDisplayName),
+              "user"    -> Text(player.openOrThrowException("No player").swiftDisplayName),
               "input"   ->Text(
               "[" +
                 sessionWithIndex.map(session =>

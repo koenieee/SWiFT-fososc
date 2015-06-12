@@ -31,8 +31,8 @@ class createProgress
       //TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
       // <&y2013.09.06.20:48:47& COULDDO refactor: get index from List(RoundTranslation, RoundBridgeConstruction, ...) is more compact coding and less shot gun surgery pattern.>
 
-      val progressBarTempl = TemplateFinder.findAnyTemplate(List("templates-hidden", "progressbar")).open_!
-      val graphProgress = TemplateFinder.findAnyTemplate(List("templates-hidden", "graph_progress")).open_!
+      val progressBarTempl = Templates.findRawTemplate(List("templates-hidden", "progressbar"), S.locale).openOrThrowException("Template not found")
+      val graphProgress = Templates.findRawTemplate(List("templates-hidden", "graph_progress"), S.locale).openOrThrowException("Template not found")
 
       val completedRoundTempl = chooseTemplate("progressbar", "completedRound", progressBarTempl)
       val latestRoundTempl = chooseTemplate("progressbar", "latestRoundReached", progressBarTempl)

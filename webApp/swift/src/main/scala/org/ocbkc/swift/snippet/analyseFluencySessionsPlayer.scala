@@ -47,7 +47,7 @@ class analyseFluencySessionsPlayer {
         { val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
           <tr>
             <td>{ session.id.toString }</td>
-            <td>{ dateFormat.format(session.stopTimeTranslation.is)   }</td>
+            <td>{ dateFormat.format(session.stopTimeTranslation.get)   }</td>
             <td>{ "" + optionToUI(PlayerScores.fluencyScore(session).map{ fs => defaultRounding(fs.toDouble) })}</td>
             <td>{  session.durationTranslation.get.toString  }</td>
             <td>{  session.answerPlayerCorrect.get match { case true => "Yes" case false => "No"}  }</td>
@@ -71,28 +71,22 @@ class analyseFluencySessionsPlayer {
       { val msgStart = "Input player_ID: " + player_id
         //println(Player.find(By(Player.id, player_id.toLong)))
 
-        val player = Player.find(By(Player.id, player_id.toLong))
-
-        if( !player.isEmpty )
-        { log( msgStart + " found!")
-          val constiOption:Option[Constitution] = Constitution.getById(player.get.firstChosenConstitution.is)
+        val player = Player.find(By(Player.id, player_id.toLong)).openOrThrowException("No player logged in")
+        log( msgStart + " found!")
+          val constiOption:Option[Constitution] = Constitution.getById(player.firstChosenConstitution.get)
           log(constiOption.toString)
           //I get sometimes a None.Get. But the player exists, why is constiOption empty, if there are sessions played..?
 
           bind( "top", ns,
-            "sessionPlayerTable"  -> sessionPlayerTable(ns, player.get),
-            "player"              -> Text(player.get.firstName),
+            "sessionPlayerTable"  -> sessionPlayerTable(ns, player),
+            "player"              -> Text(player.firstName),
             "constName"           -> Text(constiOption.get.constiId.toString),
             "release"             -> Text(constiOption.get.currentVersionId),
-            "odsDownload"         -> SHtml.link("",() => downloadOdsFile(player.get),Text("Export Spreadsheet")),
-            "graphLink"           -> SHtml.link("../fluencyTimeSeriesGraph.html?player="+player.get.userIdAsString,()=>(),Text("Link"))
+            "odsDownload"         -> SHtml.link("",() => downloadOdsFile(player),Text("Export Spreadsheet")),
+            "graphLink"           -> SHtml.link("../fluencyTimeSeriesGraph.html?player="+player.userIdAsString,()=>(),Text("Link"))
           )
         }
-        else
-        { log("[POTENTIAL_BUG] " + msgStart + " not found.")
-          S.redirectTo("../index")
-        }
-      }
+
 
       case _ =>
       { log(" Parameter player_id missing in URL.")
@@ -109,7 +103,7 @@ class analyseFluencySessionsPlayer {
 
     Sessions.zipWithIndex.map
     { sess =>
-      { data(sess._2) = Array[AnyRef](sess._1.id, dateFormat.format(sess._1.stopTimeTranslation.is), PlayerScores.fluencyScore(sess._1).map{ fs => defaultRounding(fs.toDouble) }.get.toString, sess._1.durationTranslation.get.toString , sess._1.answerPlayerCorrect.get match { case true => "TRUE" case false => "FALSE"})
+      { data(sess._2) = Array[AnyRef](sess._1.id, dateFormat.format(sess._1.stopTimeTranslation.get), PlayerScores.fluencyScore(sess._1).map{ fs => defaultRounding(fs.toDouble) }.get.toString, sess._1.durationTranslation.get.toString , sess._1.answerPlayerCorrect.get match { case true => "TRUE" case false => "FALSE"})
       }
     }
 

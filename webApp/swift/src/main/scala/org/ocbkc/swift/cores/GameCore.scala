@@ -338,7 +338,7 @@ class EfeLang(val playerIdInit:Long) extends TraitGameCore[EfeQuerySent_rb, EfeA
          case None => si.answerPlayerCorrect( false ).save
       }
 
-      AlgorithmicDefenceResult(si.answerPlayerCorrect.is, si.answerPlayerNL, "", answerPlayerCTL)
+      AlgorithmicDefenceResult(si.answerPlayerCorrect.get, si.answerPlayerNL, "", answerPlayerCTL)
    }
    // <&y2011.11.17.18:49:46& or should I change the type of text and trans to the Text class etc. see model package.>
 

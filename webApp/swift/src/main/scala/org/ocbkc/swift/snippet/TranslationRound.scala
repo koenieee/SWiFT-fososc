@@ -65,7 +65,7 @@ class TranslationRound
          if(a.isEmpty)
             println("   no currentUserId:")
          else
-            println("   currentUserId = " + a.open_!)
+            println("   currentUserId = " + a.openOrThrowException("No user ID"))
       }
 
       // <&y2012.02.26.01:34:10& perhaps more elegant to make use of built-in parser of SessionInfo>
@@ -95,7 +95,7 @@ class TranslationRound
             "testTransBt"     -> SHtml.button("test grammatically", processTestTransBt, editableAttrib:_* ),
             "errorTrans"      -> errorTransWebText,
             "submitBt"        -> SHtml.submit("Submit", processSubmission, editableAttrib:_* ),
-            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.is.toString())
+            "startTime"       -> Text(sesCoordLR.si.startTimeTranslation.get.toString())
             //"test"          -> Text(test)
           )
       bind("transround", boundForm, "sourceText" -> Text(sesCoordLR.si.textNL))

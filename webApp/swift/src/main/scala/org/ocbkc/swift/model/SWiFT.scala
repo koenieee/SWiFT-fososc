@@ -9,7 +9,7 @@ import org.ocbkc.swift.logilang._
 import org.ocbkc.swift.logilang.bridge.brone._
 import System.err.println
 import _root_.net.liftweb.mapper._
-import net.liftweb.db.ConnectionIdentifier
+import net.liftweb.util.ConnectionIdentifier
 import net.liftweb.common._
 import java.sql.ResultSet
 import org.ocbkc.swift.OCBKC._
@@ -133,10 +133,10 @@ case class SessionInfo( var textNL: String,
 
    def durationTranslation:Option[Long] = // <&y2012.10.28.19:58:50& TODO: refactor with checking if startTimeTranslation is defined?>
    {  println("   durationTranslation called")
-      println("   startTimeTranslation.is == " + startTimeTranslation.is)
-      println("   stopTimeTranslation.is == " + stopTimeTranslation.is)
-      if(startTimeTranslation.is == 0 || stopTimeTranslation.is == 0) None else
-      {  val result = Some(stopTimeTranslation.is - startTimeTranslation.is)
+      println("   startTimeTranslation.is == " + startTimeTranslation.get)
+      println("   stopTimeTranslation.is == " + stopTimeTranslation.get)
+      if(startTimeTranslation.get == 0 || stopTimeTranslation.get == 0) None else
+      {  val result = Some(stopTimeTranslation.get - startTimeTranslation.get)
          log("   durationTranslation = " + result)
          result
       }
@@ -322,10 +322,10 @@ object SessionInfoMetaMapperObj extends SessionInfo with LongKeyedMetaMapper[Ses
 // <&y2012.01.08.18:25:04& or should this object belong to Coord?>
 class SessionHistory
 {  var sessionInfos:List[SessionInfo] = Nil
-   def correctCcs = sessionInfos.filter( si => si.answerPlayerCorrect )
+   def correctCcs = sessionInfos.filter( si => si.answerPlayerCorrect.get )
 
    def totalNumber = sessionInfos.length
-   def numberCorrect = sessionInfos.count( si => si.answerPlayerCorrect )
+   def numberCorrect = sessionInfos.count( si => si.answerPlayerCorrect.get )
 
    // import Ordering.LongOrdering
    object OrderingOnDurationTranslation extends Ordering[SessionInfo]

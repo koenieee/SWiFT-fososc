@@ -33,7 +33,7 @@ class AlgorithmicDefenceRoundStage2
          "answerFromSourceNL"    -> Text(sesCoordLR.si.answerComputerNL),
          "answerFromTransCTL"    -> Text(sesCoordLR.si.answerPlayerCTL.get.toString),
          "answerFromTransNL"     -> Text(sesCoordLR.si.answerPlayerNL),
-         "conclusion"            -> Text( if (sesCoordLR.si.answerPlayerCorrect) "The answer derived from your translation is completely correct. You won!" else "The answer derived from your translation is wrong! Buzinga! Got ya'!")
+         "conclusion"            -> Text( if (sesCoordLR.si.answerPlayerCorrect.get) "The answer derived from your translation is completely correct. You won!" else "The answer derived from your translation is wrong! Buzinga! Got ya'!")
          //"questionNo"      -> Text("TODO: questionNo")
       )
    }

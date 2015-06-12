@@ -25,7 +25,7 @@ class StudyConsti__EMBED
    val player = sesCoordLR.currentPlayer
    val consti:Constitution = 
       if( player.constiSelectionProcedure == OneToStartWith || player.constiSelectionProcedure == RandomOneToStartWith )
-      {  Constitution.getById(player.firstChosenConstitution.is).get // should always be there, because if no constitution has been chosen this page should be hidden.
+      {  Constitution.getById(player.firstChosenConstitution.get).get // should always be there, because if no constitution has been chosen this page should be hidden.
       }
       else
       {  throw new RuntimeException("  constiSelectionProcedure not set, or it is one not supported yet by class StudyConstitution")

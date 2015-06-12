@@ -104,8 +104,8 @@ class Boot
 
       /** Only call when you are 100% certain a user is logged in, otherwise this must be considered a bug
       */
-      def currentPlayer =
-      {  Player.currentUser.get
+      def currentPlayer: Player =
+      {  Player.currentUser.openOrThrowException("No current player logged in")
       }
 
       // returns also false when no player is logged in.
@@ -123,12 +123,12 @@ class Boot
       }
 
       def playerIsAdmin(player:Player):Boolean =
-      {  player.firstName.is.equals(GlobalConstant.TESTADMINFIRSTNAME)
+      {  player.firstName.get.equals(GlobalConstant.TESTADMINFIRSTNAME)
       }
 
       // assumes playerIsLoggedIn
       def loggedInPlayerIsAdmin:Boolean =
-      {  playerIsAdmin(Player.currentUser.open_!)
+      {  playerIsAdmin(Player.currentUser.openOrThrowException("No current player logged in"))
 
       }
 
@@ -330,7 +330,7 @@ class Boot
             randomConstiCreationList.foreach( { case (creator, sizeHis) => generateConstiHis(creator, sizeHis) } )
 
             def generateConstiHis(creator: Player, sizeHis:Int) =
-            {  val consti = Constitution.create(creator.id.is)
+            {  val consti = Constitution.create(creator.id.get)
                consti.initialiseNew
                val randomHisCreationList = (1, creator)::List.range(2, sizeHis).map( idx => (idx, randomPlayer)) // Note: the first publication is always by the creator...
                randomHisCreationList.map(
@@ -535,7 +535,7 @@ object BootHelpers
 
       player.constiSelectionProcedure match
       {  case OneToStartWith  =>
-            if( player.firstChosenConstitution.is == -1 )
+            if( player.firstChosenConstitution.get == -1 )
             {  log("   player has not chosen a constitution to study yet, so redirect to selectConstitution.")
                S.redirectTo("fluencyGameSes/selectConstitution")
             }

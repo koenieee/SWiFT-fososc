@@ -15,5 +15,6 @@ persistentDatastructureMainVersion.txt
 proj/
 ft.fof
 .idea/
+idea/
 *.iml
 src/main/resources/jetty-ssl.keystore

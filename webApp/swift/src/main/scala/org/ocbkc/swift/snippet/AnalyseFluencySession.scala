@@ -61,7 +61,7 @@ class AnalyseFluencySession
                   "player"       -> Text(player.id.asString)
             )
  
-         val constiOption:Option[Constitution] = Constitution.getById(player.firstChosenConstitution.is)
+         val constiOption:Option[Constitution] = Constitution.getById(player.firstChosenConstitution.get)
 
          constiOption match // is there a first chosen consti for this player?
          {  case Some(consti) => // bind consti related fields

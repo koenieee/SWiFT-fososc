@@ -174,7 +174,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       }
 
       if( latestRoundFluencySession == NotInFluencySession )
-      {  if(currentPlayer.firstChosenConstitution.is == -1)
+      {  if(currentPlayer.firstChosenConstitution.get == -1)
          {  Constitution.constisWithPlayableReleases match
             {  case Nil =>
                {  log("   {| LCD y2014_m08_d06_h12_m44_s36 |} there are no constisWithPlayableReleases, and this player still has no first chosen consti, so session may not start.")  
@@ -207,7 +207,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
       if( latestRoundFluencySession == RoundConstiStudy)
       {  log("   gameCore == null " + (gameCore == null) )
          si.startTime(SystemWithTesting.currentTimeMillis).save
-         si.startTimeTranslation(si.startTime.is).save
+         si.startTimeTranslation(si.startTime.get).save
          latestRoundFluencySession = RoundTranslation
       } else
       {  log("[POTENTIAL_BUG] cannot go to state RoundTranslation, because player is not in state RoundConstiStudy")
@@ -280,7 +280,7 @@ trait CoreTrait[QuerySent__TP <: QuerySent, AnswerLangSent__TP <: CTLsent]
    }
 
    protected def turnReleaseCandidateIntoVirginIfPossible:Unit =
-   {  currentPlayer.firstChosenConstitution.is match
+   {  currentPlayer.firstChosenConstitution.get match
       {  case -1 => logAndThrow("[BUG] No first chosen consti found, while player just has finished playing a translation session.")
          case id => { log("   firstChosenConstitution = "  + id); log("   playerHasAccessToAllConstis after this session = " + OCBKCinfoPlayer.playerHasAccessToAllConstis(currentPlayer)); Constitution.getById(id).getOrElse(logAndThrow("[BUG] Constitution with id " + id + " not found. Bug or broken database?")).turnReleaseCandidateIntoVirginIfPossible }
       }
@@ -369,7 +369,7 @@ class EfeCore(/* val player: User, var text: Text,v ar round: Round */) extends
          case _         => { throw new RuntimeException("  No user id found.") }
       }
       println("   reading sessionInfo objects from database...")
-      val sis = PlayerSessionInfo_join.findAll(By(PlayerSessionInfo_join.player, currentPlayer)).map{ join => join.sessionInfo.obj.open_! }
+      val sis = PlayerSessionInfo_join.findAll(By(PlayerSessionInfo_join.player, currentPlayer)).map{ join => join.sessionInfo.obj.openOrThrowException("No sessions found played by this user") }
 
       sesHis.sessionInfos = sis
       println("   found " + sis.length + " SessionInfo objects for this player")
