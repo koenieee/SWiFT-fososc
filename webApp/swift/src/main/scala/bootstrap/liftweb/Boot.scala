@@ -1,5 +1,7 @@
 package bootstrap.liftweb
 
+import net.liftweb.http.js.jquery.JQueryArtifacts
+
 import scala.xml._
 import _root_.net.liftweb.util._
 import _root_.net.liftweb.common._
@@ -233,6 +235,9 @@ class Boot
 
     LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
 
+      LiftRules.jsArtifacts = JQueryArtifacts
+      JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
+      JQueryModule.init()
     /*
      * Show the spinny image when an Ajax call starts
      */

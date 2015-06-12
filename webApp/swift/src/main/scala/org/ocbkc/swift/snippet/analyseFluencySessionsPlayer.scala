@@ -79,7 +79,7 @@ class analyseFluencySessionsPlayer {
 
           bind( "top", ns,
             "sessionPlayerTable"  -> sessionPlayerTable(ns, player),
-            "player"              -> Text(player.firstName),
+            "player"              -> Text(player.firstName.get),
             "constName"           -> Text(constiOption.get.constiId.toString),
             "release"             -> Text(constiOption.get.currentVersionId),
             "odsDownload"         -> SHtml.link("",() => downloadOdsFile(player),Text("Export Spreadsheet")),

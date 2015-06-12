@@ -17,52 +17,36 @@
     <style type="text/css">
 /* <![CDATA[ */
 .edit_error_class {
-  display: block;
-  color: red;
+display: block;
+color: red;
 }
-
-.lift_error {
-  color: red;
-}
-
-.lift_warning {
-  color: yellow;
-}
-
-.lift_notice {
-}
-
 .sidebar ul {
-	margin:0;
-	padding:0;
-	border-bottom:1px solid #ccc;
+margin:0;
+padding:0;
+border-bottom:1px solid #ccc;
 }
-	 
 
 .sidebar ul li {
-	margin:0;
-	padding:0;
-	list-style:none;
-	border:1px solid #ccc;
-	border-bottom:none;
+margin:0;
+padding:0;
+list-style:none;
+border:1px solid #ccc;
+border-bottom:none;
 }
-
 .sidebar ul li a {
-	display:block;
-	padding:3px;
-	text-indent:30px;
-	text-decoration:none;
+display:block;
+padding:3px;
+text-indent:30px;
+text-decoration:none;
 }
-
 .sidebar ul li span {
-	display:block;
-	padding:3px;
-	text-indent:30px;
-	text-decoration:none;
+display:block;
+padding:3px;
+text-indent:30px;
+text-decoration:none;
 }
-
 .sidebar ul li a:hover {
-	background-color: #eee;
+background-color: #eee;
 }
 
 
@@ -80,15 +64,13 @@
       </div>
 
       <hr/>
-
       <div class="column span-6 colborder sidebar">
-        <hr class="space" />
+        <hr class="space" >
 
-        <lift:Menu.builder  li:class="menuitem"   />
-        <div>
-          <span class="lift:Msgs?showAll=true"/>
-          <hr class="space" />
-        </div>
+        <span class="lift:Menu.builder"></span>
+
+        <div class="lift:Msgs?showAll=true"></div>
+        <hr class="space" />
       </div>
 
       <div class="column span-17 last">
