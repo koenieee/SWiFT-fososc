@@ -81,6 +81,7 @@ class AnalyseFluencySessionsOfRelease
       Text("sessionOfReleaseTable"),
       new UnprefixedAttribute("class", Text("tablesorter"), Null)),
       TopScope,
+      false,
       <thead><tr><th>Player</th>
       <th>Fluency Score</th>
       <th>Time Session Played</th>

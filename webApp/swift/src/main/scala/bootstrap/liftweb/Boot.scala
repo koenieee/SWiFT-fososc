@@ -41,7 +41,8 @@ import java.util.Locale
  */
 class Boot 
 {  def boot
-   {  JQueryModule.InitParam.JQuery=JQueryModule.JQuery172
+   {  LiftRules.jsArtifacts = JQueryArtifacts
+      JQueryModule.InitParam.JQuery=JQueryModule.JQuery21Z
       JQueryModule.init()
       log("Boot.boot called")
    
@@ -235,9 +236,8 @@ class Boot
 
     LiftRules.setSiteMapFunc(() => Player.sitemapMutator(sitemap()))
 
-      LiftRules.jsArtifacts = JQueryArtifacts
-      JQueryModule.InitParam.JQuery=JQueryModule.JQuery191
-      JQueryModule.init()
+
+
     /*
      * Show the spinny image when an Ajax call starts
      */

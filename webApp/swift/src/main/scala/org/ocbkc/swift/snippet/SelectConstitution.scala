@@ -67,7 +67,8 @@ class SelectConstitution
                null,
                "table",
                new UnprefixedAttribute("id", Text("constitutionsTable"), new UnprefixedAttribute("class", Text("tablesorter"), Null)),
-               TopScope,  
+               TopScope,
+               false,
                <thead><tr><th>id</th><th>description</th><th>fluency</th><th>APC</th><th>ADT</th><th>Creation date</th></tr></thead>,
                <tbody>
 	       {  Constitution.constisWithAReleaseOrVirginRelease.sortWith((c1,c2) => c1.constiId > c2.constiId ).map(

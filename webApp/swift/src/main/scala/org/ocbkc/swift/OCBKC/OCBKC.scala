@@ -885,9 +885,9 @@ object PlayerScores
      */
    def averageDurationTranslation(p:Player, numOfSessions:Int):Result_averageDurationTranslation = 
    {  log("PlayerScores.averageDurationTranslation called")
-      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.open_! ).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
+      val sis:List[SessionInfo] = takeNumOrAll(PlayerSessionInfo_join.findAll( By(PlayerSessionInfo_join.player, p) ).map( join => join.sessionInfo.obj.openOrThrowException("No session objects found")).sortWith{ (si1, si2)  => si1.startTime.get < si2.startTime.get }, numOfSessions)
       
-      val correctCcs = sis.filter( si => si.answerPlayerCorrect.is )
+      val correctCcs = sis.filter( si => si.answerPlayerCorrect.get )
       val durationsCorrectTranslations = correctCcs.map(si => si.durationTranslation.get)
       val numberCorrect = correctCcs.length
       log("   numberCorrect = " + numberCorrect )

@@ -29,6 +29,7 @@ class analyseFluencySessionsConsti
       Text("analyseFluencySessionsPlayer"),
       new UnprefixedAttribute("class", Text("tablesorter"), Null)),
       TopScope,
+      false,
       <thead><tr><th>Release Index</th>
       <th>Fluency Score</th>
       <th>Creation Date</th>

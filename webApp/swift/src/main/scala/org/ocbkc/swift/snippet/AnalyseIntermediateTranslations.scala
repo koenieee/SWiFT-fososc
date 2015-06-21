@@ -51,6 +51,7 @@ class AnalyseIntermediateTranslations
           Text("analyseIntermediateTranslations"),
           new UnprefixedAttribute("class", Text("tablesorter"), Null)),
         TopScope,
+        false,
         <thead><tr>
           <th>Intermediate Time</th>
           <th>Player Text</th>

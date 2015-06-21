@@ -56,18 +56,18 @@ class AdminPage
 	
    object json extends JsonHandler 
    {  def apply(in: Any): JsCmd =
-      {  in match 
-         {  case JsonCmd("submit", _, p: String, _) => 
+      {  in match
+         {  case JsonCmd("submit", _, p: String, _) =>
             {  println(p)
-	       SetHtml("jararesult",Text("Running Simulation.."));
-	       JaraDur.set(p)
+               SetHtml("jararesult",Text("Running Simulation.."));
+               JaraDur.set(p)
                GlobalConstant.clearAndReinitialiseSWiFTdatabase
 
- 	       log("Calling Jara")	          
+               log("Calling Jara")
                PlayingSimulator.start(JaraDur.is.toLong * 1000 * 60 * 60)
-		
+
                SetHtml("jararesult", Text("Simulation Ended!"))
-	    }
+            }
          }
       }
    }

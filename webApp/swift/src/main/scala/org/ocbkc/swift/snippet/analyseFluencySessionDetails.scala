@@ -27,7 +27,7 @@ class analyseFluencySessionDetails
         { log( msgStart + " found!")
           Player.find(By(Player.id, sesCoordBySession.openOrThrowException("No session").userId.get)) match
           { case Full(p) =>
-            {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution)
+            {  val constiOption:Option[Constitution] = Constitution.getById(p.firstChosenConstitution.get)
                val releaseId = p.releaseOfFirstChosenConstitution.get
                //  log(constiOption.toString)
                val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")

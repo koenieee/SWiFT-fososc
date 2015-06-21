@@ -35,6 +35,7 @@ class analyseFluencySessionsPlayer {
         Text("analyseFluencySessionsPlayer"),
         new UnprefixedAttribute("class", Text("tablesorter"), Null)),
       TopScope,
+    false,
       <thead><tr><th>Session</th>
         <th>Translation Endtime</th>
         <th>Fluency Score</th>
