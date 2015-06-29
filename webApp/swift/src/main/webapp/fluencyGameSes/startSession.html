@@ -1,14 +1,17 @@
-<lift:surround with="default" at="content">
+<div data-lift="surround?with=default&at=content">
+
 	<center>
-	<lift:createProgress.text />
-</center>
-<Br/>
+	<!--	<div data-lift="createProgress.text"></div> TODO, A LOT OF WORK CHANGE ALL THE BINDING WAYS-->
+	</center>
 
-<lift:StartSession form="POST">
-The session and the clock will be started as soon as you click the following button:
-<form:startBtn />
+	<Br/>
 
-</lift:StartSession>
-<br/><Br/>
+	<form method="POST" data-lift="StartSession.render">
 
-</lift:surround>
+		The session and the clock will be started as soon as you click the following button:
+		<input type="submit" id="startBtn" value="I'm ready!"></submit>
+
+	</form>
+	<br/><Br/>
+
+</div>

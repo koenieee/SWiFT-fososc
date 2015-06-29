@@ -1,18 +1,20 @@
-<lift:surround with="default" at="content">
-<br />
-<h1>Study Constitution <top:constitutionId /></h1>
-<lift:StudyConstiRound form="POST">
-<center>
-   <lift:createProgress.text />
-</center>
-<br />
+<div data-lift="surround?with=default&at=content">
+   <br />
+   <form method="POST" data-lift="StudyConstiRound.render">
+   <h1>Study Constitution <span id="constitutionId"></span></h1>
 
-<span class="lift:embed?what=_study_consti_template">
-   replaced with embedded content
-</span>
 
-<top:continue />
+      <center>
+         <!--	<div data-lift="createProgress.text"></div> TODO, A LOT OF WORK CHANGE ALL THE BINDING WAYS-->
+      </center>
+      <br />
 
-</lift:StudyConstiRound>
+      <span class="lift:embed?what=_study_consti_template">
+         replaced with embedded content
+      </span>
 
-</lift:surround>
+      <input type="submit" id="startBtn" value="Continue"></submit>
+
+   </form>
+
+</div>

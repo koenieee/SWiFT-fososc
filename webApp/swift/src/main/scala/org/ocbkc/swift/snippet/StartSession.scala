@@ -31,7 +31,7 @@ object SesCoord extends SessionVar(new ses.EfeCore(/* User, null, Round.NotStart
 class StartSession
 {  val sesCoordLR = SesCoord.is // Extract coord.ses.Core object from SessionVariable LR = Local Reference
 
-   def render(ns: NodeSeq): NodeSeq =
+   def render  =
    {  //var playerAnswerTF = ""
       
       // Begin For test remove
@@ -98,10 +98,7 @@ class StartSession
             }
          }
       }  
-
-      bind( "form", ns, 
-         "startBtn"      -> SHtml.ajaxSubmit("I'm ready!", () => processSubmission)
-      )
+     "#startBtn"      #> SHtml.ajaxSubmit("I'm ready!", () => processSubmission)
    }
 }
 

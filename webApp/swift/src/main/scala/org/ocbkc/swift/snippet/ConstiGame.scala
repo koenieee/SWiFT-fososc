@@ -23,37 +23,31 @@ class ConstiGameTable
 
 // <&y2012.11.19.22:33:08& refactor: make one buildConstiTable for different snippets (constitutions.html, selectConstitution.html etc.)>
 
-   def buildCollaborationConstiTable(ns: NodeSeq):NodeSeq = {
+   def buildCollaborationConstiTable:List[CssSel] = {
       // Calls bind repeatedly, once for each Constitution that is followed
       println("buildCollaborationConstiTable called")
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       implicit val displayNoneAs = "-"
       val followedConstis = sesCoordLR.currentPlayer.followedConstis
-      val tableRowsTemplate = chooseTemplate("top", "tableRows", ns)
-      
-      println("   tableRowsTemplate = " + tableRowsTemplate)
+
       println("   number of followed constis = " + followedConstis.size)
-      followedConstis.flatMap{ constiId
+      followedConstis.map{ constiId
       => {  val c = Constitution.getById(constiId).get // .get, because SHOULD always exist, otherwise some other bug exists.
-            bind("constiColumn", tableRowsTemplate,
-               "id" -> <a href={ "constitution?id=" + constiId}>{ constiId }</a>,
-               "description" -> c.shortDescription,
-               "fluency" -> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(c.constiId).collect{ case afs:(VersionId,Double) => afs._2 }),
-               "APC" -> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId)),
-               "ADT" -> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId)),
-               "creationDate" -> df.format(c.creationTime).toString,
-               "sessionConstiLink" -> SHtml.link("analyse/analyseFluencySessionsConsti.html?consti_id="+constiId,()=>(),Text("Session Consti"))
-            )
+               ".id *" #> <a href={ "constitution?id=" + constiId}>{ constiId }</a>
+               ".description *" #> c.shortDescription
+               ".fluency *" #> optionToUI(ConstiScores.averageFluencyLatestReleaseWithScore(c.constiId).collect{ case afs:(VersionId,Double) => afs._2 })
+               ".APC *" #> optionToUI(ConstiScores.averagePercentageCorrect(GlobalConstant.AveragePercentageCorrect.minimalNumberOfSessionsPerPlayer, c.constiId))
+               ".ADT *" #> optionToUI(ConstiScores.averageDurationTranslation(GlobalConstant.AverageDurationTranslation.minimalNumberOfSessionsPerPlayer, c.constiId))
+               ".creationDate *" #> df.format(c.creationTime)
+               ".sessionConstiLink *" #> SHtml.link("analyse/analyseFluencySessionsConsti.html?consti_id="+constiId,()=>(),Text("Session Consti"))
+
          }
       }
-   }   
+   }
 
-   def render(ns: NodeSeq): NodeSeq =
-   {  val answer   = bind( "top", ns, 
-                           "tableRows"  -> buildCollaborationConstiTable(ns)
-                         )
-
-      answer
+   def render =
+   {
+      ".tableRows *"  #> buildCollaborationConstiTable
    }
 }
 }

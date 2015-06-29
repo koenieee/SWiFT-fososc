@@ -56,27 +56,26 @@ class StudyConsti__EMBED
    {  S.redirectTo("history?id=" + consti.get.constiId)
    }
 */
-   def render(ns: NodeSeq):NodeSeq =
+   def render =
    {  log("StudyConsti__EMBED.render")
       
       val emptyNode = NodeSeq.Empty // <&y2012.06.02.18:53:13& nicer way of defining empty substitution?>[A &y2014.03.22.20:03:29& yes!: NodeSeq.Empty]
 
       val df = new java.text.SimpleDateFormat("dd-MM-yyyy HH:mm")
       val releaseInfo = consti.lastReleaseVersionInfo.get
-      val answer   = bind( "top", ns, 
-                           "constitutionId"     -> Text(consti.constiId.toString),
-                           "versionDateTime"    -> Text(df.format(releaseInfo.creationDatetimePOSIX*1000)),
-                           "constitutionText"   -> consti.contentLastReleaseInScalaXML.get,
-                           "creationDate"       -> Text(df.format(consti.creationTime).toString),
-                           "creator"            -> Text(
-                                       Player.find(consti.creatorUserID) match
-                                       {  case Full(player)  => player.swiftDisplayName
-                                          case _             => { log("    [BUG] Player with id " + consti.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." }
-                                       }
-                                                       )
 
-                     )
-      answer
+      "#constitutionId"     #> Text(consti.constiId.toString)
+      "#versionDateTime"    #> Text(df.format(releaseInfo.creationDatetimePOSIX*1000))
+      "#constitutionText"   #> consti.contentLastReleaseInScalaXML.get
+      "#creationDate"       #> Text(df.format(consti.creationTime).toString)
+      "#creator"            #> Text(
+                                 Player.find(consti.creatorUserID) match
+                                 {  case Full(player)  => player.swiftDisplayName
+                                    case _             => { log("    [BUG] Player with id " + consti.creatorUserID + " not found."); "player unknown (this is a bug, please report it)." }
+                                 }
+                                  )
+
+
    }
 }
 

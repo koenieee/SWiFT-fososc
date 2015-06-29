@@ -12,7 +12,8 @@
   <inceptionYear>2010</inceptionYear>
 <!--  <author>Chide Groenouwe</author> -->
   <properties>
-    <scala.version>2.11.1</scala.version>
+    <scala.version>2.11</scala.version>
+    <scala.versionin3digits>2.11.7</scala.versionin3digits>
     <liftweb.version>2.6</liftweb.version>
     <!-- Common plugin settings -->
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -59,7 +60,7 @@
   <dependencies>
    <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-json-ext_2.11</artifactId>
+      <artifactId>lift-json-ext_${scala.version}</artifactId>
       <version>${liftweb.version}</version>
    </dependency>
       <dependency>
@@ -75,7 +76,7 @@
   </dependency>
       <dependency>
       <groupId>net.liftweb</groupId>
-      <artifactId>lift-mapper_2.11</artifactId>
+      <artifactId>lift-mapper_${scala.version}</artifactId>
       <version>${liftweb.version}</version>
         <exclusions>
             <exclusion>
@@ -110,7 +111,7 @@
     <dependency>
       <groupId>org.scala-lang</groupId>
       <artifactId>scala-library</artifactId>
-      <version>2.11.1</version>
+      <version>${scala.versionin3digits}</version>
     </dependency>
       <dependency>
           <groupId>commons-io</groupId>
@@ -130,7 +131,7 @@
    </dependency>
       <dependency>
           <groupId>net.liftmodules</groupId>
-          <artifactId>widgets_2.6_2.11</artifactId>
+          <artifactId>widgets_2.6_${scala.version}</artifactId>
           <version>1.4-SNAPSHOT</version>
       </dependency>
 
@@ -183,7 +184,7 @@
         <plugin>
             <groupId>net.alchim31.maven</groupId>
             <artifactId>scala-maven-plugin</artifactId>
-            <version>3.1.0</version>
+            <version>3.2.2</version>
             <executions>
 
                 <execution>
@@ -202,7 +203,7 @@
                 </execution>
             </executions>
             <configuration>
-                <scalaVersion>2.11.1</scalaVersion>
+                <scalaVersion>${scala.versionin3digits}</scalaVersion>
                 <source>${java.version}</source>
                 <target>${java.version}</target>
                 <encoding>UTF-8</encoding>

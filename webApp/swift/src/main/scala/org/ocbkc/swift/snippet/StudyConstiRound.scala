@@ -26,12 +26,10 @@ class StudyConstiRound
       S.redirectTo("translationRound.html") 
    }
 
-   def render(ns: NodeSeq): NodeSeq =
+   def render =
    {  SesCoord.is.URconstiStudy
-      bind(  
-         "top", ns,
-         "continue"              -> SHtml.submit("Continue", processSubmission)
-      )
+      "#constitutionId"        #> SesCoord.is.si.id
+      "#continue"              #> SHtml.submit("Continue", processSubmission)
    }
 }
 

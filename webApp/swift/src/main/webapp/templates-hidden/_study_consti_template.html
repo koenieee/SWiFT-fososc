@@ -1,4 +1,4 @@
-<lift:StudyConsti__EMBED>
+<div data-lift="StudyConsti__EMBED">
 
 <style type="text/css">
 div#consti_text
@@ -22,9 +22,9 @@ Study the constitution below by holding the 'g' key down on your keyboard. (This
 
 <h2>Info</h2>
 <table>
-   <tr><td>Creationdate:</td>             <td><top:creationDate /></td>      </tr>
-   <tr><td>Created by:</td>               <td><top:creator /></td>            </tr>
-   <tr><td>Version:</td>                  <td><top:versionDateTime /></td>            </tr>
+   <tr><td>Creationdate:</td>             <td id="creationDate"></td>      </tr>
+   <tr><td>Created by:</td>               <td id="creator"></td>            </tr>
+   <tr><td>Version:</td>                  <td id="versionDateTime"></td>            </tr>
 <!--
    <tr><td>Description:</td>              <td><top:description /></td>        </tr>
    <tr><td>Score on property TODO:</td>   <td>TODO</td>                       </tr>
@@ -40,7 +40,7 @@ If you want to read on, please <b>hold the 'g' key.</b>
 <div id="consti_text">
 <table>
    <tr><td colspan="2"><hr />                             </td></tr>
-   <tr><td colspan="2"><top:constitutionText /></td>           </tr>
+   <tr><td colspan="2" id="constitutionText"></td>           </tr>
    <tr><td colspan="2"><hr />    </td>                         </tr>
 </table>
 </div>
@@ -128,4 +128,4 @@ return c_value;
 
 </script>
 
-</lift:StudyConsti__EMBED>
+</div>
