@@ -1,36 +1,66 @@
-<lift:surround with="default" at="content">
-<lift:TableSorterConstitutions />
-<h1>Constitutions</h1>
+<div data-lift="surround?with=default&at=content">
+    <div data-lift="TableSorterConstitutions.render"></div>
+    <h1>Constitutions</h1>
 
-<lift:Constitutions.list form="POST">
-<!-- 
+    <form data-lift="Constitutions.list" method="POST">
+        <!--
 
-[&y2012.03.23.09:16:56& for next increment, use design pattern used in pocketchange app. of the book "exploring lift"]
+        [&y2012.03.23.09:16:56& for next increment, use design pattern used in pocketchange app. of the book "exploring lift"]
 
-<&y2012.03.21.17:54:06& WIW: use pocketchange  as example to finish this. I think I need to work with a Template to generate the table. Or perhaps I can simply put the lift:Cosntitutions.list tag around the <tr> directly?>
+        <&y2012.03.21.17:54:06& WIW: use pocketchange  as example to finish this. I think I need to work with a Template to generate the table. Or perhaps I can simply put the lift:Cosntitutions.list tag around the <tr> directly?>
 
-<table>
-   <tr><td>Constitution</td><td>Description</td><td>
-   <tr><td><top:link2consti /></td><td><top:descr /></td></tr>
-</table>
+        <table>
+           <tr><td>Constitution</td><td>Description</td><td>
+           <tr><td><top:link2consti /></td><td><top:descr /></td></tr>
+        </table>
 
--->
-<hr />
-<h2>Legend</h2>
-<p><list>
-<li>APC = Average Percentage of translations with Correct answer (averaged over players who used this constitution) in %</li>
-<li>ADT = Average Duration Translation in milliseconds</li>
-<li>fluency = APC/ADT * a fixed constant</li>
-</list></p>
-<hr />
-<h2>Instructions</h2>
-<p>To view, edit or (un)follow a constitution, click its identifier.</p>
-<hr />
-<top:constisInTable/>
+        -->
+        <hr/>
+        <h2>Legend</h2>
 
-<top:createNewBt />
+        <p>
+            <list>
+                <li>APC = Average Percentage of translations with Correct answer (averaged over players who used this
+                    constitution) in %
+                </li>
+                <li>ADT = Average Duration Translation in milliseconds</li>
+                <li>fluency = APC/ADT * a fixed constant</li>
+            </list>
+        </p>
+        <hr/>
+        <h2>Instructions</h2>
 
-</lift:Constitutions.list>
+        <p>To view, edit or (un)follow a constitution, click its identifier.</p>
+        <hr/>
+        <table id="constitutionsTable" class="tablesorter">
+            <thead>
+            <tr>
+                <th>id</th>
+                <th>description</th>
+                <th>fluency</th>
+                <th>APC</th>
+                <th>ADT (ms)</th>
+                <th>Creation date</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr class="tableRows">
+                <td class="id"></td>
+                <td class="description"></td>
+                <td class="fluency"></td>
+                <td class="APC"></td>
+                <td class="ADT"></td>
+                <td class="creationDate"></td>
+            </tr>
+
+            </tbody>
 
 
-</lift:surround>
+        </table>
+
+        <input type="submit" id="createNewBt" value="Create">
+
+    </form>
+
+
+</div>
